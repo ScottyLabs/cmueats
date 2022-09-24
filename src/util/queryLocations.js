@@ -123,12 +123,15 @@ function getStatusMessage(timeSlot, isOpen) {
   const action = isOpen ? "Closes" : "Opens";
   const day = WEEKDAYS[timeSlot.start.day];
   const hourLabel = diffHours === 1 ? "hour" : "hours";
+  //const hourLabel = diffHours === 0 ? 'minutes': diffHours === 1 ? "hour" : "hours";
 
   if (weekdayDiff > 1) {
     return `${action} in ${weekdayDiff} days (${day} at ${time})`;
   } else if (weekdayDiff === 1) {
     if (diffHours >= 24) {
       return `${action} in a day (tomorrow at ${time})`;
+    } else if (diffHours == 0){
+      return `${action} in ${diffMinutes} minutes (today at ${time})`;
     } else {
       return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
     }
