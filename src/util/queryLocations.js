@@ -129,9 +129,12 @@ function getStatusMessage(timeSlot, isOpen) {
   } else if (weekdayDiff === 1) {
     if (diffHours >= 24) {
       return `${action} in a day (tomorrow at ${time})`;
-    } else {
+    else if (diffHours >= 1)
+    {
       return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
-    }
+    } else {
+      return `${action} in ${diffMinutes} minutes (today at ${time})`;
+    }}
   } else if (weekdayDiff === 0) {
     if (diffHours >= 1) {
       return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
