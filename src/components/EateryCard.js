@@ -99,6 +99,30 @@ const GreenDot = styled(Card)({
   animationIterationCount: "infinite",
 });
 
+const SolidGreenDot = styled(Card)({
+  "@keyframes blinking": {
+    "0%": {
+      opacity: 0,
+    },
+
+    "50%": {
+      opacity: 1,
+    },
+
+    "75%": {
+      opacity: 1,
+    },
+
+    "100%": {
+      opacity: 0,
+    },
+  },
+  background: "#19b875",
+  width: "100%",
+  height: "100%",
+  foregroundColor: "#19b875",
+});
+
 const RedDot = styled(Card)({
   "@keyframes blinking": {
     "0%": {
@@ -155,7 +179,7 @@ export default function EateryCard({
               <Avatar
                 sx={{ width: 12, height: 12, backgroundColor: "#1D1F21" }}
               >
-                {isOpen ? <GreenDot /> : <RedDot />}
+                {isOpen ? (statusMsg.includes('minutes')? <GreenDot/> : <SolidGreenDot/>) : <RedDot />}
               </Avatar>
             }
           ></StyledCardHeader>
