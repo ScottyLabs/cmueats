@@ -7,7 +7,8 @@ import "./App.css";
 
 function App() {
   const greeting = useMemo(() => getGreeting(), []);
-  
+
+  // Load locations
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -18,9 +19,28 @@ function App() {
     });
   }, []);
 
-  const openLocations = locations.filter((location) => location.isOpen);
-  const closedLocations = locations.filter((location) => !location.isOpen);
+  // Search query processing
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchQueryChange = (e) => setSearchQuery(e.target.value);
 
+  const [filteredLocations, setFilteredLocations] = useState([]);
+  useEffect(() => {
+    const filteredSearchQuery = searchQuery.trim().toLowerCase();
+    
+    setFilteredLocations(
+      filteredSearchQuery.length === 0
+      ? locations
+      : locations.filter(({ name, location }) => {
+        return name.toLowerCase().includes(filteredSearchQuery)
+          || location.toLowerCase().includes(filteredSearchQuery);
+      })
+    );
+  }, [searchQuery, locations]);
+
+  const openLocations = filteredLocations.filter((location) => location.isOpen);
+  const closedLocations = filteredLocations.filter((location) => !location.isOpen);
+
+  // Typography
   const HeaderText = styled(Typography)({
     color: "white",
     padding: 0,
@@ -54,6 +74,15 @@ function App() {
       </div> */}
       <div className="Container">
         <HeaderText variant="h3">{greeting}</HeaderText>
+
+        <input
+          className="search-bar"
+          type="search"
+          value={searchQuery}
+          onChange={handleSearchQueryChange}
+          placeholder="Search"
+        />
+
         <Grid container spacing={2}>
           {openLocations.map(
             (
