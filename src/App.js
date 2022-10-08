@@ -1,11 +1,13 @@
 import { Typography, Grid, styled } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import EateryCard from "./components/EateryCard";
 import getGreeting from "./util/greeting";
 import queryLocations from "./util/queryLocations";
 import "./App.css";
 
 function App() {
+  const greeting = useMemo(() => getGreeting(), []);
+  
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ function App() {
         dining schedule. We are working on a fix. 🚧
       </div> */}
       <div className="Container">
-        <HeaderText variant="h3">{getGreeting()}</HeaderText>
+        <HeaderText variant="h3">{greeting}</HeaderText>
         <Grid container spacing={2}>
           {openLocations.map(
             (
