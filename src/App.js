@@ -40,6 +40,14 @@ function App() {
   const openLocations = filteredLocations.filter((location) => location.isOpen);
   const closedLocations = filteredLocations.filter((location) => !location.isOpen);
 
+  // Load the search query from the URL, if any
+  useEffect(() => {
+    const urlQuery = new URLSearchParams(window.location.search).get('search');
+    if (urlQuery) {
+      setSearchQuery(urlQuery);
+    }
+  }, []);
+
   // Typography
   const HeaderText = styled(Typography)({
     color: "white",
