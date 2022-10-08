@@ -58,6 +58,7 @@ function App() {
           {openLocations.map(
             (
               {
+                conceptId,
                 name,
                 location,
                 isOpen,
@@ -67,8 +68,7 @@ function App() {
                 acceptsOnlineOrders,
                 statusMsg,
                 todaysSoups,
-              },
-              index
+              }
             ) => (
               <EateryCard
                 name={name}
@@ -80,7 +80,7 @@ function App() {
                 statusMsg={statusMsg}
                 todaysSpecials={todaysSpecials || []}
                 todaysSoups={todaysSoups || []}
-                key={index}
+                key={conceptId}
               />
             )
           )}
@@ -90,6 +90,7 @@ function App() {
           {closedLocations.map(
             (
               {
+                conceptId,
                 name,
                 location,
                 isOpen,
@@ -99,8 +100,7 @@ function App() {
                 acceptsOnlineOrders,
                 statusMsg,
                 todaysSoups,
-              },
-              index
+              }
             ) => (
               <EateryCard
                 name={name}
@@ -112,7 +112,7 @@ function App() {
                 statusMsg={statusMsg}
                 todaysSpecials={todaysSpecials || []}
                 todaysSoups={todaysSoups || []}
-                key={index}
+                key={conceptId}
               />
             )
           )}
