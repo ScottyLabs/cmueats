@@ -49,7 +49,6 @@ function App() {
     fontWeight: 800,
     fontSize: "3em",
     paddingTop: "1em",
-    paddingBottom: "2em",
   });
 
   const LogoText = styled(Typography)({
