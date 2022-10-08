@@ -1,6 +1,7 @@
 import { Typography, Grid, styled } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import EateryCard from "./components/EateryCard";
+import NoResultsError from "./components/NoResultsError";
 import getGreeting from "./util/greeting";
 import queryLocations from "./util/queryLocations";
 import "./App.css";
@@ -89,6 +90,11 @@ function App() {
           onChange={handleSearchQueryChange}
           placeholder="Search"
         />
+
+        {
+          (filteredLocations.length === 0 && locations.length !== 0) &&
+            <NoResultsError onClear={e => setSearchQuery('')} />
+        }
 
         <Grid container spacing={2}>
           {openLocations.map(
