@@ -80,11 +80,22 @@ body {
   background-color: #23272a;
 }
 
-.search-bar {
+.Locations-header {
+  display: grid;
+  grid-gap: 1rem;
+  padding: 3rem 0;
+}
+
+@media screen and (min-width: 900px) {
+  .Locations-header {
+    grid-template-columns: 1fr 300px;
+    align-items: center;
+  }
+}
+
+.Locations-search {
   display: block;
   width: 100%;
-  margin-top: 2rem;
-  margin-bottom: 4rem;
   padding: .8rem 1rem;
   padding-left: 3rem;
   border-radius: 1rem;
@@ -108,6 +119,6 @@ body {
   font-weight: 500;
 }
 
-.search-bar:focus {
+.Locations-search:focus {
   box-shadow: 0 0 0 2px rgba(255, 2555, 255, .4);
 }

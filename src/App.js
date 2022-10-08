@@ -57,7 +57,6 @@ function App() {
       '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
     fontWeight: 800,
     fontSize: "3em",
-    paddingTop: "1em",
   });
 
   const LogoText = styled(Typography)({
@@ -81,15 +80,16 @@ function App() {
         dining schedule. We are working on a fix. 🚧
       </div> */}
       <div className="Container">
-        <HeaderText variant="h3">{greeting}</HeaderText>
-
-        <input
-          className="search-bar"
-          type="search"
-          value={searchQuery}
-          onChange={handleSearchQueryChange}
-          placeholder="Search"
-        />
+        <header className="Locations-header">
+          <HeaderText variant="h3">{greeting}</HeaderText>
+          <input
+            className="Locations-search"
+            type="search"
+            value={searchQuery}
+            onChange={handleSearchQueryChange}
+            placeholder="Search"
+          />
+        </header>
 
         {
           (filteredLocations.length === 0 && locations.length !== 0) &&
