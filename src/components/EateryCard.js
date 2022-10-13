@@ -39,7 +39,7 @@ const NameText = styled(Typography)({
 });
 
 const LocationText = styled(Typography)({
-  color: "#6C757D",
+  color: "#8D979F",
   marginBottom: "10px",
   fontWeight: 500,
   fontSize: 14
