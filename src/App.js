@@ -59,7 +59,7 @@ function App() {
                 name,
                 location,
                 isOpen,
-                short_description,
+                shortDescription,
                 todaysSpecials,
                 menu,
                 acceptsOnlineOrders,
@@ -72,7 +72,7 @@ function App() {
                 name={name}
                 location={location}
                 isOpen={isOpen}
-                description={short_description}
+                description={shortDescription}
                 menuURL={menu}
                 acceptsOnlineOrders={acceptsOnlineOrders}
                 statusMsg={statusMsg}
@@ -91,7 +91,7 @@ function App() {
                 name,
                 location,
                 isOpen,
-                short_description,
+                shortDescription,
                 todaysSpecials,
                 menu,
                 acceptsOnlineOrders,
@@ -104,7 +104,7 @@ function App() {
                 name={name}
                 location={location}
                 isOpen={isOpen}
-                description={short_description}
+                description={shortDescription}
                 menuURL={menu}
                 acceptsOnlineOrders={acceptsOnlineOrders}
                 statusMsg={statusMsg}
