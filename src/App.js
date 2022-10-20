@@ -1,11 +1,15 @@
 import { Typography, Grid, styled } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import EateryCard from "./components/EateryCard";
+import NoResultsError from "./components/NoResultsError";
 import getGreeting from "./util/greeting";
 import queryLocations from "./util/queryLocations";
 import "./App.css";
 
 function App() {
+  const greeting = useMemo(() => getGreeting(), []);
+
+  // Load locations
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -16,9 +20,36 @@ function App() {
     });
   }, []);
 
-  const openLocations = locations.filter((location) => location.isOpen);
-  const closedLocations = locations.filter((location) => !location.isOpen);
+  // Search query processing
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchQueryChange = (e) => setSearchQuery(e.target.value);
 
+  const [filteredLocations, setFilteredLocations] = useState([]);
+  useEffect(() => {
+    const filteredSearchQuery = searchQuery.trim().toLowerCase();
+    
+    setFilteredLocations(
+      filteredSearchQuery.length === 0
+      ? locations
+      : locations.filter(({ name, location }) => {
+        return name.toLowerCase().includes(filteredSearchQuery)
+          || location.toLowerCase().includes(filteredSearchQuery);
+      })
+    );
+  }, [searchQuery, locations]);
+
+  const openLocations = filteredLocations.filter((location) => location.isOpen);
+  const closedLocations = filteredLocations.filter((location) => !location.isOpen);
+
+  // Load the search query from the URL, if any
+  useEffect(() => {
+    const urlQuery = new URLSearchParams(window.location.search).get('search');
+    if (urlQuery) {
+      setSearchQuery(urlQuery);
+    }
+  }, []);
+
+  // Typography
   const HeaderText = styled(Typography)({
     color: "white",
     padding: 0,
@@ -26,8 +57,6 @@ function App() {
       '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
     fontWeight: 800,
     fontSize: "3em",
-    paddingTop: "1em",
-    paddingBottom: "2em",
   });
 
   const LogoText = styled(Typography)({
@@ -51,11 +80,27 @@ function App() {
         dining schedule. We are working on a fix. 🚧
       </div> */}
       <div className="Container">
-        <HeaderText variant="h3">{getGreeting()}</HeaderText>
+        <header className="Locations-header">
+          <HeaderText variant="h3">{greeting}</HeaderText>
+          <input
+            className="Locations-search"
+            type="search"
+            value={searchQuery}
+            onChange={handleSearchQueryChange}
+            placeholder="Search"
+          />
+        </header>
+
+        {
+          (filteredLocations.length === 0 && locations.length !== 0) &&
+            <NoResultsError onClear={e => setSearchQuery('')} />
+        }
+
         <Grid container spacing={2}>
           {openLocations.map(
             (
               {
+                conceptId,
                 name,
                 location,
                 isOpen,
@@ -65,8 +110,7 @@ function App() {
                 acceptsOnlineOrders,
                 statusMsg,
                 todaysSoups,
-              },
-              index
+              }
             ) => (
               <EateryCard
                 name={name}
@@ -78,7 +122,7 @@ function App() {
                 statusMsg={statusMsg}
                 todaysSpecials={todaysSpecials || []}
                 todaysSoups={todaysSoups || []}
-                key={index}
+                key={conceptId}
               />
             )
           )}
@@ -88,6 +132,7 @@ function App() {
           {closedLocations.map(
             (
               {
+                conceptId,
                 name,
                 location,
                 isOpen,
@@ -97,8 +142,7 @@ function App() {
                 acceptsOnlineOrders,
                 statusMsg,
                 todaysSoups,
-              },
-              index
+              }
             ) => (
               <EateryCard
                 name={name}
@@ -110,7 +154,7 @@ function App() {
                 statusMsg={statusMsg}
                 todaysSpecials={todaysSpecials || []}
                 todaysSoups={todaysSoups || []}
-                key={index}
+                key={conceptId}
               />
             )
           )}
