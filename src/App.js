@@ -3,6 +3,7 @@ import {createRoutesFromElements, createBrowserRouter, Route, RouterProvider} fr
 import ListPage from "./pages/ListPage";
 import queryLocations from "./util/queryLocations";
 import "./App.css";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   // Load locations
@@ -18,10 +19,16 @@ function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route
-        path="/"
-        element={<ListPage locations={locations} />}
-      />
+      <>
+        <Route
+          path="/"
+          element={<ListPage locations={locations} />}
+        />
+        <Route
+          path="*"
+          element={<NotFoundPage />}
+        />
+      </>
     )
   );
 
