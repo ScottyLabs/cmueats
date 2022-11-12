@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, styled, Button, Box } from "@mui/material";
+import {Box} from "@mui/material";
 import {ErrorButton, ErrorText, ErrorTitle} from "../style";
 
 export default function EateryCard({

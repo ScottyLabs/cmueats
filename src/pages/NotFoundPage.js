@@ -1,5 +1,5 @@
-import {useRouteError, Link as RouterLink} from "react-router-dom";
-import {Box, Button, styled, Typography} from "@mui/material";
+import {Link as RouterLink} from "react-router-dom";
+import {Box} from "@mui/material";
 import React from "react";
 import {ErrorTitle, ErrorText, ErrorButton} from "../style";
 
