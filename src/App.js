@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import queryLocations from "./util/queryLocations";
+import {createRoutesFromElements, createBrowserRouter, Route, RouterProvider} from "react-router-dom";
 import ListPage from "./pages/ListPage";
+import queryLocations from "./util/queryLocations";
 import "./App.css";
 
 function App() {
@@ -15,14 +16,21 @@ function App() {
     });
   }, []);
 
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route
+        path="/"
+        element={<ListPage locations={locations} />}
+      />
+    )
+  );
+
   return (
-    <div className="App">
-      {/* <div className="announcement">
-        🚧 There is an ongoing issue that is preventing us from retrieving the
-        dining schedule. We are working on a fix. 🚧
-      </div> */}
-      <ListPage locations={locations} />
-    </div>
+    <React.StrictMode>
+      <div className="App">
+        <RouterProvider router={router} />
+      </div>
+    </React.StrictMode>
   );
 }
 
