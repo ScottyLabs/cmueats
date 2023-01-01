@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import {createRoutesFromElements, createBrowserRouter, Route, RouterProvider} from "react-router-dom";
 import ListPage from "./pages/ListPage";
-import MapPage from "./pages/MapPage";
 import queryLocations from "./util/queryLocations";
 import "./App.css";
 import NotFoundPage from "./pages/NotFoundPage";
+
+const MapPage = lazy(() => import('./pages/MapPage'));
 
 function App() {
   // Load locations
