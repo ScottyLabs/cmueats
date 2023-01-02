@@ -1,5 +1,6 @@
 import React, { lazy, useEffect, useState } from "react";
-import {createRoutesFromElements, createBrowserRouter, Route, RouterProvider} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import ListPage from "./pages/ListPage";
 import queryLocations from "./util/queryLocations";
 import "./App.css";
@@ -19,30 +20,28 @@ function App() {
     });
   }, []);
 
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <>
-        <Route
-          path="/"
-          element={<ListPage locations={locations} />}
-        />
-        <Route
-          path="/map"
-          element={<MapPage locations={locations} />}
-        />
-        <Route
-          path="*"
-          element={<NotFoundPage />}
-        />
-      </>
-    )
-  );
-
   return (
     <React.StrictMode>
-      <div className="App">
-        <RouterProvider router={router} />
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <Routes>
+            <Route
+              path="/"
+              element={<ListPage locations={locations} />}
+            />
+            <Route
+              path="/map"
+              element={<MapPage locations={locations} />}
+            />
+            <Route
+              path="*"
+              element={<NotFoundPage />}
+            />
+          </Routes>
+        </div>
+
+        <Navbar />
+      </BrowserRouter>
     </React.StrictMode>
   );
 }

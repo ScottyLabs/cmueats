@@ -19,7 +19,7 @@ function MapPage({ locations }) {
   }), []);
 
   return (
-    <div style={{ height: '100%' }}>
+    <div className="MapPage">
       <Map
         token={token}
         colorScheme={ColorScheme.Dark}

@@ -1,0 +1,3 @@
+.MapPage {
+  height: calc(100% - var(--navbar-height));
+}

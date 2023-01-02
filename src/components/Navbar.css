@@ -1,0 +1,61 @@
+.Navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--navbar-height);
+
+  background-color: #1e1e1e;
+  padding: 14px;
+  box-sizing: border-box;
+  border-top: 2px solid #31373e;
+}
+
+.Navbar-links {
+  position: relative;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  height: 40px;
+  margin: 0 auto;
+
+  max-width: 500px;
+}
+
+.Navbar-links a {
+  position: relative;
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Zilla Slab', sans-serif;
+  font-weight: 500;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.Navbar-links svg {
+  width: 24px;
+  height: 24px;
+  margin-right: .4em;
+}
+
+.Navbar-active {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+
+  background-color: #2b2f33;
+  border-radius: 999px;
+  transition: .3s cubic-bezier(.4, 0, .2, 1) transform;
+}
+
+.Navbar-active_map {
+  transform: translateX(100%);
+}

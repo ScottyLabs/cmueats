@@ -62,7 +62,7 @@ function ListPage({ locations }) {
   });
 
   return (
-    <div>
+    <div className="ListPage">
       {/* <div className="announcement">
         🚧 There is an ongoing issue that is preventing us from retrieving the
         dining schedule. We are working on a fix. 🚧
