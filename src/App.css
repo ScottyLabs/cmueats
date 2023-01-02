@@ -1,5 +1,6 @@
 :root {
   --navbar-height: 70px;
+  --navbar-height: calc(56px + max(env(safe-area-inset-bottom), 14px));
 }
 
 html, body, #root, .App {
