@@ -127,17 +127,18 @@ const SpecialsContent = styled(Accordion)({
   backgroundColor: "#23272A",
 });
 
-export default function EateryCard({
-  name,
-  location,
-  description,
-  menuURL,
-  todaysSpecials,
-  acceptsOnlineOrders,
-  isOpen,
-  statusMsg,
-  todaysSoups,
-}) {
+export default function EateryCard({ location }) {
+  const {
+    name,
+    location: locationText,
+    shortDescription,
+    menuURL,
+    todaysSpecials = [],
+    isOpen,
+    statusMsg,
+    todaysSoups = [],
+  } = location;
+
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <>
@@ -161,8 +162,8 @@ export default function EateryCard({
           ></StyledCardHeader>
           <CardContent>
             <NameText variant="h6">{name}</NameText>
-            <LocationText variant="subtitle2">{location}</LocationText>
-            <DescriptionText>{description}</DescriptionText>
+            <LocationText variant="subtitle2">{locationText}</LocationText>
+            <DescriptionText>{shortDescription}</DescriptionText>
           </CardContent>
           <CardActions sx={{ marginTop: "auto" }}>
             {menuURL && (
