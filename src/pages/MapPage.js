@@ -1,8 +1,13 @@
 import React, { useMemo } from 'react';
-import { Map, Marker, ColorScheme } from 'mapkit-react';
+import { Map, Marker, ColorScheme, FeatureVisibility } from 'mapkit-react';
 import './MapPage.css';
 
 const token = '…';
+
+function abbreviate(longName: string) {
+  const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
+  return importantPart.split(' ').map(word => word.charAt(0)).join('');
+}
 
 function MapPage({ locations }) {
   const cameraBoundary = useMemo(() => ({
@@ -39,7 +44,9 @@ function MapPage({ locations }) {
             longitude={location.coordinates.lat}
 
             title={location.name}
+            titleVisibility={FeatureVisibility.Hidden}
             color={location.isOpen ? '#69bb36' : '#ff5b40'}
+            glyphText={abbreviate(location.name)}
           />
         )}
       </Map>
