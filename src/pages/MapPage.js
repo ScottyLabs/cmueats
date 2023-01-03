@@ -9,7 +9,7 @@ function MapPage({ locations }) {
     centerLatitude: 40.444,
     centerLongitude: -79.945,
     latitudeDelta: 0.006,
-    longitudeDelta: 0.008,
+    longitudeDelta: 0.01,
   }), []);
   const initialRegion = useMemo(() => ({
     centerLatitude: 40.44316701238923,
