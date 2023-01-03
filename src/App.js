@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ListPage from "./pages/ListPage";
@@ -22,26 +22,28 @@ function App() {
 
   return (
     <React.StrictMode>
-      <BrowserRouter>
-        <div className="App">
-          <Routes>
-            <Route
-              path="/"
-              element={<ListPage locations={locations} />}
-            />
-            <Route
-              path="/map"
-              element={<MapPage locations={locations} />}
-            />
-            <Route
-              path="*"
-              element={<NotFoundPage />}
-            />
-          </Routes>
-        </div>
+      <Suspense fallback={<div />}>
+        <BrowserRouter>
+          <div className="App">
+            <Routes>
+              <Route
+                path="/"
+                element={<ListPage locations={locations} />}
+              />
+              <Route
+                path="/map"
+                element={<MapPage locations={locations} />}
+              />
+              <Route
+                path="*"
+                element={<NotFoundPage />}
+              />
+            </Routes>
+          </div>
 
-        <Navbar />
-      </BrowserRouter>
+          <Navbar />
+        </BrowserRouter>
+      </Suspense>
     </React.StrictMode>
   );
 }

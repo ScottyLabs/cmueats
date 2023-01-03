@@ -1,3 +1,4 @@
 .MapPage {
+  background-color: #2c2d2f;
   height: calc(100% - var(--navbar-height));
 }
