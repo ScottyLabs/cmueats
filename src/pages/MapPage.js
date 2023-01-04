@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef } from 'react';
-import { Map, Marker, ColorScheme, FeatureVisibility } from 'mapkit-react';
+import { Map, Marker, ColorScheme } from 'mapkit-react';
 import EateryCard from './../components/EateryCard';
 import { CSSTransition } from 'react-transition-group';
 import './MapPage.css';
