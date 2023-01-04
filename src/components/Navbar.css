@@ -53,7 +53,12 @@
 
   background-color: #2b2f33;
   border-radius: 999px;
-  transition: .3s cubic-bezier(.4, 0, .2, 1) transform;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .Navbar-active {
+    transition: .3s cubic-bezier(.4, 0, .2, 1) transform;
+  }
 }
 
 .Navbar-active_map {

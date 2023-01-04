@@ -10,7 +10,13 @@
   background: #2d2f33;
   border-radius: 14px 14px 0 0;
   overflow: hidden;
-  transition: max-height ease-in 300ms;
+  box-sizing: content-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .MapDrawer {
+    transition: max-height ease-in 300ms;
+  }
 }
 
 .DrawerTransition-exit {
