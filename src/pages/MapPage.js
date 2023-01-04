@@ -1,15 +1,21 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { Map, Marker, ColorScheme, FeatureVisibility } from 'mapkit-react';
+import EateryCard from './../components/EateryCard';
+import { CSSTransition } from 'react-transition-group';
 import './MapPage.css';
 
 const token = '…';
 
-function abbreviate(longName: string) {
+function abbreviate(longName) {
   const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
   return importantPart.split(' ').map(word => word.charAt(0)).join('');
 }
 
 function MapPage({ locations }) {
+  const [selectedLocationIndex, setSelectedLocationIndex] = useState(null);
+  const [isDrawerVisible, setDrawerVisible] = useState(false);
+  const drawerRef = useRef(null);
+
   const cameraBoundary = useMemo(() => ({
     centerLatitude: 40.444,
     centerLongitude: -79.945,
@@ -36,20 +42,41 @@ function MapPage({ locations }) {
 
         showsUserLocationControl={true}
       >
-        {locations.map((location) =>
+        {locations.map((location, locationIndex) =>
           <Marker
             key={location.conceptId}
 
             latitude={location.coordinates.lng} // @TODO Fix whenever the API will be fixed (#27)
             longitude={location.coordinates.lat}
 
-            title={location.name}
-            titleVisibility={FeatureVisibility.Hidden}
             color={location.isOpen ? '#69bb36' : '#ff5b40'}
             glyphText={abbreviate(location.name)}
+
+            onSelect={() => {
+              setSelectedLocationIndex(locationIndex);
+              setDrawerVisible(true);
+            }}
+            onDeselect={() => {
+              if (selectedLocationIndex === locationIndex) {
+                setDrawerVisible(false);
+              }
+            }}
           />
         )}
       </Map>
+
+      <CSSTransition
+        classNames="DrawerTransition"
+        timeout={300}
+        in={isDrawerVisible}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={drawerRef}
+      >
+        <div className="MapDrawer" ref={drawerRef}>
+          <EateryCard location={locations[selectedLocationIndex] || {}} />
+        </div>
+      </CSSTransition>
     </div>
   );
 }
