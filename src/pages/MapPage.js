@@ -4,7 +4,7 @@ import EateryCard from './../components/EateryCard';
 import { CSSTransition } from 'react-transition-group';
 import './MapPage.css';
 
-const token = '…';
+const token = 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlY4VkZRMjU3SkgifQ.eyJpc3MiOiJXNDdFMkxTNVk5IiwiaWF0IjoxNjcyODczOTI5LCJleHAiOjE2ODgxNjk2MDAsIm9yaWdpbiI6ImRlcGxveS1wcmV2aWV3LTI5LS1jbXVlYXRzLm5ldGxpZnkuYXBwIn0.ExFbVar9E5sWypBG4Ml4Uyxny1qTdzOm06XvYebRiQ-GxkgBhriDxS3yfsb0nshLvI8mZUZR6714nD9xOfs13A';
 
 function abbreviate(longName) {
   const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
