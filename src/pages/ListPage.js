@@ -13,7 +13,7 @@ function ListPage({ locations }) {
   const handleSearchQueryChange = (e) => setSearchQuery(e.target.value);
 
   const [filteredLocations, setFilteredLocations] = useState([]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const filteredSearchQuery = searchQuery.trim().toLowerCase();
 
     setFilteredLocations(
