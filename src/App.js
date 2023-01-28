@@ -31,9 +31,10 @@ function App() {
     setFilteredLocations(
       filteredSearchQuery.length === 0
       ? locations
-      : locations.filter(({ name, location }) => {
+      : locations.filter(({ name, location, shortDescription }) => {
         return name.toLowerCase().includes(filteredSearchQuery)
-          || location.toLowerCase().includes(filteredSearchQuery);
+          || location.toLowerCase().includes(filteredSearchQuery)
+          || shortDescription.toLowerCase().includes(filteredSearchQuery);
       })
     );
   }, [searchQuery, locations]);
