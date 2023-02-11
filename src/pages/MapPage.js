@@ -46,8 +46,8 @@ function MapPage({ locations }) {
           <Marker
             key={location.conceptId}
 
-            latitude={location.coordinates.lng} // @TODO Fix whenever the API will be fixed (#27)
-            longitude={location.coordinates.lat}
+            latitude={location.coordinates.lat}
+            longitude={location.coordinates.lng}
 
             color={location.isOpen ? '#69bb36' : '#ff5b40'}
             glyphText={abbreviate(location.name)}
