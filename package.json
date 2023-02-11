@@ -13,7 +13,7 @@
     "axios": "^0.26.0",
     "css-loader": "^6.7.3",
     "luxon": "^2.3.0",
-    "mapkit-react": "^1.0.3",
+    "mapkit-react": "^1.2.0",
     "netlify-plugin-mapkitjs-token": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
