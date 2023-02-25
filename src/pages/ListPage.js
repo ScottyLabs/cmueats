@@ -63,7 +63,7 @@ function ListPage({ locations }) {
   });
 
   return (
-    <div>
+    <div className="ListPage">
       {/* <div className="announcement">
         🚧 There is an ongoing issue that is preventing us from retrieving the
         dining schedule. We are working on a fix. 🚧
@@ -86,67 +86,11 @@ function ListPage({ locations }) {
         }
 
         <Grid container spacing={2}>
-          {openLocations.map(
-            (
-              {
-                conceptId,
-                name,
-                location,
-                isOpen,
-                shortDescription,
-                todaysSpecials,
-                menu,
-                acceptsOnlineOrders,
-                statusMsg,
-                todaysSoups,
-              }
-            ) => (
-              <EateryCard
-                name={name}
-                location={location}
-                isOpen={isOpen}
-                description={shortDescription}
-                menuURL={menu}
-                acceptsOnlineOrders={acceptsOnlineOrders}
-                statusMsg={statusMsg}
-                todaysSpecials={todaysSpecials || []}
-                todaysSoups={todaysSoups || []}
-                key={conceptId}
-              />
-            )
-          )}
+          {openLocations.map(location => <EateryCard location={location} key={location.conceptId} />)}
         </Grid>
         <br></br>
         <Grid container spacing={2}>
-          {closedLocations.map(
-            (
-              {
-                conceptId,
-                name,
-                location,
-                isOpen,
-                shortDescription,
-                todaysSpecials,
-                menu,
-                acceptsOnlineOrders,
-                statusMsg,
-                todaysSoups,
-              }
-            ) => (
-              <EateryCard
-                name={name}
-                location={location}
-                isOpen={isOpen}
-                description={shortDescription}
-                menuURL={menu}
-                acceptsOnlineOrders={acceptsOnlineOrders}
-                statusMsg={statusMsg}
-                todaysSpecials={todaysSpecials || []}
-                todaysSoups={todaysSoups || []}
-                key={conceptId}
-              />
-            )
-          )}
+          {closedLocations.map(location => <EateryCard location={location} key={location.conceptId} />)}
         </Grid>
       </div>
       <footer className="footer">

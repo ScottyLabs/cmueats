@@ -1,3 +1,7 @@
+.ListPage {
+  padding-bottom: var(--navbar-height);
+}
+
 .badge-accent {
   color: #105c03;
   background: #19b875;
