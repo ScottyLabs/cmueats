@@ -12,7 +12,7 @@ const WEEKDAYS = [
   "Saturday",
 ];
 const WEEK_MINUTES = 7 * 24 * 60;
-const now = DateTime.now();
+const now = DateTime.now().setZone('America/New_York');
 
 /**
  * Convert a string to title case
