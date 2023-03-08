@@ -95,7 +95,7 @@ function ListPage({ locations }) {
       </div>
       <footer className="footer">
         <FooterText>
-          All times displayed in Pittsburgh local time (GMT -4)
+          All times displayed in Pittsburgh local time (ET)
         </FooterText>
         <FooterText>
           Contact{" "}
