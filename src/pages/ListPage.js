@@ -4,23 +4,9 @@ import EateryCard from "../components/EateryCard";
 import NoResultsError from "../components/NoResultsError";
 import getGreeting from "../util/greeting";
 import "./ListPage.css";
-import {DateTime} from 'luxon';
 
 function ListPage({ locations }) {
   const greeting = useMemo(() => getGreeting(), []);
-
-  // Initialize offsetTime to empty string and constantly change it
-  let [offsetTime, setOffsetTime] = useState("");
-
-  // Constantly fetch the current Eastern Time and creates the correct offset string, regardless of season
-  useEffect(() => {
-    const intervalTime = setInterval(() => {
-      const etNow = DateTime.now().setZone('America/New_York');
-      const etGmtOffset = -etNow.offset / 60;
-      setOffsetTime(`All times displayed in Pittsburgh local time (GMT -${etGmtOffset})`);
-    }, 1000);
-    return () => clearInterval(intervalTime);
-  }, []);
 
   // Search query processing
   const [searchQuery, setSearchQuery] = useState("");
@@ -109,7 +95,7 @@ function ListPage({ locations }) {
       </div>
       <footer className="footer">
         <FooterText>
-          {offsetTime}
+          All times displayed in Pittsburgh local time (ET)
         </FooterText>
         <FooterText>
           Contact{" "}
