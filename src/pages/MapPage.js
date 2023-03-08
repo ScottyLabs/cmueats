@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef } from 'react';
-import { Map, Marker, ColorScheme } from 'mapkit-react';
+import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
 import EateryCard from './../components/EateryCard';
 import { CSSTransition } from 'react-transition-group';
 import './MapPage.css';
@@ -22,13 +22,14 @@ function MapPage({ locations }) {
     latitudeDelta: 0.006,
     longitudeDelta: 0.01,
   }), []);
+  
   const initialRegion = useMemo(() => ({
     centerLatitude: 40.44316701238923,
     centerLongitude: -79.9431147637379,
     latitudeDelta: 0.006337455593801167,
     longitudeDelta: 0.011960061265583022,
   }), []);
-
+  
   return (
     <div className="MapPage">
       <Map
@@ -36,6 +37,9 @@ function MapPage({ locations }) {
         colorScheme={ColorScheme.Dark}
 
         initialRegion={initialRegion}
+
+        excludedPOICategories={[PointOfInterestCategory.Restaurant]}
+        
         cameraBoundary={cameraBoundary}
         minCameraDistance={100}
         maxCameraDistance={1000}
