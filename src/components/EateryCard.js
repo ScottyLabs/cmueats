@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -15,6 +15,7 @@ import {
   Dialog,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { DateTime } from "luxon";
 
 const StyledCard = styled(Card)({
   backgroundColor: "#23272A",
@@ -73,6 +74,14 @@ const ActionButton = styled(Button)({
 });
 
 const GreenDot = styled(Card)({
+  opacity: 1,
+  background: "#19b875",
+  width: "100%",
+  height: "100%",
+  foregroundColor: "#19b875"
+});
+
+const BlinkingGreenDot = styled(Card)({
   "@keyframes blinking": {
     "0%": {
       opacity: 0,
@@ -140,6 +149,59 @@ export default function EateryCard({ location }) {
   } = location;
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [isBlinking, setIsBlinking] = useState(false);
+  const [timeSlot, setTimeSlot] = useState(null);
+
+  const now = DateTime.now().setZone('America/New_York');
+
+  function toMinutes(days, hours, minutes) {
+    return days * 24 * 60 + hours * 60 + minutes;
+  };
+  
+  function isOpenNow(start, end) {
+    const weekday = now.weekday === 7 ? 0 : now.weekday;
+    const nowMinutes = toMinutes(weekday, now.hour, now.minute);
+    return start <= nowMinutes && nowMinutes <= end;
+  }
+
+  // Async function to update state of whether green dot should blink
+  async function queryLocation() {
+    let isOpen = false;
+    let isBlinking = false;
+    location.times = location.times.map(({ start, end }) => ({
+      // Add minutes since start of the week for isOpen computation
+      start: {
+        ...start,
+        rawMinutes: toMinutes(start.day, start.hour, start.minute),
+      },
+      end: {
+        ...end,
+        rawMinutes: toMinutes(end.day, end.hour, end.minute),
+      },
+    }));
+    const { times } = location;
+    const timeSlotTmp = times.find(({ start, end }) => {
+      return isOpenNow(start.rawMinutes, end.rawMinutes);
+    });
+    setTimeSlot(timeSlotTmp);
+  
+    if (timeSlotTmp != null) {
+      // Location is open
+      isOpen = true;
+      const { end } = timeSlotTmp;
+      const timeDiff = end.rawMinutes - toMinutes(now.weekday, now.hour, now.minute);
+      isBlinking = timeDiff <= 60;
+    } else {
+      // Location is closed
+      isOpen = false;
+    }
+    setIsBlinking(isBlinking);
+  }
+
+  useEffect(() => {
+    queryLocation();
+  }, [queryLocation]);
+
   return (
     <>
       <Grid item xs={12} md={4} lg={3} xl={3}>
@@ -156,7 +218,7 @@ export default function EateryCard({ location }) {
               <Avatar
                 sx={{ width: 12, height: 12, backgroundColor: "#1D1F21" }}
               >
-                {isOpen ? <GreenDot /> : <RedDot />}
+                {isOpen ? (isBlinking ? <BlinkingGreenDot /> : <GreenDot />) : <RedDot />}
               </Avatar>
             }
           ></StyledCardHeader>
