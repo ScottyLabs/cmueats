@@ -132,7 +132,7 @@ export default function EateryCard({ location }) {
     name,
     location: locationText,
     shortDescription,
-    menuURL,
+    menu,
     todaysSpecials = [],
     isOpen,
     statusMsg,
@@ -166,10 +166,10 @@ export default function EateryCard({ location }) {
             <DescriptionText>{shortDescription}</DescriptionText>
           </CardContent>
           <CardActions sx={{ marginTop: "auto" }}>
-            {menuURL && (
+            {menu && (
               <ActionButton
                 onClick={(e) => {
-                  window.open(menuURL, "_blank");
+                  window.open(menu, "_blank");
                 }}
               >
                 Menu
