@@ -141,7 +141,7 @@ export default function EateryCard({ location }) {
     name,
     location: locationText,
     shortDescription,
-    menuURL,
+    menu,
     todaysSpecials = [],
     isOpen,
     statusMsg,
@@ -228,10 +228,10 @@ export default function EateryCard({ location }) {
             <DescriptionText>{shortDescription}</DescriptionText>
           </CardContent>
           <CardActions sx={{ marginTop: "auto" }}>
-            {menuURL && (
+            {menu && (
               <ActionButton
                 onClick={(e) => {
-                  window.open(menuURL, "_blank");
+                  window.open(menu, "_blank");
                 }}
               >
                 Menu
@@ -280,7 +280,7 @@ export default function EateryCard({ location }) {
           ></StyledCardHeader>
           <CardContent>
             <NameText variant="h6">{name}</NameText>
-            <LocationText variant="subtitle2">{location}</LocationText>
+            <LocationText variant="subtitle2">{locationText}</LocationText>
           </CardContent>
           {todaysSpecials.concat(todaysSoups).map((special, idx) => {
             return (
