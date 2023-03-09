@@ -218,7 +218,7 @@ export default function EateryCard({ location }) {
           ></StyledCardHeader>
           <CardContent>
             <NameText variant="h6">{name}</NameText>
-            <LocationText variant="subtitle2">{location}</LocationText>
+            <LocationText variant="subtitle2">{locationText}</LocationText>
           </CardContent>
           {todaysSpecials.concat(todaysSoups).map((special, idx) => {
             return (
