@@ -164,12 +164,10 @@ export default function EateryCard({ location }) {
             return start <= nowMinutes && nowMinutes <= end;
         }
 
-        let modifiedTimes;
-
         // Async function to update state of whether green dot should blink
         async function queryLocation() {
             let isBlinking = false;
-            modifiedTimes = location.times.map(({ start, end }) => ({
+            const modifiedTimes = location.times.map(({ start, end }) => ({
                 // Add minutes since start of the week for isOpen computation
                 start: {
                     ...start,
