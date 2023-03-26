@@ -5,11 +5,14 @@ import ListPage from "./pages/ListPage";
 import MapPage from "./pages/MapPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import queryLocations from "./util/queryLocations";
+import { handleBeforeInstallPrompt, installApp, cancelInstall } from "./install";
+
 import "./App.css";
 
 function App() {
   // Load locations
   const [locations, setLocations] = useState([]);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   useEffect(() => {
     queryLocations().then((parsedLocations) => {
@@ -17,12 +20,27 @@ function App() {
         setLocations(parsedLocations);
       }
     });
+    // Register the beforeinstallprompt event listener
+    window.addEventListener("beforeinstallprompt", (event) => handleBeforeInstallPrompt(event, showInstallPrompt, setShowInstallPrompt));
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("beforeinstallprompt", (event) => handleBeforeInstallPrompt(event, showInstallPrompt, setShowInstallPrompt));
+    };
   }, []);
 
   return (
     <React.StrictMode>
       <BrowserRouter>
         <div className="App">
+        {
+          showInstallPrompt && (
+            <div className="install-prompt">
+              <p>Do you want to install CMUEats?</p>
+              <button onClick={() => installApp(setShowInstallPrompt)}>Install</button>
+              <button onClick={() => cancelInstall(setShowInstallPrompt)}>Cancel</button>
+            </div>
+          )
+          }
           <Routes>
             <Route
               path="/"
