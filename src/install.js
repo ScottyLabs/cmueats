@@ -10,29 +10,6 @@ function handleBeforeInstallPrompt(event, showInstallPrompt, setShowInstallPromp
     setShowInstallPrompt(true);
   }  
 
-function showInstallPrompt() {
-  // Show the custom install prompt
-  const installPrompt = document.createElement('div');
-  installPrompt.classList.add('install-prompt');
-
-  const message = document.createElement('p');
-  message.innerText = 'Do you want to install CMUEats?';
-
-  const installButton = document.createElement('button');
-  installButton.innerText = 'Install';
-  installButton.addEventListener('click', installApp);
-
-  const cancelButton = document.createElement('button');
-  cancelButton.innerText = 'Cancel';
-  cancelButton.addEventListener('click', cancelInstall);
-
-  installPrompt.appendChild(message);
-  installPrompt.appendChild(installButton);
-  installPrompt.appendChild(cancelButton);
-
-  document.body.appendChild(installPrompt);
-}
-
 function installApp(setShowInstallPrompt) {
   // Hide the custom install prompt
   const installPrompt = document.querySelector('.install-prompt');

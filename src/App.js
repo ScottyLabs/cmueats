@@ -26,7 +26,7 @@ function App() {
     return () => {
       window.removeEventListener("beforeinstallprompt", (event) => handleBeforeInstallPrompt(event, showInstallPrompt, setShowInstallPrompt));
     };
-  }, []);
+  }, [showInstallPrompt]);  
 
   return (
     <React.StrictMode>
