@@ -64,10 +64,11 @@ function ListPage({ locations }) {
 
   return (
     <div className="ListPage">
-      {/* <div className="announcement">
-        🚧 There is an ongoing issue that is preventing us from retrieving the
-        dining schedule. We are working on a fix. 🚧
-      </div> */}
+      { <div className="announcement">
+        🚧  Due to recent changes in the way CMU displays dining data, 
+        dining cards and map locations are currently unavailable. 
+        Please remain patient while we work on a fix. Thank you. 🚧
+      </div> }
       <div className="Container">
         <header className="Locations-header">
           <HeaderText variant="h3">{greeting}</HeaderText>
