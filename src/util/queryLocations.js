@@ -171,29 +171,44 @@ async function queryLocations() {
 
     const processedLocations = [];
 
-    // Determine status of locations
-    for (const location of locations) {
-      try {
-        const { times } = location;
-        const timeSlot = times.find(({ start, end }) => {
-          return isOpen(start.rawMinutes, end.rawMinutes);
-        });
+// Determine status of locations
+for (const location of locations) {
+  try {
+    const { times } = location;
+    const timeSlot = times.find(({ start, end }) => {
+      return isOpen(start.rawMinutes, end.rawMinutes);
+    });
 
-        if (timeSlot != null) {
-          // Location is open
-          location.isOpen = true;
-          location.statusMsg = getStatusMessage(timeSlot, true);
-        } else {
-          // Location is closed
-          location.isOpen = false;
-          const nextTimeSlot = getNextTimeSlot(times);
-          location.statusMsg = getStatusMessage(nextTimeSlot, false);
-        }
-        processedLocations.push(location);
-      } catch (err) {
-        console.error(err);
+    if (timeSlot != null) {
+      // Location is open
+      location.isOpen = true;
+      location.statusMsg = getStatusMessage(timeSlot, true);
+      let diff = (timeSlot.end.rawMinutes - toMinutes(now.weekday, now.hour, now.minute) + WEEK_MINUTES) % WEEK_MINUTES;
+      if (diff <= 60) {
+        location.changesSoon = true;
+      } else {
+        location.changesSoon = false;
+      }  
+    } else {
+      // Location is closed
+      location.isOpen = false;
+      const nextTimeSlot = getNextTimeSlot(times);
+      location.statusMsg = getStatusMessage(nextTimeSlot, false);
+      let diff = nextTimeSlot.start.rawMinutes - toMinutes(now.weekday, now.hour, now.minute);
+      if (diff < 0) {
+        diff += WEEK_MINUTES;
+      }
+      if (diff <= 60) {
+        location.changesSoon = true;
+      } else {
+        location.changesSoon = false;
       }
     }
+    processedLocations.push(location);
+  } catch (err) {
+    console.error(err);
+  }
+}
 
     return processedLocations;
   } catch (err) {
