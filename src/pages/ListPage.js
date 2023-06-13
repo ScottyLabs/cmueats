@@ -1,4 +1,4 @@
-import { Typography, Grid, styled } from "@mui/material";
+import { Typography, Grid, Alert, styled } from "@mui/material";
 import React, { useEffect, useMemo, useState, useLayoutEffect } from "react";
 import EateryCard from "../components/EateryCard";
 import NoResultsError from "../components/NoResultsError";
@@ -29,6 +29,8 @@ function ListPage({ locations }) {
 
   const openLocations = filteredLocations.filter((location) => location.isOpen);
   const closedLocations = filteredLocations.filter((location) => !location.isOpen);
+
+  const [showAlert, setShowAlert] = useState(true);
 
   // Load the search query from the URL, if any
   useEffect(() => {
@@ -61,13 +63,19 @@ function ListPage({ locations }) {
     marginBottom: 20,
     fontSize: 16,
   });
+  
+  const StyledAlert  = styled(Alert)({
+    backgroundColor: '#23272a',
+    color: '#ffffff',
+  });
 
   return (
     <div className="ListPage">
-      {/* <div className="announcement">
-        🚧 There is an ongoing issue that is preventing us from retrieving the
-        dining schedule. We are working on a fix. 🚧
-      </div> */}
+      { /*  showAlert && 
+      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
+        🚧 [Issue Description] 
+        Please remain patient while we work on a fix. Thank you. 🚧
+      </StyledAlert>  */}
       <div className="Container">
         <header className="Locations-header">
           <HeaderText variant="h3">{greeting}</HeaderText>
