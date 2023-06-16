@@ -29,6 +29,8 @@ function ListPage({ locations }) {
 
   const openLocations = filteredLocations.filter((location) => location.isOpen);
   const closedLocations = filteredLocations.filter((location) => !location.isOpen);
+  
+  const [showAlert, setShowAlert] = useState(true);
 
   const [showAlert, setShowAlert] = useState(true);
 
@@ -64,6 +66,11 @@ function ListPage({ locations }) {
     fontSize: 16,
   });
   
+  const StyledAlert  = styled(Alert)({
+    backgroundColor: '#23272a',
+    color: '#ffffff',
+  });
+
   const StyledAlert  = styled(Alert)({
     backgroundColor: '#23272a',
     color: '#ffffff',
