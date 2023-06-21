@@ -71,12 +71,11 @@ function ListPage({ locations }) {
 
   return (
     <div className="ListPage">
-      { showAlert && 
+       { /*  showAlert && 
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧  Due to recent changes in the way CMU displays dining data, 
-        dining cards and map locations are currently unavailable. 
+        🚧 [Issue Description] 
         Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  }
+      </StyledAlert>  */}
       <div className="Container">
         <header className="Locations-header">
           <HeaderText variant="h3">{greeting}</HeaderText>
