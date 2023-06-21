@@ -30,7 +30,7 @@ function ListPage({ locations }) {
   const openLocations = filteredLocations.filter((location) => location.isOpen);
   const closedLocations = filteredLocations.filter((location) => !location.isOpen);
   
-  const [showAlert, setShowAlert] = useState(true);
+  // const [showAlert, setShowAlert] = useState(true);
 
   // Load the search query from the URL, if any
   useEffect(() => {
@@ -64,10 +64,10 @@ function ListPage({ locations }) {
     fontSize: 16,
   });
 
-  const StyledAlert  = styled(Alert)({
+  /* const StyledAlert  = styled(Alert)({
     backgroundColor: '#23272a',
     color: '#ffffff',
-  });
+  }); */
 
   return (
     <div className="ListPage">
