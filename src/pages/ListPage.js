@@ -1,4 +1,4 @@
-import { Typography, Grid, Alert, styled } from "@mui/material";
+import { Typography, Grid, styled } from "@mui/material"; // Alert (add to imports when creating announcement)
 import React, { useEffect, useMemo, useState, useLayoutEffect } from "react";
 import EateryCard from "../components/EateryCard";
 import NoResultsError from "../components/NoResultsError";
