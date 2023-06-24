@@ -1,6 +1,6 @@
-import React from "react";
-import {Box} from "@mui/material";
-import {ErrorButton, ErrorText, ErrorTitle} from "../style";
+import React from 'react';
+import { Box } from '@mui/material';
+import { ErrorButton, ErrorText, ErrorTitle } from '../style';
 
 export default function EateryCard({
   onClear,

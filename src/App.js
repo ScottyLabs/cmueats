@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import ListPage from "./pages/ListPage";
-import MapPage from "./pages/MapPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import queryLocations from "./util/queryLocations";
-import "./App.css";
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import ListPage from './pages/ListPage';
+import MapPage from './pages/MapPage';
+import NotFoundPage from './pages/NotFoundPage';
+import queryLocations from './util/queryLocations';
+import './App.css';
 
 function App() {
   // Load locations

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';

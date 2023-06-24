@@ -1,14 +1,14 @@
 import React, { useMemo, useState, useRef } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
-import EateryCard from './../components/EateryCard';
 import { CSSTransition } from 'react-transition-group';
+import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 
 const token = process.env.REACT_APP_MAPKITJS_TOKEN;
 
 function abbreviate(longName) {
   const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
-  return importantPart.split(' ').map(word => word.charAt(0)).join('');
+  return importantPart.split(' ').map((word) => word.charAt(0)).join('');
 }
 
 function MapPage({ locations }) {
@@ -22,14 +22,14 @@ function MapPage({ locations }) {
     latitudeDelta: 0.006,
     longitudeDelta: 0.01,
   }), []);
-  
+
   const initialRegion = useMemo(() => ({
     centerLatitude: 40.44316701238923,
     centerLongitude: -79.9431147637379,
     latitudeDelta: 0.006337455593801167,
     longitudeDelta: 0.011960061265583022,
   }), []);
-  
+
   return (
     <div className="MapPage">
       <Map
@@ -39,7 +39,7 @@ function MapPage({ locations }) {
         initialRegion={initialRegion}
 
         excludedPOICategories={[PointOfInterestCategory.Restaurant]}
-        
+
         cameraBoundary={cameraBoundary}
         minCameraDistance={100}
         maxCameraDistance={1000}
@@ -47,6 +47,7 @@ function MapPage({ locations }) {
         showsUserLocationControl={true}
       >
         {locations.map((location, locationIndex) =>
+          // eslint-disable-next-line implicit-arrow-linebreak
           <Marker
             key={location.conceptId}
 
@@ -65,8 +66,7 @@ function MapPage({ locations }) {
                 setDrawerVisible(false);
               }
             }}
-          />
-        )}
+          />)}
       </Map>
 
       <CSSTransition

@@ -1,15 +1,15 @@
-import axios from "axios";
-import { DateTime } from "luxon";
+import axios from 'axios';
+import { DateTime } from 'luxon';
 
-const BASE_URL = "https://dining.apis.scottylabs.org/locations";
+const BASE_URL = 'https://dining.apis.scottylabs.org/locations';
 const WEEKDAYS = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ];
 const WEEK_MINUTES = 7 * 24 * 60;
 const now = DateTime.now().setZone('America/New_York');
@@ -21,17 +21,16 @@ const now = DateTime.now().setZone('America/New_York');
  */
 function toTitleCase(str) {
   return str
-    .trim(" ")
+    .trim(' ')
     .toLowerCase()
-    .split(" ")
+    .split(' ')
     .map((word) => {
       if (word.length > 1) {
         return word[0].toUpperCase() + word.slice(1);
-      } else {
-        return word;
       }
+      return word;
     })
-    .join(" ");
+    .join(' ');
 }
 
 /**
@@ -75,9 +74,8 @@ function getNextTimeSlot(times) {
   if (nextTimeSlot == null) {
     // End of the week. Return the first time slot instead.
     return times[0];
-  } else {
-    return nextTimeSlot;
   }
+  return nextTimeSlot;
 }
 
 /**
@@ -87,9 +85,10 @@ function getNextTimeSlot(times) {
  * @param {boolean} isOpen whether or not the location is currently open
  * @returns {str} The status message for the location
  */
+// eslint-disable-next-line no-shadow, consistent-return
 function getStatusMessage(timeSlot, isOpen) {
   if (timeSlot == null) {
-    return "Closed until further notice";
+    return 'Closed until further notice';
   }
   const weekday = now.weekday === 7 ? 0 : now.weekday;
   const nowMinutes = toMinutes(weekday, now.hour, now.minute);
@@ -116,30 +115,30 @@ function getStatusMessage(timeSlot, isOpen) {
   // Create time string
   const { hour, minute } = refTime;
   const hour12H = hour % 12 === 0 ? 12 : hour % 12;
-  const ampm = hour >= 12 ? "PM" : "AM";
+  const ampm = hour >= 12 ? 'PM' : 'AM';
   const minutePadded = minute < 10 ? `0${minute}` : minute;
   const time = `${hour12H}:${minutePadded} ${ampm}`;
 
-  const action = isOpen ? "Closes" : "Opens";
+  const action = isOpen ? 'Closes' : 'Opens';
   const day = WEEKDAYS[timeSlot.start.day];
-  const hourLabel = diffHours === 1 ? "hour" : "hours";
+  const hourLabel = diffHours === 1 ? 'hour' : 'hours';
 
+  /* eslint-disable */
   if (weekdayDiff > 1) {
     return `${action} in ${weekdayDiff} days (${day} at ${time})`;
   } else if (weekdayDiff === 1) {
     if (diffHours >= 24) {
       return `${action} in a day (tomorrow at ${time})`;
-    } else {
-      return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
-    }
+    } 
+    return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
   } else if (weekdayDiff === 0) {
     if (diffHours >= 1) {
       return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
-    } else {
-      return `${action} in ${diffMinutes} minutes (today at ${time})`;
-    }
+    } 
+    return `${action} in ${diffMinutes} minutes (today at ${time})`;
   }
 }
+/* eslint-enable */
 
 async function queryLocations() {
   try {
@@ -150,7 +149,8 @@ async function queryLocations() {
     }
 
     // Convert names to title case and append "raw time" to each time slot
-    let { locations } = data;
+    /* eslint-disable */
+    const { locations } = data;
     locations.forEach((location) => {
       location.name = toTitleCase(location.name);
       if (location.name === "Ruge Atrium - Rothberg's Roasters Ii") {
@@ -168,9 +168,11 @@ async function queryLocations() {
         },
       }));
     });
+    /* eslint-enable */
 
     const processedLocations = [];
 
+    /* eslint-disable */
     // Determine status of locations
     for (const location of locations) {
       try {
@@ -194,6 +196,7 @@ async function queryLocations() {
         console.error(err);
       }
     }
+    /* eslint-enable */
 
     return processedLocations;
   } catch (err) {

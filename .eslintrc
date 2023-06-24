@@ -1,0 +1,29 @@
+{
+    "extends": ["airbnb-base", "plugin:react/recommended"],
+    "env": {
+      "node": true,
+      "es6": true,
+      "browser": true
+    },
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
+      "linebreak-style": "off",
+      "react/prop-types": "off",
+      "object-curly-newline": "off",
+      "arrow-body-style": "off",
+      "max-len": ["error", 120],
+      "no-console": [
+        "error",
+        { "allow": ["error"] }
+      ]
+    }
+}

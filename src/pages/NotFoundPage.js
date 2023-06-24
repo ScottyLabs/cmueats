@@ -1,8 +1,7 @@
-import {Link as RouterLink} from "react-router-dom";
-import {Box} from "@mui/material";
-import React from "react";
-import {ErrorTitle, ErrorText, ErrorButton} from "../style";
-
+import { Link as RouterLink } from 'react-router-dom';
+import { Box } from '@mui/material';
+import React from 'react';
+import { ErrorTitle, ErrorText, ErrorButton } from '../style';
 
 function NotFoundPage() {
   return (

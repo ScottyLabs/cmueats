@@ -1,15 +1,15 @@
-import { Typography, Grid, Alert, styled } from "@mui/material";
-import React, { useEffect, useMemo, useState, useLayoutEffect } from "react";
-import EateryCard from "../components/EateryCard";
-import NoResultsError from "../components/NoResultsError";
-import getGreeting from "../util/greeting";
-import "./ListPage.css";
+import { Typography, Grid, styled } from '@mui/material'; // Alert (add to imports when adding announcement)
+import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react';
+import EateryCard from '../components/EateryCard';
+import NoResultsError from '../components/NoResultsError';
+import getGreeting from '../util/greeting';
+import './ListPage.css';
 
 function ListPage({ locations }) {
   const greeting = useMemo(() => getGreeting(), []);
 
   // Search query processing
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const handleSearchQueryChange = (e) => setSearchQuery(e.target.value);
 
   const [filteredLocations, setFilteredLocations] = useState([]);
@@ -23,13 +23,13 @@ function ListPage({ locations }) {
           return name.toLowerCase().includes(filteredSearchQuery)
             || location.toLowerCase().includes(filteredSearchQuery)
             || shortDescription.toLowerCase().includes(filteredSearchQuery);
-        })
+        }),
     );
   }, [searchQuery, locations]);
 
   const openLocations = filteredLocations.filter((location) => location.isOpen);
   const closedLocations = filteredLocations.filter((location) => !location.isOpen);
-  
+
   // const [showAlert, setShowAlert] = useState(true);
 
   // Load the search query from the URL, if any
@@ -42,24 +42,28 @@ function ListPage({ locations }) {
 
   // Typography
   const HeaderText = styled(Typography)({
-    color: "white",
+    color: 'white',
     padding: 0,
     fontFamily:
-      '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+      '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", '
+      + '"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", '
+      + '"Droid Sans", "Helvetica Neue", sans-serif',
     fontWeight: 800,
-    fontSize: "3em",
+    fontSize: '3em',
   });
 
   const LogoText = styled(Typography)({
-    color: "#dd3c18",
+    color: '#dd3c18',
     padding: 0,
     fontFamily:
-      '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+      '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", '
+      + '"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", '
+      + '"Droid Sans", "Helvetica Neue", sans-serif',
     fontWeight: 800,
   });
 
   const FooterText = styled(Typography)({
-    color: "white",
+    color: 'white',
     marginBottom: 20,
     fontSize: 16,
   });
@@ -71,9 +75,9 @@ function ListPage({ locations }) {
 
   return (
     <div className="ListPage">
-       { /*  showAlert && 
+       { /*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description] 
+        🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
       </StyledAlert>  */}
       <div className="Container">
@@ -89,16 +93,16 @@ function ListPage({ locations }) {
         </header>
 
         {
-          (filteredLocations.length === 0 && locations.length !== 0) &&
-          <NoResultsError onClear={e => setSearchQuery('')} />
+          (filteredLocations.length === 0 && locations.length !== 0)
+          && <NoResultsError onClear={() => setSearchQuery('')} />
         }
 
         <Grid container spacing={2}>
-          {openLocations.map(location => <EateryCard location={location} key={location.conceptId} />)}
+          {openLocations.map((location) => <EateryCard location={location} key={location.conceptId} />)}
         </Grid>
         <br></br>
         <Grid container spacing={2}>
-          {closedLocations.map(location => <EateryCard location={location} key={location.conceptId} />)}
+          {closedLocations.map((location) => <EateryCard location={location} key={location.conceptId} />)}
         </Grid>
       </div>
       <footer className="footer">
@@ -106,22 +110,22 @@ function ListPage({ locations }) {
           All times displayed in Pittsburgh local time (ET)
         </FooterText>
         <FooterText>
-          Contact{" "}
-          <a href="mailto:gramliu@cmu.edu" style={{ color: "white" }}>
+          Contact{' '}
+          <a href="mailto:gramliu@cmu.edu" style={{ color: 'white' }}>
             Gram
           </a>
-          ,{" "}
-          <a href="mailto:anuda@cmu.edu" style={{ color: "white" }}>
+          ,{' '}
+          <a href="mailto:anuda@cmu.edu" style={{ color: 'white' }}>
             Anuda
           </a>
-          , or{" "}
-          <a href="mailto:dsyou@andrew.cmu.edu" style={{ color: "white" }}>
+          , or{' '}
+          <a href="mailto:dsyou@andrew.cmu.edu" style={{ color: 'white' }}>
             David
-          </a>{" "}
+          </a>{' '}
           with any problems
         </FooterText>
         <LogoText variant="h4">
-          cmu<span style={{ color: "#19b875" }}>:eats</span>
+          cmu<span style={{ color: '#19b875' }}>:eats</span>
         </LogoText>
       </footer>
     </div>
