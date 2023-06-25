@@ -119,6 +119,7 @@ function getStatusMessage(timeSlot, isOpen) {
   const action = isOpen ? 'Closes' : 'Opens';
   const day = WEEKDAYS[timeSlot.start.day];
   const hourLabel = diffHours === 1 ? 'hour' : 'hours';
+  const minuteLabel = diffMinutes === 1 ? 'minute' : 'minutes';
 
   if (weekdayDiff > 1) {
     return `${action} in ${weekdayDiff} days (${day} at ${time})`;
@@ -132,19 +133,11 @@ function getStatusMessage(timeSlot, isOpen) {
   }
 
   if (weekdayDiff === 0) {
-    if (diffHours > 1) {
+    if (diffHours >= 1) {
       return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
     }
 
-    if (diffHours === 1) { // Use "hour" instead of "hours" for 1 hour
-      return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
-    }
-
-    if (diffMinutes === 1) { // Use "minute" instead of "minutes" for 1 minute
-      return `${action} in ${diffMinutes} minute (today at ${time})`;
-    }
-
-    return `${action} in ${diffMinutes} minutes (today at ${time})`;
+    return `${action} in ${diffMinutes} ${minuteLabel} (today at ${time})`;
   }
 
   // Default return statement
