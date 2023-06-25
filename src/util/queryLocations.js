@@ -189,8 +189,10 @@ async function queryLocations() {
     const processedLocations = updatedLocations.map((location) => {
       try {
         const { times } = location;
-        // eslint-disable-next-line max-len
-        const timeSlot = times.find(({ start, end }) => currentlyOpen(start.rawMinutes, end.rawMinutes));
+        const timeSlot = times.find(({ start, end }) => currentlyOpen(
+          start.rawMinutes,
+          end.rawMinutes,
+        ));
 
         if (timeSlot != null) {
           // Location is open
