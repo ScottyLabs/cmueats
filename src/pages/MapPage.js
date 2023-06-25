@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useRef } from 'react';
+// eslint-disable-next-line object-curly-newline
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
@@ -46,8 +47,7 @@ function MapPage({ locations }) {
 
         showsUserLocationControl={true}
       >
-        {locations.map((location, locationIndex) =>
-          // eslint-disable-next-line implicit-arrow-linebreak
+        {locations.map((location, locationIndex) => (
           <Marker
             key={location.conceptId}
 
@@ -66,7 +66,7 @@ function MapPage({ locations }) {
                 setDrawerVisible(false);
               }
             }}
-          />)}
+          />))}
       </Map>
 
       <CSSTransition

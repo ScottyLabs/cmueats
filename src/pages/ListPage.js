@@ -1,4 +1,5 @@
 import { Typography, Grid, styled } from '@mui/material'; // Alert (add to imports when adding announcement)
+// eslint-disable-next-line object-curly-newline
 import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react';
 import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
@@ -19,11 +20,11 @@ function ListPage({ locations }) {
     setFilteredLocations(
       filteredSearchQuery.length === 0
         ? locations
-        : locations.filter(({ name, location, shortDescription }) => {
-          return name.toLowerCase().includes(filteredSearchQuery)
+        : locations.filter(({ name, location, shortDescription }) => (
+          name.toLowerCase().includes(filteredSearchQuery)
             || location.toLowerCase().includes(filteredSearchQuery)
-            || shortDescription.toLowerCase().includes(filteredSearchQuery);
-        }),
+            || shortDescription.toLowerCase().includes(filteredSearchQuery)
+        )),
     );
   }, [searchQuery, locations]);
 
@@ -98,11 +99,17 @@ function ListPage({ locations }) {
         }
 
         <Grid container spacing={2}>
-          {openLocations.map((location) => <EateryCard location={location} key={location.conceptId} />)}
+          {openLocations.map((location) => <EateryCard
+                                            location={location}
+                                            key={location.conceptId}
+                                           />)}
         </Grid>
         <br></br>
         <Grid container spacing={2}>
-          {closedLocations.map((location) => <EateryCard location={location} key={location.conceptId} />)}
+          {closedLocations.map((location) => <EateryCard
+                                              location={location}
+                                              key={location.conceptId}
+                                            />)}
         </Grid>
       </div>
       <footer className="footer">

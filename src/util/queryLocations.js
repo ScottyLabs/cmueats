@@ -50,7 +50,7 @@ function toMinutes(days, hours, minutes) {
  * @param {int} end The time slot the location closes (in minutes since midnight on Sunday)
  * @returns true if the location is open, false otherwise
  */
-function isOpen(start, end) {
+function currentlyOpen(start, end) {
   const weekday = now.weekday === 7 ? 0 : now.weekday;
   const nowMinutes = toMinutes(weekday, now.hour, now.minute);
 
@@ -67,9 +67,7 @@ function getNextTimeSlot(times) {
   const nowMinutes = toMinutes(weekday, now.hour, now.minute);
 
   // Find the first time slot that opens after now
-  const nextTimeSlot = times.find(({ start }) => {
-    return start.rawMinutes >= nowMinutes;
-  });
+  const nextTimeSlot = times.find(({ start }) => start.rawMinutes >= nowMinutes);
 
   if (nextTimeSlot == null) {
     // End of the week. Return the first time slot instead.
@@ -85,7 +83,6 @@ function getNextTimeSlot(times) {
  * @param {boolean} isOpen whether or not the location is currently open
  * @returns {str} The status message for the location
  */
-// eslint-disable-next-line no-shadow, consistent-return
 function getStatusMessage(timeSlot, isOpen) {
   if (timeSlot == null) {
     return 'Closed until further notice';
@@ -123,22 +120,36 @@ function getStatusMessage(timeSlot, isOpen) {
   const day = WEEKDAYS[timeSlot.start.day];
   const hourLabel = diffHours === 1 ? 'hour' : 'hours';
 
-  /* eslint-disable */
   if (weekdayDiff > 1) {
     return `${action} in ${weekdayDiff} days (${day} at ${time})`;
-  } else if (weekdayDiff === 1) {
+  }
+
+  if (weekdayDiff === 1) {
     if (diffHours >= 24) {
       return `${action} in a day (tomorrow at ${time})`;
-    } 
+    }
     return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
-  } else if (weekdayDiff === 0) {
-    if (diffHours >= 1) {
+  }
+
+  if (weekdayDiff === 0) {
+    if (diffHours > 1) {
       return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
-    } 
+    }
+
+    if (diffHours === 1) { // Use "hour" instead of "hours" for 1 hour
+      return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
+    }
+
+    if (diffMinutes === 1) { // Use "minute" instead of "minutes" for 1 minute
+      return `${action} in ${diffMinutes} minute (today at ${time})`;
+    }
+
     return `${action} in ${diffMinutes} minutes (today at ${time})`;
   }
+
+  // Default return statement
+  return 'Status not available';
 }
-/* eslint-enable */
 
 async function queryLocations() {
   try {
@@ -149,15 +160,14 @@ async function queryLocations() {
     }
 
     // Convert names to title case and append "raw time" to each time slot
-    /* eslint-disable */
     const { locations } = data;
-    locations.forEach((location) => {
-      location.name = toTitleCase(location.name);
-      if (location.name === "Ruge Atrium - Rothberg's Roasters Ii") {
-        location.name = "Ruge Atrium - Rothberg's Roasters II";
+    const updatedLocations = locations.map((location) => {
+      let updatedName = toTitleCase(location.name);
+      if (updatedName === "Ruge Atrium - Rothberg's Roasters Ii") {
+        updatedName = "Ruge Atrium - Rothberg's Roasters II";
       }
-      location.times = location.times.map(({ start, end }) => ({
-        // Add minutes since start of the week for isOpen computation
+
+      const updatedTimes = location.times.map(({ start, end }) => ({
         start: {
           ...start,
           rawMinutes: toMinutes(start.day, start.hour, start.minute),
@@ -167,36 +177,42 @@ async function queryLocations() {
           rawMinutes: toMinutes(end.day, end.hour, end.minute),
         },
       }));
+
+      return {
+        ...location,
+        name: updatedName,
+        times: updatedTimes,
+      };
     });
-    /* eslint-enable */
 
-    const processedLocations = [];
-
-    /* eslint-disable */
     // Determine status of locations
-    for (const location of locations) {
+    const processedLocations = updatedLocations.map((location) => {
       try {
         const { times } = location;
-        const timeSlot = times.find(({ start, end }) => {
-          return isOpen(start.rawMinutes, end.rawMinutes);
-        });
+        // eslint-disable-next-line max-len
+        const timeSlot = times.find(({ start, end }) => currentlyOpen(start.rawMinutes, end.rawMinutes));
 
         if (timeSlot != null) {
           // Location is open
-          location.isOpen = true;
-          location.statusMsg = getStatusMessage(timeSlot, true);
-        } else {
-          // Location is closed
-          location.isOpen = false;
-          const nextTimeSlot = getNextTimeSlot(times);
-          location.statusMsg = getStatusMessage(nextTimeSlot, false);
+          return {
+            ...location,
+            isOpen: true,
+            statusMsg: getStatusMessage(timeSlot, true),
+          };
         }
-        processedLocations.push(location);
+
+        // Location is closed
+        const nextTimeSlot = getNextTimeSlot(times);
+        return {
+          ...location,
+          isOpen: false,
+          statusMsg: getStatusMessage(nextTimeSlot, false),
+        };
       } catch (err) {
         console.error(err);
+        return [];
       }
-    }
-    /* eslint-enable */
+    });
 
     return processedLocations;
   } catch (err) {

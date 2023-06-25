@@ -230,8 +230,7 @@ export default function EateryCard({ location }) {
             <NameText variant="h6">{name}</NameText>
             <LocationText variant="subtitle2">{locationText}</LocationText>
           </CardContent>
-          {todaysSpecials.concat(todaysSoups).map((special, idx) => {
-            return (
+          {todaysSpecials.concat(todaysSoups).map((special, idx) => (
               <SpecialsContent style={{}} key={idx}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
@@ -244,8 +243,7 @@ export default function EateryCard({ location }) {
                   <LocationText>{special.description}</LocationText>
                 </AccordionDetails>
               </SpecialsContent>
-            );
-          })}
+          ))}
         </StyledCard>
       </Dialog>
     </>

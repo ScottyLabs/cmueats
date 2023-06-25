@@ -6,6 +6,8 @@
       "browser": true
     },
     "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module",
       "ecmaFeatures": {
         "jsx": true
       }
@@ -16,14 +18,14 @@
     "rules": {
       "react/jsx-uses-react": "error",
       "react/jsx-uses-vars": "error",
-      "linebreak-style": "off",
+      "linebreak-style": ["error", "windows"],
       "react/prop-types": "off",
-      "object-curly-newline": "off",
-      "arrow-body-style": "off",
-      "max-len": ["error", 120],
       "no-console": [
         "error",
         { "allow": ["error"] }
       ]
+    },
+    "settings": {
+      "react": { "version": "detect" }
     }
 }
