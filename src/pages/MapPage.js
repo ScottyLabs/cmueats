@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useRef } from 'react';
-// eslint-disable-next-line object-curly-newline
-import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
+import {
+  Map, Marker, ColorScheme, PointOfInterestCategory,
+} from 'mapkit-react';
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';

@@ -1,6 +1,7 @@
 import { Typography, Grid, styled } from '@mui/material'; // Alert (add to imports when adding announcement)
-// eslint-disable-next-line object-curly-newline
-import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react';
+import React, {
+  useEffect, useMemo, useState, useLayoutEffect,
+} from 'react';
 import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
