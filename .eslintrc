@@ -18,7 +18,6 @@
     "rules": {
       "react/jsx-uses-react": "error",
       "react/jsx-uses-vars": "error",
-      "linebreak-style": ["error", "windows"],
       "react/prop-types": "off",
       "no-console": [
         "error",
