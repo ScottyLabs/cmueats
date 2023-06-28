@@ -113,26 +113,36 @@ function ListPage({ locations }) {
         }
 
         <Grid container spacing={2}>
-          {openLocations.map((location) => <EateryCard
-                                            location={location}
-                                            key={location.conceptId}
-                                           />)}
-          {closesSoonLocations.map((location) => <EateryCard
-                                            location={location}
-                                            key={location.conceptId}
-                                           />)}
-          {opensSoonLocations.map((location) => <EateryCard
-                                              location={location}
-                                              key={location.conceptId}
-                                            />)}
-          {closedLocations.map((location) => <EateryCard
-                                              location={location}
-                                              key={location.conceptId}
-                                            />)}
-          {closedTemporarilyLocations.map((location) => <EateryCard
-                                              location={location}
-                                              key={location.conceptId}
-                                            />)}
+          {openLocations
+            .sort((location1, location2) => location2.timeUntilClosed - location1.timeUntilClosed)
+            .map((location) => <EateryCard
+                                location={location}
+                                key={location.conceptId}
+                               />)}
+          {closesSoonLocations
+            .sort((location1, location2) => location2.timeUntilClosed - location1.timeUntilClosed)
+            .map((location) => <EateryCard
+                                location={location}
+                                key={location.conceptId}
+                              />)}
+          {opensSoonLocations
+            .sort((location1, location2) => location1.timeUntilOpen - location2.timeUntilOpen)
+            .map((location) => <EateryCard
+                              location={location}
+                              key={location.conceptId}
+                              />)}
+          {closedLocations
+            .sort((location1, location2) => location1.timeUntilOpen - location2.timeUntilOpen)
+            .map((location) => <EateryCard
+                              location={location}
+                              key={location.conceptId}
+                              />)}
+          {closedTemporarilyLocations
+            .sort((location1, location2) => location1.timeUntilOpen - location2.timeUntilOpen)
+            .map((location) => <EateryCard
+                              location={location}
+                              key={location.conceptId}
+                              />)}
         </Grid>
       </div>
       <footer className="footer">

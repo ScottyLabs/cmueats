@@ -198,6 +198,7 @@ async function queryLocations() {
           isOpen: true,
           statusMsg: getStatusMessage(timeSlot, true),
           changesSoon: diff <= 60,
+          timeUntilClosed: diff,
         };
       }
 
@@ -224,6 +225,7 @@ async function queryLocations() {
         statusMsg: getStatusMessage(nextTimeSlot, false),
         changesSoon: diff <= 60 && closedUntilFurtherNotice === false,
         closedTemporarily: closedUntilFurtherNotice,
+        timeUntilOpen: diff,
       };
     });
 
