@@ -121,9 +121,6 @@ function ListPage({ locations }) {
                                             location={location}
                                             key={location.conceptId}
                                            />)}
-        </Grid>
-        <br></br>
-        <Grid container spacing={2}>
           {opensSoonLocations.map((location) => <EateryCard
                                               location={location}
                                               key={location.conceptId}
