@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -13,118 +13,128 @@ import {
   CardActions,
   Avatar,
   Dialog,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const StyledCard = styled(Card)({
-  backgroundColor: "#23272A",
-  border: "2px solid rgba(0, 0, 0, 0.2)",
-  textAlign: "left",
+  backgroundColor: '#23272A',
+  border: '2px solid rgba(0, 0, 0, 0.2)',
+  textAlign: 'left',
   borderRadius: 7,
-  height: "100%",
-  justifyContent: "flex-start"
+  height: '100%',
+  justifyContent: 'flex-start',
 });
 
 const StyledCardHeader = styled(CardHeader)({
   fontWeight: 500,
-  backgroundColor: "#1D1F21",
+  backgroundColor: '#1D1F21',
 });
 
 const NameText = styled(Typography)({
-  color: "white",
+  color: 'white',
   padding: 0,
   fontFamily:
-    '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
-  textTransform: "capitalize",
+    '"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", '
+    + '"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", '
+    + '"Droid Sans", "Helvetica Neue", sans-serif',
+  textTransform: 'capitalize',
 });
 
 const LocationText = styled(Typography)({
-  color: "#8D979F",
-  marginBottom: "10px",
+  color: '#8D979F',
+  marginBottom: '10px',
   fontWeight: 500,
-  fontSize: 14
+  fontSize: 14,
 });
 
 const DescriptionText = styled(Typography)({
-  color: "white",
+  color: 'white',
 });
 
 const OpenText = styled(Typography)({
-  color: "#19b875",
+  color: '#19b875',
   fontSize: 14,
   fontWeight: 500,
-  fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
+  fontFamily:
+    '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", '
+    + '"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", '
+    + '"Helvetica Neue", sans-serif',
 });
 
 const ClosedText = styled(Typography)({
-  color: "#dd3c18",
+  color: '#dd3c18',
   fontSize: 14,
   fontWeight: 500,
-  fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif'
+  fontFamily:
+    '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", '
+    + '"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", '
+    + '"Helvetica Neue", sans-serif',
 });
 
 const ActionButton = styled(Button)({
   fontWeight: 600,
   fontFamily:
-    '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
-  color: "white",
-  backgroundColor: "#1D1F21",
+    '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", '
+    + '"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", '
+    + '"Helvetica Neue", sans-serif',
+  color: 'white',
+  backgroundColor: '#1D1F21',
   elevation: 30,
 });
 
 const GreenDot = styled(Card)({
-  "@keyframes blinking": {
-    "0%": {
+  '@keyframes blinking': {
+    '0%': {
       opacity: 0,
     },
 
-    "50%": {
+    '50%': {
       opacity: 1,
     },
 
-    "75%": {
+    '75%': {
       opacity: 1,
     },
 
-    "100%": {
+    '100%': {
       opacity: 0,
     },
   },
-  background: "#19b875",
-  width: "100%",
-  height: "100%",
-  foregroundColor: "#19b875",
-  animationName: "blinking",
-  animationDuration: "1s",
-  animationIterationCount: "infinite",
+  background: '#19b875',
+  width: '100%',
+  height: '100%',
+  foregroundColor: '#19b875',
+  animationName: 'blinking',
+  animationDuration: '1s',
+  animationIterationCount: 'infinite',
 });
 
 const RedDot = styled(Card)({
-  "@keyframes blinking": {
-    "0%": {
+  '@keyframes blinking': {
+    '0%': {
       opacity: 0,
     },
 
-    "50%": {
+    '50%': {
       opacity: 1,
     },
 
-    "75%": {
+    '75%': {
       opacity: 1,
     },
 
-    "100%": {
+    '100%': {
       opacity: 0,
     },
   },
-  background: "#dd3c18",
-  width: "100%",
-  height: "100%",
-  foregroundColor: "#dd3c18",
+  background: '#dd3c18',
+  width: '100%',
+  height: '100%',
+  foregroundColor: '#dd3c18',
 });
 
 const SpecialsContent = styled(Accordion)({
-  backgroundColor: "#23272A",
+  backgroundColor: '#23272A',
 });
 
 export default function EateryCard({ location }) {
@@ -154,7 +164,7 @@ export default function EateryCard({ location }) {
             }
             avatar={
               <Avatar
-                sx={{ width: 12, height: 12, backgroundColor: "#1D1F21" }}
+                sx={{ width: 12, height: 12, backgroundColor: '#1D1F21' }}
               >
                 {isOpen ? <GreenDot /> : <RedDot />}
               </Avatar>
@@ -165,11 +175,11 @@ export default function EateryCard({ location }) {
             <LocationText variant="subtitle2">{locationText}</LocationText>
             <DescriptionText>{shortDescription}</DescriptionText>
           </CardContent>
-          <CardActions sx={{ marginTop: "auto" }}>
+          <CardActions sx={{ marginTop: 'auto' }}>
             {menu && (
               <ActionButton
-                onClick={(e) => {
-                  window.open(menu, "_blank");
+                onClick={() => {
+                  window.open(menu, '_blank');
                 }}
               >
                 Menu
@@ -177,7 +187,7 @@ export default function EateryCard({ location }) {
             )}
             {(todaysSpecials.length !== 0 || todaysSoups.length !== 0) && (
               <ActionButton
-                onClick={(e) => {
+                onClick={() => {
                   setModalOpen(true);
                 }}
               >
@@ -190,12 +200,12 @@ export default function EateryCard({ location }) {
 
       <Dialog
         open={modalOpen}
-        onClose={(e) => {
+        onClose={() => {
           setModalOpen(false);
         }}
         PaperProps={{
           style: {
-            backgroundColor: "#23272A",
+            backgroundColor: '#23272A',
           },
         }}
       >
@@ -210,7 +220,7 @@ export default function EateryCard({ location }) {
             }
             avatar={
               <Avatar
-                sx={{ width: 12, height: 12, backgroundColor: "#1D1F21" }}
+                sx={{ width: 12, height: 12, backgroundColor: '#1D1F21' }}
               >
                 <GreenDot />
               </Avatar>
@@ -220,11 +230,10 @@ export default function EateryCard({ location }) {
             <NameText variant="h6">{name}</NameText>
             <LocationText variant="subtitle2">{locationText}</LocationText>
           </CardContent>
-          {todaysSpecials.concat(todaysSoups).map((special, idx) => {
-            return (
+          {todaysSpecials.concat(todaysSoups).map((special, idx) => (
               <SpecialsContent style={{}} key={idx}>
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon style={{ color: "white" }} />}
+                  expandIcon={<ExpandMoreIcon style={{ color: 'white' }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
@@ -234,8 +243,7 @@ export default function EateryCard({ location }) {
                   <LocationText>{special.description}</LocationText>
                 </AccordionDetails>
               </SpecialsContent>
-            );
-          })}
+          ))}
         </StyledCard>
       </Dialog>
     </>

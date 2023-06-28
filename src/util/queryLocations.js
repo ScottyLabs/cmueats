@@ -1,15 +1,15 @@
-import axios from "axios";
-import { DateTime } from "luxon";
+import axios from 'axios';
+import { DateTime } from 'luxon';
 
-const BASE_URL = "https://dining.apis.scottylabs.org/locations";
+const BASE_URL = 'https://dining.apis.scottylabs.org/locations';
 const WEEKDAYS = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ];
 const WEEK_MINUTES = 7 * 24 * 60;
 const now = DateTime.now().setZone('America/New_York');
@@ -21,17 +21,16 @@ const now = DateTime.now().setZone('America/New_York');
  */
 function toTitleCase(str) {
   return str
-    .trim(" ")
+    .trim(' ')
     .toLowerCase()
-    .split(" ")
+    .split(' ')
     .map((word) => {
       if (word.length > 1) {
         return word[0].toUpperCase() + word.slice(1);
-      } else {
-        return word;
       }
+      return word;
     })
-    .join(" ");
+    .join(' ');
 }
 
 /**
@@ -51,7 +50,7 @@ function toMinutes(days, hours, minutes) {
  * @param {int} end The time slot the location closes (in minutes since midnight on Sunday)
  * @returns true if the location is open, false otherwise
  */
-function isOpen(start, end) {
+function currentlyOpen(start, end) {
   const weekday = now.weekday === 7 ? 0 : now.weekday;
   const nowMinutes = toMinutes(weekday, now.hour, now.minute);
 
@@ -68,16 +67,13 @@ function getNextTimeSlot(times) {
   const nowMinutes = toMinutes(weekday, now.hour, now.minute);
 
   // Find the first time slot that opens after now
-  const nextTimeSlot = times.find(({ start }) => {
-    return start.rawMinutes >= nowMinutes;
-  });
+  const nextTimeSlot = times.find(({ start }) => start.rawMinutes >= nowMinutes);
 
   if (nextTimeSlot == null) {
     // End of the week. Return the first time slot instead.
     return times[0];
-  } else {
-    return nextTimeSlot;
   }
+  return nextTimeSlot;
 }
 
 /**
@@ -89,7 +85,7 @@ function getNextTimeSlot(times) {
  */
 function getStatusMessage(timeSlot, isOpen) {
   if (timeSlot == null) {
-    return "Closed until further notice";
+    return 'Closed until further notice';
   }
   const weekday = now.weekday === 7 ? 0 : now.weekday;
   const nowMinutes = toMinutes(weekday, now.hour, now.minute);
@@ -116,29 +112,36 @@ function getStatusMessage(timeSlot, isOpen) {
   // Create time string
   const { hour, minute } = refTime;
   const hour12H = hour % 12 === 0 ? 12 : hour % 12;
-  const ampm = hour >= 12 ? "PM" : "AM";
+  const ampm = hour >= 12 ? 'PM' : 'AM';
   const minutePadded = minute < 10 ? `0${minute}` : minute;
   const time = `${hour12H}:${minutePadded} ${ampm}`;
 
-  const action = isOpen ? "Closes" : "Opens";
+  const action = isOpen ? 'Closes' : 'Opens';
   const day = WEEKDAYS[timeSlot.start.day];
-  const hourLabel = diffHours === 1 ? "hour" : "hours";
+  const hourLabel = diffHours === 1 ? 'hour' : 'hours';
+  const minuteLabel = diffMinutes === 1 ? 'minute' : 'minutes';
 
   if (weekdayDiff > 1) {
     return `${action} in ${weekdayDiff} days (${day} at ${time})`;
-  } else if (weekdayDiff === 1) {
+  }
+
+  if (weekdayDiff === 1) {
     if (diffHours >= 24) {
       return `${action} in a day (tomorrow at ${time})`;
-    } else {
-      return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
     }
-  } else if (weekdayDiff === 0) {
+    return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
+  }
+
+  if (weekdayDiff === 0) {
     if (diffHours >= 1) {
       return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
-    } else {
-      return `${action} in ${diffMinutes} minutes (today at ${time})`;
     }
+
+    return `${action} in ${diffMinutes} ${minuteLabel} (today at ${time})`;
   }
+
+  // Default return statement
+  return 'Status not available';
 }
 
 async function queryLocations() {
@@ -150,14 +153,14 @@ async function queryLocations() {
     }
 
     // Convert names to title case and append "raw time" to each time slot
-    let { locations } = data;
-    locations.forEach((location) => {
-      location.name = toTitleCase(location.name);
-      if (location.name === "Ruge Atrium - Rothberg's Roasters Ii") {
-        location.name = "Ruge Atrium - Rothberg's Roasters II";
+    const { locations } = data;
+    const updatedLocations = locations.map((location) => {
+      let updatedName = toTitleCase(location.name);
+      if (updatedName === "Ruge Atrium - Rothberg's Roasters Ii") {
+        updatedName = "Ruge Atrium - Rothberg's Roasters II";
       }
-      location.times = location.times.map(({ start, end }) => ({
-        // Add minutes since start of the week for isOpen computation
+
+      const updatedTimes = location.times.map(({ start, end }) => ({
         start: {
           ...start,
           rawMinutes: toMinutes(start.day, start.hour, start.minute),
@@ -167,33 +170,39 @@ async function queryLocations() {
           rawMinutes: toMinutes(end.day, end.hour, end.minute),
         },
       }));
+
+      return {
+        ...location,
+        name: updatedName,
+        times: updatedTimes,
+      };
     });
 
-    const processedLocations = [];
-
     // Determine status of locations
-    for (const location of locations) {
-      try {
-        const { times } = location;
-        const timeSlot = times.find(({ start, end }) => {
-          return isOpen(start.rawMinutes, end.rawMinutes);
-        });
+    const processedLocations = updatedLocations.map((location) => {
+      const { times } = location;
+      const timeSlot = times.find(({ start, end }) => currentlyOpen(
+        start.rawMinutes,
+        end.rawMinutes,
+      ));
 
-        if (timeSlot != null) {
-          // Location is open
-          location.isOpen = true;
-          location.statusMsg = getStatusMessage(timeSlot, true);
-        } else {
-          // Location is closed
-          location.isOpen = false;
-          const nextTimeSlot = getNextTimeSlot(times);
-          location.statusMsg = getStatusMessage(nextTimeSlot, false);
-        }
-        processedLocations.push(location);
-      } catch (err) {
-        console.error(err);
+      if (timeSlot != null) {
+        // Location is open
+        return {
+          ...location,
+          isOpen: true,
+          statusMsg: getStatusMessage(timeSlot, true),
+        };
       }
-    }
+
+      // Location is closed
+      const nextTimeSlot = getNextTimeSlot(times);
+      return {
+        ...location,
+        isOpen: false,
+        statusMsg: getStatusMessage(nextTimeSlot, false),
+      };
+    });
 
     return processedLocations;
   } catch (err) {
