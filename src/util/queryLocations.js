@@ -180,33 +180,28 @@ async function queryLocations() {
 
     // Determine status of locations
     const processedLocations = updatedLocations.map((location) => {
-      try {
-        const { times } = location;
-        const timeSlot = times.find(({ start, end }) => currentlyOpen(
-          start.rawMinutes,
-          end.rawMinutes,
-        ));
+      const { times } = location;
+      const timeSlot = times.find(({ start, end }) => currentlyOpen(
+        start.rawMinutes,
+        end.rawMinutes,
+      ));
 
-        if (timeSlot != null) {
-          // Location is open
-          return {
-            ...location,
-            isOpen: true,
-            statusMsg: getStatusMessage(timeSlot, true),
-          };
-        }
-
-        // Location is closed
-        const nextTimeSlot = getNextTimeSlot(times);
+      if (timeSlot != null) {
+        // Location is open
         return {
           ...location,
-          isOpen: false,
-          statusMsg: getStatusMessage(nextTimeSlot, false),
+          isOpen: true,
+          statusMsg: getStatusMessage(timeSlot, true),
         };
-      } catch (err) {
-        console.error(err);
-        return [];
       }
+
+      // Location is closed
+      const nextTimeSlot = getNextTimeSlot(times);
+      return {
+        ...location,
+        isOpen: false,
+        statusMsg: getStatusMessage(nextTimeSlot, false),
+      };
     });
 
     return processedLocations;
