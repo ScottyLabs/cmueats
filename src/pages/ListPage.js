@@ -36,7 +36,10 @@ function ListPage({ locations }) {
     location.isOpen && location.changesSoon
   ));
   const closedLocations = filteredLocations.filter((location) => (
-    !location.isOpen && !location.changesSoon
+    !location.isOpen && !location.changesSoon && !location.closedTemporarily
+  ));
+  const closedTemporarilyLocations = filteredLocations.filter((location) => (
+    !location.isOpen && !location.changesSoon && location.closedTemporarily
   ));
   const opensSoonLocations = filteredLocations.filter((location) => (
     !location.isOpen && location.changesSoon
@@ -126,6 +129,10 @@ function ListPage({ locations }) {
                                               key={location.conceptId}
                                             />)}
           {closedLocations.map((location) => <EateryCard
+                                              location={location}
+                                              key={location.conceptId}
+                                            />)}
+          {closedTemporarilyLocations.map((location) => <EateryCard
                                               location={location}
                                               key={location.conceptId}
                                             />)}

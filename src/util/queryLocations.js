@@ -223,6 +223,7 @@ async function queryLocations() {
         isOpen: false,
         statusMsg: getStatusMessage(nextTimeSlot, false),
         changesSoon: diff <= 60 && closedUntilFurtherNotice === false,
+        closedTemporarily: closedUntilFurtherNotice,
       };
     });
 
