@@ -82,7 +82,6 @@ const ActionButton = styled(Button)({
   elevation: 30,
 });
 
-// Kept for potential future use.
 const blinkingAnimation = {
   '@keyframes blinking': {
     '0%': {
