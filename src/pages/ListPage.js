@@ -29,8 +29,18 @@ function ListPage({ locations }) {
     );
   }, [searchQuery, locations]);
 
-  const openLocations = filteredLocations.filter((location) => location.isOpen);
-  const closedLocations = filteredLocations.filter((location) => !location.isOpen);
+  const openLocations = filteredLocations.filter((location) => (
+    location.isOpen && !location.changesSoon
+  ));
+  const closesSoonLocations = filteredLocations.filter((location) => (
+    location.isOpen && location.changesSoon
+  ));
+  const closedLocations = filteredLocations.filter((location) => (
+    !location.isOpen && !location.changesSoon
+  ));
+  const opensSoonLocations = filteredLocations.filter((location) => (
+    !location.isOpen && location.changesSoon
+  ));
 
   // const [showAlert, setShowAlert] = useState(true);
 
@@ -104,9 +114,17 @@ function ListPage({ locations }) {
                                             location={location}
                                             key={location.conceptId}
                                            />)}
+          {closesSoonLocations.map((location) => <EateryCard
+                                            location={location}
+                                            key={location.conceptId}
+                                           />)}
         </Grid>
         <br></br>
         <Grid container spacing={2}>
+          {opensSoonLocations.map((location) => <EateryCard
+                                              location={location}
+                                              key={location.conceptId}
+                                            />)}
           {closedLocations.map((location) => <EateryCard
                                               location={location}
                                               key={location.conceptId}

@@ -152,14 +152,14 @@ export default function EateryCard({ location }) {
               sx={{ width: 12, height: 12, backgroundColor: '#1D1F21' }}
             >
               <Dot
-                color={() => {
+                color={(() => {
                   // Location is open/opening
-                  if (isOpen) {
+                  if (location.isOpen) {
                     return location.changesSoon ? 'soonOpen' : 'open';
                   }
                   // Location is closed/closing
                   return location.changesSoon ? 'soonClosed' : 'closed';
-                }}
+                })()}
                 changesSoon={location.changesSoon}
               />
             </Avatar>
@@ -218,14 +218,14 @@ export default function EateryCard({ location }) {
                 sx={{ width: 12, height: 12, backgroundColor: '#1D1F21' }}
               >
                 <Dot
-                  color={() => {
+                  color={(() => {
                     // Location is open/opening
-                    if (isOpen) {
+                    if (location.isOpen) {
                       return location.changesSoon ? 'soonOpen' : 'open';
                     }
                     // Location is closed/closing
                     return location.changesSoon ? 'soonClosed' : 'closed';
-                  }}
+                  })()}
                   changesSoon={location.changesSoon}
                 />
               </Avatar>
