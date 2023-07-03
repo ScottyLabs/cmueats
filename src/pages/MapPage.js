@@ -47,6 +47,9 @@ function MapPage({ locations }) {
         maxCameraDistance={1000}
 
         showsUserLocationControl={true}
+
+        allowWheelToZoom={true}
+
       >
         {locations.map((location, locationIndex) => (
           <Marker
