@@ -12,6 +12,7 @@ const WEEKDAYS = [
   'Saturday',
 ];
 const WEEK_MINUTES = 7 * 24 * 60;
+// Remove .setZone('America/New_York') and change time in computer settings when testing
 const now = DateTime.now().setZone('America/New_York');
 
 /**
@@ -188,19 +189,43 @@ async function queryLocations() {
 
       if (timeSlot != null) {
         // Location is open
+        const diff = (timeSlot.end.rawMinutes
+          - toMinutes(now.weekday, now.hour, now.minute)
+          + WEEK_MINUTES) % WEEK_MINUTES;
+
         return {
           ...location,
           isOpen: true,
           statusMsg: getStatusMessage(timeSlot, true),
+          changesSoon: diff <= 60,
+          timeUntilClosed: diff,
         };
       }
 
       // Location is closed
       const nextTimeSlot = getNextTimeSlot(times);
+      let diff = 0;
+      let closedUntilFurtherNotice = false;
+
+      if (!nextTimeSlot) {
+        closedUntilFurtherNotice = true;
+      }
+
+      if (nextTimeSlot) {
+        diff = (nextTimeSlot.start.rawMinutes
+          - toMinutes(now.weekday, now.hour, now.minute));
+        if (diff < 0) {
+          diff += WEEK_MINUTES;
+        }
+      }
+
       return {
         ...location,
         isOpen: false,
         statusMsg: getStatusMessage(nextTimeSlot, false),
+        changesSoon: diff <= 60 && closedUntilFurtherNotice === false,
+        closedTemporarily: closedUntilFurtherNotice,
+        timeUntilOpen: diff,
       };
     });
 

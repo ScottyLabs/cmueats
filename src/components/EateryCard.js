@@ -51,25 +51,25 @@ const DescriptionText = styled(Typography)({
   color: 'white',
 });
 
-const OpenText = styled(Typography)({
-  color: '#19b875',
+const OpenText = styled(Typography)(({ changesSoon }) => ({
+  color: changesSoon ? '#f3f65d' : '#19b875',
   fontSize: 14,
   fontWeight: 500,
   fontFamily:
     '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", '
     + '"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", '
     + '"Helvetica Neue", sans-serif',
-});
+}));
 
-const ClosedText = styled(Typography)({
-  color: '#dd3c18',
+const ClosedText = styled(Typography)(({ changesSoon }) => ({
+  color: changesSoon ? '#f6cc5d' : '#dd3c18',
   fontSize: 14,
   fontWeight: 500,
   fontFamily:
     '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", '
     + '"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", '
     + '"Helvetica Neue", sans-serif',
-});
+}));
 
 const ActionButton = styled(Button)({
   fontWeight: 600,
@@ -82,56 +82,40 @@ const ActionButton = styled(Button)({
   elevation: 30,
 });
 
-const GreenDot = styled(Card)({
+const blinkingAnimation = {
   '@keyframes blinking': {
     '0%': {
       opacity: 0,
     },
-
     '50%': {
       opacity: 1,
     },
-
     '75%': {
       opacity: 1,
     },
-
     '100%': {
       opacity: 0,
     },
   },
-  background: '#19b875',
+};
+
+const colors = {
+  open: '#19b875',
+  closed: '#dd3c18',
+  soonOpen: '#f3f65d',
+  soonClosed: '#f6cc5d',
+};
+
+const Dot = styled(Card)(({ color, changesSoon }) => ({
+  background: colors[color],
   width: '100%',
   height: '100%',
-  foregroundColor: '#19b875',
-  animationName: 'blinking',
+  foregroundColor: colors[color],
+  ...(changesSoon && blinkingAnimation),
+  animationName: changesSoon && 'blinking',
   animationDuration: '1s',
   animationIterationCount: 'infinite',
-});
-
-const RedDot = styled(Card)({
-  '@keyframes blinking': {
-    '0%': {
-      opacity: 0,
-    },
-
-    '50%': {
-      opacity: 1,
-    },
-
-    '75%': {
-      opacity: 1,
-    },
-
-    '100%': {
-      opacity: 0,
-    },
-  },
-  background: '#dd3c18',
-  width: '100%',
-  height: '100%',
-  foregroundColor: '#dd3c18',
-});
+}));
 
 const SpecialsContent = styled(Accordion)({
   backgroundColor: '#23272A',
@@ -157,17 +141,27 @@ export default function EateryCard({ location }) {
           <StyledCardHeader
             title={
               isOpen ? (
-                <OpenText variant="subtitle1">{statusMsg}</OpenText>
+                <OpenText variant="subtitle1" changesSoon={location.changesSoon}>{statusMsg}</OpenText>
               ) : (
-                <ClosedText variant="subtitle1">{statusMsg}</ClosedText>
+                <ClosedText variant="subtitle1" changesSoon={location.changesSoon}>{statusMsg}</ClosedText>
               )
             }
             avatar={
               <Avatar
-                sx={{ width: 12, height: 12, backgroundColor: '#1D1F21' }}
-              >
-                {isOpen ? <GreenDot /> : <RedDot />}
-              </Avatar>
+              sx={{ width: 12, height: 12, backgroundColor: '#1D1F21' }}
+            >
+              <Dot
+                color={(() => {
+                  // Location is open/opening
+                  if (location.isOpen) {
+                    return location.changesSoon ? 'soonOpen' : 'open';
+                  }
+                  // Location is closed/closing
+                  return location.changesSoon ? 'soonClosed' : 'closed';
+                })()}
+                changesSoon={location.changesSoon}
+              />
+            </Avatar>
             }
           ></StyledCardHeader>
           <CardContent>
@@ -213,16 +207,26 @@ export default function EateryCard({ location }) {
           <StyledCardHeader
             title={
               isOpen ? (
-                <OpenText variant="subtitle1">{statusMsg}</OpenText>
+                <OpenText variant="subtitle1" changesSoon={location.changesSoon}>{statusMsg}</OpenText>
               ) : (
-                <ClosedText variant="subtitle1">{statusMsg}</ClosedText>
+                <ClosedText variant="subtitle1" changesSoon={location.changesSoon}>{statusMsg}</ClosedText>
               )
             }
             avatar={
               <Avatar
                 sx={{ width: 12, height: 12, backgroundColor: '#1D1F21' }}
               >
-                <GreenDot />
+                <Dot
+                  color={(() => {
+                    // Location is open/opening
+                    if (location.isOpen) {
+                      return location.changesSoon ? 'soonOpen' : 'open';
+                    }
+                    // Location is closed/closing
+                    return location.changesSoon ? 'soonClosed' : 'closed';
+                  })()}
+                  changesSoon={location.changesSoon}
+                />
               </Avatar>
             }
           ></StyledCardHeader>

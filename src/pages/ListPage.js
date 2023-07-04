@@ -29,8 +29,21 @@ function ListPage({ locations }) {
     );
   }, [searchQuery, locations]);
 
-  const openLocations = filteredLocations.filter((location) => location.isOpen);
-  const closedLocations = filteredLocations.filter((location) => !location.isOpen);
+  const openLocations = filteredLocations.filter((location) => (
+    location.isOpen && !location.changesSoon
+  ));
+  const closesSoonLocations = filteredLocations.filter((location) => (
+    location.isOpen && location.changesSoon
+  ));
+  const closedLocations = filteredLocations.filter((location) => (
+    !location.isOpen && !location.changesSoon && !location.closedTemporarily
+  ));
+  const closedTemporarilyLocations = filteredLocations.filter((location) => (
+    !location.isOpen && !location.changesSoon && location.closedTemporarily
+  ));
+  const opensSoonLocations = filteredLocations.filter((location) => (
+    !location.isOpen && location.changesSoon
+  ));
 
   // const [showAlert, setShowAlert] = useState(true);
 
@@ -100,17 +113,36 @@ function ListPage({ locations }) {
         }
 
         <Grid container spacing={2}>
-          {openLocations.map((location) => <EateryCard
-                                            location={location}
-                                            key={location.conceptId}
-                                           />)}
-        </Grid>
-        <br></br>
-        <Grid container spacing={2}>
-          {closedLocations.map((location) => <EateryCard
-                                              location={location}
-                                              key={location.conceptId}
-                                            />)}
+          {openLocations
+            .sort((location1, location2) => location2.timeUntilClosed - location1.timeUntilClosed)
+            .map((location) => <EateryCard
+                                location={location}
+                                key={location.conceptId}
+                               />)}
+          {closesSoonLocations
+            .sort((location1, location2) => location2.timeUntilClosed - location1.timeUntilClosed)
+            .map((location) => <EateryCard
+                                location={location}
+                                key={location.conceptId}
+                              />)}
+          {opensSoonLocations
+            .sort((location1, location2) => location1.timeUntilOpen - location2.timeUntilOpen)
+            .map((location) => <EateryCard
+                              location={location}
+                              key={location.conceptId}
+                              />)}
+          {closedLocations
+            .sort((location1, location2) => location1.timeUntilOpen - location2.timeUntilOpen)
+            .map((location) => <EateryCard
+                              location={location}
+                              key={location.conceptId}
+                              />)}
+          {closedTemporarilyLocations
+            .sort((location1, location2) => location1.timeUntilOpen - location2.timeUntilOpen)
+            .map((location) => <EateryCard
+                              location={location}
+                              key={location.conceptId}
+                              />)}
         </Grid>
       </div>
       <footer className="footer">
