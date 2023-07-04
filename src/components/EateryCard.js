@@ -116,6 +116,7 @@ const Dot = styled(Card)(({ color, changesSoon }) => ({
   background: colors[color],
   width: '100%',
   height: '100%',
+  borderRadius: '50%',
   foregroundColor: colors[color],
   ...(changesSoon && blinkingAnimation),
   animationName: changesSoon && 'blinking',
