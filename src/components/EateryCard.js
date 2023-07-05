@@ -3,6 +3,7 @@ import {
   Card,
   CardHeader,
   Typography,
+  Link,
   styled,
   Grid,
   Button,
@@ -28,6 +29,11 @@ const StyledCard = styled(Card)({
 const StyledCardHeader = styled(CardHeader)({
   fontWeight: 500,
   backgroundColor: '#1D1F21',
+});
+
+const CustomLink = styled(Link)({
+  color: 'white',
+  textDecoration: 'underline',
 });
 
 const NameText = styled(Typography)({
@@ -125,6 +131,7 @@ export default function EateryCard({ location }) {
   const {
     name,
     location: locationText,
+    url,
     shortDescription,
     menu,
     todaysSpecials = [],
@@ -165,7 +172,9 @@ export default function EateryCard({ location }) {
             }
           ></StyledCardHeader>
           <CardContent>
-            <NameText variant="h6">{name}</NameText>
+            <NameText variant="h6">
+              <CustomLink href={url} target="_blank">{name}</CustomLink>
+            </NameText>
             <LocationText variant="subtitle2">{locationText}</LocationText>
             <DescriptionText>{shortDescription}</DescriptionText>
           </CardContent>
@@ -231,7 +240,9 @@ export default function EateryCard({ location }) {
             }
           ></StyledCardHeader>
           <CardContent>
-            <NameText variant="h6">{name}</NameText>
+            <NameText variant="h6">
+              <CustomLink href={url}>{name}</CustomLink>
+            </NameText>
             <LocationText variant="subtitle2">{locationText}</LocationText>
           </CardContent>
           {todaysSpecials.concat(todaysSoups).map((special, idx) => (

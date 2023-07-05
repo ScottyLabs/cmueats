@@ -130,6 +130,12 @@ function getStatusMessage(timeSlot, isOpen) {
     if (diffHours >= 24) {
       return `${action} in a day (tomorrow at ${time})`;
     }
+
+    /* Addresses bug for midnight opening/closing times */
+    if (diffHours === 0) {
+      return `${action} in ${diffMinutes} ${minuteLabel} (today at ${time})`;
+    }
+
     return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
   }
 
@@ -161,6 +167,8 @@ async function queryLocations() {
         updatedName = "Ruge Atrium - Rothberg's Roasters II";
       }
 
+      const mainURL = (location.url);
+
       const updatedTimes = location.times.map(({ start, end }) => ({
         start: {
           ...start,
@@ -175,6 +183,7 @@ async function queryLocations() {
       return {
         ...location,
         name: updatedName,
+        url: mainURL,
         times: updatedTimes,
       };
     });
