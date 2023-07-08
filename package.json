@@ -15,6 +15,8 @@
     "luxon": "^2.5.2",
     "mapkit-react": "^1.6.1",
     "netlify-plugin-mapkitjs-token": "^1.2.0",
+    "prettier-eslint": "^15.0.1",
+    "prettier-eslint-cli": "^7.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.3",
@@ -27,7 +29,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "npx eslint src --ext .js,.jsx,.ts,.tsx"
+    "lint": "npx eslint src",
+    "lint-fix": "npx eslint --fix src",
+    "format": "prettier --write src"
   },
   "eslintConfig": {
     "extends": [
@@ -50,9 +54,12 @@
   "devDependencies": {
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^5.0.0-alpha.1",
     "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0"
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^3.0.0"
   }
 }
