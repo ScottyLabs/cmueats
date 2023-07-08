@@ -1,7 +1,0 @@
-  # Ignore artifacts:
-    build
-    dist
-    coverage
-
-    .gitignore
-    .prettierignore
