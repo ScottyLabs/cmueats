@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
@@ -12,7 +13,7 @@ function App() {
 	const [locations, setLocations] = useState([]);
 
 	useEffect(() => {
-		queryLocations().then((parsedLocations) => {
+		queryLocations().then((parsedLocations: $TSFixMe) => {
 			if (parsedLocations != null) {
 				setLocations(parsedLocations);
 			}

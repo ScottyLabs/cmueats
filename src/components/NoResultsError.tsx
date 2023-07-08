@@ -1,8 +1,7 @@
-import React from 'react';
 import { Box } from '@mui/material';
 import { ErrorButton, ErrorText, ErrorTitle } from '../style';
 
-export default function EateryCard({ onClear }) {
+export default function EateryCard({ onClear }: $TSFixMe) {
 	return (
 		<Box textAlign="center" mt={6} mb={6}>
 			<ErrorTitle variant="h2">No results found</ErrorTitle>

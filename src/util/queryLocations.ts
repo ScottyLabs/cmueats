@@ -1,5 +1,8 @@
 import axios from 'axios';
+
 import { DateTime } from 'luxon';
+
+import { TimeSlot } from '../interfaces';
 
 const BASE_URL = 'https://dining.apis.scottylabs.org/locations';
 const WEEKDAYS = [
@@ -20,12 +23,12 @@ const now = DateTime.now().setZone('America/New_York');
  * @param {string} str string to convert to title case
  * @returns the same string, but in title case
  */
-function toTitleCase(str) {
+function toTitleCase(str: $TSFixMe) {
 	return str
 		.trim(' ')
 		.toLowerCase()
 		.split(' ')
-		.map((word) => {
+		.map((word: $TSFixMe) => {
 			if (word.length > 1) {
 				return word[0].toUpperCase() + word.slice(1);
 			}
@@ -41,7 +44,7 @@ function toTitleCase(str) {
  * @param {int} minutes The number of minutes since the start of the hour (0-59)
  * @returns the number of minutes since the start of the week
  */
-function toMinutes(days, hours, minutes) {
+function toMinutes(days: number, hours: number, minutes: number) {
 	return days * 24 * 60 + hours * 60 + minutes;
 }
 
@@ -51,7 +54,7 @@ function toMinutes(days, hours, minutes) {
  * @param {int} end The time slot the location closes (in minutes since midnight on Sunday)
  * @returns true if the location is open, false otherwise
  */
-function currentlyOpen(start, end) {
+function currentlyOpen(start: $TSFixMe, end: $TSFixMe) {
 	const weekday = now.weekday === 7 ? 0 : now.weekday;
 	const nowMinutes = toMinutes(weekday, now.hour, now.minute);
 
@@ -63,13 +66,13 @@ function currentlyOpen(start, end) {
  * @param {any[]} times List of time slots for a location
  * @returns The next time slot when the location opens
  */
-function getNextTimeSlot(times) {
+function getNextTimeSlot(times: $TSFixMe) {
 	const weekday = now.weekday === 7 ? 0 : now.weekday;
 	const nowMinutes = toMinutes(weekday, now.hour, now.minute);
 
 	// Find the first time slot that opens after now
 	const nextTimeSlot = times.find(
-		({ start }) => start.rawMinutes >= nowMinutes,
+		({ start }: $TSFixMe) => start.rawMinutes >= nowMinutes,
 	);
 
 	if (nextTimeSlot == null) {
@@ -86,7 +89,7 @@ function getNextTimeSlot(times) {
  * @param {boolean} isOpen whether or not the location is currently open
  * @returns {str} The status message for the location
  */
-function getStatusMessage(timeSlot, isOpen) {
+function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
 	if (timeSlot == null) {
 		return 'Closed until further notice';
 	}
@@ -163,7 +166,7 @@ async function queryLocations() {
 
 		// Convert names to title case and append "raw time" to each time slot
 		const { locations } = data;
-		const updatedLocations = locations.map((location) => {
+		const updatedLocations = locations.map((location: $TSFixMe) => {
 			let updatedName = toTitleCase(location.name);
 			if (updatedName === "Ruge Atrium - Rothberg's Roasters Ii") {
 				updatedName = "Ruge Atrium - Rothberg's Roasters II";
@@ -171,16 +174,22 @@ async function queryLocations() {
 
 			const mainURL = location.url;
 
-			const updatedTimes = location.times.map(({ start, end }) => ({
-				start: {
-					...start,
-					rawMinutes: toMinutes(start.day, start.hour, start.minute),
-				},
-				end: {
-					...end,
-					rawMinutes: toMinutes(end.day, end.hour, end.minute),
-				},
-			}));
+			const updatedTimes = location.times.map(
+				({ start, end }: $TSFixMe) => ({
+					start: {
+						...start,
+						rawMinutes: toMinutes(
+							start.day,
+							start.hour,
+							start.minute,
+						),
+					},
+					end: {
+						...end,
+						rawMinutes: toMinutes(end.day, end.hour, end.minute),
+					},
+				}),
+			);
 
 			return {
 				...location,
@@ -191,56 +200,59 @@ async function queryLocations() {
 		});
 
 		// Determine status of locations
-		const processedLocations = updatedLocations.map((location) => {
-			const { times } = location;
-			const timeSlot = times.find(({ start, end }) =>
-				currentlyOpen(start.rawMinutes, end.rawMinutes),
-			);
+		const processedLocations = updatedLocations.map(
+			(location: $TSFixMe) => {
+				const { times } = location;
+				const timeSlot = times.find(({ start, end }: TimeSlot) =>
+					currentlyOpen(start.rawMinutes, end.rawMinutes),
+				);
 
-			if (timeSlot != null) {
-				// Location is open
-				const diff =
-					(timeSlot.end.rawMinutes -
-						toMinutes(now.weekday, now.hour, now.minute) +
-						WEEK_MINUTES) %
-					WEEK_MINUTES;
+				if (timeSlot != null) {
+					// Location is open
+					const diff =
+						(timeSlot.end.rawMinutes -
+							toMinutes(now.weekday, now.hour, now.minute) +
+							WEEK_MINUTES) %
+						WEEK_MINUTES;
+
+					return {
+						...location,
+						isOpen: true,
+						statusMsg: getStatusMessage(timeSlot, true),
+						changesSoon: diff <= 60,
+						timeUntilClosed: diff,
+					};
+				}
+
+				// Location is closed
+				const nextTimeSlot = getNextTimeSlot(times);
+				let diff = 0;
+				let closedUntilFurtherNotice = false;
+
+				if (!nextTimeSlot) {
+					closedUntilFurtherNotice = true;
+				}
+
+				if (nextTimeSlot) {
+					diff =
+						nextTimeSlot.start.rawMinutes -
+						toMinutes(now.weekday, now.hour, now.minute);
+					if (diff < 0) {
+						diff += WEEK_MINUTES;
+					}
+				}
 
 				return {
 					...location,
-					isOpen: true,
-					statusMsg: getStatusMessage(timeSlot, true),
-					changesSoon: diff <= 60,
-					timeUntilClosed: diff,
+					isOpen: false,
+					statusMsg: getStatusMessage(nextTimeSlot, false),
+					changesSoon:
+						diff <= 60 && closedUntilFurtherNotice === false,
+					closedTemporarily: closedUntilFurtherNotice,
+					timeUntilOpen: diff,
 				};
-			}
-
-			// Location is closed
-			const nextTimeSlot = getNextTimeSlot(times);
-			let diff = 0;
-			let closedUntilFurtherNotice = false;
-
-			if (!nextTimeSlot) {
-				closedUntilFurtherNotice = true;
-			}
-
-			if (nextTimeSlot) {
-				diff =
-					nextTimeSlot.start.rawMinutes -
-					toMinutes(now.weekday, now.hour, now.minute);
-				if (diff < 0) {
-					diff += WEEK_MINUTES;
-				}
-			}
-
-			return {
-				...location,
-				isOpen: false,
-				statusMsg: getStatusMessage(nextTimeSlot, false),
-				changesSoon: diff <= 60 && closedUntilFurtherNotice === false,
-				closedTemporarily: closedUntilFurtherNotice,
-				timeUntilOpen: diff,
-			};
-		});
+			},
+		);
 
 		return processedLocations;
 	} catch (err) {

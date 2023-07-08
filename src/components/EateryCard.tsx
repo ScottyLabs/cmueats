@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
 	Card,
 	CardHeader,
@@ -16,6 +16,13 @@ import {
 	Dialog,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import { TextProps, Location } from '../interfaces';
+
+interface StyledProps {
+	color: keyof typeof colors;
+	changesSoon: boolean;
+}
 
 const StyledCard = styled(Card)({
 	backgroundColor: '#23272A',
@@ -57,7 +64,7 @@ const DescriptionText = styled(Typography)({
 	color: 'white',
 });
 
-const OpenText = styled(Typography)(({ changesSoon }) => ({
+const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
 	color: changesSoon ? '#f3f65d' : '#19b875',
 	fontSize: 14,
 	fontWeight: 500,
@@ -67,7 +74,7 @@ const OpenText = styled(Typography)(({ changesSoon }) => ({
 		'"Helvetica Neue", sans-serif',
 }));
 
-const ClosedText = styled(Typography)(({ changesSoon }) => ({
+const ClosedText = styled(Typography)<TextProps>(({ changesSoon }) => ({
 	color: changesSoon ? '#f6cc5d' : '#dd3c18',
 	fontSize: 14,
 	fontWeight: 500,
@@ -112,14 +119,14 @@ const colors = {
 	soonClosed: '#f6cc5d',
 };
 
-const Dot = styled(Card)(({ color, changesSoon }) => ({
+const Dot = styled(Card)<StyledProps>(({ color, changesSoon }) => ({
 	background: colors[color],
 	width: '100%',
 	height: '100%',
 	borderRadius: '50%',
 	foregroundColor: colors[color],
 	...(changesSoon && blinkingAnimation),
-	animationName: changesSoon && 'blinking',
+	animationName: changesSoon ? 'blinking' : undefined,
 	animationDuration: '1s',
 	animationIterationCount: 'infinite',
 }));
@@ -128,7 +135,7 @@ const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
-export default function EateryCard({ location }) {
+export default function EateryCard({ location }: { location: Location }) {
 	const {
 		name,
 		location: locationText,
@@ -142,6 +149,7 @@ export default function EateryCard({ location }) {
 	} = location;
 
 	const [modalOpen, setModalOpen] = useState(false);
+
 	return (
 		<>
 			<Grid item xs={12} md={4} lg={3} xl={3}>
@@ -189,7 +197,7 @@ export default function EateryCard({ location }) {
 								/>
 							</Avatar>
 						}
-					></StyledCardHeader>
+					/>
 					<CardContent>
 						<NameText variant="h6">
 							<CustomLink href={url} target="_blank">
@@ -280,7 +288,7 @@ export default function EateryCard({ location }) {
 								/>
 							</Avatar>
 						}
-					></StyledCardHeader>
+					/>
 					<CardContent>
 						<NameText variant="h6">
 							<CustomLink href={url}>{name}</CustomLink>
@@ -289,28 +297,30 @@ export default function EateryCard({ location }) {
 							{locationText}
 						</LocationText>
 					</CardContent>
-					{todaysSpecials.concat(todaysSoups).map((special, idx) => (
-						<SpecialsContent style={{}} key={idx}>
-							<AccordionSummary
-								expandIcon={
-									<ExpandMoreIcon
-										style={{ color: 'white' }}
-									/>
-								}
-								aria-controls="panel1a-content"
-								id="panel1a-header"
-							>
-								<DescriptionText>
-									{special.title}
-								</DescriptionText>
-							</AccordionSummary>
-							<AccordionDetails>
-								<LocationText>
-									{special.description}
-								</LocationText>
-							</AccordionDetails>
-						</SpecialsContent>
-					))}
+					{todaysSpecials
+						.concat(todaysSoups)
+						.map((special: $TSFixMe) => (
+							<SpecialsContent style={{}} key={special.title}>
+								<AccordionSummary
+									expandIcon={
+										<ExpandMoreIcon
+											style={{ color: 'white' }}
+										/>
+									}
+									aria-controls="panel1a-content"
+									id="panel1a-header"
+								>
+									<DescriptionText>
+										{special.title}
+									</DescriptionText>
+								</AccordionSummary>
+								<AccordionDetails>
+									<LocationText>
+										{special.description}
+									</LocationText>
+								</AccordionDetails>
+							</SpecialsContent>
+						))}
 				</StyledCard>
 			</Dialog>
 		</>

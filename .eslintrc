@@ -1,7 +1,9 @@
 {
-  "extends": ["airbnb-base", 
-              "plugin:react/recommended", 
-              "prettier"],
+  "extends": ["airbnb", 
+              "airbnb-typescript",
+              "plugin:react/jsx-runtime", 
+              "prettier",
+              "plugin:import/typescript"],
   "env": {
     "node": true,
     "es6": true,
@@ -12,9 +14,12 @@
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
-    }
+    },
+    "project": ["./tsconfig.json"]
   },
+  "parser": "@typescript-eslint/parser",
   "plugins": [
+    "@typescript-eslint",
     "react", 
     "prettier"
   ],
