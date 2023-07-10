@@ -8,8 +8,6 @@
     "tabWidth": 4,
     "useTabs": true,
     "arrowParens": "always",
-    "requirePragma": true,
-    "insertPragma": true,
     "endOfLine": "lf",
     "overrides": [
         {
