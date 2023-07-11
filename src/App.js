@@ -8,41 +8,38 @@ import queryLocations from './util/queryLocations';
 import './App.css';
 
 function App() {
-  // Load locations
-  const [locations, setLocations] = useState([]);
+	// Load locations
+	const [locations, setLocations] = useState([]);
 
-  useEffect(() => {
-    queryLocations().then((parsedLocations) => {
-      if (parsedLocations != null) {
-        setLocations(parsedLocations);
-      }
-    });
-  }, []);
+	useEffect(() => {
+		queryLocations().then((parsedLocations) => {
+			if (parsedLocations != null) {
+				setLocations(parsedLocations);
+			}
+		});
+	}, []);
 
-  return (
-    <React.StrictMode>
-      <BrowserRouter>
-        <div className="App">
-          <Routes>
-            <Route
-              path="/"
-              element={<ListPage locations={locations} />}
-            />
-            <Route
-              path="/map"
-              element={<MapPage locations={locations} />}
-            />
-            <Route
-              path="*"
-              element={<NotFoundPage />}
-            />
-          </Routes>
-        </div>
+	return (
+		<React.StrictMode>
+			<BrowserRouter>
+				<div className="App">
+					<Routes>
+						<Route
+							path="/"
+							element={<ListPage locations={locations} />}
+						/>
+						<Route
+							path="/map"
+							element={<MapPage locations={locations} />}
+						/>
+						<Route path="*" element={<NotFoundPage />} />
+					</Routes>
+				</div>
 
-        <Navbar />
-      </BrowserRouter>
-    </React.StrictMode>
-  );
+				<Navbar />
+			</BrowserRouter>
+		</React.StrictMode>
+	);
 }
 
 export default App;

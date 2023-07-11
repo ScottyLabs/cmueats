@@ -1,33 +1,33 @@
 .MapPage {
-  background-color: #2c2d2f;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  height: calc(100% - var(--navbar-height));
+	background-color: #2c2d2f;
+	display: grid;
+	grid-template-rows: 1fr auto;
+	height: calc(100% - var(--navbar-height));
 }
 
 .MapDrawer {
-  padding: 14px;
-  background: #2d2f33;
-  border-radius: 14px 14px 0 0;
-  overflow: hidden;
-  box-sizing: content-box;
+	padding: 14px;
+	background: #2d2f33;
+	border-radius: 14px 14px 0 0;
+	overflow: hidden;
+	box-sizing: content-box;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .MapDrawer {
-    transition: max-height ease-in 300ms;
-  }
+	.MapDrawer {
+		transition: max-height ease-in 300ms;
+	}
 }
 
 .DrawerTransition-exit {
-  max-height: 300px;
+	max-height: 300px;
 }
 
 .DrawerTransition-enter,
 .DrawerTransition-exit-active {
-  max-height: 0;
+	max-height: 0;
 }
 
 .DrawerTransition-enter-active {
-  max-height: 300px;
+	max-height: 300px;
 }
