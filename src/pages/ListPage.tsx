@@ -1,16 +1,19 @@
 import { Typography, Grid, styled } from '@mui/material'; // Alert (add to imports when adding announcement)
-import React, { useEffect, useMemo, useState, useLayoutEffect } from 'react';
+import { useEffect, useMemo, useState, useLayoutEffect } from 'react';
 import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
 
-function ListPage({ locations }) {
+import { Location } from '../interfaces';
+
+function ListPage({ locations }: $TSFixMe) {
 	const greeting = useMemo(() => getGreeting(), []);
 
 	// Search query processing
 	const [searchQuery, setSearchQuery] = useState('');
-	const handleSearchQueryChange = (e) => setSearchQuery(e.target.value);
+	const handleSearchQueryChange = (e: $TSFixMe) =>
+		setSearchQuery(e.target.value);
 
 	const [filteredLocations, setFilteredLocations] = useState([]);
 	useLayoutEffect(() => {
@@ -20,7 +23,7 @@ function ListPage({ locations }) {
 			filteredSearchQuery.length === 0
 				? locations
 				: locations.filter(
-						({ name, location, shortDescription }) =>
+						({ name, location, shortDescription }: $TSFixMe) =>
 							name.toLowerCase().includes(filteredSearchQuery) ||
 							location
 								.toLowerCase()
@@ -33,25 +36,25 @@ function ListPage({ locations }) {
 	}, [searchQuery, locations]);
 
 	const openLocations = filteredLocations.filter(
-		(location) => location.isOpen && !location.changesSoon,
+		(location: Location) => location.isOpen && !location.changesSoon,
 	);
 	const closesSoonLocations = filteredLocations.filter(
-		(location) => location.isOpen && location.changesSoon,
+		(location: Location) => location.isOpen && location.changesSoon,
 	);
 	const closedLocations = filteredLocations.filter(
-		(location) =>
+		(location: Location) =>
 			!location.isOpen &&
 			!location.changesSoon &&
 			!location.closedTemporarily,
 	);
 	const closedTemporarilyLocations = filteredLocations.filter(
-		(location) =>
+		(location: Location) =>
 			!location.isOpen &&
 			!location.changesSoon &&
 			location.closedTemporarily,
 	);
 	const opensSoonLocations = filteredLocations.filter(
-		(location) => !location.isOpen && location.changesSoon,
+		(location: Location) => !location.isOpen && location.changesSoon,
 	);
 
 	// const [showAlert, setShowAlert] = useState(true);
@@ -125,11 +128,11 @@ function ListPage({ locations }) {
 				<Grid container spacing={2}>
 					{openLocations
 						.sort(
-							(location1, location2) =>
+							(location1: Location, location2: Location) =>
 								location2.timeUntilClosed -
 								location1.timeUntilClosed,
 						)
-						.map((location) => (
+						.map((location: Location) => (
 							<EateryCard
 								location={location}
 								key={location.conceptId}
@@ -137,11 +140,11 @@ function ListPage({ locations }) {
 						))}
 					{closesSoonLocations
 						.sort(
-							(location1, location2) =>
+							(location1: Location, location2: Location) =>
 								location2.timeUntilClosed -
 								location1.timeUntilClosed,
 						)
-						.map((location) => (
+						.map((location: Location) => (
 							<EateryCard
 								location={location}
 								key={location.conceptId}
@@ -149,11 +152,11 @@ function ListPage({ locations }) {
 						))}
 					{opensSoonLocations
 						.sort(
-							(location1, location2) =>
+							(location1: Location, location2: Location) =>
 								location1.timeUntilOpen -
 								location2.timeUntilOpen,
 						)
-						.map((location) => (
+						.map((location: Location) => (
 							<EateryCard
 								location={location}
 								key={location.conceptId}
@@ -161,11 +164,11 @@ function ListPage({ locations }) {
 						))}
 					{closedLocations
 						.sort(
-							(location1, location2) =>
+							(location1: Location, location2: Location) =>
 								location1.timeUntilOpen -
 								location2.timeUntilOpen,
 						)
-						.map((location) => (
+						.map((location: Location) => (
 							<EateryCard
 								location={location}
 								key={location.conceptId}
@@ -173,11 +176,11 @@ function ListPage({ locations }) {
 						))}
 					{closedTemporarilyLocations
 						.sort(
-							(location1, location2) =>
+							(location1: Location, location2: Location) =>
 								location1.timeUntilOpen -
 								location2.timeUntilOpen,
 						)
-						.map((location) => (
+						.map((location: Location) => (
 							<EateryCard
 								location={location}
 								key={location.conceptId}
@@ -189,24 +192,25 @@ function ListPage({ locations }) {
 				<FooterText>
 					All times displayed in Pittsburgh local time (ET)
 				</FooterText>
+				{/* eslint-disable */}
 				<FooterText>
 					Contact{' '}
-					<a href="mailto:gramliu@cmu.edu" style={{ color: 'white' }}>
-						Gram
-					</a>
-					,{' '}
-					<a href="mailto:anuda@cmu.edu" style={{ color: 'white' }}>
-						Anuda
-					</a>
-					, or{' '}
 					<a
-						href="mailto:dsyou@andrew.cmu.edu"
+						href={`mailto:${import.meta.env.VITE_EMAIL_JAISAL}`}
 						style={{ color: 'white' }}
 					>
-						David
+						Jaisal
+					</a>{' '}
+					or{' '}
+					<a
+						href={`mailto:${import.meta.env.VITE_EMAIL_NICOLAS}`}
+						style={{ color: 'white' }}
+					>
+						Nicolas
 					</a>{' '}
 					with any problems
 				</FooterText>
+				{/* eslint-enable */}
 				<LogoText variant="h4">
 					cmu<span style={{ color: '#19b875' }}>:eats</span>
 				</LogoText>

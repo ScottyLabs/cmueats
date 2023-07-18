@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import {
 	Map,
 	Marker,
@@ -9,17 +9,17 @@ import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 
-const token = process.env.REACT_APP_MAPKITJS_TOKEN;
+const token = import.meta.env.VITE_MAPKITJS_TOKEN;
 
-function abbreviate(longName) {
+function abbreviate(longName: $TSFixMe) {
 	const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
 	return importantPart
 		.split(' ')
-		.map((word) => word.charAt(0))
+		.map((word: $TSFixMe) => word.charAt(0))
 		.join('');
 }
 
-function MapPage({ locations }) {
+function MapPage({ locations }: $TSFixMe) {
 	const [selectedLocationIndex, setSelectedLocationIndex] = useState(null);
 	const [isDrawerVisible, setDrawerVisible] = useState(false);
 	const drawerRef = useRef(null);
@@ -47,34 +47,36 @@ function MapPage({ locations }) {
 	return (
 		<div className="MapPage">
 			<Map
-				token={token}
+				token={token as string}
 				colorScheme={ColorScheme.Dark}
 				initialRegion={initialRegion}
 				excludedPOICategories={[PointOfInterestCategory.Restaurant]}
 				cameraBoundary={cameraBoundary}
 				minCameraDistance={100}
 				maxCameraDistance={1000}
-				showsUserLocationControl={true}
-				allowWheelToZoom={true}
+				showsUserLocationControl
+				allowWheelToZoom
 			>
-				{locations.map((location, locationIndex) => (
-					<Marker
-						key={location.conceptId}
-						latitude={location.coordinates.lat}
-						longitude={location.coordinates.lng}
-						color={location.isOpen ? '#69bb36' : '#ff5b40'}
-						glyphText={abbreviate(location.name)}
-						onSelect={() => {
-							setSelectedLocationIndex(locationIndex);
-							setDrawerVisible(true);
-						}}
-						onDeselect={() => {
-							if (selectedLocationIndex === locationIndex) {
-								setDrawerVisible(false);
-							}
-						}}
-					/>
-				))}
+				{locations.map(
+					(location: $TSFixMe, locationIndex: $TSFixMe) => (
+						<Marker
+							key={location.conceptId}
+							latitude={location.coordinates.lat}
+							longitude={location.coordinates.lng}
+							color={location.isOpen ? '#69bb36' : '#ff5b40'}
+							glyphText={abbreviate(location.name)}
+							onSelect={() => {
+								setSelectedLocationIndex(locationIndex);
+								setDrawerVisible(true);
+							}}
+							onDeselect={() => {
+								if (selectedLocationIndex === locationIndex) {
+									setDrawerVisible(false);
+								}
+							}}
+						/>
+					),
+				)}
 			</Map>
 
 			<CSSTransition
@@ -86,9 +88,11 @@ function MapPage({ locations }) {
 				nodeRef={drawerRef}
 			>
 				<div className="MapDrawer" ref={drawerRef}>
-					<EateryCard
-						location={locations[selectedLocationIndex] || {}}
-					/>
+					{selectedLocationIndex !== null && (
+						<EateryCard
+							location={locations[selectedLocationIndex] || {}}
+						/>
+					)}
 				</div>
 			</CSSTransition>
 		</div>

@@ -3,5 +3,6 @@ build
 dist
 coverage
 
-.gitignore
-.prettierignore
+*.json
+*.config.ts
+*.node.json
