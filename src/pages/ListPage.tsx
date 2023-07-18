@@ -190,7 +190,7 @@ function ListPage({ locations }: $TSFixMe) {
 			</div>
 			<footer className="footer">
 				<FooterText>
-					All times displayed in Pittsburgh local time (ET)
+					All times displayed in Pittsburgh local time (ET).
 				</FooterText>
 				{/* eslint-disable */}
 				<FooterText>
@@ -208,7 +208,7 @@ function ListPage({ locations }: $TSFixMe) {
 					>
 						Nicolas
 					</a>{' '}
-					with any problems
+					with any problems.
 				</FooterText>
 				{/* eslint-enable */}
 				<LogoText variant="h4">
