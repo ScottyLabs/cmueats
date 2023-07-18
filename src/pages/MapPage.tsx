@@ -9,7 +9,7 @@ import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 
-const token = import.meta.env.VITE_MAPKITJS_TOKEN;
+const token = process.env.VITE_MAPKITJS_TOKEN;
 
 function abbreviate(longName: $TSFixMe) {
 	const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
