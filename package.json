@@ -10,14 +10,14 @@
     "@mui/material": "^5.11.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/material-ui": "^0.21.12",
     "@types/react": "^18.2.14",
     "@types/react-router-dom": "^5.3.3",
-    "axios": "^0.26.0",
+    "axios": "^1.4.0",
     "css-loader": "^6.7.3",
     "eslint-config-airbnb-typescript": "^17.0.0",
-    "luxon": "^2.5.2",
+    "luxon": "^3.3.0",
     "mapkit-react": "^1.10.1",
     "netlify-plugin-mapkitjs-token": "^1.2.0",
     "prettier-eslint": "^15.0.1",
@@ -27,7 +27,7 @@
     "react-router-dom": "^6.4.3",
     "react-transition-group": "^4.4.5",
     "ts-migrate": "^0.1.35",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^3.4.0"
   },
   "scripts": {
     "start": "vite",
@@ -59,8 +59,8 @@
   "devDependencies": {
     "@types/luxon": "^3.3.0",
     "@types/testing-library__jest-dom": "^5.14.8",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "@vitejs/plugin-react": "^4.0.3",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "eslint": "^8.44.0",
