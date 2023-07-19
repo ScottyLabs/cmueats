@@ -15,7 +15,8 @@ export default defineConfig(({ command, mode }) => {
     },
     build: {
       outDir: 'build',
-      assetInlineLimit: 0
+      // generate manifest.json in outDir
+      manifest: true,
     },
     plugins: [
       react(),
