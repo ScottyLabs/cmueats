@@ -15,6 +15,7 @@ export default defineConfig(({ command, mode }) => {
     },
     build: {
       outDir: 'build',
+      assetInlineLimit: 0
     },
     plugins: [
       react(),
