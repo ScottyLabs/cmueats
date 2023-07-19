@@ -1,4 +1,4 @@
-import { Typography, Grid, styled } from '@mui/material'; // Alert (add to imports when adding announcement)
+import { Typography, Grid, Alert, styled } from '@mui/material';
 import { useEffect, useMemo, useState, useLayoutEffect } from 'react';
 import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
@@ -58,6 +58,7 @@ function ListPage({ locations }: $TSFixMe) {
 	);
 
 	// const [showAlert, setShowAlert] = useState(true);
+	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
 	useEffect(() => {
@@ -67,6 +68,21 @@ function ListPage({ locations }: $TSFixMe) {
 		if (urlQuery) {
 			setSearchQuery(urlQuery);
 		}
+	}, []);
+
+	// Monitor for the user being online
+	useEffect(() => {
+		const handleOnlineStatus = () => {
+			setShowOfflineAlert(!navigator.onLine);
+		};
+
+		window.addEventListener('online', handleOnlineStatus);
+		window.addEventListener('offline', handleOnlineStatus);
+
+		return () => {
+			window.removeEventListener('online', handleOnlineStatus);
+			window.removeEventListener('offline', handleOnlineStatus);
+		};
 	}, []);
 
 	// Typography
@@ -97,10 +113,10 @@ function ListPage({ locations }: $TSFixMe) {
 		fontSize: 16,
 	});
 
-	/* const StyledAlert  = styled(Alert)({
-    backgroundColor: '#23272a',
-    color: '#ffffff',
-  }); */
+	const StyledAlert = styled(Alert)({
+		backgroundColor: '#23272a',
+		color: '#ffffff',
+	});
 
 	return (
 		<div className="ListPage">
@@ -109,6 +125,17 @@ function ListPage({ locations }: $TSFixMe) {
         🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
       </StyledAlert>  */}
+			{showOfflineAlert && (
+				<StyledAlert
+					severity="info"
+					className="announcement"
+					onClose={() => setShowOfflineAlert(false)}
+				>
+					🌐🚫 We are temporarily unable to provide the latest
+					available dining information while you are offline. We
+					apologize for the inconvenience 🚫🌐
+				</StyledAlert>
+			)}
 			<div className="Container">
 				<header className="Locations-header">
 					<HeaderText variant="h3">{greeting}</HeaderText>
@@ -196,14 +223,14 @@ function ListPage({ locations }: $TSFixMe) {
 				<FooterText>
 					Contact{' '}
 					<a
-						href={"mailto:jaisal.patel45@gmail.com"}
+						href={'mailto:jaisal.patel45@gmail.com'}
 						style={{ color: 'white' }}
 					>
 						Jaisal
 					</a>{' '}
 					or{' '}
 					<a
-						href={"mailto:nettlin@andrew.cmu.edu"}
+						href={'mailto:nettlin@andrew.cmu.edu'}
 						style={{ color: 'white' }}
 					>
 						Nicolas
