@@ -131,9 +131,9 @@ function ListPage({ locations }: $TSFixMe) {
 					className="announcement"
 					onClose={() => setShowOfflineAlert(false)}
 				>
-					🌐🚫 TEST AUTOUPDATE. We are temporarily unable to provide
-					the latest available dining information while you are
-					offline. We apologize for the inconvenience 🚫🌐
+					🌐🚫 We are temporarily unable to provide the latest
+					available dining information while you are offline. We
+					apologize for the inconvenience 🚫🌐
 				</StyledAlert>
 			)}
 			<div className="Container">
