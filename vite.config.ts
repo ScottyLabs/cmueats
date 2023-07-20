@@ -64,7 +64,7 @@ export default defineConfig(({ command, mode }) => {
       VitePWA({
         manifest: manifestForPlugin,
         registerType: 'autoUpdate',
-        // Enables autoupdate
+        // Enables autoupdate (uses new version after user quits and reloads app)
         workbox: {
           cleanupOutdatedCaches: true,
           skipWaiting: true,
