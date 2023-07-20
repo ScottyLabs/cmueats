@@ -64,6 +64,11 @@ export default defineConfig(({ command, mode }) => {
       VitePWA({
         manifest: manifestForPlugin,
         registerType: 'autoUpdate',
+        // Enables autoupdate
+        workbox: {
+          cleanupOutdatedCaches: true,
+          skipWaiting: true,
+        },
       }),
       checker({
         typescript: true,
