@@ -6,3 +6,5 @@ coverage
 *.json
 *.config.ts
 *.node.json
+
+index.html
