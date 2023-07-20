@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import { checker } from 'vite-plugin-checker';
+import { VitePWA } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react-swc';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
@@ -20,6 +21,9 @@ export default defineConfig(({ command, mode }) => {
       viteTsconfigPaths(),
       svgrPlugin(),
       eslint(),
+      VitePWA({
+        registerType: 'autoUpdate',
+      }),
       checker({
         typescript: true,
       }),
