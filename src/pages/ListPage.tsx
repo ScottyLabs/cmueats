@@ -230,7 +230,7 @@ function ListPage({ locations }: $TSFixMe) {
 					</a>{' '}
 					or{' '}
 					<a
-						href={"mailto:nicolas+cmueats@ettlin.dev"}
+						href={'mailto:nicolas+cmueats@ettlin.dev'}
 						style={{ color: 'white' }}
 					>
 						Nicolas
