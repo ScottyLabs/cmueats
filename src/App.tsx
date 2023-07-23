@@ -20,6 +20,20 @@ function App() {
 		});
 	}, []);
 
+	// Auto-refresh the page when the user goes online after previously being offline
+	useEffect(() => {
+		function handleOnline() {
+			if (navigator.onLine) {
+				// Refresh the page
+				window.location.reload();
+			}
+		}
+
+		window.addEventListener('online', handleOnline);
+
+		return () => window.removeEventListener('online', handleOnline);
+	}, []);
+
 	return (
 		<React.StrictMode>
 			<BrowserRouter>
