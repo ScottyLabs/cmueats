@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
-export default function Navbar() {
+function Navbar() {
 	const isMap = useLocation().pathname === '/map';
 
 	return (
@@ -55,3 +55,5 @@ export default function Navbar() {
 		</nav>
 	);
 }
+
+export default Navbar;
