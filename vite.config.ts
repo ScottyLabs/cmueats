@@ -4,7 +4,6 @@ import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react-swc';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
-import eslint from 'vite-plugin-eslint';
 
 const manifestForPlugin: Partial<VitePWAOptions> = {
 	registerType: "prompt",
@@ -60,7 +59,6 @@ export default defineConfig(({ command, mode }) => {
       react(),
       viteTsconfigPaths(),
       svgrPlugin(),
-      eslint(),
       VitePWA({
         manifest: manifestForPlugin,
         registerType: 'autoUpdate',
