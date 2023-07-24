@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { ErrorButton, ErrorText, ErrorTitle } from '../style';
 
-export default function EateryCard({ onClear }: $TSFixMe) {
+function EateryCard({ onClear }: $TSFixMe) {
 	return (
 		<Box textAlign="center" mt={6} mb={6}>
 			<ErrorTitle variant="h2">No results found</ErrorTitle>
@@ -13,3 +13,5 @@ export default function EateryCard({ onClear }: $TSFixMe) {
 		</Box>
 	);
 }
+
+export default EateryCard;

@@ -135,7 +135,7 @@ const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
-export default function EateryCard({ location }: { location: Location }) {
+function EateryCard({ location }: { location: Location }) {
 	const {
 		name,
 		location: locationText,
@@ -326,3 +326,5 @@ export default function EateryCard({ location }: { location: Location }) {
 		</>
 	);
 }
+
+export default EateryCard;
