@@ -196,14 +196,14 @@ function ListPage({ locations }: $TSFixMe) {
 				<FooterText>
 					Contact{' '}
 					<a
-						href={"mailto:jaisal.patel45@gmail.com"}
+						href={'mailto:jaisal.patel45@gmail.com'}
 						style={{ color: 'white' }}
 					>
 						Jaisal
 					</a>{' '}
 					or{' '}
 					<a
-						href={"mailto:nicolas+cmueats@ettlin.dev"}
+						href={'mailto:nicolas+cmueats@ettlin.dev'}
 						style={{ color: 'white' }}
 					>
 						Nicolas
