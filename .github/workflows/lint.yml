@@ -1,18 +1,14 @@
-name: Lint and Format
-
-on: [push, pull_request]
+name: Lint
+on: [push]
 
 jobs:
-  workflow:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: bahmutov/npm-install@v1
-      - name: Run Prettier
-        run: npm run format
-        shell: bash
-      - name: Run ESLint Fix
-        run: npm run lint-fix
+      - name: Check TypeScript
+        run: npx tsc
         shell: bash
       - name: Run ESLint
         run: npm run lint
