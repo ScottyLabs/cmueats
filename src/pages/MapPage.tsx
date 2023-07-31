@@ -42,8 +42,6 @@ function MapPage({ locations }: $TSFixMe) {
 		[],
 	);
 
-	// eslint-disable-next-line no-console
-	console.log('Token: ', VITE_MAPKITJS_TOKEN);
 	const token = VITE_MAPKITJS_TOKEN;
 
 	return (
