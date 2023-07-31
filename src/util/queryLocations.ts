@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 
 import { TimeSlot } from '../interfaces';
 
-const BASE_URL = 'https://dining.apis.scottylabs.org/locations';
+const BASE_URL = import.meta.env.VITE_SERVER_URL;
 const WEEKDAYS = [
 	'Sunday',
 	'Monday',
@@ -159,7 +159,7 @@ function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
 async function queryLocations() {
 	try {
 		// Query locations
-		const { data } = await axios.get(BASE_URL);
+		const { data } = await axios.get(`${BASE_URL}/locations`);
 		if (data == null) {
 			return [];
 		}
