@@ -52,11 +52,10 @@ export default defineConfig(({ command, mode }) => {
   const teamId = env.MAPKIT_JS_TEAM_ID;
   const keyId = env.MAPKIT_JS_KEY_ID;
   const authKey = env.MAPKIT_JS_AUTH_KEY;
-  const tokenEnvVariable = env.MAPKIT_JS_TOKEN_ENV_VARIABLE || 'MAPKIT_JS_TOKEN';
   const ttl = env.MAPKIT_JS_TTL || 31_536_000; // 1 year
   const origin = env.MAPKIT_JS_ORIGIN || env.DEPLOY_PRIME_URL;
 
-  if (!teamId || !keyId || !authKey || !tokenEnvVariable || !ttl) {
+  if (!teamId || !keyId || !authKey || !ttl) {
     throw new Error('Missing mandatory parameters');
   }
 
@@ -74,9 +73,10 @@ export default defineConfig(({ command, mode }) => {
     kid: keyId,
   };
 
+  let token: string;
+
   try {
-    const token = jwt.sign(payload, atob(authKey), { header });
-    process.env[tokenEnvVariable] = token;
+    token = jwt.sign(payload, atob(authKey), { header });
     console.log("Generated MapkitJS Token:", token);
   } catch (error) {
     throw new Error('Failed to generate MapKit JS token');
@@ -85,7 +85,7 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     define: {
-      'process.env.VITE_MAPKITJS_TOKEN': JSON.stringify(env.VITE_MAPKITJS_TOKEN),
+      VITE_MAPKITJS_TOKEN: JSON.stringify(token)
     },
     build: {
       outDir: 'build',

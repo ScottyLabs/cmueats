@@ -9,8 +9,6 @@ import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 
-const token = process.env.VITE_MAPKITJS_TOKEN;
-
 function abbreviate(longName: $TSFixMe) {
 	const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
 	return importantPart
@@ -47,7 +45,7 @@ function MapPage({ locations }: $TSFixMe) {
 	return (
 		<div className="MapPage">
 			<Map
-				token={token as string}
+				token={VITE_MAPKITJS_TOKEN}
 				colorScheme={ColorScheme.Dark}
 				initialRegion={initialRegion}
 				excludedPOICategories={[PointOfInterestCategory.Restaurant]}
