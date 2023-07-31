@@ -42,10 +42,14 @@ function MapPage({ locations }: $TSFixMe) {
 		[],
 	);
 
+	// eslint-disable-next-line no-console
+	console.log('Token: ', VITE_MAPKITJS_TOKEN);
+	const token = VITE_MAPKITJS_TOKEN;
+
 	return (
 		<div className="MapPage">
 			<Map
-				token={VITE_MAPKITJS_TOKEN}
+				token={token}
 				colorScheme={ColorScheme.Dark}
 				initialRegion={initialRegion}
 				excludedPOICategories={[PointOfInterestCategory.Restaurant]}
