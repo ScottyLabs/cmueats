@@ -110,7 +110,7 @@ function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
 	}
 	const diffMinutes = diff % 60;
 	const diffHours = Math.floor((diff / 60) % 24);
-	const diffHoursForMoreThanADay = Math.floor((diff / 60));
+	const diffHoursForMoreThanADay = Math.floor(diff / 60);
 	let weekdayDiff = timeSlotWeekday - now.weekday;
 	if (weekdayDiff < 0) {
 		weekdayDiff += 7;
