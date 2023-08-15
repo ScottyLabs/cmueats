@@ -137,7 +137,6 @@ function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
 			return `${action} in a day (tomorrow at ${time})`;
 		}
 
-		/* Addresses bug for midnight opening/closing times */
 		if (diffHours === 0) {
 			return `${action} in ${diffMinutes} ${minuteLabel} (today at ${time})`;
 		}
