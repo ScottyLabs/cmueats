@@ -110,6 +110,7 @@ function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
 	}
 	const diffMinutes = diff % 60;
 	const diffHours = Math.floor((diff / 60) % 24);
+	const diffHoursForMoreThanADay = Math.floor(diff / 60);
 	let weekdayDiff = timeSlotWeekday - now.weekday;
 	if (weekdayDiff < 0) {
 		weekdayDiff += 7;
@@ -132,11 +133,10 @@ function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
 	}
 
 	if (weekdayDiff === 1) {
-		if (diffHours >= 24) {
+		if (diffHoursForMoreThanADay >= 24) {
 			return `${action} in a day (tomorrow at ${time})`;
 		}
 
-		/* Addresses bug for midnight opening/closing times */
 		if (diffHours === 0) {
 			return `${action} in ${diffMinutes} ${minuteLabel} (today at ${time})`;
 		}
