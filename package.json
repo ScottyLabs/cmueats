@@ -77,7 +77,7 @@
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-checker": "^0.6.2",
-    "vite-plugin-pwa": "^0.16.4",
+    "vite-plugin-pwa": "^0.16.5",
     "vite-plugin-svgr": "^3.2.0",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.34.3"
