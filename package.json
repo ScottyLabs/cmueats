@@ -18,7 +18,7 @@
     "css-loader": "^6.7.3",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "luxon": "^3.4.3",
-    "mapkit-react": "^1.10.1",
+    "mapkit-react": "^1.11.0",
     "netlify-plugin-mapkitjs-token": "^1.2.0",
     "prettier-eslint": "^15.0.1",
     "prettier-eslint-cli": "^7.1.0",
