@@ -69,6 +69,8 @@ function MapPage({ locations }: $TSFixMe) {
 								setSelectedLocationIndex(locationIndex);
 								setDrawerVisible(true);
 							}}
+							// enabled is a boolean (true)
+							enabled
 							onDeselect={() => {
 								if (selectedLocationIndex === locationIndex) {
 									setDrawerVisible(false);
