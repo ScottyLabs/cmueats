@@ -12,7 +12,7 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
     "@types/material-ui": "^0.21.12",
-    "@types/react": "^18.2.24",
+    "@types/react": "^18.2.25",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.5.1",
     "css-loader": "^6.7.3",
