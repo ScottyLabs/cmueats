@@ -58,7 +58,7 @@
     ]
   },
   "devDependencies": {
-    "@types/luxon": "^3.3.2",
+    "@types/luxon": "^3.3.3",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
     "@vitejs/plugin-react": "^4.1.0",
