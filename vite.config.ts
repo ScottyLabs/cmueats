@@ -4,6 +4,8 @@ import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react-swc';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
+import jwt from 'jsonwebtoken';
+
 
 const manifestForPlugin: Partial<VitePWAOptions> = {
 	registerType: "prompt",
@@ -48,9 +50,53 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  const teamId = env.MAPKIT_JS_TEAM_ID;
+  const keyId = env.MAPKIT_JS_KEY_ID;
+  const authKey = env.MAPKIT_JS_AUTH_KEY;
+  const tokenEnvVariable =
+    env.MAPKIT_JS_TOKEN_ENV_VARIABLE || 'MAPKIT_JS_TOKEN';
+  const ttl = +(env.MAPKIT_JS_TTL || 31_536_000); // 1 year
+  const origin = env.MAPKIT_JS_ORIGIN || env.DEPLOY_PRIME_URL;
+
+  console.log(teamId, keyId,  authKey, tokenEnvVariable, ttl)
+
+  if (!teamId || !keyId || !authKey || !tokenEnvVariable || !ttl) {
+    console.error('Missing mandatory parameters');
+    process.exit(1);
+  }
+
+  const iat = Date.now() / 1000;
+  const payload = {
+    iat,
+    exp: iat + ttl,
+    iss: teamId,
+    origin,
+  };
+
+  const header = {
+    typ: 'JWT',
+    alg: 'ES256',
+    kid: keyId,
+  };
+
+  try {
+    const token = jwt.sign(payload, atob(authKey), { header });
+    env[tokenEnvVariable] = token;
+    // eslint-disable-next-line no-console
+    console.info({
+      title: 'MapKit JS token generated successfully',
+      summary: `Origin: ${origin}, expires in ${ttl} seconds.`,
+      text: `process.env.${tokenEnvVariable} = '${token}';`,
+    });
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+
+
   return {
     define: {
-      'process.env.VITE_MAPKITJS_TOKEN': JSON.stringify(env.VITE_MAPKITJS_TOKEN),
+      'process.env.VITE_MAPKITJS_TOKEN': JSON.stringify(env[tokenEnvVariable]),
     },
     build: {
       outDir: 'build',
