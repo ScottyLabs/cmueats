@@ -1,1 +1,1 @@
-*.js text eol=lf
+*.js *.ts *.tsx *.css text eol=lf
