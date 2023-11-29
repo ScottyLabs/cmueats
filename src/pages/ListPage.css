@@ -1,7 +1,3 @@
-.ListPage {
-	padding-bottom: var(--navbar-height);
-}
-
 .badge-accent {
 	color: #105c03;
 	background: #19b875;
@@ -11,14 +7,14 @@
 
 .Locations-header {
 	display: grid;
-	grid-gap: 1rem;
+	grid-gap: 2rem;
 	padding: 3rem 0;
+	grid-template-columns: 1fr 300px;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (max-width: 1000px) {
 	.Locations-header {
-		grid-template-columns: 1fr 300px;
-		align-items: center;
+		grid-template-columns: auto;
 	}
 }
 
