@@ -190,6 +190,7 @@ async function queryLocations() {
 					},
 				}),
 			);
+
 			return {
 				...location,
 				name: updatedName,
@@ -197,6 +198,7 @@ async function queryLocations() {
 				times: updatedTimes,
 			};
 		});
+
 		// Determine status of locations
 		const processedLocations = updatedLocations.map(
 			(location: $TSFixMe) => {
