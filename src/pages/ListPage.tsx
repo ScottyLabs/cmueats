@@ -119,7 +119,7 @@ function ListPage({ locations }: $TSFixMe) {
 	}, []);
 
 	return (
-		<div className="ListPageContainer">
+		<div className="ListPage">
 			{/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]
@@ -136,7 +136,7 @@ function ListPage({ locations }: $TSFixMe) {
 					offline. We apologize for any inconvenience. 🌐🚫
 				</StyledAlert>
 			)}
-			<div className="GridContainer">
+			<div className="Container">
 				<header className="Locations-header">
 					<HeaderText variant="h3">{greeting}</HeaderText>
 					<input
@@ -235,7 +235,7 @@ function ListPage({ locations }: $TSFixMe) {
 					>
 						Josef
 					</a>
-                                        ,{' '}or{' '}
+					, or{' '}
 					<a
 						href={'mailto:ahusun@andrew.cmu.edu'}
 						style={{ color: 'white' }}
