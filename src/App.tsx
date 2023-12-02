@@ -13,7 +13,7 @@ function App() {
 	// Load locations
 	const { data, status } = useQuery({
 		refetchInterval: 1.5 * 60 * 1000, // every 1.5 minutes
-		queryKey: ['locationDatra'],
+		queryKey: ['locationData'],
 		queryFn: queryLocations,
 	});
 
