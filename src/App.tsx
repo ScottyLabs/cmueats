@@ -16,13 +16,6 @@ function App() {
 		queryKey: ['locationDatra'],
 		queryFn: queryLocations,
 	});
-	// useEffect(() => {
-	// 	queryLocations().then((parsedLocations: $TSFixMe) => {
-	// 		if (parsedLocations != null) {
-	// 			setLocations(parsedLocations);
-	// 		}
-	// 	});
-	// }, []);
 
 	// Auto-refresh the page when the user goes online after previously being offline
 	useEffect(() => {
