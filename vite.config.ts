@@ -58,8 +58,6 @@ export default defineConfig(({ command, mode }) => {
   const ttl = +(env.MAPKIT_JS_TTL || 31_536_000); // 1 year
   const origin = env.MAPKIT_JS_ORIGIN || env.DEPLOY_PRIME_URL;
 
-  console.log(teamId, keyId,  authKey, tokenEnvVariable, ttl)
-
   if (!teamId || !keyId || !authKey || !tokenEnvVariable || !ttl) {
     console.error('Missing mandatory parameters');
     process.exit(1);
