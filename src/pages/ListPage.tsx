@@ -235,7 +235,7 @@ function ListPage({ locations }: $TSFixMe) {
 					>
 						Josef
 					</a>{' '}
-     ,{' '}or{' '}
+                                        ,{' '}or{' '}
 					<a
 						href={'mailto:ahusun@andrew.cmu.edu'}
 						style={{ color: 'white' }}
