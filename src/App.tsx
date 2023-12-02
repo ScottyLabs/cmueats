@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
@@ -10,15 +11,18 @@ import './App.css';
 
 function App() {
 	// Load locations
-	const [locations, setLocations] = useState([]);
-
-	useEffect(() => {
-		queryLocations().then((parsedLocations: $TSFixMe) => {
-			if (parsedLocations != null) {
-				setLocations(parsedLocations);
-			}
-		});
-	}, []);
+	const { data, status } = useQuery({
+		refetchInterval: 1.5 * 60 * 1000, // every 1.5 minutes
+		queryKey: ['locationDatra'],
+		queryFn: queryLocations,
+	});
+	// useEffect(() => {
+	// 	queryLocations().then((parsedLocations: $TSFixMe) => {
+	// 		if (parsedLocations != null) {
+	// 			setLocations(parsedLocations);
+	// 		}
+	// 	});
+	// }, []);
 
 	// Auto-refresh the page when the user goes online after previously being offline
 	useEffect(() => {
@@ -42,11 +46,16 @@ function App() {
 						<Routes>
 							<Route
 								path="/"
-								element={<ListPage locations={locations} />}
+								element={
+									<ListPage
+										locations={data || []}
+										loading={status === 'pending'}
+									/>
+								}
 							/>
 							<Route
 								path="/map"
-								element={<MapPage locations={locations} />}
+								element={<MapPage locations={data} />}
 							/>
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
