@@ -215,7 +215,7 @@ function ListPage({ locations }: $TSFixMe) {
 						))}
 				</Grid>
 			</div>
-			<footer className="Footer">
+			<footer className="footer">
 				<FooterText>
 					All times displayed in Pittsburgh local time (ET).
 				</FooterText>
