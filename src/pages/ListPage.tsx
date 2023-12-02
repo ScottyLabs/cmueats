@@ -228,12 +228,19 @@ function ListPage({ locations }: $TSFixMe) {
 					>
 						Jaisal
 					</a>{' '}
-					or{' '}
+					,{' '}
 					<a
-						href={'mailto:nicolas+cmueats@ettlin.dev'}
+						href={'mailto:jmacera@andrew.cmu.edu'}
 						style={{ color: 'white' }}
 					>
-						Nicolas
+						Josef
+					</a>{' '}
+     ,{' '}or{' '}
+					<a
+						href={'mailto:ahusun@andrew.cmu.edu'}
+						style={{ color: 'white' }}
+					>
+						Aaron
 					</a>{' '}
 					with any problems.
 				</FooterText>
