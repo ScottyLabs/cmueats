@@ -2,7 +2,7 @@
 	background-color: #2c2d2f;
 	display: grid;
 	grid-template-rows: 1fr auto;
-	height: calc(100% - var(--navbar-height));
+	height: 100%;
 }
 
 .MapDrawer {

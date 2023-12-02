@@ -38,20 +38,21 @@ function App() {
 		<React.StrictMode>
 			<BrowserRouter>
 				<div className="App">
-					<Routes>
-						<Route
-							path="/"
-							element={<ListPage locations={locations} />}
-						/>
-						<Route
-							path="/map"
-							element={<MapPage locations={locations} />}
-						/>
-						<Route path="*" element={<NotFoundPage />} />
-					</Routes>
+					<div className="MainContent">
+						<Routes>
+							<Route
+								path="/"
+								element={<ListPage locations={locations} />}
+							/>
+							<Route
+								path="/map"
+								element={<MapPage locations={locations} />}
+							/>
+							<Route path="*" element={<NotFoundPage />} />
+						</Routes>
+					</div>
+					<Navbar />
 				</div>
-
-				<Navbar />
 			</BrowserRouter>
 		</React.StrictMode>
 	);

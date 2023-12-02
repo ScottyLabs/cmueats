@@ -1,10 +1,5 @@
 .Navbar {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	width: 100%;
 	height: var(--navbar-height);
-
 	background-color: #1e1e1e;
 	padding: 14px;
 	box-sizing: border-box;
@@ -18,7 +13,6 @@
 	grid-auto-flow: column;
 	height: 40px;
 	margin: 0 auto;
-
 	max-width: 500px;
 }
 

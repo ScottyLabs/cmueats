@@ -7,6 +7,39 @@ import './ListPage.css';
 
 import { Location } from '../interfaces';
 
+// Typography
+const HeaderText = styled(Typography)({
+	color: 'white',
+	padding: 0,
+	fontFamily:
+		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
+		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
+		'"Droid Sans", "Helvetica Neue", sans-serif',
+	fontWeight: 800,
+	fontSize: '3em',
+});
+
+const LogoText = styled(Typography)({
+	color: '#dd3c18',
+	padding: 0,
+	fontFamily:
+		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
+		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
+		'"Droid Sans", "Helvetica Neue", sans-serif',
+	fontWeight: 800,
+});
+
+const FooterText = styled(Typography)({
+	color: 'white',
+	marginBottom: 20,
+	fontSize: 16,
+});
+
+const StyledAlert = styled(Alert)({
+	backgroundColor: '#23272a',
+	color: '#ffffff',
+});
+
 function ListPage({ locations }: $TSFixMe) {
 	const greeting = useMemo(() => getGreeting(), []);
 
@@ -85,41 +118,8 @@ function ListPage({ locations }: $TSFixMe) {
 		};
 	}, []);
 
-	// Typography
-	const HeaderText = styled(Typography)({
-		color: 'white',
-		padding: 0,
-		fontFamily:
-			'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-			'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-			'"Droid Sans", "Helvetica Neue", sans-serif',
-		fontWeight: 800,
-		fontSize: '3em',
-	});
-
-	const LogoText = styled(Typography)({
-		color: '#dd3c18',
-		padding: 0,
-		fontFamily:
-			'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-			'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-			'"Droid Sans", "Helvetica Neue", sans-serif',
-		fontWeight: 800,
-	});
-
-	const FooterText = styled(Typography)({
-		color: 'white',
-		marginBottom: 20,
-		fontSize: 16,
-	});
-
-	const StyledAlert = styled(Alert)({
-		backgroundColor: '#23272a',
-		color: '#ffffff',
-	});
-
 	return (
-		<div className="ListPage">
+		<div className="ListPageContainer">
 			{/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]
@@ -136,7 +136,7 @@ function ListPage({ locations }: $TSFixMe) {
 					offline. We apologize for any inconvenience. 🌐🚫
 				</StyledAlert>
 			)}
-			<div className="Container">
+			<div className="GridContainer">
 				<header className="Locations-header">
 					<HeaderText variant="h3">{greeting}</HeaderText>
 					<input
