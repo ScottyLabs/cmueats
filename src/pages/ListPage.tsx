@@ -227,14 +227,14 @@ function ListPage({ locations }: $TSFixMe) {
 						style={{ color: 'white' }}
 					>
 						Jaisal
-					</a>{' '}
+					</a>
 					,{' '}
 					<a
 						href={'mailto:jmacera@andrew.cmu.edu'}
 						style={{ color: 'white' }}
 					>
 						Josef
-					</a>{' '}
+					</a>
                                         ,{' '}or{' '}
 					<a
 						href={'mailto:ahusun@andrew.cmu.edu'}
