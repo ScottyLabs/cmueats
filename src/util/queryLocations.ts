@@ -176,7 +176,6 @@ async function queryLocations() {
 
 			const updatedTimes = location.times.map(
 				({ start, end }: $TSFixMe) => {
-
 					const startRaw = toMinutes(
 						start.day,
 						start.hour,
@@ -194,7 +193,7 @@ async function queryLocations() {
 							...end,
 							rawMinutes: endRaw,
 						},
-					}
+					};
 				},
 			);
 
