@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { TextProps, Location } from '../interfaces';
+import { TextProps, Location } from '../types/interfaces';
 
 interface StyledProps {
 	color: keyof typeof colors;

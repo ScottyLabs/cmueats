@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { DateTime } from 'luxon';
 
-import { TimeSlot } from '../interfaces';
+import { TimeSlot } from '../types/interfaces';
 
 const BASE_URL = 'https://dining.apis.scottylabs.org/locations';
 const WEEKDAYS = [
@@ -23,12 +23,12 @@ const now = DateTime.now().setZone('America/New_York');
  * @param {string} str string to convert to title case
  * @returns the same string, but in title case
  */
-function toTitleCase(str: $TSFixMe) {
+function toTitleCase(str: string) {
 	return str
-		.trim(' ')
+		.trim()
 		.toLowerCase()
 		.split(' ')
-		.map((word: $TSFixMe) => {
+		.map((word) => {
 			if (word.length > 1) {
 				return word[0].toUpperCase() + word.slice(1);
 			}
@@ -89,7 +89,7 @@ function getNextTimeSlot(times: $TSFixMe) {
  * @param {boolean} isOpen whether or not the location is currently open
  * @returns {str} The status message for the location
  */
-function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
+function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean): string {
 	if (timeSlot == null) {
 		return 'Closed until further notice';
 	}
@@ -106,7 +106,7 @@ function getStatusMessage(timeSlot: $TSFixMe, isOpen: boolean) {
 		? refTime.rawMinutes - nowMinutes
 		: refTime.rawMinutes - nowMinutes;
 	if (diff < 0) {
-		diff += WEEK_MINUTES;
+		diff += WEEK_MINUTES; // TODO: when would this happen?
 	}
 	const diffMinutes = diff % 60;
 	const diffHours = Math.floor((diff / 60) % 24);

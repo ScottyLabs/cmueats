@@ -5,7 +5,7 @@ import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
 
-import { Location } from '../interfaces';
+import { Location } from '../types/interfaces';
 
 // Typography
 const HeaderText = styled(Typography)({
