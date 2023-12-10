@@ -175,20 +175,27 @@ async function queryLocations() {
 			const mainURL = location.url;
 
 			const updatedTimes = location.times.map(
-				({ start, end }: $TSFixMe) => ({
-					start: {
-						...start,
-						rawMinutes: toMinutes(
-							start.day,
-							start.hour,
-							start.minute,
-						),
-					},
-					end: {
-						...end,
-						rawMinutes: toMinutes(end.day, end.hour, end.minute),
-					},
-				}),
+				({ start, end }: $TSFixMe) => {
+
+					const startRaw = toMinutes(
+						start.day,
+						start.hour,
+						start.minute,
+					);
+					let endRaw = toMinutes(end.day, end.hour, end.minute);
+					if (endRaw < startRaw) endRaw += 7 * 24 * 60; // we end on the next week, so we'll just compensate here by adding a week's worth of minutes
+
+					return {
+						start: {
+							...start,
+							rawMinutes: startRaw,
+						},
+						end: {
+							...end,
+							rawMinutes: endRaw,
+						},
+					}
+				},
 			);
 
 			return {
