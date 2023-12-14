@@ -21,7 +21,8 @@
 }
 
 .Locations-header {
-	isolation: isolate;
+	isolation: isolate; /* Not necessary, but good practice
+	 											 to show that we've created a new stacking context*/
 	z-index: 1;
 	position: sticky;
 	top: 0;
@@ -48,10 +49,11 @@
 	}
 }
 .Locations-Greeting {
-	/* This feels a bit hacky but it prevents the search bar from growing too much when the screen gets wide*/
+	/* This feels a bit hacky but the flex-grow of 999
+	prevents the search bar from growing too much when the screen gets wide*/
 	flex: 999 1 max-content;
 	overflow-wrap: break-word;
-	min-width: 0;
+	min-width: 0; /* So it keeps shrinking when the screen gets narrow */
 }
 
 .Locations-search {
@@ -78,7 +80,7 @@
 	font-weight: 500;
 
 	flex: 1 300px;
-	min-width: 0;
+	min-width: 0; /* So it keeps shrinking when the screen gets narrow */
 }
 
 .Locations-search::-webkit-search-decoration {
