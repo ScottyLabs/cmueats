@@ -152,7 +152,7 @@ function EateryCard({ location }: { location: Location }) {
 
 	return (
 		<>
-			<Grid item xs={12} md={4} lg={3} xl={3}>
+			<Grid item xs={1}>
 				<StyledCard>
 					<StyledCardHeader
 						title={

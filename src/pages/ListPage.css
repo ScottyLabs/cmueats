@@ -1,7 +1,16 @@
 .ListPage {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-rows: 1fr auto;
 	min-height: 100%; /* So footer (the contact info one) actually stays at the bottom */
+}
+.Locations-container {
+	margin: 2.5rem 5rem 0;
+	max-width: 1600px;
+	justify-self: center;
+	/* Questionable support? Let me know if this is not optimal*/
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: fill-available;
 }
 
 .badge-accent {
@@ -12,6 +21,12 @@
 }
 
 .Locations-header {
+	isolation: isolate;
+	z-index: 1;
+	position: sticky;
+	top: 0;
+	background-color: var(--theme-color);
+
 	display: flex;
 	flex-wrap: wrap;
 	gap: 2rem;
@@ -19,9 +34,22 @@
 	place-content: space-between;
 	align-items: end;
 }
+@media (max-width: 900px) {
+	.Locations-container {
+		margin: 1.3rem;
+	}
+	.Locations-header {
+		padding: 1rem 0 2rem;
+	}
+}
+@media (max-width: 800px) {
+	.Locations-container {
+		margin: 1rem;
+	}
+}
 .Locations-Greeting {
 	/* This feels a bit hacky but it prevents the search bar from growing too much when the screen gets wide*/
-	flex: 999 max-content;
+	flex: 999 1 max-content;
 	overflow-wrap: break-word;
 	min-width: 0;
 }

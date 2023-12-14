@@ -136,7 +136,7 @@ function ListPage({ locations }: $TSFixMe) {
 					offline. We apologize for any inconvenience. 🌐🚫
 				</StyledAlert>
 			)}
-			<div className="Container">
+			<div className="Locations-container">
 				<header className="Locations-header">
 					<HeaderText variant="h3" className="Locations-Greeting">
 						{greeting}
@@ -154,7 +154,11 @@ function ListPage({ locations }: $TSFixMe) {
 					<NoResultsError onClear={() => setSearchQuery('')} />
 				)}
 
-				<Grid container spacing={3}>
+				<Grid
+					container
+					spacing={3}
+					columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+				>
 					{openLocations
 						.sort(
 							(location1: Location, location2: Location) =>
