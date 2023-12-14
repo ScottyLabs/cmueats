@@ -74,10 +74,23 @@ body {
 }
 
 .Container {
-	padding: 1.5rem 3rem 0;
-	flex-grow: 1;
+	padding: 2.5rem 5rem 0;
+	max-width: 1600px;
+	margin: auto; /*Keep it centered*/
+	width: 100%;
+	box-sizing: border-box;
+	flex: 1;
 }
-
+@media (max-width: 900px) {
+	.Container {
+		padding: 1.3rem;
+	}
+}
+@media (max-width: 800px) {
+	.Container {
+		padding: 1rem;
+	}
+}
 .footer {
 	margin-top: 80px;
 	background-color: #23272a;

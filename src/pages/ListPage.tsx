@@ -138,7 +138,9 @@ function ListPage({ locations }: $TSFixMe) {
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<HeaderText variant="h3">{greeting}</HeaderText>
+					<HeaderText variant="h3" className="Locations-Greeting">
+						{greeting}
+					</HeaderText>
 					<input
 						className="Locations-search"
 						type="search"
@@ -152,7 +154,7 @@ function ListPage({ locations }: $TSFixMe) {
 					<NoResultsError onClear={() => setSearchQuery('')} />
 				)}
 
-				<Grid container spacing={2}>
+				<Grid container spacing={3}>
 					{openLocations
 						.sort(
 							(location1: Location, location2: Location) =>

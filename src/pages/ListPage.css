@@ -12,21 +12,21 @@
 }
 
 .Locations-header {
-	display: grid;
-	grid-gap: 1rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2rem;
 	padding: 3rem 0;
+	place-content: space-between;
+	align-items: end;
 }
-
-@media screen and (min-width: 900px) {
-	.Locations-header {
-		grid-template-columns: 1fr 300px;
-		align-items: center;
-	}
+.Locations-Greeting {
+	/* This feels a bit hacky but it prevents the search bar from growing too much when the screen gets wide*/
+	flex: 999 max-content;
+	overflow-wrap: break-word;
+	min-width: 0;
 }
 
 .Locations-search {
-	display: block;
-	width: 100%;
 	padding: 0.8rem 1rem;
 	padding-left: 3rem;
 	border-radius: 1rem;
@@ -48,6 +48,9 @@
 
 	color: white;
 	font-weight: 500;
+
+	flex: 1 300px;
+	min-width: 0;
 }
 
 .Locations-search::-webkit-search-decoration {
