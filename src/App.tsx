@@ -5,21 +5,44 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
-import queryLocations from './util/queryLocations';
+import queryLocations, { getLocationStatus } from './util/locations';
 import './App.css';
+import { IAllLocationData, IExtendedLocationData } from './types/locationTypes';
+import { DateTime } from 'luxon';
 
 function App() {
 	// Load locations
-	const [locations, setLocations] = useState([]);
-
+	const [locations, setLocations] = useState<IAllLocationData>([]);
+	const [extendedLocationData, setExtendedLocationData] = useState<
+		IExtendedLocationData[]
+	>([]);
 	useEffect(() => {
-		queryLocations().then((parsedLocations: $TSFixMe) => {
-			if (parsedLocations != null) {
-				setLocations(parsedLocations);
-			}
+		queryLocations().then((parsedLocations) => {
+			setLocations(parsedLocations);
 		});
 	}, []);
+	useEffect(() => {
+		const intervalId = setInterval(
+			(function updateExtendedLocationData() {
+				// Remove .setZone('America/New_York') and change time in computer settings when testing
+				const now = DateTime.now().setZone('America/New_York');
 
+				setExtendedLocationData(
+					locations.map((location) => {
+						return {
+							...location,
+							...getLocationStatus(location.times, now), // populate location with more detailed info relevant to current time
+						};
+					}),
+				);
+				return updateExtendedLocationData; //returns itself here
+			})(), //self-invoking function
+			30 * 1000, //updates every 30 seconds
+		);
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [locations]);
 	// Auto-refresh the page when the user goes online after previously being offline
 	useEffect(() => {
 		function handleOnline() {
@@ -42,11 +65,17 @@ function App() {
 						<Routes>
 							<Route
 								path="/"
-								element={<ListPage locations={locations} />}
+								element={
+									<ListPage
+										locations={extendedLocationData}
+									/>
+								}
 							/>
 							<Route
 								path="/map"
-								element={<MapPage locations={locations} />}
+								element={
+									<MapPage locations={extendedLocationData} />
+								}
 							/>
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>

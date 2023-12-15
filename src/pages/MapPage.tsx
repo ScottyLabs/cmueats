@@ -8,19 +8,21 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
+import { IExtendedLocationData } from '../types/locationTypes';
 
 const token = process.env.VITE_MAPKITJS_TOKEN;
 
-function abbreviate(longName: $TSFixMe) {
+function abbreviate(longName: string) {
 	const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
 	return importantPart
 		.split(' ')
-		.map((word: $TSFixMe) => word.charAt(0))
+		.map((word) => word.charAt(0))
 		.join('');
 }
 
-function MapPage({ locations }: $TSFixMe) {
-	const [selectedLocationIndex, setSelectedLocationIndex] = useState(null);
+function MapPage({ locations }: { locations: IExtendedLocationData[] }) {
+	const [selectedLocationIndex, setSelectedLocationIndex] =
+		useState<number>();
 	const [isDrawerVisible, setDrawerVisible] = useState(false);
 	const drawerRef = useRef(null);
 
@@ -57,13 +59,18 @@ function MapPage({ locations }: $TSFixMe) {
 				showsUserLocationControl
 				allowWheelToZoom
 			>
-				{locations.map(
-					(location: $TSFixMe, locationIndex: $TSFixMe) => (
+				{locations.map((location, locationIndex) => {
+					if (!location.coordinates) return undefined;
+					return (
 						<Marker
 							key={location.conceptId}
 							latitude={location.coordinates.lat}
 							longitude={location.coordinates.lng}
-							color={location.isOpen ? '#69bb36' : '#ff5b40'}
+							color={
+								!location.closedLongTerm && location.isOpen
+									? '#69bb36'
+									: '#ff5b40'
+							}
 							glyphText={abbreviate(location.name)}
 							onSelect={() => {
 								setSelectedLocationIndex(locationIndex);
@@ -75,8 +82,8 @@ function MapPage({ locations }: $TSFixMe) {
 								}
 							}}
 						/>
-					),
-				)}
+					);
+				})}
 			</Map>
 
 			<CSSTransition
@@ -88,9 +95,9 @@ function MapPage({ locations }: $TSFixMe) {
 				nodeRef={drawerRef}
 			>
 				<div className="MapDrawer" ref={drawerRef}>
-					{selectedLocationIndex !== null && (
+					{selectedLocationIndex !== undefined && (
 						<EateryCard
-							location={locations[selectedLocationIndex] || {}}
+							location={locations[selectedLocationIndex]}
 						/>
 					)}
 				</div>

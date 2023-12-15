@@ -17,12 +17,9 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { TextProps, Location } from '../types/interfaces';
-
-interface StyledProps {
-	color: keyof typeof colors;
-	changesSoon: boolean;
-}
+import { TextProps } from '../types/interfaces';
+import { IExtendedLocationData, LocationState } from '../types/locationTypes';
+import { getLocationState } from '../util/locations';
 
 const StyledCard = styled(Card)({
 	backgroundColor: '#23272A',
@@ -112,30 +109,39 @@ const blinkingAnimation = {
 	},
 };
 
-const colors = {
-	open: '#19b875',
-	closed: '#dd3c18',
-	soonOpen: '#f3f65d',
-	soonClosed: '#f6cc5d',
+const colors: Record<LocationState, string> = {
+	[LocationState.OPEN]: '#19b875',
+	[LocationState.CLOSED]: '#dd3c18',
+	[LocationState.CLOSED_LONG_TERM]: '#dd3c18',
+	[LocationState.OPENS_SOON]: '#f3f65d',
+	[LocationState.CLOSES_SOON]: '#f6cc5d',
 };
 
-const Dot = styled(Card)<StyledProps>(({ color, changesSoon }) => ({
-	background: colors[color],
-	width: '100%',
-	height: '100%',
-	borderRadius: '50%',
-	foregroundColor: colors[color],
-	...(changesSoon && blinkingAnimation),
-	animationName: changesSoon ? 'blinking' : undefined,
-	animationDuration: '1s',
-	animationIterationCount: 'infinite',
-}));
+const Dot = styled(Card)(
+	({
+		state,
+		changesSoon,
+	}: {
+		state: LocationState;
+		changesSoon: boolean;
+	}) => ({
+		background: colors[state],
+		width: '100%',
+		height: '100%',
+		borderRadius: '50%',
+		foregroundColor: colors[state],
+		...(changesSoon && blinkingAnimation),
+		animationName: changesSoon ? 'blinking' : undefined,
+		animationDuration: '1s',
+		animationIterationCount: 'infinite',
+	}),
+);
 
 const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
-function EateryCard({ location }: { location: Location }) {
+function EateryCard({ location }: { location: IExtendedLocationData }) {
 	const {
 		name,
 		location: locationText,
@@ -143,10 +149,11 @@ function EateryCard({ location }: { location: Location }) {
 		shortDescription,
 		menu,
 		todaysSpecials = [],
-		isOpen,
 		statusMsg,
 		todaysSoups = [],
 	} = location;
+	const changesSoon = !location.closedLongTerm && location.changesSoon;
+	const isOpen = !location.closedLongTerm && location.isOpen;
 
 	const [modalOpen, setModalOpen] = useState(false);
 
@@ -159,14 +166,14 @@ function EateryCard({ location }: { location: Location }) {
 							isOpen ? (
 								<OpenText
 									variant="subtitle1"
-									changesSoon={location.changesSoon}
+									changesSoon={changesSoon}
 								>
 									{statusMsg}
 								</OpenText>
 							) : (
 								<ClosedText
 									variant="subtitle1"
-									changesSoon={location.changesSoon}
+									changesSoon={changesSoon}
 								>
 									{statusMsg}
 								</ClosedText>
@@ -181,19 +188,8 @@ function EateryCard({ location }: { location: Location }) {
 								}}
 							>
 								<Dot
-									color={(() => {
-										// Location is open/opening
-										if (location.isOpen) {
-											return location.changesSoon
-												? 'soonOpen'
-												: 'open';
-										}
-										// Location is closed/closing
-										return location.changesSoon
-											? 'soonClosed'
-											: 'closed';
-									})()}
-									changesSoon={location.changesSoon}
+									state={getLocationState(location)}
+									changesSoon={changesSoon}
 								/>
 							</Avatar>
 						}
@@ -250,14 +246,14 @@ function EateryCard({ location }: { location: Location }) {
 							isOpen ? (
 								<OpenText
 									variant="subtitle1"
-									changesSoon={location.changesSoon}
+									changesSoon={changesSoon}
 								>
 									{statusMsg}
 								</OpenText>
 							) : (
 								<ClosedText
 									variant="subtitle1"
-									changesSoon={location.changesSoon}
+									changesSoon={changesSoon}
 								>
 									{statusMsg}
 								</ClosedText>
@@ -272,19 +268,8 @@ function EateryCard({ location }: { location: Location }) {
 								}}
 							>
 								<Dot
-									color={(() => {
-										// Location is open/opening
-										if (location.isOpen) {
-											return location.changesSoon
-												? 'soonOpen'
-												: 'open';
-										}
-										// Location is closed/closing
-										return location.changesSoon
-											? 'soonClosed'
-											: 'closed';
-									})()}
-									changesSoon={location.changesSoon}
+									state={getLocationState(location)}
+									changesSoon={changesSoon}
 								/>
 							</Avatar>
 						}
@@ -297,30 +282,28 @@ function EateryCard({ location }: { location: Location }) {
 							{locationText}
 						</LocationText>
 					</CardContent>
-					{todaysSpecials
-						.concat(todaysSoups)
-						.map((special: $TSFixMe) => (
-							<SpecialsContent style={{}} key={special.title}>
-								<AccordionSummary
-									expandIcon={
-										<ExpandMoreIcon
-											style={{ color: 'white' }}
-										/>
-									}
-									aria-controls="panel1a-content"
-									id="panel1a-header"
-								>
-									<DescriptionText>
-										{special.title}
-									</DescriptionText>
-								</AccordionSummary>
-								<AccordionDetails>
-									<LocationText>
-										{special.description}
-									</LocationText>
-								</AccordionDetails>
-							</SpecialsContent>
-						))}
+					{todaysSpecials.concat(todaysSoups).map((special) => (
+						<SpecialsContent style={{}} key={special.title}>
+							<AccordionSummary
+								expandIcon={
+									<ExpandMoreIcon
+										style={{ color: 'white' }}
+									/>
+								}
+								aria-controls="panel1a-content"
+								id="panel1a-header"
+							>
+								<DescriptionText>
+									{special.title}
+								</DescriptionText>
+							</AccordionSummary>
+							<AccordionDetails>
+								<LocationText>
+									{special.description}
+								</LocationText>
+							</AccordionDetails>
+						</SpecialsContent>
+					))}
 				</StyledCard>
 			</Dialog>
 		</>

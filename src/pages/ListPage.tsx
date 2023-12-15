@@ -4,8 +4,9 @@ import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
-
-import { Location } from '../types/interfaces';
+import { IExtendedLocationData, LocationState } from '../types/locationTypes';
+import { getLocationState } from '../util/locations';
+import assert from '../util/assert';
 
 // Typography
 const HeaderText = styled(Typography)({
@@ -40,15 +41,16 @@ const StyledAlert = styled(Alert)({
 	color: '#ffffff',
 });
 
-function ListPage({ locations }: $TSFixMe) {
+function ListPage({ locations }: { locations: IExtendedLocationData[] }) {
 	const greeting = useMemo(() => getGreeting(), []);
 
 	// Search query processing
 	const [searchQuery, setSearchQuery] = useState('');
-	const handleSearchQueryChange = (e: $TSFixMe) =>
-		setSearchQuery(e.target.value);
 
-	const [filteredLocations, setFilteredLocations] = useState([]);
+	const [filteredLocations, setFilteredLocations] = useState<
+		IExtendedLocationData[]
+	>([]);
+
 	useLayoutEffect(() => {
 		const filteredSearchQuery = searchQuery.trim().toLowerCase();
 
@@ -56,39 +58,18 @@ function ListPage({ locations }: $TSFixMe) {
 			filteredSearchQuery.length === 0
 				? locations
 				: locations.filter(
-						({ name, location, shortDescription }: $TSFixMe) =>
+						({ name, location, shortDescription }) =>
 							name.toLowerCase().includes(filteredSearchQuery) ||
 							location
 								.toLowerCase()
 								.includes(filteredSearchQuery) ||
-							shortDescription
-								.toLowerCase()
-								.includes(filteredSearchQuery),
+							(shortDescription &&
+								shortDescription
+									.toLowerCase()
+									.includes(filteredSearchQuery)),
 				  ),
 		);
 	}, [searchQuery, locations]);
-
-	const openLocations = filteredLocations.filter(
-		(location: Location) => location.isOpen && !location.changesSoon,
-	);
-	const closesSoonLocations = filteredLocations.filter(
-		(location: Location) => location.isOpen && location.changesSoon,
-	);
-	const closedLocations = filteredLocations.filter(
-		(location: Location) =>
-			!location.isOpen &&
-			!location.changesSoon &&
-			!location.closedTemporarily,
-	);
-	const closedTemporarilyLocations = filteredLocations.filter(
-		(location: Location) =>
-			!location.isOpen &&
-			!location.changesSoon &&
-			location.closedTemporarily,
-	);
-	const opensSoonLocations = filteredLocations.filter(
-		(location: Location) => !location.isOpen && location.changesSoon,
-	);
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -143,7 +124,7 @@ function ListPage({ locations }: $TSFixMe) {
 						className="Locations-search"
 						type="search"
 						value={searchQuery}
-						onChange={handleSearchQueryChange}
+						onChange={(e) => setSearchQuery(e.target.value)}
 						placeholder="Search"
 					/>
 				</header>
@@ -153,61 +134,27 @@ function ListPage({ locations }: $TSFixMe) {
 				)}
 
 				<Grid container spacing={2}>
-					{openLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location2.timeUntilClosed -
-								location1.timeUntilClosed,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closesSoonLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location2.timeUntilClosed -
-								location1.timeUntilClosed,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{opensSoonLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closedLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closedTemporarilyLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
+					{filteredLocations
+						.sort((l1, l2) => {
+							const state1 = getLocationState(l1);
+							const state2 = getLocationState(l2);
+							if (state1 !== state2) return state1 - state2;
+							// this if statement is janky but otherwise TS won't
+							// realize that the timeUntil property exists on both l1 and l2
+							if (l1.closedLongTerm || l2.closedLongTerm) {
+								assert(l1.closedLongTerm && l2.closedLongTerm);
+								return l1.name.localeCompare(l2.name);
+							}
+							// flip sorting order if locations are both open or opening soon
+							return (
+								(state1 === LocationState.OPEN ||
+								state1 === LocationState.OPENS_SOON
+									? -1
+									: 1) *
+								(l1.timeUntil - l2.timeUntil)
+							);
+						})
+						.map((location) => (
 							<EateryCard
 								location={location}
 								key={location.conceptId}
