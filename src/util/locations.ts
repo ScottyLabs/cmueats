@@ -7,8 +7,8 @@ import {
 	IExtendedLocationData,
 	ILocationStatus,
 	LocationState,
-	MomentTimeSchema,
-	TimeSchema,
+	ITimeSlotTime,
+	ITimeSlot,
 } from '../types/locationTypes';
 import { diffInMinutes, currentlyOpen, getNextTimeSlot } from './time';
 import toTitleCase from './string';
@@ -32,7 +32,7 @@ const WEEKDAYS = [
  */
 function getStatusMessage(
 	isOpen: boolean,
-	nextTime: MomentTimeSchema,
+	nextTime: ITimeSlotTime,
 	now: DateTime,
 ): string {
 	const diff = diffInMinutes(nextTime, now);
@@ -95,7 +95,7 @@ export function getLocationState(location: IExtendedLocationData) {
 		: LocationState.CLOSED;
 }
 export function getLocationStatus(
-	timeSlots: TimeSchema[],
+	timeSlots: ITimeSlot[],
 	now: DateTime,
 ): ILocationStatus {
 	const nextTimeSlot = getNextTimeSlot(timeSlots, now);

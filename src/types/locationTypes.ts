@@ -8,22 +8,22 @@ enum DayOfTheWeek {
 	SATURDAY = 6,
 }
 
-export interface MomentTimeSchema {
+export interface ITimeSlotTime {
 	day: DayOfTheWeek;
 	hour: number;
 	minute: number;
 }
 
-export interface TimeSchema {
-	start: MomentTimeSchema;
-	end: MomentTimeSchema;
+export interface ITimeSlot {
+	start: ITimeSlotTime;
+	end: ITimeSlotTime;
 }
 interface Coordinate {
 	lat: number;
 	lng: number;
 }
 
-interface SpecialSchema {
+interface ISpecial {
 	title: string;
 	description?: string;
 }
@@ -41,9 +41,9 @@ export interface ILocationAPI {
 	location: string;
 	coordinates?: Coordinate;
 	acceptsOnlineOrders: boolean;
-	times: TimeSchema[];
-	todaysSpecials?: SpecialSchema[];
-	todaysSoups?: SpecialSchema[];
+	times: ITimeSlot[];
+	todaysSpecials?: ISpecial[];
+	todaysSoups?: ISpecial[];
 }
 export interface ILocation extends ILocationAPI {
 	name: string; // This field is now guaranteed to be defined

@@ -2,7 +2,7 @@
  */
 
 import { DateTime } from 'luxon';
-import { MomentTimeSchema, TimeSchema } from '../types/locationTypes';
+import { ITimeSlotTime, ITimeSlot } from '../types/locationTypes';
 import assert from './assert';
 
 const WEEK_MINUTES = 7 * 24 * 60;
@@ -27,7 +27,7 @@ export function minutesSinceSunday(day: number, hour: number, minute: number) {
 export function minutesSinceSundayDateTime(now: DateTime) {
 	return minutesSinceSunday(now.weekday % 7, now.hour, now.minute);
 }
-export function minutesSinceSundayTimeData(timeData: MomentTimeSchema) {
+export function minutesSinceSundayTimeData(timeData: ITimeSlotTime) {
 	assert(
 		timeData.day >= 0 &&
 			timeData.day < 7 &&
@@ -45,7 +45,7 @@ export function minutesSinceSundayTimeData(timeData: MomentTimeSchema) {
  * @param now Whatever time you want to start from
  * @returns (smallest non-negative) time in minutes to get from now to timeSlot
  */
-export function diffInMinutes(timeSlot: MomentTimeSchema, now: DateTime) {
+export function diffInMinutes(timeSlot: ITimeSlotTime, now: DateTime) {
 	const diff =
 		(minutesSinceSundayTimeData(timeSlot) -
 			minutesSinceSundayDateTime(now) +
@@ -61,7 +61,7 @@ export function diffInMinutes(timeSlot: MomentTimeSchema, now: DateTime) {
  * @param now "Current" time
  * @returns true if the location is open, false otherwise
  */
-export function currentlyOpen(timeSlot: TimeSchema, now: DateTime) {
+export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
 	const start = minutesSinceSundayTimeData(timeSlot.start);
 	const nowMinutes = minutesSinceSundayDateTime(now);
 	let end = minutesSinceSundayTimeData(timeSlot.end);
@@ -71,11 +71,11 @@ export function currentlyOpen(timeSlot: TimeSchema, now: DateTime) {
 
 /**
  * Gets the next available time slot for a given location
- * @param {TimeSchema[]} times List of time slots for a location
+ * @param {ITimeSlot[]} times List of time slots for a location
  * @returns The next time slot when the location opens (if currently open,
  * then it returns that slot). If there are no available slots, it returns null
  */
-export function getNextTimeSlot(times: TimeSchema[], now: DateTime) {
+export function getNextTimeSlot(times: ITimeSlot[], now: DateTime) {
 	if (times.length === 0) return null;
 	const nowMinutes = minutesSinceSundayDateTime(now);
 	// Find the first time slot that opens after now
