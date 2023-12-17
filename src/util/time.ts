@@ -42,10 +42,34 @@ export function minutesSinceSunday(day: number, hour: number, minute: number) {
 export function minutesSinceSundayDateTime(now: DateTime) {
 	return minutesSinceSunday(now.weekday % 7, now.hour, now.minute);
 }
-export function minutesSinceSundayTimeData(timeData: ITimeSlotTime) {
+export function minutesSinceSundayTimeSlotTime(timeData: ITimeSlotTime) {
 	assert(isTimeSlotTime(timeData), 'Invalid time!');
 	return minutesSinceSunday(timeData.day, timeData.hour, timeData.minute);
 }
+
+/**
+ *
+ * @param timeSlots
+ * @returns Checks if timeslots are non-overlapping and properly sorted.
+ * (This assumes that the start time of the next slot isn't "jumping forwards" to a new week until
+ * possibly timeSlots[-1].end (i.e. time is monotonically increasing as it should))
+ */
+export function isValidTimeSlotArray(timeSlots: ITimeSlot[]) {
+	for (let i = 0; i < timeSlots.length; i += 1) {
+		if (!isTimeSlot(timeSlots[i])) return false;
+		if (i > 0) {
+			const { start } = timeSlots[i];
+			const prevEnd = timeSlots[i - 1].end;
+			if (
+				minutesSinceSundayTimeSlotTime(prevEnd) >=
+				minutesSinceSundayTimeSlotTime(start)
+			)
+				return false;
+		}
+	}
+	return true;
+}
+
 /**
  *
  * @param timeSlotTime
@@ -55,7 +79,7 @@ export function minutesSinceSundayTimeData(timeData: ITimeSlotTime) {
 export function diffInMinutes(timeSlotTime: ITimeSlotTime, now: DateTime) {
 	assert(isTimeSlotTime(timeSlotTime));
 	const diff =
-		(minutesSinceSundayTimeData(timeSlotTime) -
+		(minutesSinceSundayTimeSlotTime(timeSlotTime) -
 			minutesSinceSundayDateTime(now) +
 			WEEK_MINUTES) %
 		WEEK_MINUTES;
@@ -71,9 +95,9 @@ export function diffInMinutes(timeSlotTime: ITimeSlotTime, now: DateTime) {
  */
 export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
 	assert(isTimeSlot(timeSlot));
-	const start = minutesSinceSundayTimeData(timeSlot.start);
+	const start = minutesSinceSundayTimeSlotTime(timeSlot.start);
 	const nowMinutes = minutesSinceSundayDateTime(now);
-	let end = minutesSinceSundayTimeData(timeSlot.end);
+	let end = minutesSinceSundayTimeSlotTime(timeSlot.end);
 	if (end < start) end += WEEK_MINUTES;
 	return start <= nowMinutes && nowMinutes <= end;
 }
@@ -85,14 +109,14 @@ export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
  * then it returns that slot). If there are no available slots, it returns null
  */
 export function getNextTimeSlot(times: ITimeSlot[], now: DateTime) {
-	assert(times.every(isTimeSlot));
+	isValidTimeSlotArray(times);
 	if (times.length === 0) return null;
 	const nowMinutes = minutesSinceSundayDateTime(now);
 	// Find the first time slot that opens after now
 	const nextTimeSlot = times.find(
 		(time) =>
 			currentlyOpen(time, now) ||
-			minutesSinceSundayTimeData(time.start) >= nowMinutes,
+			minutesSinceSundayTimeSlotTime(time.start) >= nowMinutes,
 	);
 
 	if (nextTimeSlot === undefined) {

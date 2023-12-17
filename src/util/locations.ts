@@ -14,8 +14,8 @@ import {
 	diffInMinutes,
 	currentlyOpen,
 	getNextTimeSlot,
-	isTimeSlot,
 	isTimeSlotTime,
+	isValidTimeSlotArray,
 } from './time';
 import toTitleCase from './string';
 import assert from './assert';
@@ -107,7 +107,7 @@ export function getLocationStatus(
 	timeSlots: ITimeSlot[],
 	now: DateTime,
 ): ILocationStatus {
-	assert(timeSlots.every(isTimeSlot));
+	assert(isValidTimeSlotArray(timeSlots));
 	const nextTimeSlot = getNextTimeSlot(timeSlots, now);
 	if (nextTimeSlot === null)
 		return {
