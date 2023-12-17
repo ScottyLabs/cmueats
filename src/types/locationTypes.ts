@@ -51,6 +51,7 @@ export interface ILocation extends ILocationAPI {
 
 // 'Closed' here refers to closed for the near future (no timeslots available)
 interface ILocationStatusBase {
+	/** No forseeable opening times after *now* */
 	closedLongTerm: boolean;
 	statusMsg: string;
 }
@@ -73,7 +74,7 @@ export type IExtendedLocationData =
 	| IExtendedLocationOpen
 	| IExtendedLocationClosed;
 
-// Sorted by priority (high to low)
+// Ordered by priority - affects how tiles are displayed in the grid (first to last)
 export enum LocationState {
 	OPEN,
 	CLOSES_SOON,

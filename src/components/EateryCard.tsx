@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { TextProps } from '../types/interfaces';
+import TextProps from '../types/interfaces';
 import { IExtendedLocationData, LocationState } from '../types/locationTypes';
 import { getLocationState } from '../util/locations';
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { DateTime } from 'luxon';
 
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
@@ -8,8 +9,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import queryLocations, { getLocationStatus } from './util/locations';
 import './App.css';
 import { IAllLocationData, IExtendedLocationData } from './types/locationTypes';
-import { DateTime } from 'luxon';
 
+const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 function App() {
 	// Load locations
 	const [locations, setLocations] = useState<IAllLocationData>([]);
@@ -17,7 +18,7 @@ function App() {
 		IExtendedLocationData[]
 	>([]);
 	useEffect(() => {
-		queryLocations().then((parsedLocations) => {
+		queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
 			setLocations(parsedLocations);
 		});
 	}, []);
@@ -28,16 +29,14 @@ function App() {
 				const now = DateTime.now().setZone('America/New_York');
 
 				setExtendedLocationData(
-					locations.map((location) => {
-						return {
-							...location,
-							...getLocationStatus(location.times, now), // populate location with more detailed info relevant to current time
-						};
-					}),
+					locations.map((location) => ({
+						...location,
+						...getLocationStatus(location.times, now), // populate location with more detailed info relevant to current time
+					})),
 				);
-				return updateExtendedLocationData; //returns itself here
-			})(), //self-invoking function
-			30 * 1000, //updates every 30 seconds
+				return updateExtendedLocationData; // returns itself here
+			})(), // self-invoking function
+			30 * 1000, // updates every 30 seconds
 		);
 		return () => {
 			clearInterval(intervalId);
