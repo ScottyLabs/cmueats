@@ -21,6 +21,13 @@ import TextProps from '../types/interfaces';
 import { IExtendedLocationData, LocationState } from '../types/locationTypes';
 import { getLocationState } from '../util/locations';
 
+const colors: Record<LocationState, string> = {
+	[LocationState.OPEN]: '#19b875',
+	[LocationState.CLOSED]: '#dd3c18',
+	[LocationState.CLOSED_LONG_TERM]: '#dd3c18',
+	[LocationState.OPENS_SOON]: '#f6cc5d',
+	[LocationState.CLOSES_SOON]: '#f3f65d',
+};
 const StyledCard = styled(Card)({
 	backgroundColor: '#23272A',
 	border: '2px solid rgba(0, 0, 0, 0.2)',
@@ -62,7 +69,9 @@ const DescriptionText = styled(Typography)({
 });
 
 const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
-	color: changesSoon ? '#f3f65d' : '#19b875',
+	color: changesSoon
+		? colors[LocationState.CLOSES_SOON]
+		: colors[LocationState.OPEN],
 	fontSize: 14,
 	fontWeight: 500,
 	fontFamily:
@@ -72,7 +81,9 @@ const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
 }));
 
 const ClosedText = styled(Typography)<TextProps>(({ changesSoon }) => ({
-	color: changesSoon ? '#f6cc5d' : '#dd3c18',
+	color: changesSoon
+		? colors[LocationState.OPENS_SOON]
+		: colors[LocationState.CLOSED],
 	fontSize: 14,
 	fontWeight: 500,
 	fontFamily:
@@ -107,14 +118,6 @@ const blinkingAnimation = {
 			opacity: 0,
 		},
 	},
-};
-
-const colors: Record<LocationState, string> = {
-	[LocationState.OPEN]: '#19b875',
-	[LocationState.CLOSED]: '#dd3c18',
-	[LocationState.CLOSED_LONG_TERM]: '#dd3c18',
-	[LocationState.OPENS_SOON]: '#f3f65d',
-	[LocationState.CLOSES_SOON]: '#f6cc5d',
 };
 
 const Dot = styled(Card)(
