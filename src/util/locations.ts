@@ -10,8 +10,15 @@ import {
 	ITimeSlotTime,
 	ITimeSlot,
 } from '../types/locationTypes';
-import { diffInMinutes, currentlyOpen, getNextTimeSlot } from './time';
+import {
+	diffInMinutes,
+	currentlyOpen,
+	getNextTimeSlot,
+	isTimeSlot,
+	isTimeSlotTime,
+} from './time';
 import toTitleCase from './string';
+import assert from './assert';
 
 const WEEKDAYS = [
 	'Sunday',
@@ -35,6 +42,7 @@ function getStatusMessage(
 	nextTime: ITimeSlotTime,
 	now: DateTime,
 ): string {
+	assert(isTimeSlotTime(nextTime));
 	const diff = diffInMinutes(nextTime, now);
 
 	const diffMinutes = diff % 60;
@@ -94,10 +102,12 @@ export function getLocationState(location: IExtendedLocationData) {
 		? LocationState.OPENS_SOON
 		: LocationState.CLOSED;
 }
+
 export function getLocationStatus(
 	timeSlots: ITimeSlot[],
 	now: DateTime,
 ): ILocationStatus {
+	assert(timeSlots.every(isTimeSlot));
 	const nextTimeSlot = getNextTimeSlot(timeSlots, now);
 	if (nextTimeSlot === null)
 		return {
@@ -115,7 +125,9 @@ export function getLocationStatus(
 		changesSoon: diff <= 60,
 	};
 }
-async function queryLocations(cmuEatsAPIUrl: string) {
+async function queryLocations(
+	cmuEatsAPIUrl: string,
+): Promise<IAllLocationData> {
 	try {
 		// Query locations
 		const { data } = await axios.get(cmuEatsAPIUrl);
@@ -123,21 +135,11 @@ async function queryLocations(cmuEatsAPIUrl: string) {
 			return [];
 		}
 
-		// Convert names to title case
 		const { locations }: { locations: IAllLocationData } = data;
-		const updatedLocations: IAllLocationData = locations.map((location) => {
-			let updatedName = toTitleCase(location.name ?? 'Untitled');
-
-			if (updatedName === "Ruge Atrium - Rothberg's Roasters Ii") {
-				updatedName = "Ruge Atrium - Rothberg's Roasters II";
-			}
-			return {
-				...location,
-				name: updatedName,
-			};
-		});
-
-		return updatedLocations;
+		return locations.map((location) => ({
+			...location,
+			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
+		}));
 	} catch (err) {
 		console.error(err);
 		return [];

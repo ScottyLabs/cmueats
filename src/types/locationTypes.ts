@@ -7,7 +7,9 @@ enum DayOfTheWeek {
 	FRIDAY = 5,
 	SATURDAY = 6,
 }
-
+/**
+ * Describes either start or end time in any given ITimeSlot
+ */
 export interface ITimeSlotTime {
 	day: DayOfTheWeek;
 	hour: number;
