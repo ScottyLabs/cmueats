@@ -1,19 +1,10 @@
-enum DayOfTheWeek {
-	SUNDAY = 0,
-	MONDAY = 1,
-	TUESDAY = 2,
-	WEDNESDAY = 3,
-	THURSDAY = 4,
-	FRIDAY = 5,
-	SATURDAY = 6,
-}
 /**
  * Describes either start or end time in any given ITimeSlot
  */
 export interface ITimeSlotTime {
-	day: DayOfTheWeek;
-	hour: number;
-	minute: number;
+	day: number; // 0-6
+	hour: number; // 0-23
+	minute: number; // 0-59
 }
 
 export interface ITimeSlot {
