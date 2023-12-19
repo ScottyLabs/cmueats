@@ -59,7 +59,7 @@ const ISpecialJoiSchema = Joi.object({
 	description: string,
 });
 
-// Keys without .required() are optional by default
+// Note: Keys without .required() are optional by default
 const ILocationApiJoiSchema = Joi.object({
 	conceptId: number.required(),
 	name: string,
@@ -83,6 +83,7 @@ export const IAPIResponseJoiSchema = Joi.object<IAPIResponse>({
 });
 // All of the following are extended from the base API type
 
+// Base type for internal use
 export interface ILocation extends ILocationAPI {
 	name: string; // This field is now guaranteed to be defined
 }

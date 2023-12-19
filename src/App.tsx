@@ -36,11 +36,9 @@ function App() {
 				);
 				return updateExtendedLocationData; // returns itself here
 			})(), // self-invoking function
-			30 * 1000, // updates every 30 seconds
+			10 * 1000, // updates every 10 seconds
 		);
-		return () => {
-			clearInterval(intervalId);
-		};
+		return () => clearInterval(intervalId);
 	}, [locations]);
 	// Auto-refresh the page when the user goes online after previously being offline
 	useEffect(() => {
