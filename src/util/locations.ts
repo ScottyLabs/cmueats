@@ -9,6 +9,7 @@ import {
 	LocationState,
 	ITimeSlotTime,
 	ITimeSlot,
+	ILocationAPI,
 } from '../types/locationTypes';
 import {
 	diffInMinutes,
@@ -127,7 +128,7 @@ export async function queryLocations(
 			return [];
 		}
 
-		const { locations }: { locations: IAllLocationData } = data;
+		const { locations }: { locations: ILocationAPI[] } = data;
 		return locations.map((location) => ({
 			...location,
 			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
