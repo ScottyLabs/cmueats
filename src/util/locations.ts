@@ -3,13 +3,13 @@ import axios from 'axios';
 import { DateTime } from 'luxon';
 
 import {
-	IAllLocationData,
 	IExtendedLocationData,
 	ILocationStatus,
 	LocationState,
 	ITimeSlotTime,
 	ITimeSlot,
-	ILocationAPI,
+	IAPIResponseJoiSchema,
+	ILocation,
 } from '../types/locationTypes';
 import {
 	diffInMinutes,
@@ -120,15 +120,14 @@ export function getLocationStatus(
 }
 export async function queryLocations(
 	cmuEatsAPIUrl: string,
-): Promise<IAllLocationData> {
+): Promise<ILocation[]> {
 	try {
 		// Query locations
 		const { data } = await axios.get(cmuEatsAPIUrl);
 		if (!data) {
 			return [];
 		}
-
-		const { locations }: { locations: ILocationAPI[] } = data;
+		const { locations } = await IAPIResponseJoiSchema.validateAsync(data);
 		return locations.map((location) => ({
 			...location,
 			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case

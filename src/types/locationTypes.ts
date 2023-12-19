@@ -1,3 +1,4 @@
+import Joi from 'joi';
 /**
  * Describes either start or end time in any given ITimeSlot
  */
@@ -11,33 +12,77 @@ export interface ITimeSlot {
 	start: ITimeSlotTime;
 	end: ITimeSlotTime;
 }
-interface Coordinate {
-	lat: number;
-	lng: number;
-}
-
 interface ISpecial {
 	title: string;
 	description?: string;
 }
 
 /**
- * Raw type directly from API
+ * Raw type directly from API - types below extend this
+ * (note: if you're updating this, you should
+ * update the Joi Schema below as well)
  */
-export interface ILocationAPI {
+interface ILocationAPI {
 	conceptId: number;
 	name?: string;
 	shortDescription?: string;
 	description: string;
 	url: string;
+	/** Menu link */
 	menu?: string;
 	location: string;
-	coordinates?: Coordinate;
+	coordinates?: {
+		lat: number;
+		lng: number;
+	};
 	acceptsOnlineOrders: boolean;
 	times: ITimeSlot[];
 	todaysSpecials?: ISpecial[];
 	todaysSoups?: ISpecial[];
 }
+interface IAPIResponse {
+	locations: ILocationAPI[];
+}
+const { string, number, boolean } = Joi.types();
+
+const ITimeSlotTimeJoiSchema = Joi.object({
+	day: number.min(0).max(6).required(),
+	hour: number.min(0).max(23).required(),
+	minute: number.min(0).max(59).required(),
+});
+const ITimeSlotJoiSchema = Joi.object({
+	start: ITimeSlotTimeJoiSchema.required(),
+	end: ITimeSlotTimeJoiSchema.required(),
+});
+const ISpecialJoiSchema = Joi.object({
+	title: string.required(),
+	description: string,
+});
+
+// Keys without .required() are optional by default
+const ILocationApiJoiSchema = Joi.object({
+	conceptId: number.required(),
+	name: string,
+	shortDescription: string,
+	description: string.required(),
+	url: string.required(),
+	menu: string,
+	location: string.required(),
+	coordinates: {
+		lat: number.required(),
+		lng: number.required(),
+	},
+	acceptsOnlineOrders: boolean.required(),
+	times: Joi.array().items(ITimeSlotJoiSchema).required(),
+	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
+	todaysSoups: Joi.array().items(ISpecialJoiSchema),
+});
+
+export const IAPIResponseJoiSchema = Joi.object<IAPIResponse>({
+	locations: Joi.array().items(ILocationApiJoiSchema).required(),
+});
+// All of the following are extended from the base API type
+
 export interface ILocation extends ILocationAPI {
 	name: string; // This field is now guaranteed to be defined
 }
@@ -61,7 +106,6 @@ interface ILocationStatusClosed extends ILocationStatusBase {
 interface IExtendedLocationOpen extends ILocation, ILocationStatusOpen {}
 interface IExtendedLocationClosed extends ILocation, ILocationStatusClosed {}
 
-export type IAllLocationData = ILocation[];
 export type ILocationStatus = ILocationStatusOpen | ILocationStatusClosed;
 export type IExtendedLocationData =
 	| IExtendedLocationOpen
