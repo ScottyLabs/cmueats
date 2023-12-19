@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
-import queryLocations, { getLocationStatus } from './util/locations';
+import { queryLocations, getLocationStatus } from './util/locations';
 import './App.css';
 import { IAllLocationData, IExtendedLocationData } from './types/locationTypes';
 

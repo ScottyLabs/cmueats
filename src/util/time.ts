@@ -24,9 +24,45 @@ export function isTimeSlotTime(timeSlotTime: ITimeSlotTime) {
 	return bounded(day, 0, 7) && bounded(hour, 0, 24) && bounded(minute, 0, 60);
 }
 export function isTimeSlot(timeSlot: ITimeSlot) {
+	// Note that we don't check if end is >= start because the closing time could indeed wrap around and be less than the start time (ex. Sat->Sun)
 	return isTimeSlotTime(timeSlot.start) && isTimeSlotTime(timeSlot.end);
 }
 
+/**
+ *
+ * @param minutes >=0
+ * @returns ("1 day", "32 minutes", "3 hours", etc.)
+ */
+export function getApproximateTimeStringFromMinutes(minutes: number) {
+	assert(minutes >= 0, 'Minutes must be positive!');
+
+	const pluralTag = (strings: TemplateStringsArray, amt: number) =>
+		`${strings[0]}${amt}${strings[1]}${amt === 1 ? '' : 's'}`;
+
+	let diff = minutes;
+	const m = diff % 60;
+	diff = Math.floor(diff / 60);
+	const h = diff % 24;
+	diff = Math.floor(diff / 24);
+	const d = diff;
+	if (d !== 0) return pluralTag`${d} day`;
+	if (h !== 0) return pluralTag`${h} hour`;
+	return pluralTag`${m} minute`;
+}
+
+/**
+ * Converts an ITimeSlotTime to a human-readable string (12-hour time)
+ * @param time
+ * @returns HH:MM (AM/PM)
+ */
+export function getTimeString(time: ITimeSlotTime) {
+	assert(isTimeSlotTime(time));
+	const { hour, minute } = time;
+	const hour12H = hour % 12 === 0 ? 12 : hour % 12;
+	const ampm = hour >= 12 ? 'PM' : 'AM';
+	const minutePadded = minute < 10 ? `0${minute}` : minute;
+	return `${hour12H}:${minutePadded} ${ampm}`;
+}
 /**
  * @param day The number of days since Sunday (0 if Sunday)
  * @param hour The number of hours (0-23) since midnight (0 if midnight)
@@ -36,6 +72,7 @@ export function isTimeSlot(timeSlot: ITimeSlot) {
 export function minutesSinceSunday(day: number, hour: number, minute: number) {
 	assert(
 		bounded(day, 0, 7) && bounded(hour, 0, 24) && bounded(minute, 0, 60),
+		'Invalid minutesSinceSunday input!',
 	);
 	return day * 60 * 24 + hour * 60 + minute;
 }

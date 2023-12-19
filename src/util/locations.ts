@@ -16,6 +16,10 @@ import {
 	getNextTimeSlot,
 	isTimeSlotTime,
 	isValidTimeSlotArray,
+	getTimeString,
+	minutesSinceSundayTimeSlotTime,
+	minutesSinceSundayDateTime,
+	getApproximateTimeStringFromMinutes,
 } from './time';
 import toTitleCase from './string';
 import assert from './assert';
@@ -37,7 +41,7 @@ const WEEKDAYS = [
  * @param nextTime Time data entry of next closing/opening time
  * @returns {string} The status message for the location
  */
-function getStatusMessage(
+export function getStatusMessage(
 	isOpen: boolean,
 	nextTime: ITimeSlotTime,
 	now: DateTime,
@@ -45,49 +49,37 @@ function getStatusMessage(
 	assert(isTimeSlotTime(nextTime));
 	const diff = diffInMinutes(nextTime, now);
 
-	const diffMinutes = diff % 60;
-	const diffHours = Math.floor((diff / 60) % 24);
-	const diffHoursForMoreThanADay = Math.floor(diff / 60);
 	const weekdayDiff = (nextTime.day - now.weekday + 7) % 7;
 
-	// Create time string
-	const { hour, minute } = nextTime;
-	const hour12H = hour % 12 === 0 ? 12 : hour % 12;
-	const ampm = hour >= 12 ? 'PM' : 'AM';
-	const minutePadded = minute < 10 ? `0${minute}` : minute;
-	const time = `${hour12H}:${minutePadded} ${ampm}`;
+	const time = getTimeString(nextTime);
 
 	const action = isOpen ? 'Closes' : 'Opens';
-	const day = WEEKDAYS[nextTime.day];
-	const hourLabel = diffHours === 1 ? 'hour' : 'hours';
-	const minuteLabel = diffMinutes === 1 ? 'minute' : 'minutes';
+	let day = WEEKDAYS[nextTime.day];
 
-	if (weekdayDiff > 1) {
-		return `${action} in ${weekdayDiff} days (${day} at ${time})`;
-	}
-
-	if (weekdayDiff === 1) {
-		if (diffHoursForMoreThanADay >= 24) {
-			return `${action} in a day (tomorrow at ${time})`;
+	// It's not a wrap-around time like now is Tue 2AM while nextTime is Tue 1AM
+	if (
+		minutesSinceSundayTimeSlotTime(nextTime) >=
+		minutesSinceSundayDateTime(now)
+	) {
+		if (weekdayDiff === 1) {
+			if (
+				nextTime.hour <= 4 ||
+				(nextTime.hour === 5 && nextTime.minute === 0)
+			) {
+				// Anything in the very early morning of tomorrow counts as today
+				day = 'today';
+			} else {
+				day = 'tomorrow';
+			}
+		} else if (weekdayDiff === 0) {
+			day = 'today';
 		}
-
-		if (diffHours === 0) {
-			return `${action} in ${diffMinutes} ${minuteLabel} (today at ${time})`;
-		}
-
-		return `${action} in ${diffHours} ${hourLabel} (tomorrow at ${time})`;
 	}
-
-	if (weekdayDiff === 0) {
-		if (diffHours >= 1) {
-			return `${action} in ${diffHours} ${hourLabel} (today at ${time})`;
-		}
-
-		return `${action} in ${diffMinutes} ${minuteLabel} (today at ${time})`;
+	const relTimeDiff = getApproximateTimeStringFromMinutes(diff);
+	if (relTimeDiff === '0 minutes') {
+		return `${action} now (${day} at ${time})`;
 	}
-
-	// Default return statement
-	return 'Status not available';
+	return `${action} in ${relTimeDiff} (${day} at ${time})`;
 }
 export function getLocationState(location: IExtendedLocationData) {
 	if (location.closedLongTerm) {
@@ -125,7 +117,7 @@ export function getLocationStatus(
 		changesSoon: diff <= 60,
 	};
 }
-async function queryLocations(
+export async function queryLocations(
 	cmuEatsAPIUrl: string,
 ): Promise<IAllLocationData> {
 	try {
@@ -145,5 +137,3 @@ async function queryLocations(
 		return [];
 	}
 }
-
-export default queryLocations;
