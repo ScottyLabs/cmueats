@@ -35,7 +35,10 @@ const ILocationApiJoiSchema = Joi.object({
 	times: Joi.array()
 		.items(ITimeSlotJoiSchema)
 		.required()
-		.custom((val) => assert(isValidTimeSlotArray(val))),
+		.custom((val) => {
+			assert(isValidTimeSlotArray(val));
+			return val;
+		}),
 	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
 	todaysSoups: Joi.array().items(ISpecialJoiSchema),
 });
