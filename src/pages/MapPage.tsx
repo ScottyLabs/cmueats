@@ -20,7 +20,11 @@ function abbreviate(longName: string) {
 		.join('');
 }
 
-function MapPage({ locations }: { locations: IExtendedLocationData[] }) {
+function MapPage({
+	locations,
+}: {
+	locations: IExtendedLocationData[] | undefined;
+}) {
 	const [selectedLocationIndex, setSelectedLocationIndex] =
 		useState<number>();
 	const [isDrawerVisible, setDrawerVisible] = useState(false);
@@ -45,6 +49,7 @@ function MapPage({ locations }: { locations: IExtendedLocationData[] }) {
 		}),
 		[],
 	);
+	if (!locations) return undefined;
 
 	return (
 		<div className="MapPage">

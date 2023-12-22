@@ -1,4 +1,3 @@
-import Joi from 'joi';
 /**
  * Describes either start or end time in any given ITimeSlot
  */
@@ -20,7 +19,7 @@ interface ISpecial {
 /**
  * Raw type directly from API - types below extend this
  * (note: if you're updating this, you should
- * update the Joi Schema below as well)
+ * update the Joi Schema in joiLocationTypes.ts as well)
  */
 interface ILocationAPI {
 	conceptId: number;
@@ -40,47 +39,10 @@ interface ILocationAPI {
 	todaysSpecials?: ISpecial[];
 	todaysSoups?: ISpecial[];
 }
-interface IAPIResponse {
+export interface IAPIResponse {
 	locations: ILocationAPI[];
 }
-const { string, number, boolean } = Joi.types();
 
-const ITimeSlotTimeJoiSchema = Joi.object({
-	day: number.min(0).max(6).required(),
-	hour: number.min(0).max(23).required(),
-	minute: number.min(0).max(59).required(),
-});
-const ITimeSlotJoiSchema = Joi.object({
-	start: ITimeSlotTimeJoiSchema.required(),
-	end: ITimeSlotTimeJoiSchema.required(),
-});
-const ISpecialJoiSchema = Joi.object({
-	title: string.required(),
-	description: string,
-});
-
-// Note: Keys without .required() are optional by default
-const ILocationApiJoiSchema = Joi.object({
-	conceptId: number.required(),
-	name: string,
-	shortDescription: string,
-	description: string.required(),
-	url: string.required(),
-	menu: string,
-	location: string.required(),
-	coordinates: {
-		lat: number.required(),
-		lng: number.required(),
-	},
-	acceptsOnlineOrders: boolean.required(),
-	times: Joi.array().items(ITimeSlotJoiSchema).required(),
-	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
-	todaysSoups: Joi.array().items(ISpecialJoiSchema),
-});
-
-export const IAPIResponseJoiSchema = Joi.object<IAPIResponse>({
-	locations: Joi.array().items(ILocationApiJoiSchema).required(),
-});
 // All of the following are extended from the base API type
 
 // Base type for internal use

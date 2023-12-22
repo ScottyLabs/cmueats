@@ -8,7 +8,6 @@ import {
 	LocationState,
 	ITimeSlotTime,
 	ITimeSlot,
-	IAPIResponseJoiSchema,
 	ILocation,
 } from '../types/locationTypes';
 import {
@@ -24,6 +23,7 @@ import {
 } from './time';
 import toTitleCase from './string';
 import assert from './assert';
+import IAPIResponseJoiSchema from '../types/joiLocationTypes';
 
 const WEEKDAYS = [
 	'Sunday',
@@ -34,7 +34,6 @@ const WEEKDAYS = [
 	'Friday',
 	'Saturday',
 ];
-
 /**
  * Return the status message for a dining location, given the current or next available
  * time slot, and whether or not the location is currently open

@@ -19,6 +19,14 @@ const HeaderText = styled(Typography)({
 	fontWeight: 800,
 	fontSize: '3em',
 });
+const ErrorText = styled(Typography)({
+	color: 'white',
+	padding: 0,
+	fontFamily:
+		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
+		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
+		'"Droid Sans", "Helvetica Neue", sans-serif',
+});
 
 const LogoText = styled(Typography)({
 	color: '#dd3c18',
@@ -41,7 +49,11 @@ const StyledAlert = styled(Alert)({
 	color: '#ffffff',
 });
 
-function ListPage({ locations }: { locations: IExtendedLocationData[] }) {
+function ListPage({
+	locations,
+}: {
+	locations: IExtendedLocationData[] | undefined;
+}) {
 	const greeting = useMemo(() => getGreeting(), []);
 
 	// Search query processing
@@ -52,6 +64,7 @@ function ListPage({ locations }: { locations: IExtendedLocationData[] }) {
 	>([]);
 
 	useLayoutEffect(() => {
+		if (locations === undefined) return;
 		const filteredSearchQuery = searchQuery.trim().toLowerCase();
 
 		setFilteredLocations(
@@ -119,7 +132,9 @@ function ListPage({ locations }: { locations: IExtendedLocationData[] }) {
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<HeaderText variant="h3">{greeting}</HeaderText>
+					<HeaderText variant="h3">
+						{locations === undefined ? 'Loading...' : greeting}
+					</HeaderText>
 					<input
 						className="Locations-search"
 						type="search"
@@ -128,39 +143,61 @@ function ListPage({ locations }: { locations: IExtendedLocationData[] }) {
 						placeholder="Search"
 					/>
 				</header>
-
-				{filteredLocations.length === 0 && locations.length !== 0 && (
-					<NoResultsError onClear={() => setSearchQuery('')} />
-				)}
-
-				<Grid container spacing={2}>
-					{filteredLocations
-						.sort((l1, l2) => {
-							const state1 = getLocationState(l1);
-							const state2 = getLocationState(l2);
-							if (state1 !== state2) return state1 - state2;
-							// this if statement is janky but otherwise TS won't
-							// realize that the timeUntil property exists on both l1 and l2
-							if (l1.closedLongTerm || l2.closedLongTerm) {
-								assert(l1.closedLongTerm && l2.closedLongTerm);
-								return l1.name.localeCompare(l2.name);
-							}
-							// flip sorting order if locations are both open or opening soon
-							return (
-								(state1 === LocationState.OPEN ||
-								state1 === LocationState.OPENS_SOON
-									? -1
-									: 1) *
-								(l1.timeUntil - l2.timeUntil)
-							);
-						})
-						.map((location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
+				{(() => {
+					if (locations === undefined) return undefined; // still loading
+					if (locations.length === 0)
+						// Okay we're assuming that an empty array means something has gone awry - there's no way there's no data, right?
+						return (
+							<ErrorText variant="h4">
+								Oops! We received an invalid API response (or no
+								data at all). Please contact us because we
+								definitely messed something up on the backend.
+							</ErrorText>
+						);
+					if (filteredLocations.length === 0)
+						return (
+							<NoResultsError
+								onClear={() => setSearchQuery('')}
 							/>
-						))}
-				</Grid>
+						);
+					return (
+						<Grid container spacing={2}>
+							{filteredLocations
+								.sort((l1, l2) => {
+									const state1 = getLocationState(l1);
+									const state2 = getLocationState(l2);
+									if (state1 !== state2)
+										return state1 - state2;
+									// this if statement is janky but otherwise TS won't
+									// realize that the timeUntil property exists on both l1 and l2
+									if (
+										l1.closedLongTerm ||
+										l2.closedLongTerm
+									) {
+										assert(
+											l1.closedLongTerm &&
+												l2.closedLongTerm,
+										);
+										return l1.name.localeCompare(l2.name);
+									}
+									// flip sorting order if locations are both open or opening soon
+									return (
+										(state1 === LocationState.OPEN ||
+										state1 === LocationState.OPENS_SOON
+											? -1
+											: 1) *
+										(l1.timeUntil - l2.timeUntil)
+									);
+								})
+								.map((location) => (
+									<EateryCard
+										location={location}
+										key={location.conceptId}
+									/>
+								))}
+						</Grid>
+					);
+				})()}
 			</div>
 			<footer className="footer">
 				<FooterText>

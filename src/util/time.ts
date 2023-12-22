@@ -3,6 +3,7 @@
 
 import { DateTime } from 'luxon';
 import { ITimeSlotTime, ITimeSlot } from '../types/locationTypes';
+
 import assert from './assert';
 
 const WEEK_MINUTES = 7 * 24 * 60;

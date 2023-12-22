@@ -11,13 +11,12 @@ import './App.css';
 import { IExtendedLocationData, ILocation } from './types/locationTypes';
 
 const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
-// const CMU_EATS_API_URL = 'http://localhost:5010/locations';
+// const CMU_EATS_API_URL = 'http://localhost:5010/locations'; // for debugging purposes
 function App() {
 	// Load locations
-	const [locations, setLocations] = useState<ILocation[]>([]);
-	const [extendedLocationData, setExtendedLocationData] = useState<
-		IExtendedLocationData[]
-	>([]);
+	const [locations, setLocations] = useState<ILocation[]>();
+	const [extendedLocationData, setExtendedLocationData] =
+		useState<IExtendedLocationData[]>();
 	useEffect(() => {
 		queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
 			setLocations(parsedLocations);
@@ -26,15 +25,18 @@ function App() {
 	useEffect(() => {
 		const intervalId = setInterval(
 			(function updateExtendedLocationData() {
-				// Remove .setZone('America/New_York') and change time in computer settings when testing
-				const now = DateTime.now().setZone('America/New_York');
+				if (locations !== undefined) {
+					// Remove .setZone('America/New_York') and change time in computer settings when testing
+					const now = DateTime.now().setZone('America/New_York');
 
-				setExtendedLocationData(
-					locations.map((location) => ({
-						...location,
-						...getLocationStatus(location.times, now), // populate location with more detailed info relevant to current time
-					})),
-				);
+					setExtendedLocationData(
+						locations.map((location) => ({
+							...location,
+							...getLocationStatus(location.times, now), // populate location with more detailed info relevant to current time
+						})),
+					);
+				}
+
 				return updateExtendedLocationData; // returns itself here
 			})(), // self-invoking function
 			10 * 1000, // updates every 10 seconds
