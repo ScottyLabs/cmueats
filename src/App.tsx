@@ -11,6 +11,7 @@ import './App.css';
 import { IExtendedLocationData, ILocation } from './types/locationTypes';
 
 const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
+// const CMU_EATS_API_URL = 'http://localhost:5010/locations';
 function App() {
 	// Load locations
 	const [locations, setLocations] = useState<ILocation[]>([]);

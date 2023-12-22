@@ -100,7 +100,10 @@ export function getLocationStatus(
 	timeSlots: ITimeSlot[],
 	now: DateTime,
 ): ILocationStatus {
-	assert(isValidTimeSlotArray(timeSlots));
+	assert(
+		isValidTimeSlotArray(timeSlots),
+		`${JSON.stringify(timeSlots)} is invalid!`,
+	);
 	const nextTimeSlot = getNextTimeSlot(timeSlots, now);
 	if (nextTimeSlot === null)
 		return {
