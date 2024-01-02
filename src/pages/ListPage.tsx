@@ -65,7 +65,7 @@ function ListPage({ locations, loading }: $TSFixMe) {
 							shortDescription
 								.toLowerCase()
 								.includes(filteredSearchQuery),
-				  ),
+					),
 		);
 	}, [searchQuery, locations]);
 
