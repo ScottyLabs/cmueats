@@ -14,7 +14,7 @@
     "@types/material-ui": "^0.21.16",
     "@types/react": "^18.2.46",
     "@types/react-router-dom": "^5.3.3",
-    "axios": "^1.6.3",
+    "axios": "^1.6.4",
     "css-loader": "^6.7.3",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "jsonwebtoken": "^9.0.2",
