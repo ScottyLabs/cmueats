@@ -3,7 +3,6 @@ import axios from 'axios';
 import { DateTime } from 'luxon';
 
 import {
-	IExtendedLocationData,
 	ILocationStatus,
 	LocationState,
 	ITimeSlotTime,
@@ -81,19 +80,6 @@ export function getStatusMessage(
 	}
 	return `${action} in ${relTimeDiff} (${day} at ${time})`;
 }
-export function getLocationState(location: IExtendedLocationData) {
-	if (location.closedLongTerm) {
-		return LocationState.CLOSED_LONG_TERM;
-	}
-	if (location.isOpen)
-		return location.changesSoon
-			? LocationState.CLOSES_SOON
-			: LocationState.OPEN;
-
-	return location.changesSoon
-		? LocationState.OPENS_SOON
-		: LocationState.CLOSED;
-}
 
 export function getLocationStatus(
 	timeSlots: ITimeSlot[],
@@ -108,16 +94,29 @@ export function getLocationStatus(
 		return {
 			statusMsg: 'Closed until further notice',
 			closedLongTerm: true,
+			locationState: LocationState.CLOSED_LONG_TERM,
 		};
-	const openNow = currentlyOpen(nextTimeSlot, now);
-	const relevantTime = openNow ? nextTimeSlot.end : nextTimeSlot.start; // when will the next closing/opening event happen?
-	const diff = diffInMinutes(relevantTime, now);
+	const isOpen = currentlyOpen(nextTimeSlot, now);
+	const relevantTime = isOpen ? nextTimeSlot.end : nextTimeSlot.start; // when will the next closing/opening event happen?
+	const timeUntil = diffInMinutes(relevantTime, now);
+	const statusMsg = getStatusMessage(isOpen, relevantTime, now);
+	const changesSoon = timeUntil <= 60;
+	// (imo I think this is readable)
+	// eslint-disable-next-line no-nested-ternary
+	const locationState = isOpen
+		? changesSoon
+			? LocationState.CLOSES_SOON
+			: LocationState.OPEN
+		: changesSoon
+		  ? LocationState.OPENS_SOON
+		  : LocationState.CLOSED;
 	return {
-		isOpen: openNow,
-		statusMsg: getStatusMessage(openNow, relevantTime, now),
-		timeUntil: diff,
 		closedLongTerm: false,
-		changesSoon: diff <= 60,
+		isOpen,
+		statusMsg,
+		timeUntil,
+		changesSoon,
+		locationState,
 	};
 }
 export async function queryLocations(

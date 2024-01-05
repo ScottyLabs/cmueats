@@ -16,6 +16,15 @@ interface ISpecial {
 	description?: string;
 }
 
+// Ordered by priority - affects how tiles are displayed in the grid (first to last)
+export enum LocationState {
+	OPEN,
+	CLOSES_SOON,
+	OPENS_SOON,
+	CLOSED,
+	CLOSED_LONG_TERM,
+}
+
 /**
  * Raw type directly from API - types below extend this
  * (note: if you're updating this, you should
@@ -55,15 +64,18 @@ interface ILocationStatusBase {
 	/** No forseeable opening times after *now* */
 	closedLongTerm: boolean;
 	statusMsg: string;
+	locationState: LocationState;
 }
 interface ILocationStatusOpen extends ILocationStatusBase {
 	isOpen: boolean;
 	timeUntil: number;
 	closedLongTerm: false;
 	changesSoon: boolean;
+	locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
 }
 interface ILocationStatusClosed extends ILocationStatusBase {
 	closedLongTerm: true;
+	locationState: LocationState.CLOSED_LONG_TERM;
 }
 
 interface IExtendedLocationOpen extends ILocation, ILocationStatusOpen {}
@@ -73,12 +85,3 @@ export type ILocationStatus = ILocationStatusOpen | ILocationStatusClosed;
 export type IExtendedLocationData =
 	| IExtendedLocationOpen
 	| IExtendedLocationClosed;
-
-// Ordered by priority - affects how tiles are displayed in the grid (first to last)
-export enum LocationState {
-	OPEN,
-	CLOSES_SOON,
-	OPENS_SOON,
-	CLOSED,
-	CLOSED_LONG_TERM,
-}

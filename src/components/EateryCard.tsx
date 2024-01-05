@@ -19,7 +19,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import TextProps from '../types/interfaces';
 import { IExtendedLocationData, LocationState } from '../types/locationTypes';
-import { getLocationState } from '../util/locations';
 
 const colors: Record<LocationState, string> = {
 	[LocationState.OPEN]: '#19b875',
@@ -191,7 +190,7 @@ function EateryCard({ location }: { location: IExtendedLocationData }) {
 								}}
 							>
 								<Dot
-									state={getLocationState(location)}
+									state={location.locationState}
 									changesSoon={changesSoon}
 								/>
 							</Avatar>
@@ -271,7 +270,7 @@ function EateryCard({ location }: { location: IExtendedLocationData }) {
 								}}
 							>
 								<Dot
-									state={getLocationState(location)}
+									state={location.locationState}
 									changesSoon={changesSoon}
 								/>
 							</Avatar>

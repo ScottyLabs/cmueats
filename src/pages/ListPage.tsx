@@ -5,7 +5,6 @@ import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
 import { IExtendedLocationData, LocationState } from '../types/locationTypes';
-import { getLocationState } from '../util/locations';
 import assert from '../util/assert';
 
 // Typography
@@ -164,8 +163,8 @@ function ListPage({
 						<Grid container spacing={2}>
 							{filteredLocations
 								.sort((l1, l2) => {
-									const state1 = getLocationState(l1);
-									const state2 = getLocationState(l2);
+									const state1 = l1.locationState;
+									const state2 = l2.locationState;
 									if (state1 !== state2)
 										return state1 - state2;
 									// this if statement is janky but otherwise TS won't
