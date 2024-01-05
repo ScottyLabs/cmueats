@@ -30,17 +30,18 @@
 
 	display: flex;
 	flex-wrap: wrap;
-	gap: 2rem;
-	padding: 3rem 0;
+	gap: 1.5rem;
+	padding: 2.5rem 0 1.5rem;
 	place-content: space-between;
 	align-items: end;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
 }
 @media (max-width: 900px) {
 	.Locations-container {
 		margin: 1.3rem;
 	}
 	.Locations-header {
-		padding: 1rem 0 2rem;
+		padding: 1rem 0 1.5rem;
 	}
 }
 @media (max-width: 800px) {

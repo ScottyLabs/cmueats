@@ -40,7 +40,7 @@ const StyledAlert = styled(Alert)({
 	color: '#ffffff',
 });
 
-function ListPage({ locations }: $TSFixMe) {
+function ListPage({ locations, scrollFromTop }: $TSFixMe) {
 	const greeting = useMemo(() => getGreeting(), []);
 
 	// Search query processing
@@ -117,7 +117,6 @@ function ListPage({ locations }: $TSFixMe) {
 			window.removeEventListener('offline', handleOnlineStatus);
 		};
 	}, []);
-
 	return (
 		<div className="ListPage">
 			{/*  showAlert &&
@@ -137,7 +136,10 @@ function ListPage({ locations }: $TSFixMe) {
 				</StyledAlert>
 			)}
 			<div className="Locations-container">
-				<header className="Locations-header">
+				<header
+					className="Locations-header"
+					style={{ boxShadow: scrollFromTop <= 40 ? 'none' : '' }}
+				>
 					<HeaderText variant="h3" className="Locations-Greeting">
 						{greeting}
 					</HeaderText>
@@ -156,8 +158,9 @@ function ListPage({ locations }: $TSFixMe) {
 
 				<Grid
 					container
-					spacing={3}
+					spacing={2}
 					columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+					marginTop={2}
 				>
 					{openLocations
 						.sort(
