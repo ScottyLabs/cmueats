@@ -1,5 +1,8 @@
 import { DateTime } from 'luxon';
-import { getLocationStatus, getStatusMessage } from '../../src/util/locations';
+import {
+	getLocationStatus,
+	getStatusMessage,
+} from '../../src/util/queryLocations';
 import { describe, expect, it } from 'vitest';
 import { ITimeSlotTime } from '../../src/types/locationTypes';
 
