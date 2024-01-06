@@ -35,7 +35,7 @@ test.each([
 		isOpen: false,
 		nextTime: { day: 3, hour: 0, minute: 2 },
 		now: { day: 2, hour: 23, minute: 3 },
-		expectedString: 'Opens in 59 minutes (today at 12:02 AM)',
+		expectedString: 'Opens in 59 minutes (tomorrow at 12:02 AM)',
 	},
 	{
 		isOpen: false,
@@ -53,19 +53,19 @@ test.each([
 		isOpen: false,
 		nextTime: { day: 1, hour: 0, minute: 0 },
 		now: { day: 0, hour: 0, minute: 0 },
-		expectedString: 'Opens in 1 day (today at 12:00 AM)',
+		expectedString: 'Opens in 1 day (tomorrow at 12:00 AM)',
 	},
 	{
 		isOpen: false,
 		nextTime: { day: 1, hour: 0, minute: 0 },
 		now: { day: 0, hour: 23, minute: 30 },
-		expectedString: 'Opens in 30 minutes (today at 12:00 AM)',
+		expectedString: 'Opens in 30 minutes (tomorrow at 12:00 AM)',
 	},
 	{
 		isOpen: false,
 		nextTime: { day: 1, hour: 0, minute: 0 },
 		now: { day: 0, hour: 20, minute: 30 },
-		expectedString: 'Opens in 3 hours (today at 12:00 AM)',
+		expectedString: 'Opens in 3 hours (tomorrow at 12:00 AM)',
 	},
 	{
 		isOpen: false,
@@ -83,13 +83,13 @@ test.each([
 		isOpen: false,
 		nextTime: { day: 1, hour: 2, minute: 0 },
 		now: { day: 0, hour: 0, minute: 30 },
-		expectedString: 'Opens in 1 day (today at 2:00 AM)',
+		expectedString: 'Opens in 1 day (tomorrow at 2:00 AM)',
 	},
 	{
 		isOpen: false,
 		nextTime: { day: 1, hour: 5, minute: 0 },
 		now: { day: 0, hour: 0, minute: 30 },
-		expectedString: 'Opens in 1 day (today at 5:00 AM)',
+		expectedString: 'Opens in 1 day (tomorrow at 5:00 AM)',
 	},
 	{
 		isOpen: false,
@@ -113,7 +113,7 @@ test.each([
 		isOpen: false,
 		nextTime: { day: 1, hour: 5, minute: 0 },
 		now: { day: 0, hour: 19, minute: 30 },
-		expectedString: 'Opens in 9 hours (today at 5:00 AM)',
+		expectedString: 'Opens in 9 hours (tomorrow at 5:00 AM)',
 	},
 ] satisfies IGetStatusMessageTest[])(
 	'#%# test of getStatusMessage | Now: $now | Next Time: $nextTime',

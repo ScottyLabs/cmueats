@@ -61,15 +61,7 @@ export function getStatusMessage(
 		minutesSinceSundayDateTime(now)
 	) {
 		if (weekdayDiff === 1) {
-			if (
-				nextTime.hour <= 4 ||
-				(nextTime.hour === 5 && nextTime.minute === 0)
-			) {
-				// Anything in the very early morning of tomorrow counts as today
-				day = 'today';
-			} else {
-				day = 'tomorrow';
-			}
+			day = 'tomorrow';
 		} else if (weekdayDiff === 0) {
 			day = 'today';
 		}
