@@ -79,7 +79,7 @@ function ListPage({
 								shortDescription
 									.toLowerCase()
 									.includes(filteredSearchQuery)),
-				  ),
+					),
 		);
 	}, [searchQuery, locations]);
 

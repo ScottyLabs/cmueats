@@ -100,8 +100,8 @@ export function getLocationStatus(
 			? LocationState.CLOSES_SOON
 			: LocationState.OPEN
 		: changesSoon
-		  ? LocationState.OPENS_SOON
-		  : LocationState.CLOSED;
+			? LocationState.OPENS_SOON
+			: LocationState.CLOSED;
 	return {
 		closedLongTerm: false,
 		isOpen,
