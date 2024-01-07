@@ -5,6 +5,7 @@ import {
 } from '../../src/util/queryLocations';
 import { describe, expect, it } from 'vitest';
 import { ITimeSlotTime } from '../../src/types/locationTypes';
+import { currentlyOpen } from '../../src/util/time';
 
 interface IGetStatusMessageTest {
 	isOpen: boolean;
@@ -30,6 +31,12 @@ test.each([
 		nextTime: { day: 2, hour: 2, minute: 2 },
 		now: { day: 2, hour: 2, minute: 3 },
 		expectedString: 'Opens in 6 days (Tuesday at 2:02 AM)',
+	},
+	{
+		isOpen: false,
+		nextTime: { day: 3, hour: 2, minute: 2 },
+		now: { day: 2, hour: 2, minute: 3 },
+		expectedString: 'Opens in 23 hours (tomorrow at 2:02 AM)',
 	},
 	{
 		isOpen: false,
@@ -115,6 +122,18 @@ test.each([
 		now: { day: 0, hour: 19, minute: 30 },
 		expectedString: 'Opens in 9 hours (tomorrow at 5:00 AM)',
 	},
+	{
+		isOpen: false,
+		nextTime: { day: 5, hour: 8, minute: 0 },
+		now: { day: 4, hour: 23, minute: 59 },
+		expectedString: 'Opens in 8 hours (tomorrow at 8:00 AM)',
+	},
+	{
+		isOpen: false,
+		nextTime: { day: 5, hour: 8, minute: 0 },
+		now: { day: 5, hour: 8, minute: 1 },
+		expectedString: 'Opens in 6 days (Friday at 8:00 AM)',
+	},
 ] satisfies IGetStatusMessageTest[])(
 	'#%# test of getStatusMessage | Now: $now | Next Time: $nextTime',
 	({ isOpen, nextTime, now, expectedString }) => {
@@ -138,11 +157,22 @@ test('getLocationStatus', () => {
 		],
 		makeDateTime(0, 3, 0),
 	);
-	expect(status.closedLongTerm).toBeFalsy();
+	expect(status.closedLongTerm).toEqual(false);
 	if (!status.closedLongTerm) {
 		// This has to be true given the line above (but TS doesn't know that)
 		expect(status.changesSoon).toBeTruthy();
 		expect(status.isOpen).toBeTruthy();
 		expect(status.timeUntil).toEqual(0);
 	}
+});
+test('currentlyOpen', () => {
+	expect(
+		currentlyOpen(
+			{
+				start: { day: 0, hour: 0, minute: 0 },
+				end: { day: 0, hour: 0, minute: 0 },
+			},
+			makeDateTime(1, 1, 1),
+		),
+	).toEqual(true); //equivalent start and end time implies end time is NEXT week same day
 });

@@ -7,6 +7,12 @@ export interface ITimeSlotTime {
 	minute: number; // 0-59
 }
 
+/**
+ * As far as I can tell, start and end are both inclusive in
+ * denoting when a location is open. so [2AM,4AM] includes both
+ * 2AM and 4AM. Also, [2AM,2AM] is inferred to be open from 2AM
+ * today to 2AM tomorrow. (notation: [start,end])
+ */
 export interface ITimeSlot {
 	start: ITimeSlotTime;
 	end: ITimeSlotTime;
