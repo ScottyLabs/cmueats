@@ -2,7 +2,7 @@
  */
 
 import { DateTime } from 'luxon';
-import { ITimeSlotTime, ITimeSlot } from '../types/locationTypes';
+import { ITimeSlotTime, ITimeSlot, ITimeSlots } from '../types/locationTypes';
 
 import assert from './assert';
 
@@ -106,7 +106,7 @@ export function getTimeString(time: ITimeSlotTime) {
  * (This assumes that the start time of the next slot isn't "jumping forwards" to a new week until
  * possibly timeSlots[-1].end (i.e. time is monotonically increasing as it should))
  */
-export function isValidTimeSlotArray(timeSlots: ITimeSlot[]) {
+export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 	for (let i = 0; i < timeSlots.length; i += 1) {
 		const allowWrapAround = i === timeSlots.length - 1;
 		if (!isTimeSlot(timeSlots[i], allowWrapAround)) return false;
@@ -157,11 +157,11 @@ export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
 
 /**
  * Gets the next available time slot for a given location
- * @param {ITimeSlot[]} times List of time slots for a location
+ * @param {ITimeSlots} times List of time slots for a location
  * @returns The next time slot when the location opens (if currently open,
  * then it returns that slot). If there are no available slots, it returns null
  */
-export function getNextTimeSlot(times: ITimeSlot[], now: DateTime) {
+export function getNextTimeSlot(times: ITimeSlots, now: DateTime) {
 	isValidTimeSlotArray(times);
 	if (times.length === 0) return null;
 	const nowMinutes = minutesSinceSundayDateTime(now);

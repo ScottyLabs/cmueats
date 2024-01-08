@@ -1,10 +1,18 @@
+/** Note that everything being exported here is readonly */
+
+export type RecursiveReadonly<T> = T extends object
+	? {
+			readonly [P in keyof T]: RecursiveReadonly<T[P]>;
+		}
+	: T;
+
 /**
  * Describes either start or end time in any given ITimeSlot
  */
 export interface ITimeSlotTime {
-	day: number; // 0-6
-	hour: number; // 0-23
-	minute: number; // 0-59
+	readonly day: number; // 0-6
+	readonly hour: number; // 0-23
+	readonly minute: number; // 0-59
 }
 
 /**
@@ -14,9 +22,11 @@ export interface ITimeSlotTime {
  * today to 2AM tomorrow. (notation: [start,end])
  */
 export interface ITimeSlot {
-	start: ITimeSlotTime;
-	end: ITimeSlotTime;
+	readonly start: ITimeSlotTime;
+	readonly end: ITimeSlotTime;
 }
+export type ITimeSlots = ReadonlyArray<ITimeSlot>;
+
 interface ISpecial {
 	title: string;
 	description?: string;
@@ -54,14 +64,15 @@ interface ILocationAPI {
 	todaysSpecials?: ISpecial[];
 	todaysSoups?: ISpecial[];
 }
-export interface IAPIResponse {
+
+/** What we get back from the CMU Eats API */
+interface IAPIResponse {
 	locations: ILocationAPI[];
 }
-
 // All of the following are extended from the base API type
 
-// Base type for internal use
-export interface ILocation extends ILocationAPI {
+// Base type
+interface ILocation extends ILocationAPI {
 	name: string; // This field is now guaranteed to be defined
 }
 
@@ -83,11 +94,20 @@ interface ILocationStatusClosed extends ILocationStatusBase {
 	closedLongTerm: true;
 	locationState: LocationState.CLOSED_LONG_TERM;
 }
-
 interface IExtendedLocationOpen extends ILocation, ILocationStatusOpen {}
 interface IExtendedLocationClosed extends ILocation, ILocationStatusClosed {}
 
-export type ILocationStatus = ILocationStatusOpen | ILocationStatusClosed;
-export type IExtendedLocationData =
-	| IExtendedLocationOpen
-	| IExtendedLocationClosed;
+type ILocationStatus = ILocationStatusOpen | ILocationStatusClosed;
+type IExtendedLocation = IExtendedLocationOpen | IExtendedLocationClosed;
+
+/** What we get directly from the API */
+export type IReadOnlyAPIResponse = RecursiveReadonly<IAPIResponse>;
+
+/** Base data for single location */
+export type IReadOnlyLocation = RecursiveReadonly<ILocation>;
+
+/** Only extra status portion for location */
+export type IReadOnlyLocationStatus = RecursiveReadonly<ILocationStatus>;
+
+/** Combination of base ILocation type and ILocationStatus */
+export type IReadOnlyExtendedLocation = RecursiveReadonly<IExtendedLocation>;

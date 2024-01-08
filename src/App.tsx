@@ -8,15 +8,18 @@ import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { queryLocations, getLocationStatus } from './util/queryLocations';
 import './App.css';
-import { IExtendedLocationData, ILocation } from './types/locationTypes';
+import {
+	IReadOnlyExtendedLocation,
+	IReadOnlyLocation,
+} from './types/locationTypes';
 
 // const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
 function App() {
 	// Load locations
-	const [locations, setLocations] = useState<ILocation[]>();
+	const [locations, setLocations] = useState<IReadOnlyLocation[]>();
 	const [extendedLocationData, setExtendedLocationData] =
-		useState<IExtendedLocationData[]>();
+		useState<IReadOnlyExtendedLocation[]>();
 	useEffect(() => {
 		queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
 			setLocations(parsedLocations);

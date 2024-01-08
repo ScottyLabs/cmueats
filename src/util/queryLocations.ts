@@ -3,11 +3,11 @@ import axios from 'axios';
 import { DateTime } from 'luxon';
 
 import {
-	ILocationStatus,
 	LocationState,
 	ITimeSlotTime,
-	ITimeSlot,
-	ILocation,
+	IReadOnlyLocation,
+	IReadOnlyLocationStatus,
+	ITimeSlots,
 } from '../types/locationTypes';
 import {
 	diffInMinutes,
@@ -74,9 +74,9 @@ export function getStatusMessage(
 }
 
 export function getLocationStatus(
-	timeSlots: ITimeSlot[],
+	timeSlots: ITimeSlots,
 	now: DateTime,
-): ILocationStatus {
+): IReadOnlyLocationStatus {
 	assert(
 		isValidTimeSlotArray(timeSlots),
 		`${JSON.stringify(timeSlots)} is invalid!`,
@@ -113,7 +113,7 @@ export function getLocationStatus(
 }
 export async function queryLocations(
 	cmuEatsAPIUrl: string,
-): Promise<ILocation[]> {
+): Promise<IReadOnlyLocation[]> {
 	try {
 		// Query locations
 		const { data } = await axios.get(cmuEatsAPIUrl);
@@ -121,12 +121,19 @@ export async function queryLocations(
 			return [];
 		}
 		const { locations } = await IAPIResponseJoiSchema.validateAsync(data);
+
 		return locations.map((location) => ({
 			...location,
 			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
 		}));
-	} catch (err) {
-		console.error(err);
+	} catch (err: any) {
+		if (err.isJoi) {
+			console.error('Validation error!', err.details);
+			// eslint-disable-next-line no-underscore-dangle
+			console.error('original obj', err._original);
+		} else {
+			console.error(err);
+		}
 		return [];
 	}
 }

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { isValidTimeSlotArray } from '../util/time';
-import { IAPIResponse } from './locationTypes';
+import { IReadOnlyAPIResponse } from './locationTypes';
 import assert from '../util/assert';
 
 const { string, number, boolean } = Joi.types();
@@ -38,11 +38,12 @@ const ILocationApiJoiSchema = Joi.object({
 		.custom((val) => {
 			assert(isValidTimeSlotArray(val));
 			return val;
-		}),
+		})
+		.message('Received invalid (probably improperly sorted) time slots!'),
 	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
 	todaysSoups: Joi.array().items(ISpecialJoiSchema),
 });
-const IAPIResponseJoiSchema = Joi.object<IAPIResponse>({
+const IAPIResponseJoiSchema = Joi.object<IReadOnlyAPIResponse>({
 	locations: Joi.array().items(ILocationApiJoiSchema).required(),
 });
 export default IAPIResponseJoiSchema;

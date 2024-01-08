@@ -8,7 +8,7 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
-import { IExtendedLocationData } from '../types/locationTypes';
+import { IReadOnlyExtendedLocation } from '../types/locationTypes';
 
 const token = process.env.VITE_MAPKITJS_TOKEN;
 
@@ -23,7 +23,7 @@ function abbreviate(longName: string) {
 function MapPage({
 	locations,
 }: {
-	locations: IExtendedLocationData[] | undefined;
+	locations: IReadOnlyExtendedLocation[] | undefined;
 }) {
 	const [selectedLocationIndex, setSelectedLocationIndex] =
 		useState<number>();

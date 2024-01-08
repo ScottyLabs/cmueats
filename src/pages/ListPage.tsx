@@ -4,7 +4,10 @@ import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
-import { IExtendedLocationData, LocationState } from '../types/locationTypes';
+import {
+	IReadOnlyExtendedLocation,
+	LocationState,
+} from '../types/locationTypes';
 import assert from '../util/assert';
 
 // Typography
@@ -51,7 +54,7 @@ const StyledAlert = styled(Alert)({
 function ListPage({
 	locations,
 }: {
-	locations: IExtendedLocationData[] | undefined;
+	locations: IReadOnlyExtendedLocation[] | undefined;
 }) {
 	const greeting = useMemo(() => getGreeting(), []);
 
@@ -59,7 +62,7 @@ function ListPage({
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const [filteredLocations, setFilteredLocations] = useState<
-		IExtendedLocationData[]
+		IReadOnlyExtendedLocation[]
 	>([]);
 
 	useLayoutEffect(() => {
@@ -82,7 +85,6 @@ function ListPage({
 					),
 		);
 	}, [searchQuery, locations]);
-
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
@@ -149,8 +151,8 @@ function ListPage({
 						return (
 							<ErrorText variant="h4">
 								Oops! We received an invalid API response (or no
-								data at all). Please contact us because we
-								definitely messed something up on the backend.
+								data at all). If this problem persists, please
+								let us know.
 							</ErrorText>
 						);
 					if (filteredLocations.length === 0)
