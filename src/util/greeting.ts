@@ -30,7 +30,7 @@ const evening = [
 	'Have a good evening!',
 	'Grab a bite to eat!',
 	'Hungry night owl?',
-	'Midnight munchies? We\'ve got you!',
+	"Midnight munchies? We've got you!",
 ];
 
 const getGreeting = () => {
