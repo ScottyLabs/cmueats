@@ -10,16 +10,20 @@ export type RecursiveReadonly<T> = T extends object
  * Describes either start or end time in any given ITimeSlot
  */
 export interface ITimeSlotTime {
-	readonly day: number; // 0-6 (0 is Sunday, 6 is Saturday)
-	readonly hour: number; // 0-23
-	readonly minute: number; // 0-59
+	/** 0-6 (0 is Sunday, 6 is Saturday) */
+	readonly day: number;
+	/** 0-23 */
+	readonly hour: number;
+	/** 0-59 */
+	readonly minute: number;
 }
 
 /**
  * As far as I can tell, start and end are both inclusive in
- * denoting when a location is open. so [2AM,4AM] includes both
- * 2AM and 4AM. Also, [2AM,2AM] is inferred to be open from 2AM
- * today to 2AM tomorrow. (notation: [start,end])
+ * denoting when a location is open. so [2AM today ,4AM today]
+ * includes both 2AM and 4AM. So, [2AM Tue,2AM Tue] is inferred to be open at exactly 2AM.
+ * Something like [2AM Tue, 1AM Tue] means open from 2AM Tue
+ * this week to 1AM Tue next week (notation: [start,end])
  */
 export interface ITimeSlot {
 	readonly start: ITimeSlotTime;
