@@ -10,7 +10,7 @@ export type RecursiveReadonly<T> = T extends object
  * Describes either start or end time in any given ITimeSlot
  */
 export interface ITimeSlotTime {
-	readonly day: number; // 0-6
+	readonly day: number; // 0-6 (0 is Sunday, 6 is Saturday)
 	readonly hour: number; // 0-23
 	readonly minute: number; // 0-59
 }
@@ -46,7 +46,7 @@ export enum LocationState {
  * (note: if you're updating this, you should
  * update the Joi Schema in joiLocationTypes.ts as well)
  */
-interface ILocationAPI {
+interface IAPILocation {
 	conceptId: number;
 	name?: string;
 	shortDescription?: string;
@@ -65,14 +65,10 @@ interface ILocationAPI {
 	todaysSoups?: ISpecial[];
 }
 
-/** What we get back from the CMU Eats API */
-interface IAPIResponse {
-	locations: ILocationAPI[];
-}
 // All of the following are extended from the base API type
 
 // Base type
-interface ILocation extends ILocationAPI {
+interface ILocation extends IAPILocation {
 	name: string; // This field is now guaranteed to be defined
 }
 
@@ -100,8 +96,8 @@ interface IExtendedLocationClosed extends ILocation, ILocationStatusClosed {}
 type ILocationStatus = ILocationStatusOpen | ILocationStatusClosed;
 type IExtendedLocation = IExtendedLocationOpen | IExtendedLocationClosed;
 
-/** What we get directly from the API */
-export type IReadOnlyAPIResponse = RecursiveReadonly<IAPIResponse>;
+/** What we get directly from the API (single location data) */
+export type IReadOnlyAPILocation = RecursiveReadonly<IAPILocation>;
 
 /** Base data for single location */
 export type IReadOnlyLocation = RecursiveReadonly<ILocation>;

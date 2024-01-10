@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { isValidTimeSlotArray } from '../util/time';
-import { IReadOnlyAPIResponse } from './locationTypes';
+import { IReadOnlyAPILocation } from './locationTypes';
 import assert from '../util/assert';
 
 const { string, number, boolean } = Joi.types();
@@ -19,7 +19,7 @@ const ISpecialJoiSchema = Joi.object({
 });
 
 // Note: Keys without .required() are optional by default
-const ILocationApiJoiSchema = Joi.object({
+export const ILocationAPIJoiSchema = Joi.object<IReadOnlyAPILocation>({
 	conceptId: number.required(),
 	name: string,
 	shortDescription: string,
@@ -43,7 +43,7 @@ const ILocationApiJoiSchema = Joi.object({
 	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
 	todaysSoups: Joi.array().items(ISpecialJoiSchema),
 });
-const IAPIResponseJoiSchema = Joi.object<IReadOnlyAPIResponse>({
-	locations: Joi.array().items(ILocationApiJoiSchema).required(),
-});
+const IAPIResponseJoiSchema = Joi.object<{ locations: any[] }>({
+	locations: Joi.array().required(),
+}); // shallow validation to make sure we have the locations field. That's it.
 export default IAPIResponseJoiSchema;

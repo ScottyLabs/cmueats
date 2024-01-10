@@ -8,6 +8,7 @@ import {
 	IReadOnlyLocation,
 	IReadOnlyLocationStatus,
 	ITimeSlots,
+	IReadOnlyAPILocation,
 } from '../types/locationTypes';
 import {
 	diffInMinutes,
@@ -22,7 +23,9 @@ import {
 } from './time';
 import toTitleCase from './string';
 import assert from './assert';
-import IAPIResponseJoiSchema from '../types/joiLocationTypes';
+import IAPIResponseJoiSchema, {
+	ILocationAPIJoiSchema,
+} from '../types/joiLocationTypes';
 
 const WEEKDAYS = [
 	'Sunday',
@@ -102,6 +105,7 @@ export function getLocationStatus(
 		: changesSoon
 			? LocationState.OPENS_SOON
 			: LocationState.CLOSED;
+
 	return {
 		closedLongTerm: false,
 		isOpen,
@@ -120,9 +124,18 @@ export async function queryLocations(
 		if (!data) {
 			return [];
 		}
-		const { locations } = await IAPIResponseJoiSchema.validateAsync(data);
-
-		return locations.map((location) => ({
+		const { locations: rawLocations } =
+			await IAPIResponseJoiSchema.validateAsync(data);
+		const validLocations = rawLocations.filter((location) => {
+			const { error } = ILocationAPIJoiSchema.validate(location);
+			if (error !== undefined) {
+				alert(
+					`${location.name} has invalid corresponding data! Ignoring location and continuing validation`,
+				);
+			}
+			return error === undefined;
+		}) as IReadOnlyAPILocation[];
+		return validLocations.map((location) => ({
 			...location,
 			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
 		}));

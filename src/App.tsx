@@ -13,8 +13,8 @@ import {
 	IReadOnlyLocation,
 } from './types/locationTypes';
 
-// const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
-const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
+const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
+// CMU_EATS_API_URL = 'http://localhost:5173/example-response.json'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
 function App() {
 	// Load locations
 	const [locations, setLocations] = useState<IReadOnlyLocation[]>();
@@ -30,8 +30,7 @@ function App() {
 			(function updateExtendedLocationData() {
 				if (locations !== undefined) {
 					// Remove .setZone('America/New_York') and change time in computer settings when testing
-					// const now = DateTime.now().setZone('America/New_York');
-					const now = DateTime.local(2023, 12, 22, 18, 33);
+					const now = DateTime.now().setZone('America/New_York');
 					setExtendedLocationData(
 						locations.map((location) => ({
 							...location,
