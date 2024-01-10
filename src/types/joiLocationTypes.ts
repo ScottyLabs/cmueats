@@ -43,7 +43,6 @@ export const ILocationAPIJoiSchema = Joi.object<IReadOnlyAPILocation>({
 	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
 	todaysSoups: Joi.array().items(ISpecialJoiSchema),
 });
-const IAPIResponseJoiSchema = Joi.object<{ locations: any[] }>({
+export const IAPIResponseJoiSchema = Joi.object<{ locations: any[] }>({
 	locations: Joi.array().required(),
 }); // shallow validation to make sure we have the locations field. That's it.
-export default IAPIResponseJoiSchema;

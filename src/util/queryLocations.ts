@@ -23,7 +23,8 @@ import {
 } from './time';
 import toTitleCase from './string';
 import assert from './assert';
-import IAPIResponseJoiSchema, {
+import {
+	IAPIResponseJoiSchema,
 	ILocationAPIJoiSchema,
 } from '../types/joiLocationTypes';
 
