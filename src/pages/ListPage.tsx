@@ -6,6 +6,7 @@ import getGreeting from '../util/greeting';
 import './ListPage.css';
 
 import { Location } from '../interfaces';
+import EateryCardSkeleton from '../components/EateryCardSkeleton';
 
 // Typography
 const HeaderText = styled(Typography)({
@@ -40,7 +41,7 @@ const StyledAlert = styled(Alert)({
 	color: '#ffffff',
 });
 
-function ListPage({ locations }: $TSFixMe) {
+function ListPage({ locations, loading }: $TSFixMe) {
 	const greeting = useMemo(() => getGreeting(), []);
 
 	// Search query processing
@@ -151,69 +152,80 @@ function ListPage({ locations }: $TSFixMe) {
 				{filteredLocations.length === 0 && locations.length !== 0 && (
 					<NoResultsError onClear={() => setSearchQuery('')} />
 				)}
-
-				<Grid container spacing={2}>
-					{openLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location2.timeUntilClosed -
-								location1.timeUntilClosed,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closesSoonLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location2.timeUntilClosed -
-								location1.timeUntilClosed,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{opensSoonLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closedLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closedTemporarilyLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-				</Grid>
+				{loading ? (
+					<Grid container spacing={2}>
+						{/* TODO: find a better solution */}
+						{Array(20)
+							.fill(null)
+							.map((_, idx) => idx)
+							.map((v) => (
+								<EateryCardSkeleton key={v} />
+							))}
+					</Grid>
+				) : (
+					<Grid container spacing={2}>
+						{openLocations
+							.sort(
+								(location1: Location, location2: Location) =>
+									location2.timeUntilClosed -
+									location1.timeUntilClosed,
+							)
+							.map((location: Location) => (
+								<EateryCard
+									location={location}
+									key={location.conceptId}
+								/>
+							))}
+						{closesSoonLocations
+							.sort(
+								(location1: Location, location2: Location) =>
+									location2.timeUntilClosed -
+									location1.timeUntilClosed,
+							)
+							.map((location: Location) => (
+								<EateryCard
+									location={location}
+									key={location.conceptId}
+								/>
+							))}
+						{opensSoonLocations
+							.sort(
+								(location1: Location, location2: Location) =>
+									location1.timeUntilOpen -
+									location2.timeUntilOpen,
+							)
+							.map((location: Location) => (
+								<EateryCard
+									location={location}
+									key={location.conceptId}
+								/>
+							))}
+						{closedLocations
+							.sort(
+								(location1: Location, location2: Location) =>
+									location1.timeUntilOpen -
+									location2.timeUntilOpen,
+							)
+							.map((location: Location) => (
+								<EateryCard
+									location={location}
+									key={location.conceptId}
+								/>
+							))}
+						{closedTemporarilyLocations
+							.sort(
+								(location1: Location, location2: Location) =>
+									location1.timeUntilOpen -
+									location2.timeUntilOpen,
+							)
+							.map((location: Location) => (
+								<EateryCard
+									location={location}
+									key={location.conceptId}
+								/>
+							))}
+					</Grid>
+				)}
 			</div>
 			<footer className="footer">
 				<FooterText>
