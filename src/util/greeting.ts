@@ -10,18 +10,27 @@ const morning = [
 	'Is breakfast really the most important meal of the day?',
 	'What do you want to eat?',
 	'Have a good morning!',
+	'Start your day with a delicious meal!',
+	'Time to refuel for the day ahead!',
+	'Breakfast is calling your name!',
 ];
 const afternoon = [
 	'What do you want for lunch?',
 	'What do you want to eat?',
 	'Have a good afternoon!',
 	'Use those blocks!',
+	'Fuel up for the afternoon!',
+	'Lunch options galore!',
+	'Satisfy your midday hunger!',
+	'Craving something savory for lunch?',
 ];
 const evening = [
 	'What do you want for dinner?',
 	'What do you want to eat?',
 	'Have a good evening!',
 	'Grab a bite to eat!',
+	'Hungry night owl?',
+	"Midnight munchies? We've got you!",
 ];
 
 const getGreeting = () => {
