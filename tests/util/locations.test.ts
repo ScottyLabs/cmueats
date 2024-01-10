@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, WeekdayNumbers } from 'luxon';
 import {
 	getLocationStatus,
 	getStatusMessage,
@@ -22,7 +22,11 @@ interface IGetStatusMessageTest {
  * @returns
  */
 function makeDateTime(day: number, hour: number, minute: number) {
-	return DateTime.fromObject({ hour, minute, weekday: day === 0 ? 7 : day });
+	return DateTime.fromObject({
+		hour,
+		minute,
+		weekday: (day === 0 ? 7 : day) as WeekdayNumbers,
+	});
 }
 
 test.each([
