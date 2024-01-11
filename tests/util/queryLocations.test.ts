@@ -209,6 +209,12 @@ describe('queryLocations.ts', () => {
 		},
 		{
 			isOpen: false,
+			nextTime: { day: 0, hour: 20, minute: 0 },
+			now: { day: 0, hour: 20, minute: 0 },
+			expectedString: 'Opens now (today at 8:00 PM)',
+		},
+		{
+			isOpen: false,
 			nextTime: { day: 1, hour: 5, minute: 0 },
 			now: { day: 0, hour: 19, minute: 30 },
 			expectedString: 'Opens in 9 hours (tomorrow at 5:00 AM)',
