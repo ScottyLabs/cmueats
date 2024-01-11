@@ -56,7 +56,7 @@ function ListPage({
 }: {
 	locations: IReadOnlyExtendedLocation[] | undefined;
 }) {
-	const greeting = useMemo(() => getGreeting(), []);
+	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
 
 	// Search query processing
 	const [searchQuery, setSearchQuery] = useState('');

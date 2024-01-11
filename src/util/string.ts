@@ -1,7 +1,7 @@
 /**
  * Convert a string to title case
  * @param {string} str string to convert to title case
- * @returns the same string, but in title case
+ * @returns the same string, but in title case (single characters aren't upper-cased)
  */
 export default function toTitleCase(str: string) {
 	return str

@@ -33,7 +33,7 @@ describe('queryLocations.ts', () => {
 				expect(status.timeUntil).toBe(0);
 			}
 		});
-		test('no times', () => {
+		test('no open times', () => {
 			const status = getLocationStatus([], makeDateTime(0, 0, 1));
 			expect(status).toEqual({
 				statusMsg: 'Closed until further notice',
@@ -41,14 +41,14 @@ describe('queryLocations.ts', () => {
 				closedLongTerm: true,
 			});
 		});
-		test('', () => {
+		test('wrap-over for last time slot', () => {
 			const A = {
-				start: { day: 2, hour: 0, minute: 0 },
-				end: { day: 5, hour: 23, minute: 0 },
+				start: { day: 2, hour: 0, minute: 0 }, // Tuesday 12AM
+				end: { day: 5, hour: 23, minute: 0 }, // Friday 11PM
 			};
 			const B = {
-				start: { day: 6, hour: 0, minute: 0 },
-				end: { day: 0, hour: 0, minute: 0 },
+				start: { day: 6, hour: 0, minute: 0 }, // Sat 12AM
+				end: { day: 0, hour: 0, minute: 0 }, // Sun 12AM
 			};
 			expect(getLocationStatus([A, B], makeDateTime(0, 0, 0))).toEqual({
 				changesSoon: false,
@@ -97,6 +97,22 @@ describe('queryLocations.ts', () => {
 				locationState: LocationState.OPEN,
 				statusMsg: 'Closes in 17 hours (tomorrow at 12:00 AM)',
 				timeUntil: 17 * 60,
+			});
+			expect(getLocationStatus([A, B], makeDateTime(6, 23, 59))).toEqual({
+				changesSoon: true,
+				closedLongTerm: false,
+				isOpen: true,
+				locationState: LocationState.CLOSES_SOON,
+				statusMsg: 'Closes in 1 minute (tomorrow at 12:00 AM)',
+				timeUntil: 1,
+			});
+			expect(getLocationStatus([A, B], makeDateTime(0, 1, 0))).toEqual({
+				changesSoon: false,
+				closedLongTerm: false,
+				isOpen: false,
+				locationState: LocationState.CLOSED,
+				statusMsg: 'Opens in 1 day (Tuesday at 12:00 AM)',
+				timeUntil: 47 * 60,
 			});
 		});
 	});

@@ -1,4 +1,6 @@
-const hours = new Date().getHours();
+import assert from './assert';
+import bounded from './misc';
+
 const graveyard = [
 	'Staying up all night?',
 	'Want a late-night snack?',
@@ -33,19 +35,22 @@ const evening = [
 	"Midnight munchies? We've got you!",
 ];
 
-const getGreeting = () => {
-	let message = 'Welcome to CMUEats!';
-	if (hours >= 0 && hours < 6) {
-		message = graveyard[Math.floor(Math.random() * graveyard.length)];
-	} else if (hours >= 6 && hours < 12) {
-		message = morning[Math.floor(Math.random() * morning.length)];
-	} else if (hours >= 12 && hours < 17) {
-		message = afternoon[Math.floor(Math.random() * afternoon.length)];
-	} else if (hours >= 17 && hours < 24) {
-		message = evening[Math.floor(Math.random() * evening.length)];
+const getGreeting = (hours: number) => {
+	assert(bounded(hours, 0, 24));
+	if (hours < 6) {
+		return graveyard[Math.floor(Math.random() * graveyard.length)];
+	}
+	if (hours < 12) {
+		return morning[Math.floor(Math.random() * morning.length)];
+	}
+	if (hours < 17) {
+		return afternoon[Math.floor(Math.random() * afternoon.length)];
+	}
+	if (hours < 24) {
+		return evening[Math.floor(Math.random() * evening.length)];
 	}
 
-	return message;
+	return 'Welcome to CMUEats!'; // ok honestly you can't get here
 };
 
 export default getGreeting;
