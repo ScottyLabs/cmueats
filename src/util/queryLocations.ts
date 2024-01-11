@@ -51,25 +51,25 @@ export function getStatusMessage(
 ): string {
 	assert(isTimeSlotTime(nextTime));
 	const diff = diffInMinutes(nextTime, now);
-
-	const weekdayDiff = (nextTime.day - now.weekday + 7) % 7;
+	const weekdayDiff =
+		nextTime.day -
+		(now.weekday % 7) + // now.weekday returns 1-7 [mon-sun] instead of 0-6 [sun-sat]
+		(minutesSinceSundayTimeSlotTime(nextTime) <
+		minutesSinceSundayDateTime(now)
+			? 7
+			: 0); // nextTime wraps around to next week? Add 7 days to nextTime.day
 
 	const time = getTimeString(nextTime);
 
 	const action = isOpen ? 'Closes' : 'Opens';
 	let day = WEEKDAYS[nextTime.day];
 
-	// It's not a wrap-around time like now is Tue 2AM while nextTime is Tue 1AM
-	if (
-		minutesSinceSundayTimeSlotTime(nextTime) >=
-		minutesSinceSundayDateTime(now)
-	) {
-		if (weekdayDiff === 1) {
-			day = 'tomorrow';
-		} else if (weekdayDiff === 0) {
-			day = 'today';
-		}
+	if (weekdayDiff === 1) {
+		day = 'tomorrow';
+	} else if (weekdayDiff === 0) {
+		day = 'today';
 	}
+
 	const relTimeDiff = getApproximateTimeStringFromMinutes(diff);
 	if (relTimeDiff === '0 minutes') {
 		return `${action} now (${day} at ${time})`;
@@ -77,6 +77,12 @@ export function getStatusMessage(
 	return `${action} in ${relTimeDiff} (${day} at ${time})`;
 }
 
+/**
+ * changesSoon is if location closes/opens within 60 minutes
+ * @param timeSlots
+ * @param now
+ * @returns
+ */
 export function getLocationStatus(
 	timeSlots: ITimeSlots,
 	now: DateTime,
