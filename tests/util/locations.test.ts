@@ -30,7 +30,7 @@ describe('queryLocations.ts', () => {
 				// This has to be true given the line above (but TS doesn't know that)
 				expect(status.changesSoon).toBeTruthy();
 				expect(status.isOpen).toBeTruthy();
-				expect(status.timeUntil).toEqual(0);
+				expect(status.timeUntil).toBe(0);
 			}
 		});
 		test('no times', () => {
@@ -232,6 +232,48 @@ describe('queryLocations.ts', () => {
 			now: { day: 5, hour: 12, minute: 0 },
 			nextTime: { day: 0, hour: 8, minute: 0 },
 			expectedString: 'Opens in 1 day (Sunday at 8:00 AM)',
+		},
+		{
+			isOpen: false,
+			now: { day: 4, hour: 19, minute: 0 },
+			nextTime: { day: 5, hour: 8, minute: 0 },
+			expectedString: 'Opens in 13 hours (tomorrow at 8:00 AM)',
+		},
+		{
+			isOpen: true,
+			now: { day: 4, hour: 19, minute: 0 },
+			nextTime: { day: 4, hour: 20, minute: 0 },
+			expectedString: 'Closes in 1 hour (today at 8:00 PM)',
+		},
+		{
+			isOpen: true,
+			now: { day: 4, hour: 23, minute: 25 },
+			nextTime: { day: 5, hour: 0, minute: 0 },
+			expectedString: 'Closes in 35 minutes (tomorrow at 12:00 AM)', // special regression test for https://github.com/ScottyLabs/cmueats/issues/5
+		},
+		{
+			isOpen: false,
+			now: { day: 0, hour: 10, minute: 28 },
+			nextTime: { day: 1, hour: 10, minute: 30 },
+			expectedString: 'Opens in 1 day (tomorrow at 10:30 AM)', // regression test for https://github.com/ScottyLabs/cmueats/issues/31
+		},
+		{
+			isOpen: false,
+			now: { day: 0, hour: 10, minute: 28 },
+			nextTime: { day: 1, hour: 17, minute: 0 },
+			expectedString: 'Opens in 1 day (tomorrow at 5:00 PM)', // regression test for https://github.com/ScottyLabs/cmueats/issues/31
+		},
+		{
+			isOpen: false,
+			now: { day: 6, hour: 10, minute: 28 },
+			nextTime: { day: 0, hour: 9, minute: 0 },
+			expectedString: 'Opens in 22 hours (tomorrow at 9:00 AM)',
+		},
+		{
+			isOpen: false,
+			now: { day: 6, hour: 10, minute: 28 },
+			nextTime: { day: 3, hour: 9, minute: 0 },
+			expectedString: 'Opens in 3 days (Wednesday at 9:00 AM)',
 		},
 	] satisfies IGetStatusMessageTest[])(
 		'#%# test of getStatusMessage | Now: $now | Next Time: $nextTime',
