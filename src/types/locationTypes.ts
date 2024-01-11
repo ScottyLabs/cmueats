@@ -12,7 +12,7 @@ export type RecursiveReadonly<T> = T extends object
 export interface ITimeSlotTime {
 	/** 0-6 (0 is Sunday, 6 is Saturday) */
 	readonly day: number;
-	/** 0-23 */
+	/** 0-23 - 0 means 12AM */
 	readonly hour: number;
 	/** 0-59 */
 	readonly minute: number;
@@ -20,15 +20,28 @@ export interface ITimeSlotTime {
 
 /**
  * As far as I can tell, start and end are both inclusive in
- * denoting when a location is open. so [2AM today ,4AM today]
+ * denoting when a location is open. so [2AM today, 4AM today]
  * includes both 2AM and 4AM. So, [2AM Tue,2AM Tue] is inferred to be open at exactly 2AM.
  * Something like [2AM Tue, 1AM Tue] means open from 2AM Tue
- * this week to 1AM Tue next week (notation: [start,end])
+ * this week to 1AM Tue next week (notation: [start,end]), although it seems that the
+ * API returns a wrapped around time iff the location closes at midnight on Saturday
+ * (ex. dining website says "SATURDAY: 11:00 AM - 12:00 AM" which gets parsed to
+ * [Sat 10AM, Sun 12AM] = [day:6,hour:10 -> day:0, hour: 0]) (recall that Sunday has a day-value
+ * of 0 while Saturday has a day value of 6, so this is a wrap around) Any other time
+ * would be constrained to that day and possibly 12AM on the day after.
+ * @cirex-web author (I concluded some of the above after digging
+ * through the commit history of the Dining API)
  */
 export interface ITimeSlot {
 	readonly start: ITimeSlotTime;
 	readonly end: ITimeSlotTime;
 }
+
+/**
+ * We expect this to be sorted (by start time), non-overlapping,
+ * and not wrapping (aka end time found in minutesFromSunday is less than
+ * start time) except for possibly the last entry
+ */
 export type ITimeSlots = ReadonlyArray<ITimeSlot>;
 
 interface ISpecial {

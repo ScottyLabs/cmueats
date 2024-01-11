@@ -5,16 +5,9 @@ import { DateTime } from 'luxon';
 import { ITimeSlotTime, ITimeSlot, ITimeSlots } from '../types/locationTypes';
 
 import assert from './assert';
+import bounded from './misc';
 
 const WEEK_MINUTES = 7 * 24 * 60;
-
-/**
- * @returns true iff n (int) is in [a,b)
- */
-export function bounded(n: number, a: number, b: number) {
-	assert(a <= b);
-	return n >= a && n < b;
-}
 
 /**
  * @param day The number of days since Sunday (0 if Sunday)
@@ -112,6 +105,10 @@ export function getTimeString(time: ITimeSlotTime) {
  * @returns Checks if timeslots are non-overlapping (so [a,b],[b,c] is invalid) and properly sorted.
  * (This assumes that the start time of the next slot isn't "jumping forwards" to a new week until
  * possibly timeSlots[-1].end (i.e. time is monotonically increasing as it should))
+ * Time slots ordered this way are ambiguous, since Monday will always appear before Tuesday and
+ * if the location opens this Tuesday and only next Monday, we wouldn't know. This type of representation
+ * is good only if most location opening times operate in weekly predictable cycles, but we shouldn't
+ * rely on that assumption. Oh well. It's legacy code, am I right?
  */
 export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 	for (let i = 0; i < timeSlots.length; i += 1) {
@@ -157,8 +154,10 @@ export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
 	assert(isTimeSlot(timeSlot, true));
 	const start = minutesSinceSundayTimeSlotTime(timeSlot.start);
 	const nowMinutes = minutesSinceSundayDateTime(now);
-	let end = minutesSinceSundayTimeSlotTime(timeSlot.end);
-	if (end < start) end += WEEK_MINUTES;
+	const end = minutesSinceSundayTimeSlotTime(timeSlot.end);
+	if (end < start) {
+		return start <= nowMinutes || nowMinutes <= end; // we're more flexible with the bounds because time is wrapping around
+	}
 	return start <= nowMinutes && nowMinutes <= end;
 }
 
@@ -176,7 +175,7 @@ export function getNextTimeSlot(times: ITimeSlots, now: DateTime) {
 	const nextTimeSlot = times.find(
 		(time) =>
 			currentlyOpen(time, now) ||
-			minutesSinceSundayTimeSlotTime(time.start) >= nowMinutes,
+			minutesSinceSundayTimeSlotTime(time.start) > nowMinutes,
 	);
 
 	if (nextTimeSlot === undefined) {
