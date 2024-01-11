@@ -40,7 +40,7 @@ const StyledAlert = styled(Alert)({
 	color: '#ffffff',
 });
 
-function ListPage({ locations }: $TSFixMe) {
+function ListPage({ locations, scrollFromTop }: $TSFixMe) {
 	const greeting = useMemo(() => getGreeting(), []);
 
 	// Search query processing
@@ -117,7 +117,6 @@ function ListPage({ locations }: $TSFixMe) {
 			window.removeEventListener('offline', handleOnlineStatus);
 		};
 	}, []);
-
 	return (
 		<div className="ListPage">
 			{/*  showAlert &&
@@ -136,9 +135,14 @@ function ListPage({ locations }: $TSFixMe) {
 					offline. We apologize for any inconvenience. 🌐🚫
 				</StyledAlert>
 			)}
-			<div className="Container">
-				<header className="Locations-header">
-					<HeaderText variant="h3">{greeting}</HeaderText>
+			<div className="Locations-container">
+				<header
+					className="Locations-header"
+					style={{ boxShadow: scrollFromTop <= 40 ? 'none' : '' }}
+				>
+					<HeaderText variant="h3" className="Locations-Greeting">
+						{greeting}
+					</HeaderText>
 					<input
 						className="Locations-search"
 						type="search"
@@ -152,7 +156,12 @@ function ListPage({ locations }: $TSFixMe) {
 					<NoResultsError onClear={() => setSearchQuery('')} />
 				)}
 
-				<Grid container spacing={2}>
+				<Grid
+					container
+					spacing={2}
+					columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+					marginTop={2}
+				>
 					{openLocations
 						.sort(
 							(location1: Location, location2: Location) =>

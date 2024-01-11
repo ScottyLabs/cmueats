@@ -11,7 +11,17 @@ import './App.css';
 function App() {
 	// Load locations
 	const [locations, setLocations] = useState([]);
-
+	const [scrollFromTop, setScrolledFromTop] = useState(0);
+	const scrollListener = (event: Event) => {
+		setScrolledFromTop((event.target as HTMLElement).scrollTop);
+	};
+	useEffect(() => {
+		const rootDiv = document.getElementById('root');
+		if (!rootDiv)
+			throw Error('Missing root div! (Why did you rename it lol)');
+		rootDiv.addEventListener('scroll', scrollListener);
+		return () => rootDiv.removeEventListener('scroll', scrollListener);
+	});
 	useEffect(() => {
 		queryLocations().then((parsedLocations: $TSFixMe) => {
 			if (parsedLocations != null) {
@@ -42,7 +52,12 @@ function App() {
 						<Routes>
 							<Route
 								path="/"
-								element={<ListPage locations={locations} />}
+								element={
+									<ListPage
+										locations={locations}
+										scrollFromTop={scrollFromTop}
+									/>
+								}
 							/>
 							<Route
 								path="/map"
