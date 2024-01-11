@@ -130,6 +130,9 @@ export async function queryLocations(
 		const validLocations = rawLocations.filter((location) => {
 			const { error } = ILocationAPIJoiSchema.validate(location);
 			if (error !== undefined) {
+				console.error('Validation error!', error.details);
+				// eslint-disable-next-line no-underscore-dangle
+				console.error('original obj', error._original);
 				alert(
 					`${location.name} has invalid corresponding data! Ignoring location and continuing validation`,
 				);
@@ -141,13 +144,7 @@ export async function queryLocations(
 			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
 		}));
 	} catch (err: any) {
-		if (err.isJoi) {
-			console.error('Validation error!', err.details);
-			// eslint-disable-next-line no-underscore-dangle
-			console.error('original obj', err._original);
-		} else {
-			console.error(err);
-		}
+		console.error(err);
 		return [];
 	}
 }
