@@ -25,11 +25,13 @@ function App() {
 			setLocations(parsedLocations);
 		});
 	}, []);
+
 	useEffect(() => {
 		const intervalId = setInterval(
 			(function updateExtendedLocationData() {
 				if (locations !== undefined) {
 					// Remove .setZone('America/New_York') and change time in computer settings when testing
+					// Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
 					const now = DateTime.now().setZone('America/New_York');
 					setExtendedLocationData(
 						locations.map((location) => ({
@@ -38,10 +40,9 @@ function App() {
 						})),
 					);
 				}
-
 				return updateExtendedLocationData; // returns itself here
 			})(), // self-invoking function
-			10 * 1000, // updates every 10 seconds
+			1e4, // updates every 10 seconds
 		);
 		return () => clearInterval(intervalId);
 	}, [locations]);
