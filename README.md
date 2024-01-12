@@ -42,4 +42,6 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 Note that GitHub will automatically run checks (workflows) on your PR. This includes code linting (with tsc and eslint) and verifying that all unit tests in `/tests` pass with vitest.
 
-![Alt text](image.png) 18. To run unit tests locally, type `npm test` or `npm t` as a shorthand.
+![Example checks](checks_example.png)
+
+1.  To run unit tests locally, type `npm test` or `npm t` as a shorthand.
