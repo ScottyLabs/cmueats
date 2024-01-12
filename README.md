@@ -44,4 +44,4 @@ Note that GitHub will automatically run checks (workflows) on your PR. This incl
 
 ![Example checks](checks_example.png)
 
-1.  To run unit tests locally, type `npm test` or `npm t` as a shorthand.
+18. To run unit tests locally, type `npm test` or `npm t` as a shorthand.
