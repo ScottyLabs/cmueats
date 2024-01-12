@@ -1,5 +1,9 @@
 name: Lint
-on: [pull_request, push]
+on:   
+  push:
+  pull_request:
+    types: [opened, reopened, ready_for_review, review_requested]
+
 
 jobs:
   lint:
@@ -13,3 +17,4 @@ jobs:
       - name: Run ESLint
         run: npm run lint
         shell: bash
+      - run: npm -v
