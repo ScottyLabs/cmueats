@@ -114,7 +114,6 @@ describe('queryLocations.ts', () => {
 				statusMsg: 'Opens in 1 day (Tuesday at 12:00 AM)',
 				timeUntil: 47 * 60,
 			});
-			expect(1).toBe(2);
 		});
 	});
 	test.each([
