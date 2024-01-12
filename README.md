@@ -10,15 +10,15 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 2. Create an account on [Github](https://github.com). Later, you should also apply to get access to the [Github Student Developer Pack](https://education.github.com/pack).
 
-3. To start developing, you'll need to download [Node.js](https://nodejs.org/en) (follow this [Medium article](https://medium.com/@lucaskay/install-node-and-npm-using-nvm-in-mac-or-linux-ubuntu-f0c85153e173)), [Git](https://git-scm.com/download/win), and an IDE (I recommend [VSCode](https://code.visualstudio.com)). You should also download [Github Desktop](https://desktop.github.com) to make development easier at the beginning. I recommend checking out [Learn Git Branching](https://learngitbranching.js.org) later. 
+3. To start developing, you'll need to download [Node.js](https://nodejs.org/en) (follow this [Medium article](https://medium.com/@lucaskay/install-node-and-npm-using-nvm-in-mac-or-linux-ubuntu-f0c85153e173)), [Git](https://git-scm.com/download/win), and an IDE (I recommend [VSCode](https://code.visualstudio.com)). You should also download [Github Desktop](https://desktop.github.com) to make development easier at the beginning. I recommend checking out [Learn Git Branching](https://learngitbranching.js.org) later.
 
 4. If you followed my IDE recommendation, also download the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 
 5. Any of the following steps where you type something (i.e. git clone…, npm install, etc.) should be done in your IDE’s terminal.
 
-6. Then, clone this repository to your computer by running                                                           `git clone https://github.com/ScottyLabs/cmueats.git` after making sure you have [git](https://git-scm.com/downloads) downloaded or running `gh repo clone ScottyLabs/cmueats` if you have the [Github CLI](https://cli.github.com/).
+6. Then, clone this repository to your computer by running `git clone https://github.com/ScottyLabs/cmueats.git` after making sure you have [git](https://git-scm.com/downloads) downloaded or running `gh repo clone ScottyLabs/cmueats` if you have the [Github CLI](https://cli.github.com/).
 
-7. Now use  `git fetch upstream`.
+7. Now use `git fetch upstream`.
 
 8. Do the same for the dining API in a new location. This time, replace `https://github.com/ScottyLabs/cmueats.git`with `https://github.com/ScottyLabs/dining-api.git` and `ScottyLabs/cmueats` with `ScottyLabs/dining-api`.
 
@@ -34,8 +34,12 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 14. To find bootcamp issues you can work on, please visit the [CMUEats issues page](https://github.com/ScottyLabs/cmueats/labels/bootcamp) or the [dining API issues page](https://github.com/ScottyLabs/dining-api/labels/bootcamp).
 
-15. For every new issue or change you work on, first make sure your local repo is up-to-date with the ScottyLabs repo. To do this, go to your repo on your Github profile and click `Sync fork` if you are behind the main repo in commits. Then use `git pull origin main` in your IDE. Then type `cd main` in the local repository (folder containing all the code) for CMUEats or the dining API then type `git checkout -b branch-name`, where `branch-name` is the branch you want to work on (see [Learn Git Branching](https://learngitbranching.js.org)). To work on changes to a branch you already created, use `git checkout branch-name`, where `branch-name` is the branch you already created. Make sure to use  `git checkout main` every t
+15. For every new issue or change you work on, first make sure your local repo is up-to-date with the ScottyLabs repo. To do this, go to your repo on your Github profile and click `Sync fork` if you are behind the main repo in commits. Then use `git pull origin main` in your IDE. Then type `cd main` in the local repository (folder containing all the code) for CMUEats or the dining API then type `git checkout -b branch-name`, where `branch-name` is the branch you want to work on (see [Learn Git Branching](https://learngitbranching.js.org)). To work on changes to a branch you already created, use `git checkout branch-name`, where `branch-name` is the branch you already created. Make sure to use `git checkout main` every t
 
-16. When you want to commit changes, first stage changes with `git add .`. Then, use `git commit -m "commit message"` (alternatively commit using Github Desktop). To undo commits, use `git reset --hard (HEAD~# or commit-id)`  (`--hard` removes staged and unstaged changes after commit chosen to reset to; `--soft` keeps changes in working directory and keeps reset commits in staging area). Replace `#` with the number of commits you want to go back by. Similarly, using `@{#}` instead of `~#` undos the reset (not necessarily just simplified). When you are ready to push changes, use `git push -f` or `git push -u branch-name`.
+16. When you want to commit changes, first stage changes with `git add .`. Then, use `git commit -m "commit message"` (alternatively commit using Github Desktop). To undo commits, use `git reset --hard (HEAD~# or commit-id)` (`--hard` removes staged and unstaged changes after commit chosen to reset to; `--soft` keeps changes in working directory and keeps reset commits in staging area). Replace `#` with the number of commits you want to go back by. Similarly, using `@{#}` instead of `~#` undos the reset (not necessarily just simplified). When you are ready to push changes, use `git push -f` or `git push -u branch-name`.
 
-17. When you want to create a pull request for your changes, go to the ScottyLabs repo on the Github website and click on `Pull Requests`. Click on `New Pull Request`. On the right side, click on your repo’s branch you want to merge from, and, on the left side, make sure you have  ScottyLabs’ `main` branch selected.  Create a description then create the pull request. Feel free to request reviewers or ask a tech lead directly, so they can review your pull requests and requests changes or merge it.
+17. When you want to create a pull request for your changes, go to the ScottyLabs repo on the Github website and click on `Pull Requests`. Click on `New Pull Request`. On the right side, click on your repo’s branch you want to merge from, and, on the left side, make sure you have ScottyLabs’ `main` branch selected. Create a description then create the pull request. Feel free to request reviewers or ask a tech lead directly, so they can review your pull requests and requests changes or merge it.
+
+Note that GitHub will automatically run checks (workflows) on your PR. This includes code linting (with tsc and eslint) and verifying that all unit tests in `/tests` pass with vitest.
+
+![Alt text](image.png) 18. To run unit tests locally, type `npm test` or `npm t` as a shorthand.
