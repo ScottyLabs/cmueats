@@ -19,7 +19,7 @@ describe('currentlyOpen', () => {
 				},
 				makeDateTime(1, 1, 1),
 			),
-		).toBe(false); //no wrap-around here
+		).toBe(false); // no wrap-around here
 		expect(
 			currentlyOpen(
 				{
@@ -28,7 +28,7 @@ describe('currentlyOpen', () => {
 				},
 				makeDateTime(0, 0, 0),
 			),
-		).toBe(true); //no wrap-around here
+		).toBe(true); // no wrap-around here
 		for (let d = 0; d < 7; d++)
 			for (let h = 0; h < 23; h++)
 				for (let m = 0; m < 60; m++) {
@@ -37,10 +37,10 @@ describe('currentlyOpen', () => {
 							{
 								start: { day: 1, hour: 8, minute: 0 },
 								end: { day: 1, hour: 7, minute: 58 },
-							}, //basically every moment is open
+							}, // basically every moment is open
 							makeDateTime(d, h, m),
 						),
-					).toBe(!(d === 1 && h === 7 && m === 59)); //except for this one
+					).toBe(!(d === 1 && h === 7 && m === 59)); // except for this one
 				}
 	});
 	test('closes Sat midnight', () => {
@@ -241,7 +241,7 @@ test('isValidTimeSlotArray', () => {
 				end: { minute: 4, hour: 1, day: 1 },
 			},
 		]),
-	).toBe(false); //	don't allow wrap over for entries other than last one
+	).toBe(false); // don't allow wrap over for entries other than last one
 
 	expect(
 		isValidTimeSlotArray([
@@ -288,5 +288,5 @@ test('getNextTimeSlot', () => {
 	expect(getNextTimeSlot([A, B], makeDateTime(0, 0, 0))).toEqual(A);
 	expect(getNextTimeSlot([], makeDateTime(0, 0, 0))).toEqual(null);
 	expect(getNextTimeSlot([A], makeDateTime(6, 0, 0))).toEqual(A);
-	expect(() => getNextTimeSlot([B, A], makeDateTime(3, 3, 3))).toThrow(); //[B,A] is improperly sorted
+	expect(() => getNextTimeSlot([B, A], makeDateTime(3, 3, 3))).toThrow(); // [B,A] is improperly sorted
 });

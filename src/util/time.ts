@@ -75,14 +75,14 @@ export function getApproximateTimeStringFromMinutes(minutes: number) {
 		`${strings[0]}${amt}${strings[1]}${amt === 1 ? '' : 's'}`;
 
 	let diff = minutes;
-	const m = diff % 60;
+	const minuteCount = diff % 60;
 	diff = Math.floor(diff / 60);
-	const h = diff % 24;
+	const hourCount = diff % 24;
 	diff = Math.floor(diff / 24);
-	const d = diff;
-	if (d !== 0) return pluralTag`${d} day`;
-	if (h !== 0) return pluralTag`${h} hour`;
-	return pluralTag`${m} minute`;
+	const dayCount = diff;
+	if (dayCount !== 0) return pluralTag`${dayCount} day`;
+	if (hourCount !== 0) return pluralTag`${hourCount} hour`;
+	return pluralTag`${minuteCount} minute`;
 }
 
 /**

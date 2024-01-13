@@ -147,7 +147,6 @@ function ListPage({
 				{(() => {
 					if (locations === undefined) return undefined; // still loading
 					if (locations.length === 0)
-						// Okay we're assuming that an empty array means something has gone awry - there's no way there's no data, right?
 						return (
 							<ErrorText variant="h4">
 								Oops! We received an invalid API response (or no

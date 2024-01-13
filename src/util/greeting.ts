@@ -50,7 +50,7 @@ const getGreeting = (hours: number) => {
 		return evening[Math.floor(Math.random() * evening.length)];
 	}
 
-	return 'Welcome to CMUEats!'; // ok honestly you can't get here
+	return 'Welcome to CMUEats!';
 };
 
 export default getGreeting;
