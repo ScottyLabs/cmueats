@@ -6,8 +6,6 @@ on:
 
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
   vitest:
     runs-on: ubuntu-latest
     steps:
