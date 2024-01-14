@@ -86,13 +86,16 @@ function ListPage({
 
 	useLayoutEffect(() => {
 		if (locations === undefined || fuse === null) return;
-
+		const processedSearchQuery = searchQuery.trim().toLowerCase();
 		// Fuzzy search. If there's no search query, it returns all locations.
-		const searchResults = searchQuery.trim()
-			? fuse.search(searchQuery.trim().toLowerCase())
-			: locations.map((location) => ({ item: location }));
-		const filteredResults = searchResults.map((result) => result.item);
-		setFilteredLocations(filteredResults);
+
+		setFilteredLocations(
+			processedSearchQuery.length === 0
+				? locations
+				: fuse
+						.search(processedSearchQuery)
+						.map((result) => result.item),
+		);
 	}, [searchQuery, fuse, locations]);
 
 	// const [showAlert, setShowAlert] = useState(true);
