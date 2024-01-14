@@ -89,7 +89,7 @@ function ListPage({
 
 		// Fuzzy search. If there's no search query, it returns all locations.
 		const searchResults = searchQuery.trim()
-			? fuse.search(searchQuery.trim())
+			? fuse.search(searchQuery.trim().toLowerCase())
 			: locations.map((location) => ({ item: location }));
 		const filteredResults = searchResults.map((result) => result.item);
 		setFilteredLocations(filteredResults);
