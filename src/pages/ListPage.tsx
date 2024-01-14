@@ -87,8 +87,8 @@ function ListPage({
 	useLayoutEffect(() => {
 		if (locations === undefined || fuse === null) return;
 		const processedSearchQuery = searchQuery.trim().toLowerCase();
+		
 		// Fuzzy search. If there's no search query, it returns all locations.
-
 		setFilteredLocations(
 			processedSearchQuery.length === 0
 				? locations
