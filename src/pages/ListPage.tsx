@@ -95,7 +95,7 @@ function ListPage({
 		setFilteredLocations(filteredResults);
 	}, [searchQuery, fuse, locations]);
 
-	//const [showAlert, setShowAlert] = useState(true);
+	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
