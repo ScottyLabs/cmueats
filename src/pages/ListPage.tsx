@@ -175,7 +175,7 @@ function ListPage({
 						);
 					return (
 						<Grid container spacing={2}>
-							{filteredLocations
+							{[...filteredLocations]
 								.sort((location1, location2) => {
 									const state1 = location1.locationState;
 									const state2 = location2.locationState;
