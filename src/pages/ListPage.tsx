@@ -1,5 +1,6 @@
 import { Typography, Grid, Alert, styled } from '@mui/material';
 import { useEffect, useMemo, useState, useLayoutEffect } from 'react';
+import Fuse from 'fuse.js';
 import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
@@ -58,6 +59,17 @@ function ListPage({
 }) {
 	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
 
+	// Fuzzy search options
+	const fuseOptions = {
+		// keys to perform the search on
+		keys: ['name', 'location', 'shortDescription'],
+		threshold: 0.3,
+	};
+
+	const [fuse, setFuse] = useState<Fuse<IReadOnlyExtendedLocation> | null>(
+		null,
+	);
+
 	// Search query processing
 	const [searchQuery, setSearchQuery] = useState('');
 
@@ -65,26 +77,24 @@ function ListPage({
 		IReadOnlyExtendedLocation[]
 	>([]);
 
-	useLayoutEffect(() => {
-		if (locations === undefined) return;
-		const filteredSearchQuery = searchQuery.trim().toLowerCase();
+	useEffect(() => {
+		if (locations) {
+			const fuseInstance = new Fuse(locations, fuseOptions);
+			setFuse(fuseInstance);
+		}
+	}, [locations]);
 
-		setFilteredLocations(
-			filteredSearchQuery.length === 0
-				? locations
-				: locations.filter(
-						({ name, location, shortDescription }) =>
-							name.toLowerCase().includes(filteredSearchQuery) ||
-							location
-								.toLowerCase()
-								.includes(filteredSearchQuery) ||
-							(shortDescription &&
-								shortDescription
-									.toLowerCase()
-									.includes(filteredSearchQuery)),
-					),
-		);
-	}, [searchQuery, locations]);
+	useLayoutEffect(() => {
+		if (locations === undefined || fuse === null) return;
+
+		// Fuzzy search. If there's no search query, it returns all locations.
+		const searchResults = searchQuery.trim()
+			? fuse.search(searchQuery.trim())
+			: locations.map((location) => ({ item: location }));
+		const filteredResults = searchResults.map((result) => result.item);
+		setFilteredLocations(filteredResults);
+	}, [searchQuery, fuse, locations]);
+
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
