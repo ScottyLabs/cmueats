@@ -244,6 +244,16 @@ function ListPage({
 					</a>{' '}
 					with any problems.
 				</FooterText>
+				<FooterText>
+					Made with 🩷 by{' '}
+					<a
+						href={'https://scottylabs.org'}
+						style={{ color: 'white' }}
+					>
+						ScottyLabs
+					</a>
+					.
+				</FooterText>
 				{/* eslint-enable */}
 				<LogoText variant="h4">
 					cmu<span style={{ color: '#19b875' }}>:eats</span>
