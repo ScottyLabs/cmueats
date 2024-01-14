@@ -1,18 +1,17 @@
-name: Lint
+name: Run unit tests
 on:   
   push:
   pull_request:
     types: [opened, reopened]
+
+
 jobs:
   lint:
+    runs-on: ubuntu-latest
+  vitest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: bahmutov/npm-install@v1
-      - name: Check TypeScript
-        run: npx tsc
-        shell: bash
-      - name: Run ESLint
-        run: npm run lint
-        shell: bash
-      - run: npm -v
+      - name: run vitest
+        run: npm test
