@@ -38,6 +38,7 @@
   },
   "scripts": {
     "start": "vite",
+    "build": "tsc && vite build",
     "test": "vitest",
     "eject": "vite eject",
     "lint": "npx eslint src",
