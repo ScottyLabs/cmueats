@@ -6,6 +6,7 @@ import {
 	getTimeString,
 	isValidTimeSlotArray,
 	getNextTimeSlot,
+	getApproximateTimeStringFromMinutes,
 } from '../../src/util/time';
 import makeDateTime from './helper';
 
@@ -176,6 +177,28 @@ test('isTimeSlot', () => {
 			end: { minute: 1, hour: 1, day: 7 },
 		}),
 	).toEqual(false);
+});
+describe('getApproximateTimeStringFromMinutes', () => {
+	test.each([
+		[4, '4 minutes'],
+		[0, '0 minutes'],
+		[59, '59 minutes'],
+		[62, '1 hour'],
+		[60, '1 hour'],
+		[119, '1 hour'],
+		[120, '2 hours'],
+		[60 * 24 - 1, '23 hours'],
+		[60 * 24, '1 day'],
+		[60 * 24 * 2, '2 days'],
+		[60 * 24 * 5, '5 days'],
+		[60 * 24 * 365, '365 days'],
+	])('basic testing', (minutes: number, expected: string) => {
+		expect(getApproximateTimeStringFromMinutes(minutes)).toBe(expected);
+	});
+	test('edge cases', () => {
+		expect(() => getApproximateTimeStringFromMinutes(-1)).toThrow();
+		expect(getApproximateTimeStringFromMinutes(0.3)).toBe('0.3 minutes');
+	});
 });
 
 test('getTimeString', () => {
