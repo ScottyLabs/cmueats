@@ -16,6 +16,7 @@
     "@types/react": "^18.2.47",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.5",
+    "bun-types": "^1.0.22",
     "css-loader": "^6.9.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "fuse.js": "^7.0.0",
@@ -37,7 +38,6 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build",
     "test": "vitest",
     "eject": "vite eject",
     "lint": "npx eslint src",
@@ -83,7 +83,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^23.2.0",
     "prettier": "^3.2.2",
-    "typescript": "^5.3.3",
     "vite": "^5.0.11",
     "vite-plugin-checker": "^0.6.2",
     "vite-plugin-pwa": "^0.17.4",

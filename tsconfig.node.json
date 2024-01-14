@@ -1,8 +1,11 @@
 {
     "compilerOptions": {
+      "lib": ["ESNext"],
       "composite": true,
       "skipLibCheck": true,
       "module": "ESNext",
+      "target": "ESNext",
+      "types": ["bun-types"],
       "moduleResolution": "bundler",
       "allowSyntheticDefaultImports": true
     },
