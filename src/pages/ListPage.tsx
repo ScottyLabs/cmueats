@@ -89,13 +89,13 @@ function ListPage({
 
 		// Fuzzy search. If there's no search query, it returns all locations.
 		const searchResults = searchQuery.trim()
-			? fuse.search(searchQuery.trim())
+			? fuse.search(searchQuery.trim().toLowerCase())
 			: locations.map((location) => ({ item: location }));
 		const filteredResults = searchResults.map((result) => result.item);
 		setFilteredLocations(filteredResults);
 	}, [searchQuery, fuse, locations]);
 
-	// const [showAlert, setShowAlert] = useState(true);
+	const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
@@ -129,7 +129,12 @@ function ListPage({
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
+      </StyledAlert>  */
+
+	  showAlert &&
+      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
+        🚨 We have made changes to allow you to search even if you make typos. Please contact us if you encounter any bugs. Thank you. 🚨
+      </StyledAlert>  }
 			{showOfflineAlert && (
 				<StyledAlert
 					severity="info"
