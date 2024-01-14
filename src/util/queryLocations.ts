@@ -103,7 +103,6 @@ export function getLocationStatus(
 	const timeUntil = diffInMinutes(relevantTime, now);
 	const statusMsg = getStatusMessage(isOpen, relevantTime, now);
 	const changesSoon = timeUntil <= 60;
-	// (imo I think this is readable)
 	// eslint-disable-next-line no-nested-ternary
 	const locationState = isOpen
 		? changesSoon
