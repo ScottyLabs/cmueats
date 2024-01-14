@@ -110,6 +110,7 @@ export function getTimeString(time: ITimeSlotTime) {
  * is good only if most location opening times operate in weekly predictable cycles, but we shouldn't
  * rely on that assumption. Oh well. It's legacy code, am I right?
  */
+
 export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 	for (let i = 0; i < timeSlots.length; i += 1) {
 		const allowWrapAround = i === timeSlots.length - 1;
