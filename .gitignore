@@ -26,3 +26,6 @@ yarn-error.log*
 
 /dist
 /dev-dist
+
+# for testing only
+/public/example-response.json

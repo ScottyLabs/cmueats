@@ -4,8 +4,11 @@ import EateryCard from '../components/EateryCard';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
-
-import { Location } from '../interfaces';
+import {
+	IReadOnlyExtendedLocation,
+	LocationState,
+} from '../types/locationTypes';
+import assert from '../util/assert';
 
 // Typography
 const HeaderText = styled(Typography)({
@@ -17,6 +20,14 @@ const HeaderText = styled(Typography)({
 		'"Droid Sans", "Helvetica Neue", sans-serif',
 	fontWeight: 800,
 	fontSize: '3em',
+});
+const ErrorText = styled(Typography)({
+	color: 'white',
+	padding: 0,
+	fontFamily:
+		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
+		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
+		'"Droid Sans", "Helvetica Neue", sans-serif',
 });
 
 const LogoText = styled(Typography)({
@@ -40,56 +51,40 @@ const StyledAlert = styled(Alert)({
 	color: '#ffffff',
 });
 
-function ListPage({ locations }: $TSFixMe) {
-	const greeting = useMemo(() => getGreeting(), []);
+function ListPage({
+	locations,
+}: {
+	locations: IReadOnlyExtendedLocation[] | undefined;
+}) {
+	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
 
 	// Search query processing
 	const [searchQuery, setSearchQuery] = useState('');
-	const handleSearchQueryChange = (e: $TSFixMe) =>
-		setSearchQuery(e.target.value);
 
-	const [filteredLocations, setFilteredLocations] = useState([]);
+	const [filteredLocations, setFilteredLocations] = useState<
+		IReadOnlyExtendedLocation[]
+	>([]);
+
 	useLayoutEffect(() => {
+		if (locations === undefined) return;
 		const filteredSearchQuery = searchQuery.trim().toLowerCase();
 
 		setFilteredLocations(
 			filteredSearchQuery.length === 0
 				? locations
 				: locations.filter(
-						({ name, location, shortDescription }: $TSFixMe) =>
+						({ name, location, shortDescription }) =>
 							name.toLowerCase().includes(filteredSearchQuery) ||
 							location
 								.toLowerCase()
 								.includes(filteredSearchQuery) ||
-							shortDescription
-								.toLowerCase()
-								.includes(filteredSearchQuery),
+							(shortDescription &&
+								shortDescription
+									.toLowerCase()
+									.includes(filteredSearchQuery)),
 					),
 		);
 	}, [searchQuery, locations]);
-
-	const openLocations = filteredLocations.filter(
-		(location: Location) => location.isOpen && !location.changesSoon,
-	);
-	const closesSoonLocations = filteredLocations.filter(
-		(location: Location) => location.isOpen && location.changesSoon,
-	);
-	const closedLocations = filteredLocations.filter(
-		(location: Location) =>
-			!location.isOpen &&
-			!location.changesSoon &&
-			!location.closedTemporarily,
-	);
-	const closedTemporarilyLocations = filteredLocations.filter(
-		(location: Location) =>
-			!location.isOpen &&
-			!location.changesSoon &&
-			location.closedTemporarily,
-	);
-	const opensSoonLocations = filteredLocations.filter(
-		(location: Location) => !location.isOpen && location.changesSoon,
-	);
-
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
@@ -138,82 +133,74 @@ function ListPage({ locations }: $TSFixMe) {
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<HeaderText variant="h3">{greeting}</HeaderText>
+					<HeaderText variant="h3">
+						{locations === undefined ? 'Loading...' : greeting}
+					</HeaderText>
 					<input
 						className="Locations-search"
 						type="search"
 						value={searchQuery}
-						onChange={handleSearchQueryChange}
+						onChange={(e) => setSearchQuery(e.target.value)}
 						placeholder="Search"
 					/>
 				</header>
-
-				{filteredLocations.length === 0 && locations.length !== 0 && (
-					<NoResultsError onClear={() => setSearchQuery('')} />
-				)}
-
-				<Grid container spacing={2}>
-					{openLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location2.timeUntilClosed -
-								location1.timeUntilClosed,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
+				{(() => {
+					if (locations === undefined) return undefined; // still loading
+					if (locations.length === 0)
+						return (
+							<ErrorText variant="h4">
+								Oops! We received an invalid API response (or no
+								data at all). If this problem persists, please
+								let us know.
+							</ErrorText>
+						);
+					if (filteredLocations.length === 0)
+						return (
+							<NoResultsError
+								onClear={() => setSearchQuery('')}
 							/>
-						))}
-					{closesSoonLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location2.timeUntilClosed -
-								location1.timeUntilClosed,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{opensSoonLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closedLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-					{closedTemporarilyLocations
-						.sort(
-							(location1: Location, location2: Location) =>
-								location1.timeUntilOpen -
-								location2.timeUntilOpen,
-						)
-						.map((location: Location) => (
-							<EateryCard
-								location={location}
-								key={location.conceptId}
-							/>
-						))}
-				</Grid>
+						);
+					return (
+						<Grid container spacing={2}>
+							{filteredLocations
+								.sort((location1, location2) => {
+									const state1 = location1.locationState;
+									const state2 = location2.locationState;
+									if (state1 !== state2)
+										return state1 - state2;
+									// this if statement is janky but otherwise TS won't
+									// realize that the timeUntil property exists on both l1 and l2
+									if (
+										location1.closedLongTerm ||
+										location2.closedLongTerm
+									) {
+										assert(
+											location1.closedLongTerm &&
+												location2.closedLongTerm,
+										);
+										return location1.name.localeCompare(
+											location2.name,
+										);
+									}
+									// flip sorting order if locations are both open or opening soon
+									return (
+										(state1 === LocationState.OPEN ||
+										state1 === LocationState.OPENS_SOON
+											? -1
+											: 1) *
+										(location1.timeUntil -
+											location2.timeUntil)
+									);
+								})
+								.map((location) => (
+									<EateryCard
+										location={location}
+										key={location.conceptId}
+									/>
+								))}
+						</Grid>
+					);
+				})()}
 			</div>
 			<footer className="footer">
 				<FooterText>

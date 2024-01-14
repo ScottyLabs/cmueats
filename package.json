@@ -28,7 +28,7 @@
     "prettier-eslint-cli": "^8.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.1",
+    "react-router-dom": "^6.21.2",
     "react-transition-group": "^4.4.5",
     "serve": "^14.2.1",
     "ts-migrate": "^0.1.35",
@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^29.5.11",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/luxon": "^3.4.0",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
