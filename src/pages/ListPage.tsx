@@ -95,7 +95,7 @@ function ListPage({
 		setFilteredLocations(filteredResults);
 	}, [searchQuery, fuse, locations]);
 
-	const [showAlert, setShowAlert] = useState(true);
+	//const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
@@ -129,12 +129,7 @@ function ListPage({
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */
-
-	  showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚨 We have made changes to allow you to search even if you make typos. Please contact us if you encounter any bugs. Thank you. 🚨
-      </StyledAlert>  }
+      </StyledAlert>  */}
 			{showOfflineAlert && (
 				<StyledAlert
 					severity="info"
