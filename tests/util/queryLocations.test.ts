@@ -1,8 +1,8 @@
+import {test, expect, describe} from 'vitest';
 import {
 	getLocationStatus,
 	getStatusMessage,
 } from '../../src/util/queryLocations';
-import { describe, expect } from 'vitest';
 import { ITimeSlotTime, LocationState } from '../../src/types/locationTypes';
 import makeDateTime from './helper';
 

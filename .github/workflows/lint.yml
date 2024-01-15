@@ -8,10 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: bahmutov/npm-install@v1
+      - uses: oven-sh/setup-bun@v1
       - name: Check TypeScript
-        run: npx tsc
-        shell: bash
+        run: bunx tsc
       - name: Run ESLint
-        run: npm run lint
-        shell: bash
+        run: bun lint
