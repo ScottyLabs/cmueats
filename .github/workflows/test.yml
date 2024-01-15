@@ -14,4 +14,4 @@ jobs:
         with:
           bun-version: latest
       - name: run bun test
-        run: bun test
+        run: bun vitest
