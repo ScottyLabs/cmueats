@@ -43,7 +43,7 @@ function App() {
         }
         return updateExtendedLocationData; // returns itself here
       })(), // self-invoking function
-      1e4, // updates every 10 seconds
+      10 * 1000, // updates every 10 seconds
     );
     return () => clearInterval(intervalId);
   }, [locations]);
