@@ -40,7 +40,6 @@
     "start": "vite",
     "build": "tsc && vite build",
     "test": "bun test",
-    "vitest": "vitest", 
     "eject": "vite eject",
     "lint": "bunx eslint src",
     "lint-fix": "bunx eslint --fix src",
