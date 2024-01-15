@@ -1,21 +1,21 @@
 /** Note that everything being exported here is readonly */
 
 export type RecursiveReadonly<T> = T extends object
-	? {
-			readonly [P in keyof T]: RecursiveReadonly<T[P]>;
-		}
-	: T;
+  ? {
+      readonly [P in keyof T]: RecursiveReadonly<T[P]>;
+    }
+  : T;
 
 /**
  * Describes either start or end time in any given ITimeSlot
  */
 export interface ITimeSlotTime {
-	/** 0-6 (0 is Sunday, 6 is Saturday) */
-	readonly day: number;
-	/** 0-23 - 0 means 12AM */
-	readonly hour: number;
-	/** 0-59 */
-	readonly minute: number;
+  /** 0-6 (0 is Sunday, 6 is Saturday) */
+  readonly day: number;
+  /** 0-23 - 0 means 12AM */
+  readonly hour: number;
+  /** 0-59 */
+  readonly minute: number;
 }
 
 /**
@@ -33,8 +33,8 @@ export interface ITimeSlotTime {
  * through the commit history of the Dining API)
  */
 export interface ITimeSlot {
-	readonly start: ITimeSlotTime;
-	readonly end: ITimeSlotTime;
+  readonly start: ITimeSlotTime;
+  readonly end: ITimeSlotTime;
 }
 
 /**
@@ -45,17 +45,17 @@ export interface ITimeSlot {
 export type ITimeSlots = ReadonlyArray<ITimeSlot>;
 
 interface ISpecial {
-	title: string;
-	description?: string;
+  title: string;
+  description?: string;
 }
 
 // Ordered by priority - affects how tiles are displayed in the grid (first to last)
 export enum LocationState {
-	OPEN,
-	CLOSES_SOON,
-	OPENS_SOON,
-	CLOSED,
-	CLOSED_LONG_TERM,
+  OPEN,
+  CLOSES_SOON,
+  OPENS_SOON,
+  CLOSED,
+  CLOSED_LONG_TERM,
 }
 
 /**
@@ -64,48 +64,48 @@ export enum LocationState {
  * update the Joi Schema in joiLocationTypes.ts as well)
  */
 interface IAPILocation {
-	conceptId: number;
-	name?: string;
-	shortDescription?: string;
-	description: string;
-	url: string;
-	/** Menu link */
-	menu?: string;
-	location: string;
-	coordinates?: {
-		lat: number;
-		lng: number;
-	};
-	acceptsOnlineOrders: boolean;
-	times: ITimeSlot[];
-	todaysSpecials?: ISpecial[];
-	todaysSoups?: ISpecial[];
+  conceptId: number;
+  name?: string;
+  shortDescription?: string;
+  description: string;
+  url: string;
+  /** Menu link */
+  menu?: string;
+  location: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  acceptsOnlineOrders: boolean;
+  times: ITimeSlot[];
+  todaysSpecials?: ISpecial[];
+  todaysSoups?: ISpecial[];
 }
 
 // All of the following are extended from the base API type
 
 // Base type
 interface ILocation extends IAPILocation {
-	name: string; // This field is now guaranteed to be defined
+  name: string; // This field is now guaranteed to be defined
 }
 
 // 'Closed' here refers to closed for the near future (no timeslots available)
 interface ILocationStatusBase {
-	/** No forseeable opening times after *now* */
-	closedLongTerm: boolean;
-	statusMsg: string;
-	locationState: LocationState;
+  /** No forseeable opening times after *now* */
+  closedLongTerm: boolean;
+  statusMsg: string;
+  locationState: LocationState;
 }
 interface ILocationStatusOpen extends ILocationStatusBase {
-	isOpen: boolean;
-	timeUntil: number;
-	closedLongTerm: false;
-	changesSoon: boolean;
-	locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
+  isOpen: boolean;
+  timeUntil: number;
+  closedLongTerm: false;
+  changesSoon: boolean;
+  locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
 }
 interface ILocationStatusClosed extends ILocationStatusBase {
-	closedLongTerm: true;
-	locationState: LocationState.CLOSED_LONG_TERM;
+  closedLongTerm: true;
+  locationState: LocationState.CLOSED_LONG_TERM;
 }
 interface IExtendedLocationOpen extends ILocation, ILocationStatusOpen {}
 interface IExtendedLocationClosed extends ILocation, ILocationStatusClosed {}
