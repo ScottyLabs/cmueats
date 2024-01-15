@@ -3,10 +3,8 @@ on:
   push:
   pull_request:
     types: [opened, reopened]
-
-
 jobs:
-  vitest:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,5 +12,5 @@ jobs:
         with:
             bun-version: latest
       - run: bun install 
-      - name: run bun test
+      - name: Run bun test
         run: bun test
