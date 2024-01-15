@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1 # Setup bun
         with:
-            bun-version: latest 
+            bun-version: latest
+      - run: bun install 
       - name: run bun test
         run: bun test
