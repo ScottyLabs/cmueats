@@ -131,6 +131,9 @@ export async function queryLocations(
     }
     const { locations: rawLocations } =
       await IAPIResponseJoiSchema.validateAsync(data);
+    
+
+    // Check for invalid location data
     const validLocations = rawLocations.filter((location) => {
       const { error } = ILocationAPIJoiSchema.validate(location);
       if (error !== undefined) {
@@ -138,12 +141,13 @@ export async function queryLocations(
         // eslint-disable-next-line no-underscore-dangle
         console.error("original obj", error._original);
         // eslint-disable-next-line no-alert
-        alert(
+        console.log(
           `${location.name} has invalid corresponding data! Ignoring location and continuing validation`,
         );
       }
       return error === undefined;
     }) as IReadOnlyAPILocation[];
+
     return validLocations.map((location) => ({
       ...location,
       name: toTitleCase(location.name ?? "Untitled"), // Convert names to title case
