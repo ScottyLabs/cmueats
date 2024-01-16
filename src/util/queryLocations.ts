@@ -139,8 +139,8 @@ export async function queryLocations(
         console.error("Validation error!", error.details);
         // eslint-disable-next-line no-underscore-dangle
         console.error("original obj", error._original);
-        // eslint-disable-next-line no-console
-        console.log(
+        // eslint-disable-next-line no-alert
+        alert(
           `${location.name} has invalid corresponding data! Ignoring location and continuing validation`,
         );
       }
