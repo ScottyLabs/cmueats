@@ -131,7 +131,6 @@ export async function queryLocations(
     }
     const { locations: rawLocations } =
       await IAPIResponseJoiSchema.validateAsync(data);
-    
 
     // Check for invalid location data
     const validLocations = rawLocations.filter((location) => {
@@ -140,7 +139,7 @@ export async function queryLocations(
         console.error("Validation error!", error.details);
         // eslint-disable-next-line no-underscore-dangle
         console.error("original obj", error._original);
-        // eslint-disable-next-line no-alert
+        // eslint-disable-next-line no-console
         console.log(
           `${location.name} has invalid corresponding data! Ignoring location and continuing validation`,
         );
