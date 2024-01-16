@@ -131,19 +131,28 @@ export async function queryLocations(
     }
     const { locations: rawLocations } =
       await IAPIResponseJoiSchema.validateAsync(data);
-    const validLocations = rawLocations.filter((location) => {
-      const { error } = ILocationAPIJoiSchema.validate(location);
-      if (error !== undefined) {
-        console.error("Validation error!", error.details);
-        // eslint-disable-next-line no-underscore-dangle
-        console.error("original obj", error._original);
-        // eslint-disable-next-line no-alert
-        alert(
-          `${location.name} has invalid corresponding data! Ignoring location and continuing validation`,
-        );
-      }
-      return error === undefined;
-    }) as IReadOnlyAPILocation[];
+
+    // Revert after implementing merging algo
+    const validLocations = rawLocations as IReadOnlyAPILocation[];
+    const { error } = ILocationAPIJoiSchema.validate(location); 
+    console.log(error);
+    
+
+    // Check for invalid location data
+    // const validLocations = rawLocations.filter((location) => {
+    //   const { error } = ILocationAPIJoiSchema.validate(location);
+    //   if (error !== undefined) {
+    //     console.error("Validation error!", error.details);
+    //     // eslint-disable-next-line no-underscore-dangle
+    //     console.error("original obj", error._original);
+    //     // eslint-disable-next-line no-alert
+    //     console.log(
+    //       `${location.name} has invalid corresponding data! Ignoring location and continuing validation`,
+    //     );
+    //   }
+    //   return error === undefined;
+    // }) as IReadOnlyAPILocation[];
+
     return validLocations.map((location) => ({
       ...location,
       name: toTitleCase(location.name ?? "Untitled"), // Convert names to title case
