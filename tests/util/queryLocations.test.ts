@@ -116,7 +116,8 @@ describe('queryLocations.ts', () => {
 			});
 		});
 	});
-	test.each([
+	
+	const testCases: IGetStatusMessageTest[] = [
 		{
 			isOpen: false,
 			nextTime: { day: 2, hour: 2, minute: 2 },
@@ -297,16 +298,33 @@ describe('queryLocations.ts', () => {
 			nextTime: { day: 3, hour: 9, minute: 0 },
 			expectedString: 'Opens in 3 days (Wednesday at 9:00 AM)',
 		},
-	] satisfies IGetStatusMessageTest[])(
-		'#%# test of getStatusMessage | Now: $now | Next Time: $nextTime',
-		({ isOpen, nextTime, now, expectedString }) => {
+	]
+	
+	const modifiedTestCases = testCases.map(testCase => [
+		testCase.isOpen,
+		testCase.nextTime,
+		testCase.now,
+		testCase.expectedString
+	]);
+	
+	test.each(modifiedTestCases)(
+		'getStatusMessage | isOpen: %p, nextTime: %p, now: %p, expected: %p',
+		(isOpen, nextTime, now, expectedString) => {
+			// TypeScript type assertions
+			const isOpenBool = isOpen as boolean;
+			const nextTimeObj = nextTime as ITimeSlotTime;
+			const nowObj = now as ITimeSlotTime;
+			const expectedStringText = expectedString as string;
+	
 			const locationString = getStatusMessage(
-				isOpen,
-				nextTime,
-				makeDateTime(now.day, now.hour, now.minute),
+				isOpenBool,
+				nextTimeObj,
+				makeDateTime(nowObj.day, nowObj.hour, nowObj.minute),
 			);
-			if (expectedString === undefined) console.log(locationString);
-			else expect(locationString).toEqual(expectedString);
+	
+			expect(locationString).toEqual(expectedStringText);
 		},
 	);
+	
+
 });
