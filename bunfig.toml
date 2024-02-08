@@ -1,2 +1,3 @@
 [test]
-preload = "./tests/happydom.ts"
+# preload = "./tests/happydom.ts"
+# preload temporarily commented out due to an issue with Bun test (see the issue I filed at https://github.com/oven-sh/bun/issues/8383)
