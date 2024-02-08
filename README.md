@@ -40,7 +40,7 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 Note that GitHub will automatically run checks (workflows) on your PR. This includes code linting (with tsc and eslint) and verifying that all unit tests in `/tests` pass with vitest.
 
-![Example checks](checks_example.png)
+![Example checks](/public/checks_example.png)
 
 17. To run unit tests locally, type `bun test`.
 
