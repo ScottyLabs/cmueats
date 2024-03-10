@@ -246,7 +246,7 @@ function ListPage({
 					with any problems.
 				</FooterText>
 				<FooterText>
-					Made with 🩷 by{' '}
+					Made with ❤️ by{' '}
 					<a
 						href={'https://scottylabs.org'}
 						style={{ color: 'white' }}
