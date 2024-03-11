@@ -122,7 +122,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			now: { day: 2, hour: 2, minute: 3 },
 			nextTime: { day: 2, hour: 2, minute: 2 },
-			expectedString: 'Opens in 7 days (Tuesday at 2:02 AM)',
+			expectedString: 'Opens in a week (Tuesday at 2:02 AM)',
 		},
 		{
 			isOpen: false,
@@ -230,7 +230,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			now: { day: 5, hour: 8, minute: 1 },
 			nextTime: { day: 5, hour: 8, minute: 0 },
-			expectedString: 'Opens in 7 days (Friday at 8:00 AM)',
+			expectedString: 'Opens in a week (Friday at 8:00 AM)',
 		},
 		{
 			isOpen: false,
@@ -242,7 +242,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			now: { day: 6, hour: 13, minute: 0 },
 			nextTime: { day: 6, hour: 12, minute: 0 },
-			expectedString: 'Opens in 7 days (Saturday at 12:00 PM)',
+			expectedString: 'Opens in a week (Saturday at 12:00 PM)',
 		},
 		{
 			isOpen: false,
