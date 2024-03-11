@@ -281,7 +281,9 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 					/>
 					<CardContent>
 						<NameText variant="h6">
-							<CustomLink href={url}>{name}</CustomLink>
+							<CustomLink href={url} target="_blank">
+								{name}
+							</CustomLink>
 						</NameText>
 						<LocationText variant="subtitle2">
 							{locationText}
