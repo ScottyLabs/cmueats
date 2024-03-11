@@ -76,7 +76,8 @@ export function getApproximateTimeStringFromMinutes(minutes: number) {
 
 	let diff = minutes;
 	const minuteCount = diff % 60;
-	diff = Math.floor(diff / 60);
+	const condition = (Math.floor(diff / 60) > 23) || (diff / 60) < 1;
+	diff = condition ? Math.floor(diff / 60) : Math.round(diff / 60);
 	const hourCount = diff % 24;
 	diff = Math.floor(diff / 24);
 	const dayCount = diff;

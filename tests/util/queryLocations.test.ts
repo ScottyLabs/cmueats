@@ -128,7 +128,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			nextTime: { day: 3, hour: 2, minute: 2 },
 			now: { day: 2, hour: 2, minute: 3 },
-			expectedString: 'Opens in 23 hours (tomorrow at 2:02 AM)',
+			expectedString: 'Opens in 1 day (tomorrow at 2:02 AM)',
 		},
 		{
 			isOpen: false,
@@ -164,7 +164,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			nextTime: { day: 1, hour: 0, minute: 0 },
 			now: { day: 0, hour: 20, minute: 30 },
-			expectedString: 'Opens in 3 hours (tomorrow at 12:00 AM)',
+			expectedString: 'Opens in 4 hours (tomorrow at 12:00 AM)',
 		},
 		{
 			isOpen: false,
@@ -176,7 +176,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			nextTime: { day: 0, hour: 20, minute: 0 },
 			now: { day: 0, hour: 0, minute: 30 },
-			expectedString: 'Opens in 19 hours (today at 8:00 PM)',
+			expectedString: 'Opens in 20 hours (today at 8:00 PM)',
 		},
 		{
 			isOpen: false,
@@ -218,7 +218,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			nextTime: { day: 1, hour: 5, minute: 0 },
 			now: { day: 0, hour: 19, minute: 30 },
-			expectedString: 'Opens in 9 hours (tomorrow at 5:00 AM)',
+			expectedString: 'Opens in 10 hours (tomorrow at 5:00 AM)',
 		},
 		{
 			isOpen: false,
@@ -290,7 +290,7 @@ describe('queryLocations.ts', () => {
 			isOpen: false,
 			now: { day: 6, hour: 10, minute: 28 },
 			nextTime: { day: 0, hour: 9, minute: 0 },
-			expectedString: 'Opens in 22 hours (tomorrow at 9:00 AM)',
+			expectedString: 'Opens in 23 hours (tomorrow at 9:00 AM)',
 		},
 		{
 			isOpen: false,
