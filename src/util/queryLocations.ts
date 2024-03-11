@@ -73,7 +73,7 @@ export function getStatusMessage(
 	let relTimeDiff = getApproximateTimeStringFromMinutes(diff);
 	const weekEdgeCase = Math.round(Math.floor(diff / 60) / 24);
 
-	if (weekEdgeCase == 7) {
+	if (weekEdgeCase === 7) {
 		relTimeDiff = 'a week';
 	}
 
