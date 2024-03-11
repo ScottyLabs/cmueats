@@ -70,7 +70,13 @@ export function getStatusMessage(
 		day = 'today';
 	}
 
-	const relTimeDiff = getApproximateTimeStringFromMinutes(diff);
+	let relTimeDiff = getApproximateTimeStringFromMinutes(diff);
+	const weekEdgeCase = Math.round(Math.floor(diff / 60) / 24);
+
+	if (weekEdgeCase === 7) {
+		relTimeDiff = 'a week';
+	}
+
 	if (relTimeDiff === '0 minutes') {
 		return `${action} now (${day} at ${time})`;
 	}

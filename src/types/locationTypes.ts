@@ -19,7 +19,7 @@ export interface ITimeSlotTime {
 }
 
 /**
- * As far as I can tell, start and end are both inclusive in
+ * Start and end are both inclusive in
  * denoting when a location is open. so [2AM today, 4AM today]
  * includes both 2AM and 4AM. So, [2AM Tue,2AM Tue] is inferred to be open at exactly 2AM.
  * Something like [2AM Tue, 1AM Tue] means open from 2AM Tue
@@ -29,8 +29,6 @@ export interface ITimeSlotTime {
  * [Sat 10AM, Sun 12AM] = [day:6,hour:10 -> day:0, hour: 0]) (recall that Sunday has a day-value
  * of 0 while Saturday has a day value of 6, so this is a wrap around) Any other time
  * would be constrained to that day and possibly 12AM on the day after.
- * @cirex-web author (I concluded some of the above after digging
- * through the commit history of the Dining API)
  */
 export interface ITimeSlot {
 	readonly start: ITimeSlotTime;
