@@ -43,7 +43,7 @@
     "eject": "vite eject",
     "lint": "bunx eslint src",
     "lint-fix": "bunx eslint --fix src",
-    "format": "prettier --write src",
+    "format": "bunx prettier --write src",
     "coverage": "bun test --coverage"
   },
   "eslintConfig": {
