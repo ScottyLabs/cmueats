@@ -14,6 +14,7 @@ import {
 	CardActions,
 	Avatar,
 	Dialog,
+	keyframes,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -30,6 +31,19 @@ const colors: Record<LocationState, string> = {
 	[LocationState.OPENS_SOON]: '#f6cc5d',
 	[LocationState.CLOSES_SOON]: '#f3f65d',
 };
+
+const glowAnimation = keyframes`
+  0% {
+    box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(238, 111, 82, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
+  }
+`;
+
 const StyledCard = styled(Card)({
 	backgroundColor: '#23272A',
 	border: '2px solid rgba(0, 0, 0, 0.2)',
@@ -37,6 +51,10 @@ const StyledCard = styled(Card)({
 	borderRadius: 7,
 	height: '100%',
 	justifyContent: 'flex-start',
+	transition: 'box-shadow 0.3s ease-in-out',
+	'&:hover': {
+		animation: `${glowAnimation} 1.5s infinite`,
+	},
 });
 
 const StyledCardHeader = styled(CardHeader)({
