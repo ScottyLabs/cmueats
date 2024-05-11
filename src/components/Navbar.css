@@ -19,11 +19,9 @@
 .Navbar-links a {
 	position: relative;
 	z-index: 5;
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
 	font-family: 'Zilla Slab', sans-serif;
 	font-weight: 500;
 	color: white;
@@ -44,17 +42,20 @@
 	top: 0;
 	width: 50%;
 	height: 100%;
-
 	background-color: #2b2f33;
 	border-radius: 999px;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-	.Navbar-active {
-		transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1) transform;
-	}
+	transition:
+		transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+		box-shadow 0.3s ease-in-out;
 }
 
 .Navbar-active_map {
 	transform: translateX(100%);
+}
+
+.Navbar-active_glow {
+	box-shadow:
+		0 0 5px #ee6f52,
+		0 0 10px #ee6f52,
+		0 0 15px #ee6f52;
 }

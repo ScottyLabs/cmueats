@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
-	const isMap = useLocation().pathname === '/map';
+	const location = useLocation();
 
 	return (
 		<nav className="Navbar">
@@ -47,7 +47,7 @@ function Navbar() {
 					Map
 				</Link>
 				<div
-					className={`Navbar-active ${isMap ? 'Navbar-active_map' : ''}`}
+					className={`Navbar-active ${location.pathname === '/map' ? 'Navbar-active_map' : ''} Navbar-active_glow`}
 				/>
 			</div>
 		</nav>
