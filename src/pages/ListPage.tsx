@@ -52,6 +52,18 @@ const StyledAlert = styled(Alert)({
 	color: '#ffffff',
 });
 
+function getPittsburghTime() {
+	const now = new Date();
+	const options: Intl.DateTimeFormatOptions = {
+	  timeZone: 'America/New_York',
+	  hour: 'numeric',
+	  minute: 'numeric',
+	  second: 'numeric',
+	  timeZoneName: 'short',
+	};
+	return now.toLocaleString('en-US', options);
+  }
+
 function ListPage({
 	locations,
 }: {
@@ -218,7 +230,7 @@ function ListPage({
 			</div>
 			<footer className="footer">
 				<FooterText>
-					All times displayed in Pittsburgh local time (ET).
+				All times displayed in Pittsburgh local time ({getPittsburghTime()}).
 				</FooterText>
 				{/* eslint-disable */}
 				<FooterText>
