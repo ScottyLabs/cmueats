@@ -55,14 +55,14 @@ const StyledAlert = styled(Alert)({
 function getPittsburghTime() {
 	const now = new Date();
 	const options: Intl.DateTimeFormatOptions = {
-	  timeZone: 'America/New_York',
-	  hour: 'numeric',
-	  minute: 'numeric',
-	  second: 'numeric',
-	  timeZoneName: 'short',
+		timeZone: 'America/New_York',
+		hour: 'numeric',
+		minute: 'numeric',
+		second: 'numeric',
+		timeZoneName: 'short',
 	};
 	return now.toLocaleString('en-US', options);
-  }
+}
 
 function ListPage({
 	locations,
@@ -230,7 +230,8 @@ function ListPage({
 			</div>
 			<footer className="footer">
 				<FooterText>
-				All times displayed in Pittsburgh local time ({getPittsburghTime()}).
+					All times displayed in Pittsburgh local time (
+					{getPittsburghTime()}).
 				</FooterText>
 				{/* eslint-disable */}
 				<FooterText>
