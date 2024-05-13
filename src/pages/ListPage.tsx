@@ -176,9 +176,13 @@ function ListPage({
 						// Display skeleton cards while loading
 						return (
 							<Grid container spacing={2}>
-								{Array.from({ length: 36 }).map((_, index) => (
-									<EateryCardSkeleton key={`skeleton-${index}`} />
-								))}
+								{/* TODO: find a better solution */}
+								{Array(36)
+									.fill(null)
+									.map((_, index) => index)
+									.map((v) => (
+										<EateryCardSkeleton key={v} />
+									))}
 							</Grid>
 						);
 					}
