@@ -175,11 +175,11 @@ function ListPage({
 					if (locations === undefined) {
 						// Display skeleton cards while loading
 						return (
-						<Grid container spacing={2}>
-							{Array.from({ length: 36 }).map((_, index) => (
-							<EateryCardSkeleton key={index} />
-							))}
-						</Grid>
+							<Grid container spacing={2}>
+								{Array.from({ length: 36 }).map((_, index) => (
+									<EateryCardSkeleton key={index} />
+								))}
+							</Grid>
 						);
 					}
 					if (locations.length === 0)
