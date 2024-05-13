@@ -177,7 +177,7 @@ function ListPage({
 						return (
 							<Grid container spacing={2}>
 								{/* TODO: find a better solution */}
-								{Array(20)
+								{Array(36)
 									.fill(null)
 									.map((_, index) => index)
 									.map((v) => (
