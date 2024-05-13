@@ -177,7 +177,7 @@ function ListPage({
 						return (
 							<Grid container spacing={2}>
 								{Array.from({ length: 36 }).map((_, index) => (
-									<EateryCardSkeleton key={index} />
+									<EateryCardSkeleton key={`skeleton-${index}`} />
 								))}
 							</Grid>
 						);
