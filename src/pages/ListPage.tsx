@@ -2,6 +2,7 @@ import { Typography, Grid, Alert, styled } from '@mui/material';
 import { useEffect, useMemo, useState, useLayoutEffect } from 'react';
 import Fuse from 'fuse.js';
 import EateryCard from '../components/EateryCard';
+import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
@@ -171,7 +172,16 @@ function ListPage({
 					/>
 				</header>
 				{(() => {
-					if (locations === undefined) return undefined; // still loading
+					if (locations === undefined) {
+						// Display skeleton cards while loading
+						return (
+							<Grid container spacing={2}>
+								{Array.from({ length: 36 }).map((_, index) => (
+									<EateryCardSkeleton key={index} />
+								))}
+							</Grid>
+						);
+					}
 					if (locations.length === 0)
 						return (
 							<ErrorText variant="h4">
