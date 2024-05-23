@@ -18,7 +18,7 @@
     "@types/react": "^18.2.68",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.8",
-    "css-loader": "^6.10.0",
+    "css-loader": "^7.1.2",
     "fuse.js": "^7.0.0",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
