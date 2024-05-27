@@ -97,9 +97,6 @@ export default defineConfig(({ command, mode }) => {
     define: {
       'process.env.VITE_MAPKITJS_TOKEN': JSON.stringify(env[tokenEnvVariable]),
     },
-    build: {
-      outDir: 'build',
-    },
     plugins: [
       million.vite({ auto: true }),
       react(),
