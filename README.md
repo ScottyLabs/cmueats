@@ -44,4 +44,4 @@ Note that GitHub will automatically run checks (workflows) on your PR. This incl
 
 17. To run unit tests locally, type `bun test`.
 
-Note: To add new dependencies, use ```bun add dependency-name```. To remove dependencies, use ```bun remove dependency-name```.
+Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
