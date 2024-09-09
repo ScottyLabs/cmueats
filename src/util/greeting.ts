@@ -29,6 +29,14 @@ const graveyard = [
 	'The night wraps around you like a dream—let us offer a taste to match its beauty.',
 	'A moment in the moonlight, a bite to soothe your soul.',
 	'In the shadows of the night, let your hunger find solace in every flavor.',
+	'In the hush of the night, let your hunger find solace in every sweet bite.',
+	'As the moon watches over, let your meal be a quiet dance of flavors.',
+	'The stars write stories, and tonight, your meal is the chapter that nourishes your soul.',
+	'Let the cool night breeze guide you to a feast made for midnight dreamers.',
+	'Under the canvas of night, let each taste paint a picture of comfort and delight.',
+	'As darkness falls, let your meal be the beacon that lights your way.',
+	'The night whispers mysteries—let us reveal them one delicious bite at a time.',
+	'In the silence between stars, your hunger calls—let us craft a meal to answer.',
 ];
 const morning = [
 	'Fancy some breakfast?',
@@ -55,6 +63,14 @@ const morning = [
 	'Morning dew and fresh beginnings—let breakfast carry you into the day with grace.',
 	'Let the quiet beauty of the morning reflect in every bite you take.',
 	'The world awakens softly—let your breakfast do the same, filling you with warmth.',
+	'As the morning sky blushes, let your breakfast bloom with promise and joy.',
+	'Like the first light of day, let your meal unfold with grace and beauty.',
+	'With each sunrise, the world is reborn—let your breakfast be the start of something new.',
+	'In the golden embrace of morning, let your plate be a symphony of flavors.',
+	'As the sun climbs, let your spirit and hunger rise together, fed by something wonderful.',
+	'Morning light and fresh beginnings—let your meal be a moment of pure poetry.',
+	'The dawn breaks gently, and so does the warmth of your first bite—welcome the day with joy.',
+	'Let the soft light of morning carry you to a breakfast as gentle as the breeze.',
 ];
 const afternoon = [
 	'What do you want for lunch?',
@@ -81,6 +97,14 @@ const afternoon = [
 	"Let your lunch be a gentle retreat, a quiet breath amid the day's rhythm.",
 	'As the day unfolds, let every bite be a reminder to savor the beauty around you.',
 	'In the stillness between hours, let your meal be a moment to reflect and rejuvenate.',
+	'As the sun sits high in the sky, let your meal be the calm in the midst of the day’s rhythm.',
+	'The afternoon glows with possibility—let your lunch be the spark that fuels your journey.',
+	'Beneath the midday sun, let every bite be a reminder of the beauty in small moments.',
+	'In the warmth of the afternoon, let your meal be a pause, a gentle breath between hours.',
+	'The day stretches long, but let your lunch shorten the distance with a taste of joy.',
+	'As time marches on, let your meal be a moment suspended in delicious peace.',
+	'In the golden hours of the afternoon, let your plate be as radiant as the sun above.',
+	'Let your lunch carry you like the wind—light, freeing, and full of life.',
 ];
 const evening = [
 	'What do you want for dinner?',
@@ -105,6 +129,14 @@ const evening = [
 	'The night falls gently, and so does your hunger—let us satisfy it with something unforgettable.',
 	'In the stillness of nightfall, let each bite be a promise of comfort and peace.',
 	'As the world grows quiet, let your dinner speak the language of love and warmth.',
+	'As the sun dips low, let your meal be a soft song that ends the day in harmony.',
+	'In the embrace of twilight, let your dinner be a feast fit for the setting sun.',
+	'The night sky unfurls its canvas—let your dinner paint the perfect end to your day.',
+	'As the stars twinkle, let your meal be a constellation of flavors, guiding you to satisfaction.',
+	'Let the nightfall carry you to a dinner that soothes, satisfies, and whispers goodnight.',
+	'In the quiet moments of dusk, let each bite be a reminder of the peace the night can bring.',
+	'The evening wraps you in its arms—let dinner be the warmth that completes its embrace.',
+	'As the world quiets down, let your meal speak volumes of comfort and serenity.',
 ];
 
 const getGreeting = (hours: number) => {
