@@ -265,10 +265,10 @@ function ListPage({
 					</a>
 					, or{' '}
 					<a
-						href={'mailto:ahusun@andrew.cmu.edu'}
+						href={'mailto:jhurewit@andrew.cmu.edu'}
 						style={{ color: 'white' }}
 					>
-						Aaron
+						Jack
 					</a>{' '}
 					with any problems.
 				</FooterText>
