@@ -60,7 +60,7 @@ export default defineConfig(({ command, mode }) => {
   const origin = env.MAPKIT_JS_ORIGIN || env.DEPLOY_PRIME_URL;
 
   if (!teamId || !keyId || !authKey || !tokenEnvVariable || !ttl) {
-    console.error('Missing mandatory parameters');
+    console.error('Missing one or more .env variables! Make sure you have a .env file locally.');
     process.exit(1);
   }
 
