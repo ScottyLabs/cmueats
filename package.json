@@ -88,7 +88,7 @@
     "jsdom": "^24.0.0",
     "prettier": "^3.2.5",
     "vite": "^5.2.3",
-    "vite-plugin-checker": "^0.6.4",
+    "vite-plugin-checker": "^0.8.0",
     "vite-plugin-pwa": "^0.19.6",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.2"
