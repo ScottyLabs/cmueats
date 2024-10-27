@@ -98,3 +98,11 @@ body {
 	text-align: center;
 	background-color: #23272a;
 }
+
+.AdBanner {
+	padding: 1rem;
+	font-size: 1.5em;
+	color: white;
+	text-align: center;
+	background-color: #007fff;
+}

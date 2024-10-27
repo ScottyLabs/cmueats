@@ -66,6 +66,16 @@ function App() {
 		<React.StrictMode>
 			<BrowserRouter>
 				<div className="App">
+					<div className="AdBanner">
+						‼️ Sign up for{' '}
+						<a
+							href="https://nova.scottylabs.org/"
+							style={{ color: 'white' }}
+						>
+							<strong>Nova</strong>
+						</a>
+						, ScottyLabs&apos; new GenAI Hackathon! 🖥️
+					</div>
 					<div className="MainContent">
 						<Routes>
 							<Route
