@@ -69,7 +69,7 @@ function App() {
 					<div className="AdBanner">
 						‼️ Sign up for{' '}
 						<a
-							href="https://nova.scottylabs.org/"
+							href="https://go.scottylabs.org/nova-cmueats"
 							style={{ color: 'white' }}
 						>
 							<strong>Nova</strong>
