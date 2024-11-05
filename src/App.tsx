@@ -72,9 +72,10 @@ function App() {
 							href="https://go.scottylabs.org/nova-cmueats"
 							style={{ color: 'white' }}
 						>
-							<strong>Nova by November 9th</strong>
+							<strong>Nova</strong>
 						</a>
-						, ScottyLabs&apos; new GenAI Hackathon! 🖥️
+						, ScottyLabs&apos; new GenAI Hackathon, by November 9th!
+						🖥️
 					</div>
 					<div className="MainContent">
 						<Routes>
