@@ -58,6 +58,7 @@ export default defineConfig(({ command, mode }) => {
     env.MAPKIT_JS_TOKEN_ENV_VARIABLE || 'MAPKIT_JS_TOKEN';
   const ttl = +(env.MAPKIT_JS_TTL || 31_536_000); // 1 year
   const origin = env.MAPKIT_JS_ORIGIN || env.DEPLOY_PRIME_URL;
+  const posthog = env.REACT_APP_PUBLIC_POSTHOG_KEY;
 
   if (!teamId || !keyId || !authKey || !tokenEnvVariable || !ttl) {
     console.error('Missing one or more .env variables! Make sure you have a .env file locally.');
@@ -96,6 +97,7 @@ export default defineConfig(({ command, mode }) => {
   return {
     define: {
       'process.env.VITE_MAPKITJS_TOKEN': JSON.stringify(env[tokenEnvVariable]),
+      'process.env.REACT_APP_PUBLIC_POSTHOG_KEY': JSON.stringify(posthog),
     },
     plugins: [
       million.vite({ auto: true }),
