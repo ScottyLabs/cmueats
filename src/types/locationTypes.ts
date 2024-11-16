@@ -78,6 +78,7 @@ interface IAPILocation {
 	times: ITimeSlot[];
 	todaysSpecials?: ISpecial[];
 	todaysSoups?: ISpecial[];
+	timesListDisplay: string[];
 }
 
 // All of the following are extended from the base API type

@@ -174,6 +174,7 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 		todaysSpecials = [],
 		statusMsg,
 		todaysSoups = [],
+		timesListDisplay,//me
 	} = location;
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
 	const isOpen = !location.closedLongTerm && location.isOpen;
@@ -238,14 +239,13 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 								Menu
 							</ActionButton>
 						)}
-						{(todaysSpecials.length !== 0 ||
-							todaysSoups.length !== 0) && (
+						{(true) && (//todaysSpecials.length !== 0 || todaysSoups.length !== 0 GO BACK
 							<ActionButton
 								onClick={() => {
 									setModalOpen(true);
 								}}
 							>
-								Specials
+								Specials & Times
 							</ActionButton>
 						)}
 					</CardActions>
@@ -305,6 +305,27 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 						</NameText>
 						<LocationText variant="subtitle2">
 							{locationText}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Sunday: ".concat(timesListDisplay[0])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Monday: ".concat(timesListDisplay[1])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Tuesday: ".concat(timesListDisplay[2])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Wednesday: ".concat(timesListDisplay[3])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Thursday: ".concat(timesListDisplay[4])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Friday: ".concat(timesListDisplay[5])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Saturday: ".concat(timesListDisplay[6])}
 						</LocationText>
 					</CardContent>
 					{todaysSpecials.concat(todaysSoups).map((special) => (
