@@ -67,14 +67,14 @@ function App() {
 			<BrowserRouter>
 				<div className="App">
 					<div className="AdBanner">
-						‼️ Sign up for{' '}
+						Pre-register for{' '}
 						<a
-							href="https://go.scottylabs.org/nova-cmueats"
+							href="https://tartanhacks.com/"
 							style={{ color: 'white' }}
 						>
-							<strong>Nova by November 9th</strong>
+							<strong>TartanHacks (February 7-8, 2025)</strong>
 						</a>
-						, ScottyLabs&apos; new GenAI Hackathon! 🖥️
+						, CMU's Largest Hackathon! 🖥️
 					</div>
 					<div className="MainContent">
 						<Routes>
