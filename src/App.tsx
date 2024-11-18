@@ -69,12 +69,12 @@ function App() {
 					<div className="AdBanner">
 						Pre-register for{' '}
 						<a
-							href="https://tartanhacks.com/"
+							href="https://go.scottylabs.org/tartanhacks-cmueats"
 							style={{ color: 'white' }}
 						>
-							<strong>TartanHacks (February 7-8, 2025)</strong>
+							<strong>TartanHacks</strong>
 						</a>
-						, CMU's Largest Hackathon! 🖥️
+						, Pittsburgh&apos;s LARGEST hackathon! 🖥️
 					</div>
 					<div className="MainContent">
 						<Routes>
