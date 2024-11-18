@@ -67,7 +67,7 @@ function App() {
 			<BrowserRouter>
 				<div className="App">
 					<div className="AdBanner">
-						‼️ Sign up for{' '}
+						Pre-register for{' '}
 						<a
 							href="https://go.scottylabs.org/tartanhacks-cmueats"
 							style={{ color: 'white' }}
