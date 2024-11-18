@@ -69,13 +69,12 @@ function App() {
 					<div className="AdBanner">
 						‼️ Sign up for{' '}
 						<a
-							href="https://go.scottylabs.org/nova-cmueats"
+							href="https://go.scottylabs.org/tartanhacks-cmueats"
 							style={{ color: 'white' }}
 						>
-							<strong>Nova</strong>
+							<strong>TartanHacks</strong>
 						</a>
-						, ScottyLabs&apos; new GenAI Hackathon, by November 9th!
-						🖥️
+						, Pittsburgh&apos;s LARGEST hackathon! 🖥️
 					</div>
 					<div className="MainContent">
 						<Routes>
