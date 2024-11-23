@@ -102,7 +102,7 @@ export function getTimeString(time: ITimeSlotTime) {
 }
 
 
-/**ME-(GO BACK)
+/**ME
  * Converts an ITimeSlotTime to a human-readable string (12-hour time)
  * @param time
  * @returns HH:MM (AM/PM)
@@ -111,7 +111,7 @@ export function getTimeSlotString(time: ITimeSlot) {
 	assert(isTimeSlot(time));
 	const start=getTimeString(time.start);
 	const end=getTimeString(time.end);
-	return `${start}-${end}`;
+	return `${start} - ${end}`;
 }
 
 export function getTimeSlotsString(times: ITimeSlots) {
@@ -134,7 +134,7 @@ export function getTimeSlotsString(times: ITimeSlots) {
 		if (concatted_string.length==0){
 			concatted_string="CLOSED";
 		}else{
-			concatted_string.substring(0, concatted_string.length-1);
+			concatted_string=concatted_string.substring(0, concatted_string.length-1);
 		}
 		listByDate.push(concatted_string);
 	}

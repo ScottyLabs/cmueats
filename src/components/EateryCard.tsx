@@ -88,6 +88,11 @@ const DescriptionText = styled(Typography)({
 	color: 'white',
 });
 
+const LongDescriptionText = styled(Typography)({
+	color: 'white',
+	marginBottom: '5px',
+});
+
 const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
 	color: changesSoon
 		? colors[LocationState.CLOSES_SOON]
@@ -169,12 +174,14 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 		name,
 		location: locationText,
 		url,
+		description,
 		shortDescription,
 		menu,
 		todaysSpecials = [],
 		statusMsg,
 		todaysSoups = [],
-		timesListDisplay,//me
+		timesListDisplay,
+		// acceptsOnlineOrders,
 	} = location;
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
 	const isOpen = !location.closedLongTerm && location.isOpen;
@@ -306,6 +313,9 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 						<LocationText variant="subtitle2">
 							{locationText}
 						</LocationText>
+						<LongDescriptionText variant="subtitle2">
+							{description}
+						</LongDescriptionText>
 						<LocationText variant="subtitle2">
 							{"Sunday: ".concat(timesListDisplay[0])}
 						</LocationText>
@@ -327,6 +337,21 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 						<LocationText variant="subtitle2">
 							{"Saturday: ".concat(timesListDisplay[6])}
 						</LocationText>
+						{/* {({acceptsOnlineOrders} ? (
+								<OpenText
+									variant="subtitle1"
+									changesSoon={acceptsOnlineOrders}
+								>
+									{"Accepts Online Orders"}
+								</OpenText>
+							) : (
+								<ClosedText
+									variant="subtitle1"
+									changesSoon={acceptsOnlineOrders}
+								>
+									{"Does Not Accept Online Orders"}
+								</ClosedText>
+							))} */}
 					</CardContent>
 					{todaysSpecials.concat(todaysSoups).map((special) => (
 						<SpecialsContent style={{}} key={special.title}>
