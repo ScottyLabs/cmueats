@@ -26,7 +26,7 @@
     "mapkit-react": "^1.14.1",
     "million": "latest",
     "netlify-plugin-mapkitjs-token": "^1.2.0",
-    "posthog-js": "^1.181.0",
+    "posthog-js": "^1.188.0",
     "prettier-eslint": "^16.3.0",
     "prettier-eslint-cli": "^8.0.1",
     "react": "^18.2.0",
@@ -66,7 +66,6 @@
     ]
   },
   "devDependencies": {
-    "bun-types": "^1.0.35",
     "@happy-dom/global-registrator": "^14.3.1",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
@@ -76,6 +75,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "@vitest/coverage-v8": "^1.4.0",
+    "bun-types": "^1.0.35",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
