@@ -124,6 +124,19 @@ const RatingFormPage = () => {
           onChange={(e) => setCleanlinessExperience(e.target.value)}
         />
 
+{/* Recommend Checkbox */}
+<FormControlLabel
+          control={
+            <Checkbox
+              checked={wouldRecommend}
+              onChange={(e) => setWouldRecommend(e.target.checked)}
+            />
+          }
+          label="Would you recommend this restaurant to a friend?"
+        />
+      </form>
+    </div>
+  );
+};
 
-
-
+export default RatingFormPage;
