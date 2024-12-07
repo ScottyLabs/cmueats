@@ -146,6 +146,19 @@ const RatingFormPage = () => {
           onChange={(e) => setAdditionalComments(e.target.value)}
         />
 
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          fullWidth
+          style={{
+            backgroundColor: '#007bff',
+            color: 'white',
+            padding: '10px 20px',
+            marginTop: '20px',
+          }}
+        >
+          Submit Feedback
+        </Button>
       </form>
     </div>
   );
