@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
+import RatingFormPage from './pages/RatingFormPage'; // Import the new page
 import { queryLocations, getLocationStatus } from './util/queryLocations';
 import './App.css';
 import {
@@ -14,13 +15,13 @@ import {
 } from './types/locationTypes';
 
 const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
-// const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
-// const CMU_EATS_API_URL = 'http://localhost:5010/locations'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
+
 function App() {
 	// Load locations
 	const [locations, setLocations] = useState<IReadOnlyLocation[]>();
 	const [extendedLocationData, setExtendedLocationData] =
 		useState<IReadOnlyExtendedLocation[]>();
+
 	useEffect(() => {
 		queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
 			setLocations(parsedLocations);
@@ -31,8 +32,6 @@ function App() {
 		const intervalId = setInterval(
 			(function updateExtendedLocationData() {
 				if (locations !== undefined) {
-					// Remove .setZone('America/New_York') and change time in computer settings when testing
-					// Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
 					const now = DateTime.now().setZone('America/New_York');
 					setExtendedLocationData(
 						locations.map((location) => ({
@@ -41,8 +40,8 @@ function App() {
 						})),
 					);
 				}
-				return updateExtendedLocationData; // returns itself here
-			})(), // self-invoking function
+				return updateExtendedLocationData;
+			})(),
 			1 * 1000, // updates every second
 		);
 		return () => clearInterval(intervalId);
@@ -92,6 +91,10 @@ function App() {
 									<MapPage locations={extendedLocationData} />
 								}
 							/>
+							<Route
+								path="/rate-restaurant"
+								element={<RatingFormPage />} // Add the new route
+							/>
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
 					</div>
@@ -103,3 +106,4 @@ function App() {
 }
 
 export default App;
+
