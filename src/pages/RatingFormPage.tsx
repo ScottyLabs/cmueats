@@ -99,3 +99,31 @@ const RatingFormPage = () => {
           value={foodExperience}
           onChange={(e) => setFoodExperience(e.target.value)}
         />
+
+        {/* Service Experience */}
+        <TextField
+          variant="outlined"
+          label="Describe Your Service Experience"
+          multiline
+          rows={3}
+          fullWidth
+          required
+          value={serviceExperience}
+          onChange={(e) => setServiceExperience(e.target.value)}
+        />
+
+        {/* Cleanliness Experience */}
+        <TextField
+          variant="outlined"
+          label="Describe the Cleanliness of the Restaurant"
+          multiline
+          rows={3}
+          fullWidth
+          required
+          value={cleanlinessExperience}
+          onChange={(e) => setCleanlinessExperience(e.target.value)}
+        />
+
+
+
+
