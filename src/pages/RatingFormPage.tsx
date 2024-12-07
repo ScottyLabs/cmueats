@@ -134,6 +134,18 @@ const RatingFormPage = () => {
           }
           label="Would you recommend this restaurant to a friend?"
         />
+
+        {/* Additional Comments */}
+        <TextField
+          label="Additional Comments or Suggestions"
+          multiline
+          rows={4}
+          fullWidth
+          variant="outlined"
+          value={additionalComments}
+          onChange={(e) => setAdditionalComments(e.target.value)}
+        />
+
       </form>
     </div>
   );
