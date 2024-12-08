@@ -1,7 +1,26 @@
-import { Typography, Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import { useState } from 'react';
+import { Typography, Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
 
 const RatingFormPage = () => {
+    // Defined textFieldStyles 
+    const textFieldStyles = {
+      backgroundColor: '#2D2F32',  // Adjust the background color if needed
+      '& label.Mui-focused': {
+        color: 'green',  // Changes the label color to green when focused
+      },
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: 'grey',  // Default border color
+        },
+        '&:hover fieldset': {
+          borderColor: 'green',  // Border color changes to green on hover
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: 'green',  // Border color when the input is focused
+        },
+      }
+    };
+  
   const [userEmail, setUserEmail] = useState('');
   const [selectedRestaurant, setSelectedRestaurant] = useState('');
   const [wouldRecommend, setWouldRecommend] = useState(false);
@@ -13,21 +32,14 @@ const RatingFormPage = () => {
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', color: 'white' }}>
       <header style={{ marginBottom: '20px' }}>
-        <Typography
-          variant="h2"
-          style={{
-            color: 'white',
-            fontFamily: '"Zilla Slab", "Inter", sans-serif',
-            fontWeight: 800,
-            fontSize: '2.5em',
-          }}
-        >
+        <Typography variant="h2" style={{ color: 'white', fontWeight: 800, fontSize: '2.5em' }}>
           Leave a Review
         </Typography>
       </header>
       <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Email Input */}
         <TextField
+          sx={textFieldStyles}
           variant="outlined"
           label="Your Email"
           type="email"
@@ -39,6 +51,7 @@ const RatingFormPage = () => {
 
         {/* Restaurant Selection */}
         <TextField
+          sx={textFieldStyles}
           select
           label="Select Restaurant"
           SelectProps={{ native: true }}
@@ -90,6 +103,7 @@ const RatingFormPage = () => {
 
         {/* Food Experience */}
         <TextField
+          sx={textFieldStyles}
           variant="outlined"
           label="Describe Your Food Experience"
           multiline
@@ -102,6 +116,7 @@ const RatingFormPage = () => {
 
         {/* Service Experience */}
         <TextField
+          sx={textFieldStyles}
           variant="outlined"
           label="Describe Your Service Experience"
           multiline
@@ -114,6 +129,7 @@ const RatingFormPage = () => {
 
         {/* Cleanliness Experience */}
         <TextField
+          sx={textFieldStyles}
           variant="outlined"
           label="Describe the Cleanliness of the Restaurant"
           multiline
@@ -128,6 +144,7 @@ const RatingFormPage = () => {
 <FormControlLabel
           control={
             <Checkbox
+              sx={textFieldStyles}
               checked={wouldRecommend}
               onChange={(e) => setWouldRecommend(e.target.checked)}
             />
@@ -137,6 +154,7 @@ const RatingFormPage = () => {
 
         {/* Additional Comments */}
         <TextField
+          sx={textFieldStyles}
           label="Additional Comments or Suggestions"
           multiline
           rows={4}
@@ -151,7 +169,7 @@ const RatingFormPage = () => {
           type="submit"
           fullWidth
           style={{
-            backgroundColor: '#007bff',
+            backgroundColor: 'green',
             color: 'white',
             padding: '10px 20px',
             marginTop: '20px',
