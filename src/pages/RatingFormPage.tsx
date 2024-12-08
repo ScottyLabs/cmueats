@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Typography, Button, RadioGroup, FormControlLabel, Radio, TextField } from '@mui/material';
 
 const RatingPage = () => {
@@ -33,6 +33,40 @@ const RatingPage = () => {
     },
   };
 
+  // Define the handleSubmit function
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const ratings = {
+      userEmail,
+      foodRating,
+      locationRating,
+      cleanlinessRating,
+      serviceRating,
+      valueForMoneyRating,
+      menuVarietyRating,
+      waitTimeRating,
+      staffRating,
+      overallSatisfactionRating,
+      restaurantId: selectedRestaurant, // assuming each restaurant has a unique ID
+    };
+
+    try {
+      const response = await fetch('/api/ratings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ratings),
+      });
+
+      if (response.ok) {
+        console.log("Rating submitted successfully");
+      } else {
+        console.error("Failed to submit rating");
+      }
+    } catch (error) {
+      console.error("Error submitting rating: ", error);
+    }
+  };
+
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', color: 'white' }}>
       <header style={{ marginBottom: '20px' }}>
@@ -44,7 +78,7 @@ const RatingPage = () => {
         </Typography>
       </header>
 
-      <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Email Input */}
         <TextField
           sx={textFieldStyles}
@@ -56,18 +90,18 @@ const RatingPage = () => {
           value={userEmail}
           onChange={(e) => setUserEmail(e.target.value)}
         />
-
-        {/* Restaurant Selection */}
-        <TextField
-          sx={textFieldStyles}
-          select
-          SelectProps={{ native: true }}
-          variant="outlined"
-          fullWidth
-          required
-          value={selectedRestaurant}
-          onChange={(e) => setSelectedRestaurant(e.target.value)}
-        >
+    
+          {/* Restaurant Selection */}
+          <TextField
+            sx={textFieldStyles}
+            select
+            SelectProps={{ native: true }}
+            variant="outlined"
+            fullWidth
+            required
+            value={selectedRestaurant}
+            onChange={(e) => setSelectedRestaurant(e.target.value)}
+          >
           <option value="">-- Select a Restaurant --</option>
           <option value="stephanies@example.com">Stephanie's - Market c</option>
           <option value="scottys@example.com">Scotty's Market By Salem's</option>
