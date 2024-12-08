@@ -1,19 +1,44 @@
-const mongoose = require('mongoose');
+// services/ratingModel.ts
 
-const ratingSchema = new mongoose.Schema({
-  restaurantId: { type: String, required: true },
-  userEmail: { type: String, required: true },
-  foodRating: Number,
-  locationRating: Number,
-  cleanlinessRating: Number,
-  serviceRating: Number,
-  valueForMoneyRating: Number,
-  menuVarietyRating: Number,
-  waitTimeRating: Number,
-  staffRating: Number,
-  overallSatisfactionRating: Number,
-});
-
-const Rating = mongoose.model('Rating', ratingSchema);
-
-module.exports = Rating;
+interface Rating {
+    userEmail: string;
+    foodRating: number;
+    locationRating: number;
+    cleanlinessRating: number;
+    serviceRating: number;
+    valueForMoneyRating: number;
+    menuVarietyRating: number;
+    waitTimeRating: number;
+    staffRating: number;
+    overallSatisfactionRating: number;
+    restaurantId: string;
+  }
+  
+  const ratingsDb: Rating[] = [];
+  
+  export const RatingModel = {
+    async create(ratingData: Rating): Promise<Rating> {
+      ratingsDb.push(ratingData);
+      return ratingData;
+    },
+  
+    async getRatingsByRestaurant(restaurantId: string): Promise<Rating[]> {
+      return ratingsDb.filter(rating => rating.restaurantId === restaurantId);
+    },
+  
+    async getAverageRating(restaurantId: string): Promise<number> {
+      const ratings = await this.getRatingsByRestaurant(restaurantId);
+      const totalRatings = ratings.length;
+  
+      if (totalRatings === 0) return 0;
+  
+      const totalScore = ratings.reduce((acc, rating) => {
+        return acc + rating.foodRating + rating.locationRating + rating.cleanlinessRating +
+               rating.serviceRating + rating.valueForMoneyRating + rating.menuVarietyRating +
+               rating.waitTimeRating + rating.staffRating + rating.overallSatisfactionRating;
+      }, 0);
+  
+      return totalScore / (totalRatings * 9); // Divide by 9 for each rating type
+    }
+  };
+  
