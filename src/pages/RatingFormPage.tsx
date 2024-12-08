@@ -22,7 +22,7 @@ const RatingPage = () => {
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        borderColor: 'grey',
+        borderColor: 'white',
       },
       '&:hover fieldset': {
         borderColor: 'green',
@@ -61,7 +61,6 @@ const RatingPage = () => {
         <TextField
           sx={textFieldStyles}
           select
-          label="Select Restaurant"
           SelectProps={{ native: true }}
           variant="outlined"
           fullWidth
