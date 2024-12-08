@@ -3,7 +3,7 @@
     margin: 0 auto;
     padding: 20px;
     color: white; /* Maintaining consistency with the inline style */
-    background-color: #1e1e1e; /* Background for the form page */
+    background-color: #2D2F32 /* Background for the form page */
 }
 
 .RatingFormPage header {
@@ -19,6 +19,7 @@
 .TextField {
     background-color: #2D2F32; /* Background color for input fields */
     border-color: grey; /* Default border color */
+    color: white; /* Setting text color to white for better visibility */
 }
 
 .TextField:hover {

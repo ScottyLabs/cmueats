@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Typography, Button, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import './RatingFormPage.css';
 
 const RatingFormPage = () => {
     // Defined textFieldStyles 
     const textFieldStyles = {
-      backgroundColor: '#2D2F32',  // Adjust the background color if needed
+      backgroundColor: '#2D2F32', // Background color of the input fields
+      '& label': {
+        color: 'white', // Set default label color to white
+      },
       '& label.Mui-focused': {
         color: 'green',  // Changes the label color to green when focused
       },
@@ -18,6 +22,9 @@ const RatingFormPage = () => {
         '&.Mui-focused fieldset': {
           borderColor: 'green',  // Border color when the input is focused
         },
+        '& .MuiInputBase-input': {
+          color: 'white',  // Changes the text color inside the input
+        }
       }
     };
   
@@ -30,12 +37,12 @@ const RatingFormPage = () => {
   const [additionalComments, setAdditionalComments] = useState('');
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', color: 'white' }}>
-      <header style={{ marginBottom: '20px' }}>
-        <Typography variant="h2" style={{ color: 'white', fontWeight: 800, fontSize: '2.5em' }}>
+    <div className="RatingFormPage">
+      <header>
+        <Typography variant="h2" style={{ fontWeight: 800, fontSize: '2.5em' }}>
           Leave a Review
-        </Typography>
-      </header>
+          </Typography>
+          </header>
       <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Email Input */}
         <TextField
@@ -60,8 +67,9 @@ const RatingFormPage = () => {
           required
           value={selectedRestaurant}
           onChange={(e) => setSelectedRestaurant(e.target.value)}
+          placeholder="Select a Restaurant" 
         >
-    <option value="">-- Select a Restaurant --</option>
+      <option value="" disabled>Select Restaurant</option>
   <option value="stephanies@example.com">Stephanie's - Market c</option>
   <option value="scottys@example.com">Scotty's Market By Salem's</option>
   <option value="aubonpain@example.com">Au Bon Pain At Skibo Café</option>
