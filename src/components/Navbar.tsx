@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import './Navbar.css';
+import StarOutlineIcon from '@mui/icons-material/StarOutline'; // Import the empty star icon
 
 function Navbar() {
     return (
@@ -26,6 +27,13 @@ function Navbar() {
                 </NavLink>
                 <NavLink
                     to="/rate-restaurant"
+                    className={({ isActive }) => isActive ? "nav-link Navbar-active" : "nav-link"}>
+                    {/* Empty Star Icon and text for Rate a Restaurant */}
+                    <StarOutlineIcon style={{ marginRight: '8px', fontSize: '1.2em', color: 'white' }} /> {/* Empty Star Icon */}
+                    Rate a Restaurant
+                </NavLink>
+                <NavLink
+                    to="/review-restaurant"
                     className={({ isActive }) => isActive ? "nav-link Navbar-active" : "nav-link"}>
                     {/* SVG and text for Leave a Review */}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
