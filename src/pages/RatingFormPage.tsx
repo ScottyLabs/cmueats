@@ -42,6 +42,9 @@ const RatingFormPage = () => {
         <Typography variant="h2" style={{ fontWeight: 800, fontSize: '2.5em' }}>
           Leave a Review
           </Typography>
+          <Typography variant="body1" style={{ marginTop: '10px', fontSize: '1.1em', color: '#cccccc' }}>
+            Got a review? Submit your feedback and it'll be sent right to the restaurant!
+            </Typography>
           </header>
       <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Email Input */}
