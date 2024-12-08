@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import {
 	Card,
 	CardHeader,
@@ -164,6 +165,7 @@ const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
+
 function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 	const {
 		name,
@@ -177,8 +179,32 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 	} = location;
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
 	const isOpen = !location.closedLongTerm && location.isOpen;
-
 	const [modalOpen, setModalOpen] = useState(false);
+
+
+	const [averageRatings, setAverageRatings] = useState<{
+		overall: number;
+	}>({ overall: 0 }); // Default values
+
+	useEffect(() => {
+		const fetchAverageRating = async () => {
+			try {
+				const response = await fetch(`/api/ratings/average/${name}`);
+				if (response.ok) {
+					const data = await response.json();
+					setAverageRatings(data.averageRating || { overall: 0 });
+				} else {
+					console.warn(`No ratings available for ${name}`);
+				}
+			} catch (error) {
+				console.error('Error fetching average ratings:', error);
+			}
+		};
+
+		fetchAverageRating();
+	}, [name]);
+
+	  
 
 	return (
 		<>
@@ -227,6 +253,9 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 							{locationText}
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
+						<Typography variant="body1" style={{ color: '#FFD700' }}>
+							Average Rating: {averageRatings.overall ? averageRatings.overall.toFixed(1) : 'Not Rated'}
+							</Typography>
 					</CardContent>
 					<CardActions sx={{ marginTop: 'auto' }}>
 						{menu && (

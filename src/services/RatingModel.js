@@ -1,7 +1,6 @@
-// services/ratingModel.ts
-
-interface Rating {
+type Rating = {
     userEmail: string;
+    restaurantName: string; // Use name instead of ID
     foodRating: number;
     locationRating: number;
     cleanlinessRating: number;
@@ -11,34 +10,38 @@ interface Rating {
     waitTimeRating: number;
     staffRating: number;
     overallSatisfactionRating: number;
-    restaurantId: string;
-  }
+  };
   
-  const ratingsDb: Rating[] = [];
+  const ratingsDb: Rating[] = []; // Simulated in-memory database
   
   export const RatingModel = {
-    async create(ratingData: Rating): Promise<Rating> {
+    create: async (ratingData: Rating) => {
       ratingsDb.push(ratingData);
       return ratingData;
     },
   
-    async getRatingsByRestaurant(restaurantId: string): Promise<Rating[]> {
-      return ratingsDb.filter(rating => rating.restaurantId === restaurantId);
+    getRatingsByRestaurant: async (restaurantName: string) => {
+      return ratingsDb.filter((rating) => rating.restaurantName === restaurantName);
     },
   
-    async getAverageRating(restaurantId: string): Promise<number> {
-      const ratings = await this.getRatingsByRestaurant(restaurantId);
-      const totalRatings = ratings.length;
+    getAverageRating: async (restaurantName: string) => {
+      const restaurantRatings = ratingsDb.filter((rating) => rating.restaurantName === restaurantName);
+      if (restaurantRatings.length === 0) return null;
   
-      if (totalRatings === 0) return 0;
+      const totalRatings = restaurantRatings.length;
+      const averageRating = {
+        foodRating: restaurantRatings.reduce((sum, rating) => sum + rating.foodRating, 0) / totalRatings,
+        locationRating: restaurantRatings.reduce((sum, rating) => sum + rating.locationRating, 0) / totalRatings,
+        cleanlinessRating: restaurantRatings.reduce((sum, rating) => sum + rating.cleanlinessRating, 0) / totalRatings,
+        serviceRating: restaurantRatings.reduce((sum, rating) => sum + rating.serviceRating, 0) / totalRatings,
+        valueForMoneyRating: restaurantRatings.reduce((sum, rating) => sum + rating.valueForMoneyRating, 0) / totalRatings,
+        menuVarietyRating: restaurantRatings.reduce((sum, rating) => sum + rating.menuVarietyRating, 0) / totalRatings,
+        waitTimeRating: restaurantRatings.reduce((sum, rating) => sum + rating.waitTimeRating, 0) / totalRatings,
+        staffRating: restaurantRatings.reduce((sum, rating) => sum + rating.staffRating, 0) / totalRatings,
+        overallSatisfactionRating: restaurantRatings.reduce((sum, rating) => sum + rating.overallSatisfactionRating, 0) / totalRatings,
+      };
   
-      const totalScore = ratings.reduce((acc, rating) => {
-        return acc + rating.foodRating + rating.locationRating + rating.cleanlinessRating +
-               rating.serviceRating + rating.valueForMoneyRating + rating.menuVarietyRating +
-               rating.waitTimeRating + rating.staffRating + rating.overallSatisfactionRating;
-      }, 0);
-  
-      return totalScore / (totalRatings * 9); // Divide by 9 for each rating type
-    }
+      return averageRating;
+    },
   };
   

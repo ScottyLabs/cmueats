@@ -38,6 +38,7 @@ const RatingPage = () => {
     event.preventDefault();
     const ratings = {
       userEmail,
+      restaurantName: selectedRestaurant, // Use name instead of ID
       foodRating,
       locationRating,
       cleanlinessRating,
@@ -47,16 +48,15 @@ const RatingPage = () => {
       waitTimeRating,
       staffRating,
       overallSatisfactionRating,
-      restaurantId: selectedRestaurant, // assuming each restaurant has a unique ID
     };
-
+  
     try {
       const response = await fetch('/api/ratings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ratings),
       });
-
+  
       if (response.ok) {
         console.log("Rating submitted successfully");
       } else {
