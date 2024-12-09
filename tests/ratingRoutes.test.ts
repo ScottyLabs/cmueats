@@ -30,4 +30,14 @@ describe('Rating Routes Tests', () => {
     expect(response.body.averageRating).toBeGreaterThanOrEqual(1);
     expect(response.body.averageRating).toBeLessThanOrEqual(5);
   });
+  it('should handle server errors gracefully', async () => {
+    // Simulate a database error
+    vi.spyOn(RatingModel, 'getRatingsByRestaurant').mockImplementation(() => {
+      throw new Error('Database error');
+    });
+  
+    const response = await request(app).get('/api/ratings/Test Restaurant');
+    expect(response.status).toBe(500);
+    expect(response.body).toHaveProperty('error', 'Failed to fetch ratings');
+  });  
 });
