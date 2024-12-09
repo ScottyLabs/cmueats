@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
-import RatingFormPage from './pages/RatingFormPage'; // Import the new page
+import ReviewFormPage from './pages/ReviewFormPage'; // Import the new page
 import { queryLocations, getLocationStatus } from './util/queryLocations';
 import './App.css';
 import {
@@ -93,7 +93,7 @@ function App() {
 							/>
 							<Route
 								path="/rate-restaurant"
-								element={<RatingFormPage />} // Add the new route
+								element={<ReviewFormPage />} // Add the new route
 							/>
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
