@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Typography, Button, RadioGroup, FormControlLabel, Radio, TextField } from '@mui/material';
+import { Typography, Button, RadioGroup, FormControlLabel, Radio, TextField, Snackbar } from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
+
 
 const RatingPage = () => {
   const [userEmail, setUserEmail] = useState(''); // Email state
@@ -13,6 +15,8 @@ const RatingPage = () => {
   const [staffRating, setStaffRating] = useState(3); // Staff rating state
   const [overallSatisfactionRating, setOverallSatisfactionRating] = useState(3); // Overall satisfaction rating state
   const [selectedRestaurant, setSelectedRestaurant] = useState(''); // Restaurant selection state
+  const [success, setSuccess] = useState(false); // Success notification state
+
 
   // Define textFieldStyles for styling
   const textFieldStyles = {
@@ -56,16 +60,18 @@ const RatingPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ratings),
       });
-  
+
       if (response.ok) {
-        console.log("Rating submitted successfully");
+        setSuccess(true); // Show success notification
       } else {
-        console.error("Failed to submit rating");
+        console.error('Failed to submit rating');
       }
     } catch (error) {
-      console.error("Error submitting rating: ", error);
+      console.error('Error submitting rating:', error);
     }
   };
+
+  const handleSnackbarClose = () => setSuccess(false);
 
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', color: 'white' }}>
@@ -355,8 +361,21 @@ const RatingPage = () => {
           Submit Rating
         </Button>
       </form>
+
+      {/* Snackbar Notification */}
+      <Snackbar
+        open={success}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="success" elevation={6} variant="filled">
+          Successfully submitted your review!
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };
+
 
 export default RatingPage;
