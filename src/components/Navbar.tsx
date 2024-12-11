@@ -6,8 +6,13 @@ function Navbar() {
     return (
         <nav className="Navbar">
             <div className="Navbar-links">
+<<<<<<< HEAD
                 <NavLink
                     to="/"
+=======
+                <NavLink 
+                    to="/" 
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
                     className={({ isActive }) => isActive ? "nav-link Navbar-active" : "nav-link"}
                     end>
                     {/* SVG and text for Locations */}
@@ -16,8 +21,13 @@ function Navbar() {
                     </svg>
                     Locations
                 </NavLink>
+<<<<<<< HEAD
                 <NavLink
                     to="/map"
+=======
+                <NavLink 
+                    to="/map" 
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
                     className={({ isActive }) => isActive ? "nav-link Navbar-active" : "nav-link"}>
                     {/* SVG and text for Map */}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -25,6 +35,7 @@ function Navbar() {
                     </svg>
                     Map
                 </NavLink>
+<<<<<<< HEAD
                 <NavLink
                     to="/rate-restaurant"
                     className={({ isActive }) => isActive ? "nav-link Navbar-active" : "nav-link"}>
@@ -34,6 +45,10 @@ function Navbar() {
                 </NavLink>
                 <NavLink
                     to="/review-restaurant"
+=======
+                <NavLink 
+                    to="/rate-restaurant" 
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
                     className={({ isActive }) => isActive ? "nav-link Navbar-active" : "nav-link"}>
                     {/* SVG and text for Leave a Review */}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">

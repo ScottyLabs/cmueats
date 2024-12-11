@@ -1,0 +1,46 @@
+.RatingFormPage {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    color: white; /* Maintaining consistency with the inline style */
+    background-color: #2D2F32 /* Background for the form page */
+}
+
+.RatingFormPage header {
+    margin-bottom: 20px;
+}
+
+.RatingFormPage form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.TextField {
+    background-color: #2D2F32; /* Background color for input fields */
+    border-color: grey; /* Default border color */
+    color: white; /* Setting text color to white for better visibility */
+}
+
+.TextField:hover {
+    border-color: green; /* Border color on hover */
+}
+
+.TextField.Mui-focused {
+    border-color: green; /* Border color when input is focused */
+}
+
+.TextField label.Mui-focused {
+    color: green; /* Color of the label when input is focused */
+}
+
+.Checkbox {
+    color: green; /* Color for the checkbox when active/focused */
+}
+
+.Button {
+    background-color: green; /* Background color for the submit button */
+    color: white; /* Text color for the submit button */
+    padding: 10px 20px;
+    margin-top: 20px;
+}

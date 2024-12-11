@@ -1,5 +1,9 @@
 .Navbar {
+<<<<<<< HEAD
 	height: var(--navbar-height);
+=======
+    height: var(--navbar-height);
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
     background-color: #1e1e1e;
     padding: 14px;
     box-sizing: border-box;
@@ -7,9 +11,15 @@
 }
 
 .Navbar-links {
+<<<<<<< HEAD
 	position: relative;
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Adjusted for 4 links now */
+=======
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Adjusted for 3 links now */
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
     grid-auto-flow: column;
     height: 40px;
     margin: 0 auto;
@@ -17,7 +27,11 @@
 }
 
 .Navbar-links a {
+<<<<<<< HEAD
 	position: relative;
+=======
+    position: relative;
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
     z-index: 1;
     display: flex;
     align-items: center;
@@ -30,7 +44,11 @@
 }
 
 .Navbar-links svg {
+<<<<<<< HEAD
 	width: 24px;
+=======
+    width: 24px;
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
     height: 24px;
     margin-right: 0.4em;
 }
@@ -41,17 +59,12 @@
     border-radius: 999px;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 0 5px #ee6f52, 0 0 10px #ee6f52, 0 0 15px #ee6f52; /* Glowing effect */
+<<<<<<< HEAD
     width: calc(350% / 4); /* Adapt width to the number of links */
+=======
+    width: calc(215% / 3); /* Adapt width to the number of links */
+>>>>>>> 4c404a598afa7d19b57b8b0b504e4b2ef9b40649
     height: 100%;
 }
 
-.Navbar-active_map {
-	transform: translateX(100%);
-}
-
-.Navbar-active_glow {
-	box-shadow:
-		0 0 5px #ee6f52,
-		0 0 10px #ee6f52,
-		0 0 15px #ee6f52;
-}
+/* Active and hover styling managed via NavLink in Navbar.tsx */
