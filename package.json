@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "which tsc  && vite build",
+    "build": "pwd && which tsc  && vite build",
     "test": "bun test",
     "eject": "vite eject",
     "lint": "bunx eslint src",
