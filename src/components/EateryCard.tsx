@@ -88,6 +88,11 @@ const DescriptionText = styled(Typography)({
 	color: 'white',
 });
 
+const LongDescriptionText = styled(Typography)({
+	color: 'white',
+	marginBottom: '5px',
+});
+
 const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
 	color: changesSoon
 		? colors[LocationState.CLOSES_SOON]
@@ -169,11 +174,14 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 		name,
 		location: locationText,
 		url,
+		description,
 		shortDescription,
 		menu,
 		todaysSpecials = [],
 		statusMsg,
 		todaysSoups = [],
+		timesListDisplay,
+		// acceptsOnlineOrders,
 	} = location;
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
 	const isOpen = !location.closedLongTerm && location.isOpen;
@@ -238,14 +246,13 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 								Menu
 							</ActionButton>
 						)}
-						{(todaysSpecials.length !== 0 ||
-							todaysSoups.length !== 0) && (
+						{(true) && (//todaysSpecials.length !== 0 || todaysSoups.length !== 0 GO BACK
 							<ActionButton
 								onClick={() => {
 									setModalOpen(true);
 								}}
 							>
-								Specials
+								Specials & Times
 							</ActionButton>
 						)}
 					</CardActions>
@@ -306,6 +313,45 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 						<LocationText variant="subtitle2">
 							{locationText}
 						</LocationText>
+						<LongDescriptionText variant="subtitle2">
+							{description}
+						</LongDescriptionText>
+						<LocationText variant="subtitle2">
+							{"Sunday: ".concat(timesListDisplay[0])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Monday: ".concat(timesListDisplay[1])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Tuesday: ".concat(timesListDisplay[2])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Wednesday: ".concat(timesListDisplay[3])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Thursday: ".concat(timesListDisplay[4])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Friday: ".concat(timesListDisplay[5])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Saturday: ".concat(timesListDisplay[6])}
+						</LocationText>
+						{/* {({acceptsOnlineOrders} ? (
+								<OpenText
+									variant="subtitle1"
+									changesSoon={acceptsOnlineOrders}
+								>
+									{"Accepts Online Orders"}
+								</OpenText>
+							) : (
+								<ClosedText
+									variant="subtitle1"
+									changesSoon={acceptsOnlineOrders}
+								>
+									{"Does Not Accept Online Orders"}
+								</ClosedText>
+							))} */}
 					</CardContent>
 					{todaysSpecials.concat(todaysSoups).map((special) => (
 						<SpecialsContent style={{}} key={special.title}>
