@@ -51,6 +51,8 @@ const FooterText = styled(Typography)({
 const StyledAlert = styled(Alert)({
 	backgroundColor: '#23272a',
 	color: '#ffffff',
+	display: 'flex',
+	alignItems: 'center',
 });
 
 function getPittsburghTime() {
@@ -111,7 +113,7 @@ function ListPage({
 		);
 	}, [searchQuery, fuse, locations]);
 
-	// const [showAlert, setShowAlert] = useState(true);
+	const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
@@ -141,11 +143,12 @@ function ListPage({
 
 	return (
 		<div className="ListPage">
-			{/*  showAlert &&
+			{ showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description]
-        Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
+        {/* 🚧 [Issue Description]
+        Please remain patient while we work on a fix. Thank you. 🚧 */}
+		We made changes to make opening/closing statuses more reliable. Please contact us (see the footer) if issues arise.
+      </StyledAlert>  }
 
 			{showOfflineAlert && (
 				<StyledAlert
