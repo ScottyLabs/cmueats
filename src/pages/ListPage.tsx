@@ -143,12 +143,19 @@ function ListPage({
 
 	return (
 		<div className="ListPage">
-			{ showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        {/* 🚧 [Issue Description]
+			{showAlert && (
+				<StyledAlert
+					severity="info"
+					className="announcement"
+					onClose={() => setShowAlert(false)}
+				>
+					{/* 🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧 */}
-		We made changes to make opening/closing statuses more reliable. Please contact us (see the footer) if issues arise.
-      </StyledAlert>  }
+					We made changes to make opening/closing statuses more
+					reliable. Please contact us (see the footer) if issues
+					arise.
+				</StyledAlert>
+			)}
 
 			{showOfflineAlert && (
 				<StyledAlert
