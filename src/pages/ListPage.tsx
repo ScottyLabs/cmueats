@@ -151,8 +151,9 @@ function ListPage({
 				>
 					{/* 🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧 */}
-					Last semester, CMUEats was unreliable for opening and closing statuses. We made changes to hopefully make them more
-					reliable. Please contact us (see the footer) if issues
+					Last semester, CMUEats was unreliable for opening and
+					closing statuses. We made changes to hopefully make them
+					more reliable. Please contact us (see the footer) if issues
 					persist.
 				</StyledAlert>
 			)}
