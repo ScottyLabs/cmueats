@@ -148,7 +148,7 @@ export async function queryLocations(
 				console.error('original obj', error._original);
 				// eslint-disable-next-line no-alert
 				alert(
-					`${location.name} has invalid corresponding data! Ignoring location and continuing validation. Please notify the CMUEats team.`,
+					`${location.name} has invalid data! Ignoring location and continuing validation. Please notify the CMUEats team.`,
 				);
 			}
 			return error === undefined;
