@@ -8,7 +8,10 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
-import { IReadOnlyExtendedLocation, LocationState } from '../types/locationTypes';
+import {
+	IReadOnlyExtendedLocation,
+	LocationState,
+} from '../types/locationTypes';
 
 const token = process.env.VITE_MAPKITJS_TOKEN;
 
