@@ -1,5 +1,7 @@
 /** Note that everything being exported here is readonly */
 
+import { boolean } from 'joi';
+
 export type RecursiveReadonly<T> = T extends object
 	? {
 			readonly [P in keyof T]: RecursiveReadonly<T[P]>;
@@ -88,11 +90,13 @@ interface ILocation extends IAPILocation {
 }
 
 // 'Closed' here refers to closed for the near future (no timeslots available)
+
 interface ILocationStatusBase {
 	/** No forseeable opening times after *now* */
 	closedLongTerm: boolean;
 	statusMsg: string;
 	locationState: LocationState;
+	isStarred: boolean;
 }
 interface ILocationStatusOpen extends ILocationStatusBase {
 	isOpen: boolean;

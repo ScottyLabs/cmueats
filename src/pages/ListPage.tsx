@@ -110,7 +110,6 @@ function ListPage({
 						.map((result) => result.item),
 		);
 	}, [searchQuery, fuse, locations]);
-
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
