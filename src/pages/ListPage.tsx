@@ -75,8 +75,9 @@ function ListPage({
 	// Fuzzy search options
 	const fuseOptions = {
 		// keys to perform the search on
+		ignoreLocation : true,
 		keys: ['name', 'location', 'shortDescription'],
-		threshold: 0.3,
+		threshold: 0.1,
 	};
 
 	const [fuse, setFuse] = useState<Fuse<IReadOnlyExtendedLocation> | null>(
@@ -99,7 +100,7 @@ function ListPage({
 
 	useLayoutEffect(() => {
 		if (locations === undefined || fuse === null) return;
-		const processedSearchQuery = searchQuery.trim().toLowerCase();
+		const processedSearchQuery = searchQuery.trim().toLowerCase().replace(/[^\w\s]/g, '');
 
 		// Fuzzy search. If there's no search query, it returns all locations.
 		setFilteredLocations(
@@ -290,5 +291,6 @@ function ListPage({
 		</div>
 	);
 }
+
 
 export default ListPage;
