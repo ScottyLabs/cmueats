@@ -8,7 +8,7 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
-import { IReadOnlyExtendedLocation } from '../types/locationTypes';
+import { IReadOnlyExtendedLocation, LocationState } from '../types/locationTypes';
 
 const token = process.env.VITE_MAPKITJS_TOKEN;
 
@@ -66,16 +66,23 @@ function MapPage({
 			>
 				{locations.map((location, locationIndex) => {
 					if (!location.coordinates) return undefined;
+					let markerColor = '#ff5b40';
+					if (location.closedLongTerm) {
+						markerColor = '#ff5b40';
+					} else if (
+						location.locationState === LocationState.CLOSES_SOON
+					) {
+						markerColor = '#ffd700';
+					} else if (location.isOpen) {
+						markerColor = '#69bb36';
+					}
+
 					return (
 						<Marker
 							key={location.conceptId}
 							latitude={location.coordinates.lat}
 							longitude={location.coordinates.lng}
-							color={
-								!location.closedLongTerm && location.isOpen
-									? '#69bb36'
-									: '#ff5b40'
-							}
+							color={markerColor}
 							glyphText={abbreviate(location.name)}
 							onSelect={() => {
 								setSelectedLocationIndex(locationIndex);
