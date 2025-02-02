@@ -77,23 +77,27 @@ function ListPage({
 	extraLocationData,
 	locations,
 }: {
-	extraLocationData?: IReadOnlyLocationExtraDataMap;
-	locations?: IReadOnlyLocation_PostProcessed[];
+	extraLocationData: IReadOnlyLocationExtraDataMap | undefined;
+	locations: IReadOnlyLocation_PostProcessed[] | undefined;
 }) {
 	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
-	const fuse = useMemo(() => {
-		console.log('new fuse', locations);
-		return new Fuse(locations ?? [], FUSE_OPTIONS);
-	}, [locations]); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
+	const fuse = useMemo(
+		() => new Fuse(locations ?? [], FUSE_OPTIONS),
+		[locations],
+	); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
 
 	const [searchQuery, setSearchQuery] = useState('g');
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
-	const filteredLocations = useMemo(() => {
-		return processedSearchQuery.length === 0
-			? (locations ?? [])
-			: fuse.search(processedSearchQuery).map((result) => result.item);
-	}, [fuse, searchQuery]);
+	const filteredLocations = useMemo(
+		() =>
+			processedSearchQuery.length === 0
+				? (locations ?? [])
+				: fuse
+						.search(processedSearchQuery)
+						.map((result) => result.item),
+		[fuse, searchQuery],
+	);
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);

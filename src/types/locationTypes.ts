@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 /** Note that everything being exported here is readonly */
 
 export type RecursiveReadonly<T> = T extends object
