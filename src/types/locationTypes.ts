@@ -61,7 +61,7 @@ export enum LocationState {
  * (note: if you're updating this, you should
  * update the Joi Schema in joiLocationTypes.ts as well)
  */
-interface IAPILocation {
+interface IAPILocation_PreProcessed {
 	conceptId: number;
 	name?: string;
 	shortDescription?: string;
@@ -79,46 +79,48 @@ interface IAPILocation {
 	todaysSpecials?: ISpecial[];
 	todaysSoups?: ISpecial[];
 }
-
-// All of the following are extended from the base API type
-
-// Base type
-interface ILocation extends IAPILocation {
+interface IAPILocation_PostProcessed extends IAPILocation_PreProcessed {
 	name: string; // This field is now guaranteed to be defined
 }
+// All of the following are extended from the base API type
 
+// ILocationStatus* represents the data added on to IAPILocation
 // 'Closed' here refers to closed for the near future (no timeslots available)
-interface ILocationStatusBase {
+interface ILocationExtraData_Base {
 	/** No forseeable opening times after *now* */
 	closedLongTerm: boolean;
 	statusMsg: string;
 	locationState: LocationState;
 }
-interface ILocationStatusOpen extends ILocationStatusBase {
+interface ILocationExtraDataNotPermanentlyClosed
+	extends ILocationExtraData_Base {
+	closedLongTerm: false;
 	isOpen: boolean;
 	timeUntil: number;
-	closedLongTerm: false;
 	changesSoon: boolean;
 	locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
 }
-interface ILocationStatusClosed extends ILocationStatusBase {
+interface ILocationExtraDataPermanentlyClosed extends ILocationExtraData_Base {
 	closedLongTerm: true;
 	locationState: LocationState.CLOSED_LONG_TERM;
 }
-interface IExtendedLocationOpen extends ILocation, ILocationStatusOpen {}
-interface IExtendedLocationClosed extends ILocation, ILocationStatusClosed {}
-
-type ILocationStatus = ILocationStatusOpen | ILocationStatusClosed;
-type IExtendedLocation = IExtendedLocationOpen | IExtendedLocationClosed;
+type ILocationStatus =
+	| ILocationExtraDataNotPermanentlyClosed
+	| ILocationExtraDataPermanentlyClosed;
 
 /** What we get directly from the API (single location data) */
-export type IReadOnlyAPILocation = RecursiveReadonly<IAPILocation>;
+export type IReadOnlyAPILocation_PreProcessed =
+	RecursiveReadonly<IAPILocation_PreProcessed>;
 
-/** Base data for single location */
-export type IReadOnlyLocation = RecursiveReadonly<ILocation>;
+export type IReadOnlyLocation_PostProcessed =
+	RecursiveReadonly<IAPILocation_PostProcessed>;
 
-/** Only extra status portion for location */
-export type IReadOnlyLocationStatus = RecursiveReadonly<ILocationStatus>;
+export type IReadOnlyLocationExtraData = RecursiveReadonly<ILocationStatus>;
 
-/** Combination of base ILocation type and ILocationStatus */
-export type IReadOnlyExtendedLocation = RecursiveReadonly<IExtendedLocation>;
+export type IReadOnlyLocationExtraDataMap = {
+	[conceptId: number]: IReadOnlyLocationExtraData;
+};
+
+/** once we combine extraDataMap with our base api data */
+export type IReadOnlyExtendedLocationData = IReadOnlyAPILocation_PreProcessed &
+	IReadOnlyLocationExtraData;

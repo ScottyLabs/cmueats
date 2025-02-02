@@ -1,13 +1,14 @@
 import { Typography, Grid, Alert, styled } from '@mui/material';
-import { useEffect, useMemo, useState, useLayoutEffect } from 'react';
-import Fuse from 'fuse.js';
+import { useEffect, useMemo, useState } from 'react';
+import Fuse, { IFuseOptions } from 'fuse.js';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
 import {
-	IReadOnlyExtendedLocation,
+	IReadOnlyLocationExtraDataMap,
+	IReadOnlyLocation_PostProcessed,
 	LocationState,
 } from '../types/locationTypes';
 import assert from '../util/assert';
@@ -65,51 +66,34 @@ function getPittsburghTime() {
 	return now.toLocaleString('en-US', options);
 }
 
+const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_PostProcessed> = {
+	// keys to perform the search on
+	keys: ['name', 'location', 'shortDescription', 'description'],
+	ignoreLocation: true,
+	threshold: 0.3,
+};
+
 function ListPage({
+	extraLocationData,
 	locations,
 }: {
-	locations: IReadOnlyExtendedLocation[] | undefined;
+	extraLocationData?: IReadOnlyLocationExtraDataMap;
+	locations?: IReadOnlyLocation_PostProcessed[];
 }) {
 	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
+	const fuse = useMemo(() => {
+		console.log('new fuse', locations);
+		return new Fuse(locations ?? [], FUSE_OPTIONS);
+	}, [locations]); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
 
-	// Fuzzy search options
-	const fuseOptions = {
-		// keys to perform the search on
-		keys: ['name', 'location', 'shortDescription'],
-		threshold: 0.3,
-	};
+	const [searchQuery, setSearchQuery] = useState('g');
+	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
-	const [fuse, setFuse] = useState<Fuse<IReadOnlyExtendedLocation> | null>(
-		null,
-	);
-
-	// Search query processing
-	const [searchQuery, setSearchQuery] = useState('');
-
-	const [filteredLocations, setFilteredLocations] = useState<
-		IReadOnlyExtendedLocation[]
-	>([]);
-
-	useEffect(() => {
-		if (locations) {
-			const fuseInstance = new Fuse(locations, fuseOptions);
-			setFuse(fuseInstance);
-		}
-	}, [locations]);
-
-	useLayoutEffect(() => {
-		if (locations === undefined || fuse === null) return;
-		const processedSearchQuery = searchQuery.trim().toLowerCase();
-
-		// Fuzzy search. If there's no search query, it returns all locations.
-		setFilteredLocations(
-			processedSearchQuery.length === 0
-				? locations
-				: fuse
-						.search(processedSearchQuery)
-						.map((result) => result.item),
-		);
-	}, [searchQuery, fuse, locations]);
+	const filteredLocations = useMemo(() => {
+		return processedSearchQuery.length === 0
+			? (locations ?? [])
+			: fuse.search(processedSearchQuery).map((result) => result.item);
+	}, [fuse, searchQuery]);
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -161,7 +145,9 @@ function ListPage({
 			<div className="Container">
 				<header className="Locations-header">
 					<HeaderText variant="h3">
-						{locations === undefined ? 'Loading...' : greeting}
+						{extraLocationData === undefined
+							? 'Loading...'
+							: greeting}
 					</HeaderText>
 					<input
 						className="Locations-search"
@@ -172,7 +158,10 @@ function ListPage({
 					/>
 				</header>
 				{(() => {
-					if (locations === undefined) {
+					if (
+						locations === undefined ||
+						extraLocationData === undefined
+					) {
 						// Display skeleton cards while loading
 						return (
 							<Grid container spacing={2}>
@@ -203,6 +192,10 @@ function ListPage({
 					return (
 						<Grid container spacing={2}>
 							{[...filteredLocations]
+								.map((location) => ({
+									...location,
+									...extraLocationData[location.conceptId], // add on our extra data here
+								}))
 								.sort((location1, location2) => {
 									const state1 = location1.locationState;
 									const state2 = location2.locationState;

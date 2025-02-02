@@ -8,7 +8,10 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
-import { IReadOnlyExtendedLocation } from '../types/locationTypes';
+import {
+	IReadOnlyLocation_PostProcessed,
+	IReadOnlyLocationExtraDataMap,
+} from '../types/locationTypes';
 
 const token = process.env.VITE_MAPKITJS_TOKEN;
 
@@ -22,8 +25,10 @@ function abbreviate(longName: string) {
 
 function MapPage({
 	locations,
+	extraLocationData,
 }: {
-	locations: IReadOnlyExtendedLocation[] | undefined;
+	locations: IReadOnlyLocation_PostProcessed[] | undefined;
+	extraLocationData: IReadOnlyLocationExtraDataMap | undefined;
 }) {
 	const [selectedLocationIndex, setSelectedLocationIndex] =
 		useState<number>();
@@ -49,8 +54,11 @@ function MapPage({
 		}),
 		[],
 	);
-	if (!locations) return undefined;
-
+	if (!locations || !extraLocationData) return undefined;
+	const extendedLocationData = locations.map((location) => ({
+		...location,
+		...extraLocationData[location.conceptId],
+	}));
 	return (
 		<div className="MapPage">
 			<Map
@@ -64,7 +72,7 @@ function MapPage({
 				showsUserLocationControl
 				allowWheelToZoom
 			>
-				{locations.map((location, locationIndex) => {
+				{extendedLocationData.map((location, locationIndex) => {
 					if (!location.coordinates) return undefined;
 					return (
 						<Marker
@@ -102,7 +110,9 @@ function MapPage({
 				<div className="MapDrawer" ref={drawerRef}>
 					{selectedLocationIndex !== undefined && (
 						<EateryCard
-							location={locations[selectedLocationIndex]}
+							location={
+								extendedLocationData[selectedLocationIndex]
+							}
 						/>
 					)}
 				</div>

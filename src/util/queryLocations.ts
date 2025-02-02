@@ -5,10 +5,11 @@ import { DateTime } from 'luxon';
 import {
 	LocationState,
 	ITimeSlotTime,
-	IReadOnlyLocation,
-	IReadOnlyLocationStatus,
+	IReadOnlyLocation_PostProcessed,
+	IReadOnlyLocationExtraData,
 	ITimeSlots,
-	IReadOnlyAPILocation,
+	IReadOnlyAPILocation_PreProcessed,
+	IReadOnlyLocationExtraDataMap,
 } from '../types/locationTypes';
 import {
 	diffInMinutes,
@@ -92,7 +93,7 @@ export function getStatusMessage(
 export function getLocationStatus(
 	timeSlots: ITimeSlots,
 	now: DateTime,
-): IReadOnlyLocationStatus {
+): IReadOnlyLocationExtraData {
 	assert(
 		isValidTimeSlotArray(timeSlots),
 		`${JSON.stringify(timeSlots)} is invalid!`,
@@ -129,7 +130,7 @@ export function getLocationStatus(
 }
 export async function queryLocations(
 	cmuEatsAPIUrl: string,
-): Promise<IReadOnlyLocation[]> {
+): Promise<IReadOnlyLocation_PostProcessed[]> {
 	try {
 		// Query locations
 		const { data } = await axios.get(cmuEatsAPIUrl);
@@ -152,7 +153,7 @@ export async function queryLocations(
 				);
 			}
 			return error === undefined;
-		}) as IReadOnlyAPILocation[];
+		}) as IReadOnlyAPILocation_PreProcessed[];
 
 		return validLocations.map((location) => ({
 			...location,
@@ -162,4 +163,21 @@ export async function queryLocations(
 		console.error(err);
 		return [];
 	}
+}
+
+export function getExtendedLocationData(
+	locations?: IReadOnlyLocation_PostProcessed[],
+): IReadOnlyLocationExtraDataMap | undefined {
+	// Remove .setZone('America/New_York') and change time in computer settings when testing
+	// Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
+	const now = DateTime.now().setZone('America/New_York');
+	return locations?.reduce(
+		(acc, location) => ({
+			...acc,
+			[location.conceptId]: {
+				...getLocationStatus(location.times, now),
+			},
+		}),
+		{},
+	); // foldl!
 }

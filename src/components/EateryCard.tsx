@@ -20,7 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import TextProps from '../types/interfaces';
 import {
-	IReadOnlyExtendedLocation,
+	IReadOnlyExtendedLocationData,
 	LocationState,
 } from '../types/locationTypes';
 
@@ -164,7 +164,7 @@ const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
-function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
+function EateryCard({ location }: { location: IReadOnlyExtendedLocationData }) {
 	const {
 		name,
 		location: locationText,
