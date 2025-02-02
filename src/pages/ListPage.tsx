@@ -148,11 +148,14 @@ function ListPage({
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<HeaderText variant="h3">
-						{extraLocationData === undefined
-							? 'Loading...'
-							: greeting}
-					</HeaderText>
+					<div className="Locations-header__greeting-wrapper">
+						<HeaderText
+							variant="h3"
+							className="Locations-header__greeting"
+						>
+							{greeting}
+						</HeaderText>
+					</div>
 					<input
 						className="Locations-search"
 						type="search"

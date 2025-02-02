@@ -13,10 +13,26 @@
 
 .Locations-header {
 	display: grid;
-	grid-gap: 1rem; 
+	grid-gap: 1rem;
 	padding: 3rem 0;
 }
-
+.Locations-header__greeting {
+	display: block;
+	overflow: hidden;
+	width: fit-content;
+	animation: slide-in 1.2s forwards;
+	animation-timing-function: cubic-bezier(0.08, 0.59, 0.56, 1.01);
+}
+@keyframes slide-in {
+	0% {
+		opacity: 0;
+		clip-path: inset(0px 100% 0px 0px);
+	}
+	100% {
+		opacity: 1;
+		clip-path: inset(0px 0% 0px 0px);
+	}
+}
 @media screen and (min-width: 900px) {
 	.Locations-header {
 		grid-template-columns: 1fr 300px;
@@ -55,4 +71,40 @@
 	box-shadow: 0 0 40px #ee6f52;
 	border-color: #ee6f52;
 	outline: none;
+}
+.card {
+	background-color: #23272a;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	text-align: left;
+	border-radius: 7px;
+	justify-content: flex-start;
+	height: 100%;
+}
+.card--animated {
+	animation: fade-in 0.3s forwards;
+	&:hover {
+		animation:
+			fade-in 0.3s forwards,
+			glow-animation 1.5s infinite;
+	}
+}
+@keyframes fade-in {
+	0% {
+		filter: opacity(0);
+	}
+	100% {
+		opacity: 1;
+		transform: translate(0, 0);
+	}
+}
+@keyframes glow-animation {
+	0% {
+		box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
+	}
+	50% {
+		box-shadow: 0 0 20px rgba(238, 111, 82, 0.7);
+	}
+	100% {
+		box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
+	}
 }
