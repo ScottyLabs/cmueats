@@ -63,7 +63,7 @@ export enum LocationState {
  * (note: if you're updating this, you should
  * update the Joi Schema in joiLocationTypes.ts as well)
  */
-interface IAPILocation_PreProcessed {
+interface ILocation_FromAPI_PreProcessed {
 	conceptId: number;
 	name?: string;
 	shortDescription?: string;
@@ -81,7 +81,8 @@ interface IAPILocation_PreProcessed {
 	todaysSpecials?: ISpecial[];
 	todaysSoups?: ISpecial[];
 }
-interface IAPILocation_PostProcessed extends IAPILocation_PreProcessed {
+interface ILocation_FromAPI_PostProcessed
+	extends ILocation_FromAPI_PreProcessed {
 	name: string; // This field is now guaranteed to be defined
 }
 // All of the following are extended from the base API type
@@ -111,18 +112,19 @@ type ILocationStatus =
 	| ILocationExtraDataPermanentlyClosed;
 
 /** What we get directly from the API (single location data) */
-export type IReadOnlyAPILocation_PreProcessed =
-	RecursiveReadonly<IAPILocation_PreProcessed>;
+export type IReadOnlyLocation_FromAPI_PreProcessed =
+	RecursiveReadonly<ILocation_FromAPI_PreProcessed>;
 
-export type IReadOnlyLocation_PostProcessed =
-	RecursiveReadonly<IAPILocation_PostProcessed>;
+export type IReadOnlyLocation_FromAPI_PostProcessed =
+	RecursiveReadonly<ILocation_FromAPI_PostProcessed>;
 
 export type IReadOnlyLocationExtraData = RecursiveReadonly<ILocationStatus>;
 
+/** what we'll typically pass into components for efficient look-up of extra data (like time until close) */
 export type IReadOnlyLocationExtraDataMap = {
 	[conceptId: number]: IReadOnlyLocationExtraData;
 };
 
 /** once we combine extraDataMap with our base api data */
-export type IReadOnlyExtendedLocationData = IReadOnlyAPILocation_PreProcessed &
-	IReadOnlyLocationExtraData;
+export type IReadOnlyExtendedLocationData =
+	IReadOnlyLocation_FromAPI_PreProcessed & IReadOnlyLocationExtraData;

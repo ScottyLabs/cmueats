@@ -9,7 +9,7 @@ import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 import {
-	IReadOnlyLocation_PostProcessed,
+	IReadOnlyLocation_FromAPI_PostProcessed,
 	IReadOnlyLocationExtraDataMap,
 } from '../types/locationTypes';
 
@@ -27,7 +27,7 @@ function MapPage({
 	locations,
 	extraLocationData,
 }: {
-	locations: IReadOnlyLocation_PostProcessed[] | undefined;
+	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 	extraLocationData: IReadOnlyLocationExtraDataMap | undefined;
 }) {
 	const [selectedLocationIndex, setSelectedLocationIndex] =

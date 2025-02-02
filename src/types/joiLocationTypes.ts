@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { isValidTimeSlotArray } from '../util/time';
-import { IReadOnlyAPILocation_PreProcessed } from './locationTypes';
+import { IReadOnlyLocation_FromAPI_PreProcessed } from './locationTypes';
 import assert from '../util/assert';
 
 const { string, number, boolean } = Joi.types();
@@ -20,7 +20,7 @@ const ISpecialJoiSchema = Joi.object({
 
 // Note: Keys without .required() are optional by default
 export const ILocationAPIJoiSchema =
-	Joi.object<IReadOnlyAPILocation_PreProcessed>({
+	Joi.object<IReadOnlyLocation_FromAPI_PreProcessed>({
 		conceptId: number.required(),
 		name: string,
 		shortDescription: string,

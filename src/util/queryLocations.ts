@@ -5,10 +5,10 @@ import { DateTime } from 'luxon';
 import {
 	LocationState,
 	ITimeSlotTime,
-	IReadOnlyLocation_PostProcessed,
+	IReadOnlyLocation_FromAPI_PostProcessed,
 	IReadOnlyLocationExtraData,
 	ITimeSlots,
-	IReadOnlyAPILocation_PreProcessed,
+	IReadOnlyLocation_FromAPI_PreProcessed,
 	IReadOnlyLocationExtraDataMap,
 } from '../types/locationTypes';
 import {
@@ -130,7 +130,7 @@ export function getLocationStatus(
 }
 export async function queryLocations(
 	cmuEatsAPIUrl: string,
-): Promise<IReadOnlyLocation_PostProcessed[]> {
+): Promise<IReadOnlyLocation_FromAPI_PostProcessed[]> {
 	try {
 		// Query locations
 		const { data } = await axios.get(cmuEatsAPIUrl);
@@ -153,7 +153,7 @@ export async function queryLocations(
 				);
 			}
 			return error === undefined;
-		}) as IReadOnlyAPILocation_PreProcessed[];
+		}) as IReadOnlyLocation_FromAPI_PreProcessed[];
 
 		return validLocations.map((location) => ({
 			...location,
@@ -166,7 +166,7 @@ export async function queryLocations(
 }
 
 export function getExtendedLocationData(
-	locations?: IReadOnlyLocation_PostProcessed[],
+	locations?: IReadOnlyLocation_FromAPI_PostProcessed[],
 ): IReadOnlyLocationExtraDataMap | undefined {
 	// Remove .setZone('America/New_York') and change time in computer settings when testing
 	// Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M

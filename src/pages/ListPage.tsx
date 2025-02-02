@@ -8,7 +8,7 @@ import getGreeting from '../util/greeting';
 import './ListPage.css';
 import {
 	IReadOnlyLocationExtraDataMap,
-	IReadOnlyLocation_PostProcessed,
+	IReadOnlyLocation_FromAPI_PostProcessed,
 	LocationState,
 } from '../types/locationTypes';
 import assert from '../util/assert';
@@ -66,7 +66,7 @@ function getPittsburghTime() {
 	return now.toLocaleString('en-US', options);
 }
 
-const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_PostProcessed> = {
+const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_FromAPI_PostProcessed> = {
 	// keys to perform the search on
 	keys: ['name', 'location', 'shortDescription', 'description'],
 	ignoreLocation: true,
@@ -78,7 +78,7 @@ function ListPage({
 	locations,
 }: {
 	extraLocationData: IReadOnlyLocationExtraDataMap | undefined;
-	locations: IReadOnlyLocation_PostProcessed[] | undefined;
+	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 }) {
 	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
 	const fuse = useMemo(
