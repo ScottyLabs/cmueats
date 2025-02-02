@@ -75,7 +75,7 @@ function ListPage({
 	// Fuzzy search options
 	const fuseOptions = {
 		// keys to perform the search on
-		ignoreLocation : true,
+		ignoreLocation: true,
 		keys: ['name', 'location', 'shortDescription'],
 		threshold: 0.1,
 	};
