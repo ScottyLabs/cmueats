@@ -70,7 +70,7 @@ const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_FromAPI_PostProcessed> = {
 	// keys to perform the search on
 	keys: ['name', 'location', 'shortDescription', 'description'],
 	ignoreLocation: true,
-	threshold: 0.3,
+	threshold: 0.2,
 };
 
 function ListPage({
