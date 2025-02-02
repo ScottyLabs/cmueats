@@ -100,7 +100,7 @@ function ListPage({
 
 	useLayoutEffect(() => {
 		if (locations === undefined || fuse === null) return;
-		const processedSearchQuery = searchQuery.trim().toLowerCase().replace(/[^\w\s]/g, '');
+		const processedSearchQuery = searchQuery.trim().toLowerCase();
 
 		// Fuzzy search. If there's no search query, it returns all locations.
 		setFilteredLocations(
