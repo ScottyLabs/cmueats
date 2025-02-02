@@ -86,7 +86,7 @@ function ListPage({
 		[locations],
 	); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
 
-	const [searchQuery, setSearchQuery] = useState('g');
+	const [searchQuery, setSearchQuery] = useState('');
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
 	const filteredLocations = useMemo(
