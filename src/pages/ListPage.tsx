@@ -181,7 +181,8 @@ function ListPage({
 									.fill(null)
 									.map((_, index) => (
 										<EateryCardSkeleton
-											key={index}
+											// we can make an exception here since this array won't change
+											key={index} // eslint-disable-line react/no-array-index-key
 											index={index}
 										/>
 									))}
