@@ -1,5 +1,5 @@
 import { Typography, Grid, Alert, styled } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import Fuse, { IFuseOptions } from 'fuse.js';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
@@ -87,6 +87,7 @@ function ListPage({
 	); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
 
 	const [searchQuery, setSearchQuery] = useState('');
+	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
 	const filteredLocations = useMemo(
@@ -103,7 +104,7 @@ function ListPage({
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const urlQuery = new URLSearchParams(window.location.search).get(
 			'search',
 		);
@@ -160,7 +161,10 @@ function ListPage({
 						className="Locations-search"
 						type="search"
 						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
+						onChange={(e) => {
+							setSearchQuery(e.target.value);
+							setShouldAnimateCards(false);
+						}}
 						placeholder="Search"
 					/>
 				</header>
@@ -237,7 +241,7 @@ function ListPage({
 										location={location}
 										key={location.conceptId}
 										index={i}
-										animate
+										animate={shouldAnimateCards}
 									/>
 								))}
 						</Grid>
