@@ -70,7 +70,7 @@ const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_FromAPI_PostProcessed> = {
 	// keys to perform the search on
 	keys: ['name', 'location', 'shortDescription', 'description'],
 	ignoreLocation: true,
-	threshold: 0.3,
+	threshold: 0.2,
 };
 
 function ListPage({
@@ -86,7 +86,7 @@ function ListPage({
 		[locations],
 	); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
 
-	const [searchQuery, setSearchQuery] = useState('g');
+	const [searchQuery, setSearchQuery] = useState('');
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
 	const filteredLocations = useMemo(
