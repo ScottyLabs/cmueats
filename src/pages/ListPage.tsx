@@ -77,6 +77,7 @@ function ListPage({
 		// keys to perform the search on
 		keys: ['name', 'location', 'shortDescription'],
 		threshold: 0.3,
+		ignoreLocation: true,
 	};
 
 	const [fuse, setFuse] = useState<Fuse<IReadOnlyExtendedLocation> | null>(
