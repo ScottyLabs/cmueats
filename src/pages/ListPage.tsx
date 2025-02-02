@@ -176,7 +176,6 @@ function ListPage({
 						// Display skeleton cards while loading
 						return (
 							<Grid container spacing={2}>
-								{/* TODO: find a better solution */}
 								{Array(36)
 									.fill(null)
 									.map((_, index) => (
