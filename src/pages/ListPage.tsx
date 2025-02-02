@@ -179,9 +179,11 @@ function ListPage({
 								{/* TODO: find a better solution */}
 								{Array(36)
 									.fill(null)
-									.map((_, index) => index)
-									.map((v) => (
-										<EateryCardSkeleton key={v} />
+									.map((_, index) => (
+										<EateryCardSkeleton
+											key={index}
+											index={index}
+										/>
 									))}
 							</Grid>
 						);

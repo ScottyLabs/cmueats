@@ -16,28 +16,42 @@
 	grid-gap: 1rem;
 	padding: 3rem 0;
 }
+/* we need this to properly animate the mask gradient */
+@property --left-pos {
+	syntax: '<percentage>';
+	inherits: false;
+	initial-value: 0%;
+}
 .Locations-header__greeting {
-	display: block;
-	overflow: hidden;
+	--left-pos: 100%;
 	width: fit-content;
 	animation: slide-in 1.2s forwards;
 	animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
+	/* we add a delay so it doesn't look jittery on page load */
 	animation-delay: 0.1s;
 	opacity: 0;
+
+	mask-image: linear-gradient(
+		to right,
+		rgba(0, 0, 0, 1) 0%,
+		rgba(0, 0, 0, 1) var(--left-pos),
+		rgba(0, 0, 0, 0) calc(var(--left-pos) + 10%)
+	);
 }
 @keyframes slide-in {
 	0% {
 		opacity: 0;
-		clip-path: inset(0px 100% 0px 0px);
+		/* clip-path: inset(0px 100% 0px 0px); */
 		transform: translate(-10px, 0);
+		--left-pos: 0%;
 	}
 	20% {
 		opacity: 1;
 	}
 	100% {
 		opacity: 1;
-		clip-path: inset(0px -5% 0px 0px);
-		transform: translate();
+		transform: translate(0, 0);
+		--left-pos: 100%;
 	}
 }
 @media screen and (min-width: 900px) {
@@ -96,20 +110,20 @@
 	&:hover {
 		animation:
 			var(--fade-in-animation),
-			/* so we don't overwrite this*/ glow-animation 1.5s infinite;
+			glow-animation 1.5s infinite;
 	}
 }
 @keyframes fade-in {
 	0% {
-		filter: opacity(0);
+		opacity: 0;
 		transform: translate(-20px, 0);
 	}
 	20% {
 		opacity: 1;
 	}
 	100% {
-		opacity: 1;
 		transform: translate(0, 0);
+		opacity: 1;
 	}
 }
 @keyframes glow-animation {
@@ -122,4 +136,18 @@
 	100% {
 		box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
 	}
+}
+@keyframes oscillate-opacity {
+	0% {
+		opacity: 1;
+	}
+	30% {
+		opacity: 0.6;
+	}
+	90% {
+		opacity: 1;
+	}
+}
+.skeleton-card--animated {
+	opacity: 0;
 }
