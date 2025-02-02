@@ -32,8 +32,7 @@ function EateryCardSkeleton({ index }: { index: number }) {
 			<StyledCard
 				className="skeleton-card--animated"
 				style={{
-					animation: `fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
-		oscillate-opacity 2s ease-in-out ${1.4 + index * 0.1}s infinite`,
+					'--oscillate-delay': `${1.4 + index * 0.1}s`, // let the skeleton cards fade in first before oscillating
 				}}
 			>
 				<StyledCardHeader
