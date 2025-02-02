@@ -138,7 +138,15 @@ const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
-function EateryCard({ location }: { location: IReadOnlyExtendedLocationData }) {
+function EateryCard({
+	location,
+	index = 0,
+	animate = false,
+}: {
+	location: IReadOnlyExtendedLocationData;
+	index?: number;
+	animate?: boolean;
+}) {
 	const {
 		name,
 		location: locationText,
@@ -157,7 +165,10 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocationData }) {
 	return (
 		<>
 			<Grid item xs={12} md={4} lg={3} xl={3}>
-				<div className="card card--animated">
+				<div
+					className={`card ${animate ? 'card--animated' : ''}`}
+					style={{ animationDelay: `${index * 40}ms` }}
+				>
 					<StyledCardHeader
 						title={
 							isOpen ? (

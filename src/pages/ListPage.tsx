@@ -232,10 +232,12 @@ function ListPage({
 											location2.timeUntil)
 									);
 								})
-								.map((location) => (
+								.map((location, i) => (
 									<EateryCard
 										location={location}
 										key={location.conceptId}
+										index={i}
+										animate
 									/>
 								))}
 						</Grid>
