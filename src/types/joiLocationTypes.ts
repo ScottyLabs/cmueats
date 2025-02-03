@@ -15,7 +15,7 @@ const ITimeSlotJoiSchema = Joi.object({
 });
 const ISpecialJoiSchema = Joi.object({
 	title: string.required(),
-	description: string.allow(''),
+	description: string.required().allow(''),
 });
 
 // Note: Keys without .required() are optional by default
