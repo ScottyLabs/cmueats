@@ -167,7 +167,7 @@ function EateryCard({
 			<Grid item xs={12} md={4} lg={3} xl={3}>
 				<div
 					className={`card ${animate ? 'card--animated' : ''}`}
-					style={{ '--card-show-delay': `${index * 40}ms` }}
+					style={{ '--card-show-delay': `${index * 50}ms` }}
 				>
 					<StyledCardHeader
 						title={

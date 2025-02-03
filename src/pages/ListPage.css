@@ -107,6 +107,7 @@
 	--fade-in-animation: fade-in 0.7s forwards var(--card-show-delay)
 		cubic-bezier(0.08, 0.67, 0.64, 1.01);
 	animation: var(--fade-in-animation);
+
 	&:hover {
 		animation:
 			var(--fade-in-animation),
@@ -116,14 +117,18 @@
 @keyframes fade-in {
 	0% {
 		opacity: 0;
-		transform: translate(-20px, 0);
+		transform: translate(-10px, 0);
+		filter: url('#horizontal-blur');
 	}
-	20% {
+	75% {
+		filter: blur(0);
 		opacity: 1;
 	}
+
 	100% {
 		transform: translate(0, 0);
 		opacity: 1;
+		filter: blur(0);
 	}
 }
 @keyframes glow-animation {
@@ -151,6 +156,7 @@
 .skeleton-card--animated {
 	opacity: 0;
 	--oscillate-delay: 0s;
-	animation: fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
-	oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
+	animation:
+		fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
+		oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
 }

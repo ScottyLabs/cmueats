@@ -295,6 +295,13 @@ function ListPage({
 					cmu<span style={{ color: '#19b875' }}>:eats</span>
 				</LogoText>
 			</footer>
+			<svg width="1" height="1" style={{ display: 'none' }}>
+				<defs>
+					<filter id="horizontal-blur">
+						<feGaussianBlur in="SourceGraphic" stdDeviation="4 0" />
+					</filter>
+				</defs>
+			</svg>
 		</div>
 	);
 }
