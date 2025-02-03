@@ -39,6 +39,7 @@ const evening = [
 	'Grab a bite to eat!',
 	'Hungry night owl?',
 	"Midnight munchies? We've got you!",
+	'shikanoko nokonoko koshi tan tan!',
 ];
 
 const getGreeting = (hours: number) => {
