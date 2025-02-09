@@ -1,5 +1,5 @@
 import { Typography, Grid, Alert, styled } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import Fuse, { IFuseOptions } from 'fuse.js';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
@@ -87,6 +87,7 @@ function ListPage({
 	); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
 
 	const [searchQuery, setSearchQuery] = useState('');
+	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
 	const filteredLocations = useMemo(
@@ -103,7 +104,7 @@ function ListPage({
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const urlQuery = new URLSearchParams(window.location.search).get(
 			'search',
 		);
@@ -148,16 +149,22 @@ function ListPage({
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<HeaderText variant="h3">
-						{extraLocationData === undefined
-							? 'Loading...'
-							: greeting}
-					</HeaderText>
+					<div className="Locations-header__greeting-wrapper">
+						<HeaderText
+							variant="h3"
+							className="Locations-header__greeting"
+						>
+							{greeting}
+						</HeaderText>
+					</div>
 					<input
 						className="Locations-search"
 						type="search"
 						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
+						onChange={(e) => {
+							setSearchQuery(e.target.value);
+							setShouldAnimateCards(false);
+						}}
 						placeholder="Search"
 					/>
 				</header>
@@ -169,12 +176,14 @@ function ListPage({
 						// Display skeleton cards while loading
 						return (
 							<Grid container spacing={2}>
-								{/* TODO: find a better solution */}
 								{Array(36)
 									.fill(null)
-									.map((_, index) => index)
-									.map((v) => (
-										<EateryCardSkeleton key={v} />
+									.map((_, index) => (
+										<EateryCardSkeleton
+											// we can make an exception here since this array won't change
+											key={index} // eslint-disable-line react/no-array-index-key
+											index={index}
+										/>
 									))}
 							</Grid>
 						);
@@ -229,10 +238,12 @@ function ListPage({
 											location2.timeUntil)
 									);
 								})
-								.map((location) => (
+								.map((location, i) => (
 									<EateryCard
 										location={location}
 										key={location.conceptId}
+										index={i}
+										animate={shouldAnimateCards}
 									/>
 								))}
 						</Grid>
