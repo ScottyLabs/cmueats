@@ -42,6 +42,7 @@ export const ILocationAPIJoiSchema = Joi.object<IReadOnlyAPILocation>({
 		.message('Received invalid (probably improperly sorted) time slots!'),
 	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
 	todaysSoups: Joi.array().items(ISpecialJoiSchema),
+	timesListDisplay: Joi.array().items(string),
 });
 export const IAPIResponseJoiSchema = Joi.object<{ locations: any[] }>({
 	locations: Joi.array().required(),
