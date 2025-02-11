@@ -100,6 +100,7 @@ body {
 }
 
 .AdBanner {
+	display: none;
 	padding: 1rem;
 	font-size: 1.5em;
 	color: white;
