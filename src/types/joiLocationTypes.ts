@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { isValidTimeSlotArray } from '../util/time';
-import { IReadOnlyAPILocation } from './locationTypes';
+import { IReadOnlyLocation_FromAPI_PreProcessed } from './locationTypes';
 import assert from '../util/assert';
 
 const { string, number, boolean } = Joi.types();
@@ -19,30 +19,33 @@ const ISpecialJoiSchema = Joi.object({
 });
 
 // Note: Keys without .required() are optional by default
-export const ILocationAPIJoiSchema = Joi.object<IReadOnlyAPILocation>({
-	conceptId: number.required(),
-	name: string,
-	shortDescription: string,
-	description: string.required(),
-	url: string.required(),
-	menu: string,
-	location: string.required(),
-	coordinates: {
-		lat: number.required(),
-		lng: number.required(),
-	},
-	acceptsOnlineOrders: boolean.required(),
-	times: Joi.array()
-		.items(ITimeSlotJoiSchema)
-		.required()
-		.custom((val) => {
-			assert(isValidTimeSlotArray(val));
-			return val;
-		})
-		.message('Received invalid (probably improperly sorted) time slots!'),
-	todaysSpecials: Joi.array().items(ISpecialJoiSchema),
-	todaysSoups: Joi.array().items(ISpecialJoiSchema),
-});
+export const ILocationAPIJoiSchema =
+	Joi.object<IReadOnlyLocation_FromAPI_PreProcessed>({
+		conceptId: number.required(),
+		name: string,
+		shortDescription: string,
+		description: string.required(),
+		url: string.required(),
+		menu: string,
+		location: string.required(),
+		coordinates: {
+			lat: number.required(),
+			lng: number.required(),
+		},
+		acceptsOnlineOrders: boolean.required(),
+		times: Joi.array()
+			.items(ITimeSlotJoiSchema)
+			.required()
+			.custom((val) => {
+				assert(isValidTimeSlotArray(val));
+				return val;
+			})
+			.message(
+				'Received invalid (probably improperly sorted) time slots!',
+			),
+		todaysSpecials: Joi.array().items(ISpecialJoiSchema),
+		todaysSoups: Joi.array().items(ISpecialJoiSchema),
+	});
 export const IAPIResponseJoiSchema = Joi.object<{ locations: any[] }>({
 	locations: Joi.array().required(),
 }); // shallow validation to make sure we have the locations field. That's it.

@@ -26,13 +26,22 @@ const SkeletonText = styled(Skeleton)({
 	marginBottom: '12px',
 });
 
-function EateryCardSkeleton() {
+function EateryCardSkeleton({ index }: { index: number }) {
 	return (
 		<Grid item xs={12} md={4} lg={3} xl={3}>
-			<StyledCard>
+			<StyledCard
+				className="skeleton-card--animated"
+				style={{
+					'--oscillate-delay': `${1.4 + index * 0.1}s`, // let the skeleton cards fade in first before oscillating
+				}}
+			>
 				<StyledCardHeader
 					title={
-						<Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+						<Skeleton
+							variant="text"
+							sx={{ fontSize: '1rem' }}
+							animation={false}
+						/>
 					}
 					avatar={
 						<Avatar
@@ -46,14 +55,27 @@ function EateryCardSkeleton() {
 								variant="circular"
 								width={40}
 								height={40}
+								animation={false}
 							/>
 						</Avatar>
 					}
 				/>
 				<CardContent>
-					<SkeletonText variant="text" sx={{ fontSize: '2rem' }} />
-					<SkeletonText variant="text" sx={{ fontSize: '1rem' }} />
-					<SkeletonText variant="text" sx={{ fontSize: '1.2rem' }} />
+					<SkeletonText
+						variant="text"
+						sx={{ fontSize: '2rem' }}
+						animation={false}
+					/>
+					<SkeletonText
+						variant="text"
+						sx={{ fontSize: '1rem' }}
+						animation={false}
+					/>
+					<SkeletonText
+						variant="text"
+						sx={{ fontSize: '1.2rem' }}
+						animation={false}
+					/>
 				</CardContent>
 			</StyledCard>
 		</Grid>

@@ -1,13 +1,14 @@
 import { Typography, Grid, Alert, styled } from '@mui/material';
-import { useEffect, useMemo, useState, useLayoutEffect } from 'react';
-import Fuse from 'fuse.js';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import Fuse, { IFuseOptions } from 'fuse.js';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
 import {
-	IReadOnlyExtendedLocation,
+	IReadOnlyLocation_ExtraData_Map,
+	IReadOnlyLocation_FromAPI_PostProcessed,
 	LocationState,
 } from '../types/locationTypes';
 import assert from '../util/assert';
@@ -65,58 +66,45 @@ function getPittsburghTime() {
 	return now.toLocaleString('en-US', options);
 }
 
+const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_FromAPI_PostProcessed> = {
+	// keys to perform the search on
+	keys: ['name', 'location', 'shortDescription', 'description'],
+	ignoreLocation: true,
+	threshold: 0.2,
+};
+
 function ListPage({
+	extraLocationData,
 	locations,
 }: {
-	locations: IReadOnlyExtendedLocation[] | undefined;
+	extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
+	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 }) {
 	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
+	const fuse = useMemo(
+		() => new Fuse(locations ?? [], FUSE_OPTIONS),
+		[locations],
+	); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
 
-	// Fuzzy search options
-	const fuseOptions = {
-		// keys to perform the search on
-		keys: ['name', 'location', 'shortDescription'],
-		threshold: 0.3,
-		ignoreLocation: true,
-	};
-
-	const [fuse, setFuse] = useState<Fuse<IReadOnlyExtendedLocation> | null>(
-		null,
-	);
-
-	// Search query processing
 	const [searchQuery, setSearchQuery] = useState('');
+	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
+	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
-	const [filteredLocations, setFilteredLocations] = useState<
-		IReadOnlyExtendedLocation[]
-	>([]);
-
-	useEffect(() => {
-		if (locations) {
-			const fuseInstance = new Fuse(locations, fuseOptions);
-			setFuse(fuseInstance);
-		}
-	}, [locations]);
-
-	useLayoutEffect(() => {
-		if (locations === undefined || fuse === null) return;
-		const processedSearchQuery = searchQuery.trim().toLowerCase();
-
-		// Fuzzy search. If there's no search query, it returns all locations.
-		setFilteredLocations(
+	const filteredLocations = useMemo(
+		() =>
 			processedSearchQuery.length === 0
-				? locations
+				? (locations ?? [])
 				: fuse
 						.search(processedSearchQuery)
 						.map((result) => result.item),
-		);
-	}, [searchQuery, fuse, locations]);
+		[fuse, searchQuery],
+	);
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const urlQuery = new URLSearchParams(window.location.search).get(
 			'search',
 		);
@@ -161,28 +149,41 @@ function ListPage({
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<HeaderText variant="h3">
-						{locations === undefined ? 'Loading...' : greeting}
-					</HeaderText>
+					<div className="Locations-header__greeting-wrapper">
+						<HeaderText
+							variant="h3"
+							className="Locations-header__greeting"
+						>
+							{greeting}
+						</HeaderText>
+					</div>
 					<input
 						className="Locations-search"
 						type="search"
 						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
+						onChange={(e) => {
+							setSearchQuery(e.target.value);
+							setShouldAnimateCards(false);
+						}}
 						placeholder="Search"
 					/>
 				</header>
 				{(() => {
-					if (locations === undefined) {
+					if (
+						locations === undefined ||
+						extraLocationData === undefined
+					) {
 						// Display skeleton cards while loading
 						return (
 							<Grid container spacing={2}>
-								{/* TODO: find a better solution */}
 								{Array(36)
 									.fill(null)
-									.map((_, index) => index)
-									.map((v) => (
-										<EateryCardSkeleton key={v} />
+									.map((_, index) => (
+										<EateryCardSkeleton
+											// we can make an exception here since this array won't change
+											key={index} // eslint-disable-line react/no-array-index-key
+											index={index}
+										/>
 									))}
 							</Grid>
 						);
@@ -204,6 +205,10 @@ function ListPage({
 					return (
 						<Grid container spacing={2}>
 							{[...filteredLocations]
+								.map((location) => ({
+									...location,
+									...extraLocationData[location.conceptId], // add on our extra data here
+								}))
 								.sort((location1, location2) => {
 									const state1 = location1.locationState;
 									const state2 = location2.locationState;
@@ -233,10 +238,12 @@ function ListPage({
 											location2.timeUntil)
 									);
 								})
-								.map((location) => (
+								.map((location, i) => (
 									<EateryCard
 										location={location}
 										key={location.conceptId}
+										index={i}
+										animate={shouldAnimateCards}
 									/>
 								))}
 						</Grid>

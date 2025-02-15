@@ -14,13 +14,12 @@ import {
 	CardActions,
 	Avatar,
 	Dialog,
-	keyframes,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import TextProps from '../types/interfaces';
 import {
-	IReadOnlyExtendedLocation,
+	IReadOnlyLocation_Combined,
 	LocationState,
 } from '../types/locationTypes';
 
@@ -31,31 +30,6 @@ const colors: Record<LocationState, string> = {
 	[LocationState.OPENS_SOON]: '#f6cc5d',
 	[LocationState.CLOSES_SOON]: '#f3f65d',
 };
-
-const glowAnimation = keyframes`
-  0% {
-    box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(238, 111, 82, 0.7);
-  }
-  100% {
-    box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
-  }
-`;
-
-const StyledCard = styled(Card)({
-	backgroundColor: '#23272A',
-	border: '2px solid rgba(0, 0, 0, 0.2)',
-	textAlign: 'left',
-	borderRadius: 7,
-	height: '100%',
-	justifyContent: 'flex-start',
-	transition: 'box-shadow 0.3s ease-in-out',
-	'&:hover': {
-		animation: `${glowAnimation} 1.5s infinite`,
-	},
-});
 
 const StyledCardHeader = styled(CardHeader)({
 	fontWeight: 500,
@@ -164,7 +138,15 @@ const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
-function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
+function EateryCard({
+	location,
+	index = 0,
+	animate = false,
+}: {
+	location: IReadOnlyLocation_Combined;
+	index?: number;
+	animate?: boolean;
+}) {
 	const {
 		name,
 		location: locationText,
@@ -183,7 +165,10 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 	return (
 		<>
 			<Grid item xs={12} md={4} lg={3} xl={3}>
-				<StyledCard>
+				<div
+					className={`card ${animate ? 'card--animated' : ''}`}
+					style={{ '--card-show-delay': `${index * 50}ms` }}
+				>
 					<StyledCardHeader
 						title={
 							isOpen ? (
@@ -249,7 +234,7 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 							</ActionButton>
 						)}
 					</CardActions>
-				</StyledCard>
+				</div>
 			</Grid>
 
 			<Dialog
@@ -263,7 +248,7 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 					},
 				}}
 			>
-				<StyledCard>
+				<div className="card">
 					<StyledCardHeader
 						title={
 							isOpen ? (
@@ -329,7 +314,7 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 							</AccordionDetails>
 						</SpecialsContent>
 					))}
-				</StyledCard>
+				</div>
 			</Dialog>
 		</>
 	);

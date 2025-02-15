@@ -105,5 +105,22 @@ body {
 	font-size: 1.5em;
 	color: white;
 	text-align: center;
-	background-color: #007fff;
+	background-image: linear-gradient(
+		90deg,
+		hsl(210deg 94% 33%) 0%,
+		hsl(210deg 93% 34%) 8%,
+		hsl(210deg 92% 36%) 17%,
+		hsl(210deg 91% 38%) 25%,
+		hsl(210deg 90% 39%) 33%,
+		hsl(210deg 90% 41%) 42%,
+		hsl(210deg 89% 42%) 50%,
+		hsl(210deg 88% 44%) 58%,
+		hsl(210deg 88% 46%) 67%,
+		hsl(210deg 87% 47%) 75%,
+		hsl(210deg 87% 49%) 83%,
+		hsl(210deg 89% 51%) 92%,
+		hsl(210deg 94% 52%) 100%
+	);
+	border-bottom: 2px solid hsl(210 94% 17%);
+	font-weight: 600;
 }

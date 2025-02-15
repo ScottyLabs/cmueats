@@ -13,10 +13,47 @@
 
 .Locations-header {
 	display: grid;
-	grid-gap: 1rem; 
+	grid-gap: 1rem;
 	padding: 3rem 0;
 }
+/* we need this to properly animate the mask gradient */
+@property --left-pos {
+	syntax: '<percentage>';
+	inherits: false;
+	initial-value: 0%;
+}
+.Locations-header__greeting {
+	--left-pos: 100%;
+	width: fit-content;
+	animation: slide-in 1.2s forwards;
+	animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
+	/* we add a delay so it doesn't look jittery on page load */
+	animation-delay: 0.1s;
+	opacity: 0;
 
+	mask-image: linear-gradient(
+		to right,
+		rgba(0, 0, 0, 1) 0%,
+		rgba(0, 0, 0, 1) var(--left-pos),
+		rgba(0, 0, 0, 0) calc(var(--left-pos) + 10%)
+	);
+}
+@keyframes slide-in {
+	0% {
+		opacity: 0;
+		/* clip-path: inset(0px 100% 0px 0px); */
+		transform: translate(-10px, 0);
+		--left-pos: 0%;
+	}
+	20% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		transform: translate(0, 0);
+		--left-pos: 100%;
+	}
+}
 @media screen and (min-width: 900px) {
 	.Locations-header {
 		grid-template-columns: 1fr 300px;
@@ -55,4 +92,70 @@
 	box-shadow: 0 0 40px #ee6f52;
 	border-color: #ee6f52;
 	outline: none;
+}
+.card {
+	background-color: #23272a;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	text-align: left;
+	border-radius: 7px;
+	justify-content: flex-start;
+	height: 100%;
+}
+.card--animated {
+	opacity: 0;
+	--card-show-delay: 0s;
+	--fade-in-animation: fade-in 0.7s forwards var(--card-show-delay)
+		cubic-bezier(0.08, 0.67, 0.64, 1.01);
+	animation: var(--fade-in-animation);
+
+	&:hover {
+		animation:
+			var(--fade-in-animation),
+			glow-animation 1.5s ease 0s infinite;
+	}
+}
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+		transform: translate(-10px, 0);
+		filter: blur(3px);
+	}
+	55% {
+		filter: blur(0);
+	}
+
+	100% {
+		transform: translate(0, 0);
+		opacity: 1;
+		filter: blur(0);
+	}
+}
+@keyframes glow-animation {
+	0% {
+		box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
+	}
+	50% {
+		box-shadow: 0 0 20px rgba(238, 111, 82, 0.7);
+	}
+	100% {
+		box-shadow: 0 0 5px rgba(238, 111, 82, 0.7);
+	}
+}
+@keyframes oscillate-opacity {
+	0% {
+		opacity: 1;
+	}
+	30% {
+		opacity: 0.6;
+	}
+	90% {
+		opacity: 1;
+	}
+}
+.skeleton-card--animated {
+	opacity: 0;
+	--oscillate-delay: 0s;
+	animation:
+		fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
+		oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
 }
