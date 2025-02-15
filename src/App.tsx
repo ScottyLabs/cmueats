@@ -8,32 +8,24 @@ import NotFoundPage from './pages/NotFoundPage';
 import {
 	queryLocations,
 	getExtendedLocationData as getExtraLocationData,
+	LocationChecker,
 } from './util/queryLocations';
 import './App.css';
 import {
 	IReadOnlyLocation_FromAPI_PostProcessed,
-	IReadOnlyLocationExtraDataMap,
+	IReadOnlyLocation_ExtraData_Map,
 } from './types/locationTypes';
 
 const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5010/locations'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
-function assertThatLocationsAndExtraLocationDataAreInSync(
-	locations?: IReadOnlyLocation_FromAPI_PostProcessed[],
-	extraData?: IReadOnlyLocationExtraDataMap,
-) {
-	locations?.forEach((location) => {
-		if (!extraData || !(location.conceptId in extraData)) {
-			console.error(location.conceptId, 'missing from extraData!');
-		}
-	});
-}
+
 function App() {
 	// Load locations
 	const [locations, setLocations] =
 		useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
 	const [extraLocationData, setExtraLocationData] =
-		useState<IReadOnlyLocationExtraDataMap>();
+		useState<IReadOnlyLocation_ExtraData_Map>();
 	useEffect(() => {
 		queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
 			setLocations(parsedLocations);
@@ -66,10 +58,7 @@ function App() {
 		return () => window.removeEventListener('online', handleOnline);
 	}, []);
 
-	assertThatLocationsAndExtraLocationDataAreInSync(
-		locations,
-		extraLocationData,
-	);
+	new LocationChecker(locations).assertExtraDataInSync(extraLocationData);
 
 	return (
 		<React.StrictMode>

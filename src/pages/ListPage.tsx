@@ -7,7 +7,7 @@ import NoResultsError from '../components/NoResultsError';
 import getGreeting from '../util/greeting';
 import './ListPage.css';
 import {
-	IReadOnlyLocationExtraDataMap,
+	IReadOnlyLocation_ExtraData_Map,
 	IReadOnlyLocation_FromAPI_PostProcessed,
 	LocationState,
 } from '../types/locationTypes';
@@ -77,7 +77,7 @@ function ListPage({
 	extraLocationData,
 	locations,
 }: {
-	extraLocationData: IReadOnlyLocationExtraDataMap | undefined;
+	extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 }) {
 	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);

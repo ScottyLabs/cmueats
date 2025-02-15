@@ -19,7 +19,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import TextProps from '../types/interfaces';
 import {
-	IReadOnlyExtendedLocationData,
+	IReadOnlyLocation_Combined,
 	LocationState,
 } from '../types/locationTypes';
 
@@ -143,7 +143,7 @@ function EateryCard({
 	index = 0,
 	animate = false,
 }: {
-	location: IReadOnlyExtendedLocationData;
+	location: IReadOnlyLocation_Combined;
 	index?: number;
 	animate?: boolean;
 }) {

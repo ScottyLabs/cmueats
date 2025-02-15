@@ -87,29 +87,29 @@ interface ILocation_FromAPI_PostProcessed
 }
 // All of the following are extended from the base API type
 
-// ILocationStatus* represents the data added on to IAPILocation
-// 'Closed' here refers to closed for the near future (no timeslots available)
-interface ILocationExtraData_Base {
+// 'closedLongTerm' here refers to closed for the next 7 days (no timeslots available)
+interface ILocation_ExtraData_Base {
 	/** No forseeable opening times after *now* */
 	closedLongTerm: boolean;
 	statusMsg: string;
 	locationState: LocationState;
 }
-interface ILocationExtraDataNotPermanentlyClosed
-	extends ILocationExtraData_Base {
+interface ILocation_ExtraData_NotPermanentlyClosed
+	extends ILocation_ExtraData_Base {
 	closedLongTerm: false;
 	isOpen: boolean;
 	timeUntil: number;
 	changesSoon: boolean;
 	locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
 }
-interface ILocationExtraDataPermanentlyClosed extends ILocationExtraData_Base {
+interface ILocation_ExtraData_PermanentlyClosed
+	extends ILocation_ExtraData_Base {
 	closedLongTerm: true;
 	locationState: LocationState.CLOSED_LONG_TERM;
 }
-type ILocationStatus =
-	| ILocationExtraDataNotPermanentlyClosed
-	| ILocationExtraDataPermanentlyClosed;
+type ILocation_ExtraData =
+	| ILocation_ExtraData_NotPermanentlyClosed
+	| ILocation_ExtraData_PermanentlyClosed;
 
 /** What we get directly from the API (single location data) */
 export type IReadOnlyLocation_FromAPI_PreProcessed =
@@ -118,13 +118,14 @@ export type IReadOnlyLocation_FromAPI_PreProcessed =
 export type IReadOnlyLocation_FromAPI_PostProcessed =
 	RecursiveReadonly<ILocation_FromAPI_PostProcessed>;
 
-export type IReadOnlyLocationExtraData = RecursiveReadonly<ILocationStatus>;
+export type IReadOnlyLocation_ExtraData =
+	RecursiveReadonly<ILocation_ExtraData>;
 
-/** what we'll typically pass into components for efficient look-up of extra data (like time until close) */
-export type IReadOnlyLocationExtraDataMap = {
-	[conceptId: number]: IReadOnlyLocationExtraData;
+/** we'll typically pass this into components for efficient look-up of extra data (like time until close) */
+export type IReadOnlyLocation_ExtraData_Map = {
+	[conceptId: number]: IReadOnlyLocation_ExtraData;
 };
 
 /** once we combine extraDataMap with our base api data */
-export type IReadOnlyExtendedLocationData =
-	IReadOnlyLocation_FromAPI_PreProcessed & IReadOnlyLocationExtraData;
+export type IReadOnlyLocation_Combined =
+	IReadOnlyLocation_FromAPI_PostProcessed & IReadOnlyLocation_ExtraData;

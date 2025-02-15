@@ -10,7 +10,7 @@ import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 import {
 	IReadOnlyLocation_FromAPI_PostProcessed,
-	IReadOnlyLocationExtraDataMap,
+	IReadOnlyLocation_ExtraData_Map,
 } from '../types/locationTypes';
 
 const token = process.env.VITE_MAPKITJS_TOKEN;
@@ -28,7 +28,7 @@ function MapPage({
 	extraLocationData,
 }: {
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-	extraLocationData: IReadOnlyLocationExtraDataMap | undefined;
+	extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
 }) {
 	const [selectedLocationIndex, setSelectedLocationIndex] =
 		useState<number>();

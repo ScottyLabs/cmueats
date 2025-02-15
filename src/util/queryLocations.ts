@@ -6,10 +6,10 @@ import {
 	LocationState,
 	ITimeSlotTime,
 	IReadOnlyLocation_FromAPI_PostProcessed,
-	IReadOnlyLocationExtraData,
+	IReadOnlyLocation_ExtraData,
 	ITimeSlots,
 	IReadOnlyLocation_FromAPI_PreProcessed,
-	IReadOnlyLocationExtraDataMap,
+	IReadOnlyLocation_ExtraData_Map,
 } from '../types/locationTypes';
 import {
 	diffInMinutes,
@@ -93,7 +93,7 @@ export function getStatusMessage(
 export function getLocationStatus(
 	timeSlots: ITimeSlots,
 	now: DateTime,
-): IReadOnlyLocationExtraData {
+): IReadOnlyLocation_ExtraData {
 	assert(
 		isValidTimeSlotArray(timeSlots),
 		`${JSON.stringify(timeSlots)} is invalid!`,
@@ -167,7 +167,7 @@ export async function queryLocations(
 
 export function getExtendedLocationData(
 	locations?: IReadOnlyLocation_FromAPI_PostProcessed[],
-): IReadOnlyLocationExtraDataMap | undefined {
+): IReadOnlyLocation_ExtraData_Map | undefined {
 	// Remove .setZone('America/New_York') and change time in computer settings when testing
 	// Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
 	const now = DateTime.now().setZone('America/New_York');
@@ -180,4 +180,19 @@ export function getExtendedLocationData(
 		}),
 		{},
 	); // foldl!
+}
+export class LocationChecker {
+	locations?: IReadOnlyLocation_FromAPI_PostProcessed[];
+
+	constructor(locations?: IReadOnlyLocation_FromAPI_PostProcessed[]) {
+		this.locations = locations;
+	}
+
+	assertExtraDataInSync(extraData?: IReadOnlyLocation_ExtraData_Map) {
+		this.locations?.forEach((location) => {
+			if (!extraData || !(location.conceptId in extraData)) {
+				console.error(location.conceptId, 'missing from extraData!');
+			}
+		});
+	}
 }
