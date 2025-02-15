@@ -90,6 +90,10 @@ function ListPage({
 		IReadOnlyExtendedLocation[]
 	>([]);
 
+	const [starredEateries, setStarredEateries] = useState<
+		IReadOnlyExtendedLocation[]
+	>([]);
+
 	useEffect(() => {
 		if (locations) {
 			const fuseInstance = new Fuse(locations, fuseOptions);
@@ -98,13 +102,13 @@ function ListPage({
 	}, [locations]);
 
 	useLayoutEffect(() => {
-		if (locations === undefined || fuse === null) return;
+		if (starredEateries === undefined || fuse === null) return;
 		const processedSearchQuery = searchQuery.trim().toLowerCase();
 
 		// Fuzzy search. If there's no search query, it returns all locations.
 		setFilteredLocations(
 			processedSearchQuery.length === 0
-				? locations
+				? starredEateries
 				: fuse
 						.search(processedSearchQuery)
 						.map((result) => result.item),
@@ -137,6 +141,37 @@ function ListPage({
 			window.removeEventListener('offline', handleOnlineStatus);
 		};
 	}, []);
+
+	const sortedEateries = [locations].sort((a, b) => {
+		const isStarredA = starredEateries.some(
+			(starred) => JSON.stringify(starred) === JSON.stringify(a),
+		);
+		const isStarredB = starredEateries.some(
+			(starred) => JSON.stringify(starred) === JSON.stringify(b),
+		);
+		return (isStarredB ? 1 : 0) - (isStarredA ? 1 : 0);
+	});
+
+	useEffect(() => {
+		const storedStars = JSON.parse(
+			localStorage.getItem('starredEateries') || '[]',
+		);
+		setStarredEateries(storedStars);
+	}, []);
+
+	const toggleStar = (location: IReadOnlyExtendedLocation) => {
+		const locationKey = JSON.stringify(location);
+		const updatedStars = starredEateries.some(
+			(starred) => JSON.stringify(starred) === locationKey,
+		)
+			? starredEateries.filter(
+					(starred) => JSON.stringify(starred) !== locationKey,
+				)
+			: [...starredEateries, location];
+
+		setStarredEateries(updatedStars);
+		localStorage.setItem('starredEateries', JSON.stringify(updatedStars));
+	};
 
 	return (
 		<div className="ListPage">
@@ -235,6 +270,12 @@ function ListPage({
 									<EateryCard
 										location={location}
 										key={location.conceptId}
+										starred={starredEateries.some(
+											(starred) =>
+												JSON.stringify(starred) ===
+												JSON.stringify(location),
+										)}
+										onToggleStar={toggleStar}
 									/>
 								))}
 						</Grid>

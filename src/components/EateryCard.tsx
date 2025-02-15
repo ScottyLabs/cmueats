@@ -165,7 +165,13 @@ const SpecialsContent = styled(Accordion)({
 	backgroundColor: '#23272A',
 });
 
-function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
+interface EateryCardProps {
+	location: IReadOnlyExtendedLocation;
+	starred: boolean;
+	onToggleStar: (loc: IReadOnlyExtendedLocation) => void;
+}
+
+function EateryCard({ location, starred, onToggleStar }: EateryCardProps) {
 	const {
 		name,
 		location: locationText,
@@ -179,7 +185,7 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
 	const isOpen = !location.closedLongTerm && location.isOpen;
 
-	const [starred, setStarred] = useState(true);
+	// const [starred, setStarred] = useState(true);
 
 	const [modalOpen, setModalOpen] = useState(false);
 
@@ -261,7 +267,7 @@ function EateryCard({ location }: { location: IReadOnlyExtendedLocation }) {
 								Specials
 							</ActionButton>
 						)}
-						<IconButton onClick={() => setStarred(!starred)}>
+						<IconButton onClick={() => onToggleStar(location)}>
 							{starred ? (
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
