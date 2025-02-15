@@ -46,7 +46,7 @@ export type ITimeSlots = ReadonlyArray<ITimeSlot>;
 
 interface ISpecial {
 	title: string;
-	description?: string;
+	description: string;
 }
 
 // Ordered by priority - affects how tiles are displayed in the grid (first to last)
