@@ -1,0 +1,31 @@
+.select {
+	display: block;
+	width: 25%;
+	padding: 0.8rem 0.5rem;
+	border-radius: 1rem;
+	background: #23272a;
+	outline: none;
+	border: 1px solid transparent;
+	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+	transition: all 0.2s;
+	font-family: inherit;
+	font-size: 1rem;
+	background-size: 20px;
+	background-repeat: no-repeat;
+	background-position: 1rem center;
+	color: white;
+	font-weight: 500;
+	animation: slide-in 1.2s forwards;
+	animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
+	/* we add a delay so it doesn't look jittery on page load */
+	animation-delay: 0.1s;
+	opacity: 0;
+
+}
+
+.select:hover {
+	transition: all 0.5s;
+	box-shadow: 0 0 40px #ee6f52;
+	border-color: #ee6f52;
+	outline: none;
+}
