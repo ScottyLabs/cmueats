@@ -56,6 +56,8 @@ const FooterText = styled(Typography)({
 const StyledAlert = styled(Alert)({
 	backgroundColor: '#23272a',
 	color: '#ffffff',
+	display: 'flex',
+	alignItems: 'center',
 });
 
 function getPittsburghTime() {
@@ -104,7 +106,7 @@ function ListPage({
 		[fuse, searchQuery],
 	);
 
-	// const [showAlert, setShowAlert] = useState(true);
+	const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
 	// Load the search query from the URL, if any
@@ -134,11 +136,20 @@ function ListPage({
 
 	return (
 		<div className="ListPage">
-			{/*  showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description]
-        Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
+			{showAlert && (
+				<StyledAlert
+					severity="info"
+					className="announcement"
+					onClose={() => setShowAlert(false)}
+				>
+					{/* 🚧 [Issue Description]
+        Please remain patient while we work on a fix. Thank you. 🚧 */}
+					Last semester, CMUEats was unreliable for opening and
+					closing statuses. We made changes to hopefully make them
+					more reliable. Please contact us (see the footer) if issues
+					persist.
+				</StyledAlert>
+			)}
 
 			{showOfflineAlert && (
 				<StyledAlert
