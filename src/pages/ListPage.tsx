@@ -13,9 +13,9 @@ import {
 } from '../types/locationTypes';
 import assert from '../util/assert';
 
-//for the location filter
-import SelectLocation from '../components/SelectLocation'
-//for the location filter
+// for the location filter
+import SelectLocation from '../components/SelectLocation';
+// for the location filter
 
 // Typography
 const HeaderText = styled(Typography)({
@@ -172,10 +172,8 @@ function ListPage({
 						placeholder="Search"
 					/>
 					{/* call the location filter */}
-					<SelectLocation SSQ = {setSearchQuery} l = {locations}>
-					</SelectLocation>
+					<SelectLocation SSQ={setSearchQuery} l={locations} />
 					{/* call the location filter */}
-
 				</header>
 				{(() => {
 					if (
