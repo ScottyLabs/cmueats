@@ -3,12 +3,12 @@ import { IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes'
 import './SelectLocation.css';
 
 type SelectLocationProps = {
-	SSQ: (value: React.SetStateAction<string>) => void;
-	l: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+	setSearchQuery: (value: React.SetStateAction<string>) => void;
+	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 };
 
-function SelectLocation({ SSQ, l }: SelectLocationProps) {
-	if (l === undefined) {
+function SelectLocation({ setSearchQuery, locations }: SelectLocationProps) {
+	if (locations === undefined) {
 		return (
 			<select className="select">
 				<option value="" label="Loading..." />
@@ -16,30 +16,31 @@ function SelectLocation({ SSQ, l }: SelectLocationProps) {
 		);
 	}
 
-	let lStrings = l.map((locationObj) => locationObj.location);
-	lStrings = lStrings.map((locationObj) =>
+	let locationStringsList = locations.map(
+		(locationObj) => locationObj.location,
+	);
+	locationStringsList = locationStringsList.map((locationObj) =>
 		locationObj.indexOf(',') === -1
 			? locationObj
 			: locationObj.slice(0, locationObj.indexOf(',')),
 	);
-	lStrings = lStrings.filter(
-		(item, index) => lStrings.indexOf(item) === index,
-	);
+	const locationStrings = Array.from(new Set(locationStringsList));
 
 	return (
-		<select onChange={(e) => SSQ(e.target.value)} className="select">
+		<select
+			onChange={(e) => setSearchQuery(e.target.value)}
+			className="select"
+		>
 			<option value="" label="Filter by Building" />
-			{lStrings.map((ll) => (
-				<option key={ll} value={ll}>
-					{ll}
+			{locationStrings.map((location) => (
+				<option key={location} value={location}>
+					{location}
 				</option>
 			))}
 		</select>
 	);
 
-	// The whole thing breaks if this useless, extraneous piece is deleted.
-	// i don't know why.
-	return <>🥥</>;
+	return <>BUG: breaks if removed</>;
 }
 
 export default SelectLocation;
