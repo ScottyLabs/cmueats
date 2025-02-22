@@ -12,8 +12,6 @@ import {
 	LocationState,
 } from '../types/locationTypes';
 import assert from '../util/assert';
-
-// for the location filter
 import SelectLocation from '../components/SelectLocation';
 
 // Typography
