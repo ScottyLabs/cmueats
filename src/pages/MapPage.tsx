@@ -103,6 +103,10 @@ function MapPage({
 					{selectedLocationIndex !== undefined && (
 						<EateryCard
 							location={locations[selectedLocationIndex]}
+							starred={true}
+							onToggleStar={(
+								_loc: IReadOnlyExtendedLocation,
+							) => {}}
 						/>
 					)}
 				</div>

@@ -94,6 +94,10 @@ function ListPage({
 		IReadOnlyExtendedLocation[]
 	>([]);
 
+	const [nonStarredEateries, setNonStarredEateries] = useState<
+		IReadOnlyExtendedLocation[]
+	>([]);
+
 	useEffect(() => {
 		if (locations) {
 			const fuseInstance = new Fuse(locations, fuseOptions);
@@ -102,13 +106,13 @@ function ListPage({
 	}, [locations]);
 
 	useLayoutEffect(() => {
-		if (starredEateries === undefined || fuse === null) return;
+		if (locations === undefined || fuse === null) return;
 		const processedSearchQuery = searchQuery.trim().toLowerCase();
 
 		// Fuzzy search. If there's no search query, it returns all locations.
 		setFilteredLocations(
 			processedSearchQuery.length === 0
-				? starredEateries
+				? locations
 				: fuse
 						.search(processedSearchQuery)
 						.map((result) => result.item),
@@ -142,16 +146,6 @@ function ListPage({
 		};
 	}, []);
 
-	const sortedEateries = [locations].sort((a, b) => {
-		const isStarredA = starredEateries.some(
-			(starred) => JSON.stringify(starred) === JSON.stringify(a),
-		);
-		const isStarredB = starredEateries.some(
-			(starred) => JSON.stringify(starred) === JSON.stringify(b),
-		);
-		return (isStarredB ? 1 : 0) - (isStarredA ? 1 : 0);
-	});
-
 	useEffect(() => {
 		const storedStars = JSON.parse(
 			localStorage.getItem('starredEateries') || '[]',
@@ -170,6 +164,10 @@ function ListPage({
 			: [...starredEateries, location];
 
 		setStarredEateries(updatedStars);
+		const setDifference = locations.filter(
+			(loc) => !updatedStars.includes(loc),
+		);
+		setNonStarredEateries(setDifference);
 		localStorage.setItem('starredEateries', JSON.stringify(updatedStars));
 	};
 
@@ -238,12 +236,26 @@ function ListPage({
 						<Grid container spacing={2}>
 							{[...filteredLocations]
 								.sort((location1, location2) => {
+									const isStarred1 = starredEateries.some(
+										(starred) =>
+											starred.conceptId ===
+											location1.conceptId,
+									);
+									const isStarred2 = starredEateries.some(
+										(starred) =>
+											starred.conceptId ===
+											location2.conceptId,
+									);
+
+									if (isStarred1 !== isStarred2) {
+										return isStarred2 ? 1 : -1;
+									}
+
 									const state1 = location1.locationState;
 									const state2 = location2.locationState;
 									if (state1 !== state2)
 										return state1 - state2;
-									// this if statement is janky but otherwise TS won't
-									// realize that the timeUntil property exists on both l1 and l2
+
 									if (
 										location1.closedLongTerm ||
 										location2.closedLongTerm
@@ -256,7 +268,7 @@ function ListPage({
 											location2.name,
 										);
 									}
-									// flip sorting order if locations are both open or opening soon
+
 									return (
 										(state1 === LocationState.OPEN ||
 										state1 === LocationState.OPENS_SOON
