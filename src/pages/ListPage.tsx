@@ -14,6 +14,10 @@ import {
 import assert from '../util/assert';
 import SelectLocation from '../components/SelectLocation';
 
+// for the location filter
+import SelectLocation from '../components/SelectLocation';
+// for the location filter
+
 // Typography
 const HeaderText = styled(Typography)({
 	color: 'white',

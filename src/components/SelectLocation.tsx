@@ -22,6 +22,7 @@ function SelectLocation({ setSearchQuery, locations }: SelectLocationProps) {
 			? locationObj
 			: locationObj.slice(0, locationObj.indexOf(',')),
 	);
+
 	locationStrings = Array.from(new Set(locationStrings));
 	return (
 		<select
