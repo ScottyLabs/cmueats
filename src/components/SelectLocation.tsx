@@ -16,22 +16,23 @@ function SelectLocation({ setSearchQuery, locations }: SelectLocationProps) {
 		);
 	}
 
-	let locationStringsList = locations.map(
-		(locationObj) => locationObj.location,
-	);
-	locationStringsList = locationStringsList.map((locationObj) =>
+	let locationStrings = locations.map((locationObj) => locationObj.location);
+	locationStrings = locationStrings.map((locationObj) =>
 		locationObj.indexOf(',') === -1
 			? locationObj
 			: locationObj.slice(0, locationObj.indexOf(',')),
 	);
-	const locationStrings = Array.from(new Set(locationStringsList));
-
+	locationStrings = Array.from(new Set(locationStrings));
 	return (
 		<select
 			onChange={(e) => setSearchQuery(e.target.value)}
 			className="select"
 		>
-			<option value="" label="Filter by Building" />
+			<option
+				value=""
+				key="Filter by Building"
+				label="Filter by Building"
+			/>
 			{locationStrings.map((location) => (
 				<option key={location} value={location}>
 					{location}
