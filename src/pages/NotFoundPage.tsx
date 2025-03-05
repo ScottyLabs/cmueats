@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Button } from '@mui/material';
+import { Button } from '@mui/material';
 
 function NotFoundPage() {
 	const navigate = useNavigate();
 
 	return (
-		<Box textAlign="center" mt={12} mb={12}>
+		<div className="error-container">
 			<h2 className="error-container__title">Oops!</h2>
 			<p className="error-container__text">
 				We couldn’t find the page you are looking for.
@@ -18,7 +18,7 @@ function NotFoundPage() {
 			>
 				Home page
 			</Button>
-		</Box>
+		</div>
 	);
 }
 

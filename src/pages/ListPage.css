@@ -23,7 +23,7 @@
 	initial-value: 0%;
 }
 .Locations-header__greeting {
-	color: var(--text-primary);
+	color: var(--text-greeting);
 	margin: 5px 0;
 	font-family: var(--text-primary-font);
 	font-weight: 800;
@@ -89,17 +89,18 @@
 	background-position: 1rem center;
 	color: var(--input-text);
 	font-weight: 500;
-}
-
-.Locations-search::-webkit-search-decoration {
-	display: none;
-}
-
-.Locations-search:focus {
-	transition: all 0.5s;
-	box-shadow: 0 0 40px var(--hover-accent-color);
-	border-color: var(--hover-accent-color);
-	outline: none;
+	&::-webkit-search-decoration {
+		display: none;
+	}
+	&:focus {
+		transition: all 0.5s;
+		box-shadow: 0 0 40px var(--hover-accent-color);
+		border-color: var(--hover-accent-color);
+		outline: none;
+	}
+	&::placeholder {
+		color: var(--input-text-placeholder);
+	}
 }
 
 .card {

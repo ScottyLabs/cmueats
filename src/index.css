@@ -2,10 +2,12 @@
 	--main-bg: #2c2f33;
 	--main-bg-accent: #23272a;
 	--text-primary: white;
+	--text-greeting: white;
 	--text-muted: #d4d4d8;
 
 	--input-bg: #23272a;
 	--input-text: var(--text-primary);
+	--input-text-placeholder: rgba(255, 255, 255, 0.785);
 
 	--card-bg: #23272a;
 	--card-header-bg: #1d1f21;
@@ -54,13 +56,15 @@ html.miku {
 	--main-bg: hsl(178 2.4% 7.7%);
 	--main-bg-accent: hsl(206, 9%, 15%);
 	--text-primary: white;
+	--text-greeting: black;
 	--text-muted: #d4d4d8;
 
 	--input-bg: hsla(178, 100%, 17%, 0.731);
 	--input-text: var(--text-primary);
+	--input-text-placeholder: rgba(255, 255, 255, 0.785);
 
-	--card-bg: hsla(180, 4%, 22%, 0.837);
-	--card-header-bg: hsl(180, 4%, 22%);
+	--card-bg: hsla(180, 4%, 22%, 0.537);
+	--card-header-bg: hsl(180, 4%, 22%, 0.6);
 	--card-text-title: hsl(178 100% 46.7%);
 	--card-text-description: hsl(178 30% 86.7%);
 	--card-text-muted: hsl(178 42.4% 46.7%);
@@ -101,14 +105,24 @@ html.miku {
 	--logo-second-half: hsl(185, 68%, 54%);
 	.App {
 		background-image: url(miku.jpg);
-		background-color: rgba(0, 0, 0, 0.486);
+		background-color: rgba(0, 0, 0, 0.2);
 		background-blend-mode: overlay;
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: cover;
 	}
+	.Locations-header__greeting {
+		text-shadow:
+			-1px -1px 0 white,
+			1px -1px 0 white,
+			-1px 1px 0 white,
+			1px 1px 0 white;
+	}
 	.card--animated:hover {
 		background-color: hsla(180, 4%, 22%, 0.937);
+	}
+	.error-container {
+		background-color: hsla(180, 4%, 22%, 0.437);
 	}
 	@media screen and (max-width: 900px) {
 		.App {
@@ -125,10 +139,14 @@ body {
 .error-container {
 	margin: 48px auto;
 	text-align: center;
+	width: fit-content;
+	padding: 20px 30px;
+	border-radius: 15px;
 }
 .error-container__title {
 	color: var(--text-primary);
 	font-family: var(--text-primary-font);
+	margin-top: 0;
 	margin-bottom: 12px;
 	font-size: 1.5rem;
 }
