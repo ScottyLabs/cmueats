@@ -12,10 +12,8 @@ body,
 
 html,
 body {
-	background-color: #2c2f33;
 	margin: 0;
 	padding: 0;
-	font-size: 14px;
 	font-family:
 		'Inter',
 		-apple-system,
@@ -37,7 +35,7 @@ body {
 
 .App {
 	text-align: left;
-	background-color: #2c2f33;
+	background: var(--main-bg);
 	display: flex;
 	flex-direction: column;
 }
@@ -80,9 +78,31 @@ body {
 
 .footer {
 	margin-top: 80px;
-	background-color: #23272a;
+	background-color: var(--footer-bg);
 	padding: 40px;
 	min-height: 130px;
+	position: relative;
+	overflow: hidden;
+	&:has(.footer__miku) {
+		min-height: 530px;
+		/* we create a new stacking context so miku doesn't go below the bg */
+		isolation: isolate;
+	}
+}
+.footer__miku {
+	position: absolute;
+	right: 20px;
+	top: -56px;
+	height: 100%;
+	z-index: -1;
+}
+@media screen and (max-width: 900px) {
+	.footer__miku {
+		top: 0;
+	}
+	.Container {
+		padding: 10px 15px;
+	}
 }
 
 .MuiCard-root {

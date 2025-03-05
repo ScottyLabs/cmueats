@@ -1,13 +1,150 @@
+:root {
+	--main-bg: #2c2f33;
+	--main-bg-accent: #23272a;
+	--text-primary: white;
+	--text-muted: #d4d4d8;
+
+	--input-bg: #23272a;
+	--input-text: var(--text-primary);
+
+	--card-bg: #23272a;
+	--card-header-bg: #1d1f21;
+	--card-text-title: white;
+	--card-text-description: white;
+	--card-text-muted: #8d979f;
+	--card-border-color: rgba(0, 0, 0, 0.2);
+	--card-border-width: 2px;
+
+	--footer-bg: #1e1e1e;
+	--nav-border-top: #31373e;
+	--nav-bg: #1e1e1e;
+	--selected-tab-bg: #2b2f33;
+
+	--hover-accent-color: rgba(238, 111, 82, 0.7);
+
+	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--text-secondary-font: 'Inter';
+	--button-bg: #1d1f21;
+	--button-bg--hover: #000000;
+	--button-text: white;
+
+	--location-open-text-color: #19b875;
+	--location-closed-text-color: #dd3c18;
+	--location-closed-long-term-text-color: #dd3c18;
+	--location-opens-soon-text-color: #f6cc5d;
+	--location-closes-soon-text-color: #f3f65d;
+
+	--location-open-highlight: var(--location-open-text-color);
+	--location-closed-highlight: var(--location-closed-text-color);
+	--location-closed-long-term-highlight: var(
+		--location-closed-long-term-text-color
+	);
+	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
+	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
+
+	--specials-bg: #23272a;
+
+	--logo-first-half: #dd3c18;
+	--logo-second-half: #19b875;
+}
+
+html.miku {
+	--main-bg: hsl(178 2.4% 7.7%);
+	--main-bg-accent: hsl(206, 9%, 15%);
+	--text-primary: white;
+	--text-muted: #d4d4d8;
+
+	--input-bg: hsla(178, 100%, 17%, 0.731);
+	--input-text: var(--text-primary);
+
+	--card-bg: hsla(180, 4%, 22%, 0.837);
+	--card-header-bg: hsl(180, 4%, 22%);
+	--card-text-title: hsl(178 100% 46.7%);
+	--card-text-description: hsl(178 30% 86.7%);
+	--card-text-muted: hsl(178 42.4% 46.7%);
+	--card-border-color: hsla(178, 100%, 67%, 0.44);
+	--card-border-width: 0px;
+
+	--footer-bg: hsl(178 100% 16.7%);
+	--nav-border-top: #31373e;
+	--selected-tab-bg: #2b2f33;
+	--nav-bg: #1e1e1e;
+	--hover-accent-color: hsl(170, 100%, 67%, 0.3);
+
+	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--text-secondary-font: 'Inter';
+	--button-bg: hsla(171, 29%, 70%, 0.626);
+	--button-bg--hover: hsl(170 30% 80%);
+	--button-text: black;
+
+	--location-open-text-color: #19b875;
+	--location-closed-text-color: #dd3c18;
+	--location-closed-long-term-text-color: #dd3c18;
+	--location-opens-soon-text-color: #f6cc5d;
+	--location-closes-soon-text-color: #f3f65d;
+
+	--location-open-highlight: hsl(103, 61%, 49%);
+	--location-closed-highlight: var(--location-closed-text-color);
+	--location-closed-long-term-highlight: var(
+		--location-closed-long-term-text-color
+	);
+	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
+	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
+
+	--specials-bg: #23272a;
+
+	--logo-first-half: hsl(11, 90%, 58%);
+	--logo-second-half: hsl(185, 68%, 54%);
+	.App {
+		background-image: url(miku.jpg);
+		background-color: rgba(0, 0, 0, 0.486);
+		background-blend-mode: overlay;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	.card--animated:hover {
+		background-color: hsla(180, 4%, 22%, 0.937);
+	}
+	@media screen and (max-width: 900px) {
+		.App {
+			background-position: -900px 0;
+		}
+	}
+}
 body {
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-		'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-		'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
 
-code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-		monospace;
+.error-container {
+	margin: 48px auto;
+	text-align: center;
+}
+.error-container__title {
+	color: var(--text-primary);
+	font-family: var(--text-primary-font);
+	margin-bottom: 12px;
+	font-size: 1.5rem;
+}
+.error-container__text {
+	color: var(--text-muted);
+	font-family: var(--text-secondary-font);
+	margin-bottom: 20px;
+	font-size: 1rem;
+}
+.error-container__error-button.MuiButton-root {
+	font-size: 1rem;
+	font-family: var(--text-secondary-font);
+	background-color: var(--button-bg);
+	color: var(--button-text);
+	font-weight: 600;
+	&:hover {
+		background-color: var(--button-bg--hover);
+	}
 }

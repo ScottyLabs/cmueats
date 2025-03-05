@@ -1,4 +1,5 @@
 import assert from './assert';
+import MIKU_DAY from './constants';
 import bounded from './misc';
 
 const graveyard = [
@@ -43,6 +44,8 @@ const evening = [
 
 const getGreeting = (hours: number) => {
 	assert(bounded(hours, 0, 24));
+
+	if (MIKU_DAY) return 'Happy Miku Day! (March 9th)';
 	if (hours < 6) {
 		return graveyard[Math.floor(Math.random() * graveyard.length)];
 	}

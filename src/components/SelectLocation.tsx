@@ -11,7 +11,7 @@ function SelectLocation({ SSQ, l }: SelectLocationProps) {
 	if (l === undefined) {
 		return (
 			<select className="select">
-				<option value="" label="Loading..." />
+				<option value="" label="Filter by Building" />
 			</select>
 		);
 	}

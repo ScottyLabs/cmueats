@@ -15,47 +15,24 @@ import assert from '../util/assert';
 
 // for the location filter
 import SelectLocation from '../components/SelectLocation';
-// for the location filter
-
-// Typography
-const HeaderText = styled(Typography)({
-	color: 'white',
-	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
-	fontWeight: 800,
-	fontSize: '3em',
-});
-const ErrorText = styled(Typography)({
-	color: 'white',
-	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
-});
+import MIKU_DAY from '../util/constants';
 
 const LogoText = styled(Typography)({
-	color: '#dd3c18',
+	color: 'var(--logo-first-half)',
 	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
+	fontFamily: 'var(--text-primary-font)',
 	fontWeight: 800,
 });
 
 const FooterText = styled(Typography)({
-	color: 'white',
+	color: 'var(--text-primary)',
 	marginBottom: 20,
 	fontSize: 16,
 });
 
 const StyledAlert = styled(Alert)({
-	backgroundColor: '#23272a',
-	color: '#ffffff',
+	backgroundColor: 'var(--main-bg-accent)',
+	color: 'var(--text-primary)',
 });
 
 function getPittsburghTime() {
@@ -153,14 +130,7 @@ function ListPage({
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<div className="Locations-header__greeting-wrapper">
-						<HeaderText
-							variant="h3"
-							className="Locations-header__greeting"
-						>
-							{greeting}
-						</HeaderText>
-					</div>
+					<h3 className="Locations-header__greeting">{greeting}</h3>
 					<input
 						className="Locations-search"
 						type="search"
@@ -197,11 +167,11 @@ function ListPage({
 					}
 					if (locations.length === 0)
 						return (
-							<ErrorText variant="h4">
+							<p className="locations-container__error-text">
 								Oops! We received an invalid API response (or no
 								data at all). If this problem persists, please
 								let us know.
-							</ErrorText>
+							</p>
 						);
 					if (filteredLocations.length === 0)
 						return (
@@ -258,49 +228,70 @@ function ListPage({
 				})()}
 			</div>
 			<footer className="footer">
-				<FooterText>
-					All times displayed in Pittsburgh local time (
-					{getPittsburghTime()}).
-				</FooterText>
-				{/* eslint-disable */}
-				<FooterText>
-					Contact{' '}
-					<a
-						href={'mailto:jaisal.patel45@gmail.com'}
-						style={{ color: 'white' }}
-					>
-						Jaisal
-					</a>
-					,{' '}
-					<a
-						href={'mailto:jmacera@andrew.cmu.edu'}
-						style={{ color: 'white' }}
-					>
-						Josef
-					</a>
-					, or{' '}
-					<a
-						href={'mailto:jhurewit@andrew.cmu.edu'}
-						style={{ color: 'white' }}
-					>
-						Jack
-					</a>{' '}
-					with any problems.
-				</FooterText>
-				<FooterText>
-					Made with ❤️ by{' '}
-					<a
-						href={'https://scottylabs.org'}
-						style={{ color: 'white' }}
-					>
-						ScottyLabs
-					</a>
-					.
-				</FooterText>
+				{MIKU_DAY ? (
+					<FooterText>
+						Blue hair, blue tie, hiding in your wifi
+						<br />
+						All times displayed in Pittsburgh local time (
+						{getPittsburghTime()}).
+					</FooterText>
+				) : (
+					<>
+						<FooterText>
+							All times displayed in Pittsburgh local time (
+							{getPittsburghTime()}).
+						</FooterText>
+						{/* eslint-disable */}
+						<FooterText>
+							Contact{' '}
+							<a
+								href={'mailto:jaisal.patel45@gmail.com'}
+								style={{ color: 'white' }}
+							>
+								Jaisal
+							</a>
+							,{' '}
+							<a
+								href={'mailto:jmacera@andrew.cmu.edu'}
+								style={{ color: 'white' }}
+							>
+								Josef
+							</a>
+							, or{' '}
+							<a
+								href={'mailto:jhurewit@andrew.cmu.edu'}
+								style={{ color: 'white' }}
+							>
+								Jack
+							</a>{' '}
+							with any problems.
+						</FooterText>
+						<FooterText>
+							Made with ❤️ by{' '}
+							<a
+								href={'https://scottylabs.org'}
+								style={{ color: 'white' }}
+							>
+								ScottyLabs
+							</a>
+							.
+						</FooterText>
+					</>
+				)}
 				{/* eslint-enable */}
 				<LogoText variant="h4">
-					cmu<span style={{ color: '#19b875' }}>:eats</span>
+					cmu
+					<span style={{ color: 'var(--logo-second-half)' }}>
+						:eats
+					</span>
 				</LogoText>
+				{MIKU_DAY && (
+					<img
+						src="/miku2.png"
+						alt="miku!"
+						className="footer__miku"
+					/>
+				)}
 			</footer>
 		</div>
 	);

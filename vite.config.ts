@@ -100,7 +100,6 @@ export default defineConfig(({ command, mode }) => {
       'process.env.REACT_APP_PUBLIC_POSTHOG_KEY': JSON.stringify(posthog),
     },
     plugins: [
-      million.vite({ auto: true }),
       react(),
       viteTsconfigPaths(),
       svgrPlugin(),

@@ -1,16 +1,17 @@
-import { Box } from '@mui/material';
-import { ErrorButton, ErrorText, ErrorTitle } from '../style';
+import { Button } from '@mui/material';
 
 function EateryCard({ onClear }: { onClear: () => unknown }) {
 	return (
-		<Box textAlign="center" mt={6} mb={6}>
-			<ErrorTitle variant="h2">No results found</ErrorTitle>
-			<ErrorText>
+		<div className="error-container">
+			<h2 className="error-container__title">No results found</h2>
+			<p className="error-container__text">
 				Try searching for a name (e.g. “Schatz”) or location (e.g.
 				“Cohon”).
-			</ErrorText>
-			<ErrorButton onClick={onClear}>Clear search</ErrorButton>
-		</Box>
+			</p>
+			<Button onClick={onClear} className="error-container__error-button">
+				Clear search
+			</Button>
+		</div>
 	);
 }
 
