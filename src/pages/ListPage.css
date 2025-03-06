@@ -24,7 +24,7 @@
 }
 .Locations-header__greeting {
 	color: var(--text-greeting);
-	margin: 5px 0;
+	margin: 0;
 	font-family: var(--text-primary-font);
 	font-weight: 800;
 	font-size: 2.5rem;
@@ -119,6 +119,7 @@
 .card--special {
 	background: var(--specials-bg);
 }
+
 .card--animated {
 	opacity: 0;
 	--card-show-delay: 0s;
@@ -173,7 +174,8 @@
 .locations-container__error-text {
 	color: var(--text-primary);
 	font-family: var(--text-primary-font);
-	font-size: 2rem;
+	font-size: 1.5rem;
+	width: fit-content;
 }
 
 .skeleton-card--animated {

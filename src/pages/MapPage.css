@@ -1,5 +1,5 @@
 .MapPage {
-	background-color: #2c2d2f;
+	background-color: var(--main-bg);
 	display: grid;
 	grid-template-rows: 1fr auto;
 	height: 100%;
@@ -7,7 +7,7 @@
 
 .MapDrawer {
 	padding: 14px;
-	background: #2d2f33;
+	background: var(--map-drawer-bg);
 	border-radius: 14px 14px 0 0;
 	overflow: hidden;
 	box-sizing: content-box;

@@ -7,9 +7,7 @@
 
 	padding: 0.8rem 0.9rem;
 	border-radius: 1rem;
-	background: var(--input-bg)
-		url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj4KICA8cG9seWdvbiBmaWxsPSIjZmZmIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPgogIDxwb2x5Z29uIGZpbGw9IiNmZmYiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+Cjwvc3ZnPg==)
-		no-repeat calc(100% - 10px) 50%;
+	background: var(--input-bg) url(select.svg) no-repeat calc(100% - 10px) 50%;
 	outline: none;
 	border: 1px solid transparent;
 	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);

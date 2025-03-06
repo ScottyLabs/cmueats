@@ -1,5 +1,5 @@
 :root {
-	--main-bg: #2c2f33;
+	--main-bg: hsl(214, 7%, 19%);
 	--main-bg-accent: #23272a;
 	--text-primary: white;
 	--text-greeting: white;
@@ -47,6 +47,7 @@
 	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
 
 	--specials-bg: #23272a;
+	--map-drawer-bg: #2d2f33;
 
 	--logo-first-half: #dd3c18;
 	--logo-second-half: #19b875;
@@ -56,16 +57,16 @@ html.miku {
 	--main-bg: hsl(178 2.4% 7.7%);
 	--main-bg-accent: hsl(206, 9%, 15%);
 	--text-primary: white;
-	--text-greeting: black;
+	--text-greeting: white;
 	--text-muted: #d4d4d8;
 
 	--input-bg: hsla(178, 100%, 17%, 0.731);
 	--input-text: var(--text-primary);
 	--input-text-placeholder: rgba(255, 255, 255, 0.785);
 
-	--card-bg: hsla(180, 4%, 22%, 0.537);
-	--card-header-bg: hsl(180, 4%, 22%, 0.6);
-	--card-text-title: hsl(178 100% 46.7%);
+	--card-bg: hsla(180, 24%, 22%, 0.6);
+	--card-header-bg: hsl(180, 24%, 22%, 0.6);
+	--card-text-title: hsl(190 100% 46.7%);
 	--card-text-description: hsl(178 30% 86.7%);
 	--card-text-muted: hsl(178 42.4% 46.7%);
 	--card-border-color: hsla(178, 100%, 67%, 0.44);
@@ -81,12 +82,12 @@ html.miku {
 		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
 		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	--text-secondary-font: 'Inter';
-	--button-bg: hsla(171, 29%, 70%, 0.626);
+	--button-bg: hsla(190, 99%, 50%, 0.626);
 	--button-bg--hover: hsl(170 30% 80%);
-	--button-text: black;
+	--button-text: white;
 
 	--location-open-text-color: #19b875;
-	--location-closed-text-color: #dd3c18;
+	--location-closed-text-color: hsl(352, 80%, 58%);
 	--location-closed-long-term-text-color: #dd3c18;
 	--location-opens-soon-text-color: #f6cc5d;
 	--location-closes-soon-text-color: #f3f65d;
@@ -100,32 +101,58 @@ html.miku {
 	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
 
 	--specials-bg: #23272a;
+	--map-drawer-bg: #2d2f33;
 
 	--logo-first-half: hsl(11, 90%, 58%);
 	--logo-second-half: hsl(185, 68%, 54%);
+
 	.App {
 		background-image: url(miku.jpg);
-		background-color: rgba(0, 0, 0, 0.2);
-		background-blend-mode: overlay;
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: cover;
 	}
-	.Locations-header__greeting {
-		text-shadow:
-			-1px -1px 0 white,
-			1px -1px 0 white,
-			-1px 1px 0 white,
-			1px 1px 0 white;
+	/* Adds a dark gradient at the top (so the greeting is actually readable) */
+	.Container {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		box-sizing: border-box;
+		&::before {
+			content: '';
+			z-index: -1;
+			position: absolute;
+			inset: 0;
+			height: 200px;
+			background: linear-gradient(
+				to bottom,
+				rgba(0, 0, 0, 0.5),
+				rgba(0, 0, 0, 0)
+			);
+		}
 	}
-	.card--animated:hover {
-		background-color: hsla(180, 4%, 22%, 0.937);
+	.locations-container__error-text {
+		position: relative;
+		background-color: hsla(180, 4%, 22%, 0.837);
+		backdrop-filter: blur(12px);
+		padding: 10px;
+		border-radius: 10px;
 	}
+	.card--in-main-grid {
+		backdrop-filter: blur(9px) brightness(70%);
+	}
+	.card--in-main-grid:hover {
+		background-color: hsla(180, 4%, 22%, 1);
+	}
+
 	.error-container {
-		background-color: hsla(180, 4%, 22%, 0.437);
+		background-color: hsla(180, 4%, 22%, 0.837);
+		backdrop-filter: blur(12px);
+		border-radius: 10px;
 	}
 	@media screen and (max-width: 900px) {
 		.App {
+			/* position miku's face front and center */
 			background-position: -900px 0;
 		}
 	}

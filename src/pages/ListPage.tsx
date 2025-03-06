@@ -221,6 +221,7 @@ function ListPage({
 										key={location.conceptId}
 										index={i}
 										animate={shouldAnimateCards}
+										partOfMainGrid
 									/>
 								))}
 						</Grid>

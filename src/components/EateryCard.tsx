@@ -44,6 +44,7 @@ const highlightColors: Record<LocationState, string> = {
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(
 	({ state }) => ({
 		fontWeight: 500,
+		alignItems: 'flex-start',
 		borderBottom: '2px solid',
 		borderBottomColor: highlightColors[state],
 		background: 'var(--card-header-bg)',
@@ -73,7 +74,9 @@ const DescriptionText = styled(Typography)({
 	color: 'var(--card-text-description)',
 });
 
-const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
+const OpenText = styled(Typography, {
+	shouldForwardProp: (prop) => prop !== 'changesSoon',
+})<TextProps>(({ changesSoon }) => ({
 	color: changesSoon
 		? textColors[LocationState.CLOSES_SOON]
 		: textColors[LocationState.OPEN],
@@ -82,7 +85,9 @@ const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
 	fontFamily: 'var(--text-secondary-font)',
 }));
 
-const ClosedText = styled(Typography)<TextProps>(({ changesSoon }) => ({
+const ClosedText = styled(Typography, {
+	shouldForwardProp: (prop) => prop !== 'changesSoon',
+})<TextProps>(({ changesSoon }) => ({
 	color: changesSoon
 		? textColors[LocationState.OPENS_SOON]
 		: textColors[LocationState.CLOSED],
@@ -121,7 +126,9 @@ const blinkingAnimation = {
 	},
 };
 
-const Dot = styled(Card)(
+const Dot = styled(Card, {
+	shouldForwardProp: (prop) => prop !== 'changesSoon' && prop !== 'state',
+})(
 	({
 		state,
 		changesSoon,
@@ -148,10 +155,12 @@ const SpecialsContent = styled(Accordion)({
 function EateryCard({
 	location,
 	index = 0,
+	partOfMainGrid = false,
 	animate = false,
 }: {
 	location: IReadOnlyLocation_Combined;
 	index?: number;
+	partOfMainGrid?: boolean;
 	animate?: boolean;
 }) {
 	const {
@@ -173,7 +182,7 @@ function EateryCard({
 		<>
 			<Grid item xs={12} md={4} lg={3} xl={3}>
 				<div
-					className={`card ${animate ? 'card--animated' : ''}`}
+					className={`card ${animate ? 'card--animated' : ''} ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
 					style={{ '--card-show-delay': `${index * 50}ms` }}
 				>
 					<StyledCardHeader
@@ -201,6 +210,7 @@ function EateryCard({
 									width: 12,
 									height: 12,
 									backgroundColor: 'transparent',
+									marginTop: '8px',
 								}}
 							>
 								<Dot
@@ -256,7 +266,7 @@ function EateryCard({
 					},
 				}}
 			>
-				<div className="card card--special">
+				<div className="card">
 					<StyledCardHeader
 						title={
 							isOpen ? (
@@ -281,6 +291,7 @@ function EateryCard({
 									width: 12,
 									height: 12,
 									backgroundColor: 'transparent',
+									marginTop: '8px',
 								}}
 							>
 								<Dot

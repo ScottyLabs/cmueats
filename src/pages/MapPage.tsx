@@ -54,69 +54,83 @@ function MapPage({
 		}),
 		[],
 	);
-	if (!locations || !extraLocationData) return undefined;
-	const extendedLocationData = locations.map((location) => ({
-		...location,
-		...extraLocationData[location.conceptId],
-	}));
+
+	const extendedLocationData =
+		locations && extraLocationData
+			? locations.map((location) => ({
+					...location,
+					...extraLocationData[location.conceptId],
+				}))
+			: undefined;
 	return (
 		<div className="MapPage">
-			<Map
-				token={token as string}
-				colorScheme={ColorScheme.Dark}
-				initialRegion={initialRegion}
-				excludedPOICategories={[PointOfInterestCategory.Restaurant]}
-				cameraBoundary={cameraBoundary}
-				minCameraDistance={100}
-				maxCameraDistance={1000}
-				showsUserLocationControl
-				allowWheelToZoom
-			>
-				{extendedLocationData.map((location, locationIndex) => {
-					if (!location.coordinates) return undefined;
-					return (
-						<Marker
-							key={location.conceptId}
-							latitude={location.coordinates.lat}
-							longitude={location.coordinates.lng}
-							color={
-								!location.closedLongTerm && location.isOpen
-									? '#69bb36'
-									: '#ff5b40'
-							}
-							glyphText={abbreviate(location.name)}
-							onSelect={() => {
-								setSelectedLocationIndex(locationIndex);
-								setDrawerVisible(true);
-							}}
-							onDeselect={() => {
-								if (selectedLocationIndex === locationIndex) {
-									setDrawerVisible(false);
-								}
-							}}
-						/>
-					);
-				})}
-			</Map>
-
-			<CSSTransition
-				classNames="DrawerTransition"
-				timeout={300}
-				in={isDrawerVisible}
-				mountOnEnter
-				unmountOnExit
-				nodeRef={drawerRef}
-			>
-				<div className="MapDrawer" ref={drawerRef}>
-					{selectedLocationIndex !== undefined && (
-						<EateryCard
-							location={
-								extendedLocationData[selectedLocationIndex]
-							}
-						/>
-					)}
-				</div>
-			</CSSTransition>
+			{extendedLocationData && (
+				<>
+					<Map
+						token={token as string}
+						colorScheme={ColorScheme.Dark}
+						initialRegion={initialRegion}
+						excludedPOICategories={[
+							PointOfInterestCategory.Restaurant,
+						]}
+						cameraBoundary={cameraBoundary}
+						minCameraDistance={100}
+						maxCameraDistance={1000}
+						showsUserLocationControl
+						allowWheelToZoom
+					>
+						{extendedLocationData.map((location, locationIndex) => {
+							if (!location.coordinates) return undefined;
+							return (
+								<Marker
+									key={location.conceptId}
+									latitude={location.coordinates.lat}
+									longitude={location.coordinates.lng}
+									color={
+										!location.closedLongTerm &&
+										location.isOpen
+											? '#69bb36'
+											: '#ff5b40'
+									}
+									glyphText={abbreviate(location.name)}
+									onSelect={() => {
+										setSelectedLocationIndex(locationIndex);
+										setDrawerVisible(true);
+									}}
+									onDeselect={() => {
+										if (
+											selectedLocationIndex ===
+											locationIndex
+										) {
+											setDrawerVisible(false);
+										}
+									}}
+								/>
+							);
+						})}
+					</Map>
+					<CSSTransition
+						classNames="DrawerTransition"
+						timeout={300}
+						in={isDrawerVisible}
+						mountOnEnter
+						unmountOnExit
+						nodeRef={drawerRef}
+					>
+						<div className="MapDrawer" ref={drawerRef}>
+							{selectedLocationIndex !== undefined && (
+								<EateryCard
+									location={
+										extendedLocationData[
+											selectedLocationIndex
+										]
+									}
+								/>
+							)}
+						</div>
+					</CSSTransition>
+				</>
+			)}
 		</div>
 	);
 }
