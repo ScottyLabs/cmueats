@@ -48,7 +48,6 @@ const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(
 		padding: '13px 16px',
 		borderBottom: '2px solid',
 		borderBottomColor: highlightColors[state],
-		background: 'var(--card-header-bg)',
 	}),
 );
 
@@ -220,6 +219,7 @@ function EateryCard({
 								/>
 							</Avatar>
 						}
+						className="card__header"
 					/>
 					<CardContent>
 						<NameText variant="h6">
@@ -267,7 +267,7 @@ function EateryCard({
 					},
 				}}
 			>
-				<div className="card">
+				<div className="card card--dialog">
 					<StyledCardHeader
 						title={
 							isOpen ? (
@@ -302,6 +302,7 @@ function EateryCard({
 							</Avatar>
 						}
 						state={location.locationState}
+						className="card--dialog__header"
 					/>
 					<CardContent>
 						<NameText variant="h6">

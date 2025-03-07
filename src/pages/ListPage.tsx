@@ -15,7 +15,8 @@ import assert from '../util/assert';
 
 // for the location filter
 import SelectLocation from '../components/SelectLocation';
-import MIKU_DAY from '../util/constants';
+import { useTheme } from '../ThemeProvider';
+import IS_MIKU_DAY from '../util/constants';
 
 const LogoText = styled(Typography)({
 	color: 'var(--logo-first-half)',
@@ -61,7 +62,11 @@ function ListPage({
 	extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 }) {
-	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
+	const { theme, updateTheme } = useTheme();
+	const greeting = useMemo(
+		() => getGreeting(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
+		[],
+	);
 	const fuse = useMemo(
 		() => new Fuse(locations ?? [], FUSE_OPTIONS),
 		[locations],
@@ -141,9 +146,18 @@ function ListPage({
 						}}
 						placeholder="Search"
 					/>
-					{/* call the location filter */}
 					<SelectLocation SSQ={setSearchQuery} l={locations} />
-					{/* call the location filter */}
+					{IS_MIKU_DAY && (
+						<button
+							onClick={() =>
+								updateTheme(theme === 'miku' ? 'none' : 'miku')
+							}
+							type="button"
+							className="Locations-header__miku-toggle"
+						>
+							<img src="miku-keychain.svg" alt="click me!" />
+						</button>
+					)}
 				</header>
 				{(() => {
 					if (
@@ -229,7 +243,7 @@ function ListPage({
 				})()}
 			</div>
 			<footer className="footer">
-				{MIKU_DAY ? (
+				{theme === 'miku' ? (
 					<FooterText>
 						Blue hair, blue tie, hiding in your wifi
 						<br />
@@ -286,7 +300,7 @@ function ListPage({
 						:eats
 					</span>
 				</LogoText>
-				{MIKU_DAY && (
+				{theme === 'miku' && (
 					<img
 						src="/miku2.png"
 						alt="miku!"

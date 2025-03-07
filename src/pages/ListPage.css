@@ -15,6 +15,49 @@
 	display: grid;
 	grid-gap: 1rem;
 	padding: 3rem 0;
+	position: relative;
+}
+.Locations-header__miku-toggle {
+	position: absolute;
+	top: -240px;
+	left: min(55%, 630px);
+	mask-image: url('miku-keychain.svg');
+	mask-position: bottom;
+	mask-size: contain;
+	padding: 0;
+	background-color: transparent;
+	border: none;
+	line-height: 0;
+	cursor: pointer;
+	transition: 0.3s all;
+	transform-origin: top;
+	animation: 3s sway infinite cubic-bezier(0.364212, 0, 0.635788, 1);
+	&:hover {
+		top: -230px;
+		&:active {
+			top: -225px;
+		}
+	}
+	& img {
+		height: 410px;
+	}
+}
+@media screen and (max-width: 900px) {
+	.Locations-header__miku-toggle {
+		right: -20px;
+		left: auto;
+	}
+}
+@keyframes sway {
+	0% {
+		transform: rotate(1deg);
+	}
+	50% {
+		transform: rotate(-1deg);
+	}
+	100% {
+		transform: rotate(1deg);
+	}
 }
 /* we need this to properly animate the mask gradient */
 @property --right-cutoff {
@@ -115,9 +158,15 @@
 	overflow: hidden;
 	transition: 0.3s all;
 }
+.card__header {
+	background: var(--card-header-bg);
+}
 /* the overlay card */
-.card--special {
-	background: var(--specials-bg);
+.card--dialog {
+	background: var(--dialog-bg);
+}
+.card--dialog__header {
+	background: var(--dialog-header-bg);
 }
 
 .card--animated {

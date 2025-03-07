@@ -1,5 +1,4 @@
 import assert from './assert';
-import MIKU_DAY from './constants';
 import bounded from './misc';
 
 const graveyard = [
@@ -41,11 +40,13 @@ const evening = [
 	'Hungry night owl?',
 	"Midnight munchies? We've got you!",
 ];
-
-const getGreeting = (hours: number) => {
+interface Special {
+	isMikuDay: boolean;
+}
+const getGreeting = (hours: number, special?: Special) => {
 	assert(bounded(hours, 0, 24));
 
-	if (MIKU_DAY) return 'Happy Miku Day! (March 9th)';
+	if (special?.isMikuDay) return 'Happy Miku Day! (March 9th)';
 	if (hours < 6) {
 		return graveyard[Math.floor(Math.random() * graveyard.length)];
 	}

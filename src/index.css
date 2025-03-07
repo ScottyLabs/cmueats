@@ -17,6 +17,9 @@
 	--card-border-color: rgba(0, 0, 0, 0.2);
 	--card-border-width: 2px;
 
+	--dialog-bg: var(--card-bg);
+	--dialog-header-bg: var(--card-header-bg);
+
 	--footer-bg: #1e1e1e;
 	--nav-border-top: #31373e;
 	--nav-bg: #1e1e1e;
@@ -46,14 +49,13 @@
 	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
 	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
 
-	--specials-bg: #23272a;
 	--map-drawer-bg: #2d2f33;
 
 	--logo-first-half: #dd3c18;
 	--logo-second-half: #19b875;
 }
 
-html.miku {
+body.miku {
 	--main-bg: hsl(178 2.4% 7.7%);
 	--main-bg-accent: hsl(206, 9%, 15%);
 	--text-primary: white;
@@ -69,8 +71,11 @@ html.miku {
 	--card-text-title: hsl(190 100% 46.7%);
 	--card-text-description: hsl(178 30% 86.7%);
 	--card-text-muted: hsl(178 42.4% 46.7%);
-	--card-border-color: hsla(178, 100%, 67%, 0.44);
-	--card-border-width: 0px;
+	--card-border-color: hsla(178, 100%, 67%, 0);
+	--card-border-width: 2px;
+
+	--dialog-bg: hsla(180, 4%, 22%, 1);
+	--dialog-header-bg: hsl(180, 24%, 22%, 0.6);
 
 	--footer-bg: hsl(178 100% 16.7%);
 	--nav-border-top: #31373e;
@@ -100,7 +105,6 @@ html.miku {
 	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
 	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
 
-	--specials-bg: #23272a;
 	--map-drawer-bg: #2d2f33;
 
 	--logo-first-half: hsl(11, 90%, 58%);
@@ -126,7 +130,7 @@ html.miku {
 			height: 200px;
 			background: linear-gradient(
 				to bottom,
-				hsla(180, 70%, 30%, 0.5),
+				hsla(180, 70%, 30%, 0.5) 70%,
 				hsla(0, 0%, 0%, 0)
 			);
 			/* background: black; */
@@ -140,7 +144,7 @@ html.miku {
 		border-radius: 10px;
 	}
 	.card--in-main-grid {
-		backdrop-filter: blur(9px) brightness(70%);
+		backdrop-filter: blur(3px) brightness(70%);
 	}
 	.card--in-main-grid:hover {
 		background-color: hsla(180, 4%, 22%, 1);
