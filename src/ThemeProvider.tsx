@@ -25,7 +25,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 	}, [theme]);
 
 	const updateTheme = (_theme: Theme) => {
-		localStorage.setItem('theme', _theme);
+		try {
+			localStorage.setItem('theme', _theme);
+		} catch (e) {
+			console.error(e);
+		}
 		setTheme(_theme);
 	};
 	const exportedContext = useMemo(
