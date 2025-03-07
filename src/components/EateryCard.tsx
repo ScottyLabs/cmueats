@@ -45,6 +45,7 @@ const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(
 	({ state }) => ({
 		fontWeight: 500,
 		alignItems: 'flex-start',
+		padding: '13px 16px',
 		borderBottom: '2px solid',
 		borderBottomColor: highlightColors[state],
 		background: 'var(--card-header-bg)',

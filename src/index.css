@@ -83,7 +83,7 @@ html.miku {
 		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	--text-secondary-font: 'Inter';
 	--button-bg: hsla(190, 99%, 50%, 0.626);
-	--button-bg--hover: hsl(170 30% 80%);
+	--button-bg--hover: hsla(190, 99%, 50%, 0.826);
 	--button-text: white;
 
 	--location-open-text-color: #19b875;
@@ -126,9 +126,10 @@ html.miku {
 			height: 200px;
 			background: linear-gradient(
 				to bottom,
-				rgba(0, 0, 0, 0.5),
-				rgba(0, 0, 0, 0)
+				hsla(180, 70%, 30%, 0.5),
+				hsla(0, 0%, 0%, 0)
 			);
+			/* background: black; */
 		}
 	}
 	.locations-container__error-text {
