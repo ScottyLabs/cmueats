@@ -7,7 +7,7 @@
 
 	padding: 0.8rem 0.9rem;
 	border-radius: 1rem;
-	background: var(--input-bg) url(src/assets/select.svg) no-repeat
+	background: var(--input-bg) url(../assets/select.svg) no-repeat
 		calc(100% - 10px) 50%;
 	outline: none;
 	border: 1px solid transparent;

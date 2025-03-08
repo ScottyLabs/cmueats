@@ -114,7 +114,7 @@ body.miku {
 	--logo-second-half: hsl(185, 68%, 54%);
 
 	.MainContent {
-		background-image: url(/src/assets/miku/miku.jpg);
+		background-image: url(./assets/miku/miku.jpg);
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: cover;
