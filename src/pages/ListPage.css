@@ -202,6 +202,9 @@
 	margin-top: auto;
 	padding: 0 16px 16px 16px;
 	margin-left: -2px; /* the illusion of alignment */
+
+	display: flex;
+	gap: 12px;
 }
 /* the overlay card */
 .card--dialog {
