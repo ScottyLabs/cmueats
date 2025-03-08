@@ -4,7 +4,7 @@ import Fuse, { IFuseOptions } from 'fuse.js';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
-import getGreeting from '../util/greeting';
+import { getGreetings } from '../util/greeting';
 import './ListPage.css';
 import {
 	IReadOnlyLocation_ExtraData_Map,
@@ -63,10 +63,11 @@ function ListPage({
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 }) {
 	const { theme, updateTheme } = useTheme();
-	const greeting = useMemo(
-		() => getGreeting(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
+	const { mobileGreeting, desktopGreeting } = useMemo(
+		() => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
 		[],
 	);
+
 	const fuse = useMemo(
 		() => new Fuse(locations ?? [], FUSE_OPTIONS),
 		[locations],
@@ -135,7 +136,14 @@ function ListPage({
 			)}
 			<div className="Container">
 				<header className="Locations-header">
-					<h3 className="Locations-header__greeting">{greeting}</h3>
+					<div className="Locations-header__greeting-container">
+						<h3 className="Locations-header__greeting Locations-header__greeting--desktop">
+							{desktopGreeting}
+						</h3>
+						<h3 className="Locations-header__greeting Locations-header__greeting--mobile">
+							{mobileGreeting}
+						</h3>
+					</div>
 					<input
 						className="Locations-search"
 						type="search"

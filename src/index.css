@@ -115,6 +115,18 @@ body.miku {
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: cover;
+		@media screen and (max-width: 900px) {
+			& {
+				/* position miku's face front and center */
+				background-position: -800px 0;
+			}
+		}
+		@media screen and (max-width: 600px) {
+			& {
+				/* position miku's face front and center */
+				background-position: -900px 0;
+			}
+		}
 	}
 	/* Adds a dark gradient at the top (so the greeting is actually readable) */
 	.Container {
@@ -154,12 +166,6 @@ body.miku {
 		background-color: hsla(180, 4%, 22%, 0.837);
 		backdrop-filter: blur(12px);
 		border-radius: 10px;
-	}
-	@media screen and (max-width: 900px) {
-		.App {
-			/* position miku's face front and center */
-			background-position: -900px 0;
-		}
 	}
 }
 body {

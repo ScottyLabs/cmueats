@@ -72,8 +72,14 @@ body {
 }
 
 .Container {
-	padding: 1.5rem 3rem 0;
+	padding: 72px 48px 0;
 	flex-grow: 1;
+	overflow: hidden;
+	@media screen and (max-width: 900px) {
+		& {
+			padding: 50px 15px;
+		}
+	}
 }
 
 .footer {
@@ -95,13 +101,10 @@ body {
 	top: -56px;
 	height: 100%;
 	z-index: -1;
-}
-@media screen and (max-width: 900px) {
-	.footer__miku {
-		top: 0;
-	}
-	.Container {
-		padding: 10px 15px;
+	@media screen and (max-width: 900px) {
+		& {
+			top: 0;
+		}
 	}
 }
 
