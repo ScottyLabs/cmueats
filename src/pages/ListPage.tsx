@@ -13,10 +13,11 @@ import {
 } from '../types/locationTypes';
 import assert from '../util/assert';
 
-// for the location filter
 import SelectLocation from '../components/SelectLocation';
 import { useTheme } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
+import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
+import footerMikuUrl from '../assets/miku/miku2.png';
 
 const LogoText = styled(Typography)({
 	color: 'var(--logo-first-half)',
@@ -163,7 +164,7 @@ function ListPage({
 							type="button"
 							className="Locations-header__miku-toggle"
 						>
-							<img src="miku-keychain.svg" alt="click me!" />
+							<img src={mikuKeychainUrl} alt="click me!" />
 						</button>
 					)}
 				</header>
@@ -310,7 +311,7 @@ function ListPage({
 				</LogoText>
 				{theme === 'miku' && (
 					<img
-						src="/miku2.png"
+						src={footerMikuUrl}
 						alt="miku!"
 						className="footer__miku"
 					/>

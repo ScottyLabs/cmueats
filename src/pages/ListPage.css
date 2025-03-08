@@ -29,7 +29,7 @@
 	position: absolute;
 	top: -290px;
 	left: min(55%, 630px);
-	mask-image: url('miku-keychain.svg');
+	mask-image: url('src/assets/miku/miku-keychain.svg');
 	mask-position: bottom;
 	mask-size: contain;
 	padding: 0;
