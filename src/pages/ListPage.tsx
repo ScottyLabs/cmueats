@@ -18,6 +18,7 @@ import { useTheme } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
+import mikuBgUrl from '../assets/miku/miku.jpg';
 
 const LogoText = styled(Typography)({
 	color: 'var(--logo-first-half)',
@@ -317,6 +318,7 @@ function ListPage({
 					/>
 				)}
 			</footer>
+			<link rel="prefetch" href={mikuBgUrl} />
 		</div>
 	);
 }
