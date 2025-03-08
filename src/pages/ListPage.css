@@ -1,9 +1,17 @@
 .ListPage {
 	display: flex;
 	flex-direction: column;
-	min-height: 100%; /* So footer (the contact info one) actually stays at the bottom */
+	min-height: 100%; /* So the contact info footer actually stays at the bottom */
 }
-
+.ListPage__container {
+	padding: 72px 48px 0;
+	flex-grow: 1;
+	@media screen and (max-width: 900px) {
+		& {
+			padding: 50px 15px;
+		}
+	}
+}
 .badge-accent {
 	color: #105c03;
 	background: #19b875;
@@ -161,12 +169,14 @@
 }
 
 .card {
+	box-sizing: border-box;
+	height: 100%;
+
 	background-color: var(--card-bg);
 	border: var(--card-border-width) solid var(--card-border-color);
-	text-align: left;
 	border-radius: 7px;
-	justify-content: flex-start;
-	height: 100%;
+
+	text-align: left;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
@@ -174,6 +184,24 @@
 }
 .card__header {
 	background: var(--card-header-bg);
+}
+/* additional .card__header needed to override MUI styles. We can discard when we finish migration */
+.card__header .card__header__text {
+	line-height: 1.6;
+	text-underline-offset: 20px;
+}
+
+.card .card__content {
+	padding: 24px 16px 32px;
+	@media screen and (max-width: 900px) {
+		padding: 24px 16px;
+	}
+}
+.card__actions {
+	/* makes sure footer is actually on the bottom (we're in a flexbox column layout) */
+	margin-top: auto;
+	padding: 0 16px 16px 16px;
+	margin-left: -2px; /* the illusion of alignment */
 }
 /* the overlay card */
 .card--dialog {
@@ -196,6 +224,7 @@
 			glow-animation 1.5s ease 0s infinite;
 	}
 }
+
 @keyframes fade-in {
 	0% {
 		opacity: 0;

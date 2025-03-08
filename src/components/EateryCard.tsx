@@ -11,7 +11,6 @@ import {
 	AccordionSummary,
 	AccordionDetails,
 	CardContent,
-	CardActions,
 	Avatar,
 	Dialog,
 } from '@mui/material';
@@ -54,18 +53,20 @@ const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(
 const CustomLink = styled(Link)({
 	color: 'var(--card-text-title)',
 	textDecoration: 'underline',
+	textUnderlineOffset: '2px',
 });
 
 const NameText = styled(Typography)({
 	padding: 0,
-	marginBottom: 4,
+	marginBottom: 5,
 	fontFamily: 'var(--text-primary-font)',
 	textTransform: 'capitalize',
+	lineHeight: 1.2,
 });
 
 const LocationText = styled(Typography)({
 	color: 'var(--card-text-muted)',
-	marginBottom: '10px',
+	marginBottom: 16,
 	fontWeight: 500,
 	fontSize: 14,
 });
@@ -74,23 +75,10 @@ const DescriptionText = styled(Typography)({
 	color: 'var(--card-text-description)',
 });
 
-const OpenText = styled(Typography, {
-	shouldForwardProp: (prop) => prop !== 'changesSoon',
-})<TextProps>(({ changesSoon }) => ({
-	color: changesSoon
-		? textColors[LocationState.CLOSES_SOON]
-		: textColors[LocationState.OPEN],
-	fontSize: '1rem',
-	fontWeight: 500,
-	fontFamily: 'var(--text-secondary-font)',
-}));
-
-const ClosedText = styled(Typography, {
-	shouldForwardProp: (prop) => prop !== 'changesSoon',
-})<TextProps>(({ changesSoon }) => ({
-	color: changesSoon
-		? textColors[LocationState.OPENS_SOON]
-		: textColors[LocationState.CLOSED],
+const StatusText = styled(Typography, {
+	shouldForwardProp: (prop) => prop !== 'state',
+})<TextProps>(({ state }) => ({
+	color: textColors[state],
 	fontSize: '1rem',
 	fontWeight: 500,
 	fontFamily: 'var(--text-secondary-font)',
@@ -174,7 +162,6 @@ function EateryCard({
 		todaysSoups = [],
 	} = location;
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
-	const isOpen = !location.closedLongTerm && location.isOpen;
 
 	const [modalOpen, setModalOpen] = useState(false);
 
@@ -187,21 +174,13 @@ function EateryCard({
 				>
 					<StyledCardHeader
 						title={
-							isOpen ? (
-								<OpenText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</OpenText>
-							) : (
-								<ClosedText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</ClosedText>
-							)
+							<StatusText
+								variant="subtitle1"
+								state={location.locationState}
+								className="card__header__text"
+							>
+								{statusMsg}
+							</StatusText>
 						}
 						state={location.locationState}
 						avatar={
@@ -210,7 +189,7 @@ function EateryCard({
 									width: 12,
 									height: 12,
 									backgroundColor: 'transparent',
-									marginTop: '8px',
+									marginTop: '6px',
 								}}
 							>
 								<Dot
@@ -221,7 +200,7 @@ function EateryCard({
 						}
 						className="card__header"
 					/>
-					<CardContent>
+					<CardContent className="card__content">
 						<NameText variant="h6">
 							<CustomLink href={url} target="_blank">
 								{name}
@@ -232,27 +211,31 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-					<CardActions sx={{ marginTop: 'auto', padding: '16px' }}>
-						{menu && (
-							<ActionButton
-								onClick={() => {
-									window.open(menu, '_blank');
-								}}
-							>
-								Menu
-							</ActionButton>
-						)}
-						{(todaysSpecials.length !== 0 ||
-							todaysSoups.length !== 0) && (
-							<ActionButton
-								onClick={() => {
-									setModalOpen(true);
-								}}
-							>
-								Specials
-							</ActionButton>
-						)}
-					</CardActions>
+					{(menu ||
+						todaysSoups.length !== 0 ||
+						todaysSpecials.length !== 0) && (
+						<div className="card__actions">
+							{menu && (
+								<ActionButton
+									onClick={() => {
+										window.open(menu, '_blank');
+									}}
+								>
+									Menu
+								</ActionButton>
+							)}
+							{(todaysSpecials.length !== 0 ||
+								todaysSoups.length !== 0) && (
+								<ActionButton
+									onClick={() => {
+										setModalOpen(true);
+									}}
+								>
+									Specials
+								</ActionButton>
+							)}
+						</div>
+					)}
 				</div>
 			</Grid>
 
@@ -270,21 +253,13 @@ function EateryCard({
 				<div className="card card--dialog">
 					<StyledCardHeader
 						title={
-							isOpen ? (
-								<OpenText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</OpenText>
-							) : (
-								<ClosedText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</ClosedText>
-							)
+							<StatusText
+								variant="subtitle1"
+								state={location.locationState}
+								className="card__header__text"
+							>
+								{statusMsg}
+							</StatusText>
 						}
 						avatar={
 							<Avatar
@@ -304,7 +279,7 @@ function EateryCard({
 						state={location.locationState}
 						className="card--dialog__header"
 					/>
-					<CardContent>
+					<CardContent className="card__content">
 						<NameText variant="h6">
 							<CustomLink href={url} target="_blank">
 								{name}

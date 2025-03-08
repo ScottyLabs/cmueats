@@ -1,5 +1,7 @@
+import { LocationState } from './locationTypes';
+
 export default interface TextProps {
 	variant: 'subtitle1';
-	changesSoon: boolean;
+	state: LocationState;
 	children: React.ReactNode;
 }

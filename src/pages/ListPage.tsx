@@ -134,7 +134,7 @@ function ListPage({
 					offline. We apologize for any inconvenience. 🌐🚫
 				</StyledAlert>
 			)}
-			<div className="Container">
+			<div className="ListPage__container">
 				<header className="Locations-header">
 					<div className="Locations-header__greeting-container">
 						<h3 className="Locations-header__greeting Locations-header__greeting--desktop">

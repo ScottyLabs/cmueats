@@ -8,7 +8,6 @@
 .MapDrawer {
 	padding: 14px;
 	background: var(--map-drawer-bg);
-	border-radius: 14px 14px 0 0;
 	overflow: hidden;
 	box-sizing: content-box;
 }
