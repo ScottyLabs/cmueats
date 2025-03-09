@@ -133,21 +133,21 @@ body.miku {
 
 		@media only screen and (max-device-width: 600px) {
 			& {
-				background-position: -500px 0;
+				background-position: -420px 0;
 				background-size: auto 100%;
 			}
 		}
 
 		@media only screen and (max-device-width: 428px) {
 			& {
-				background-position: -400px 0;
+				background-position: -340px 0;
 				background-size: auto 100%;
 			}
 		}
 
 		@media only screen and (max-device-width: 375px) {
 			& {
-				background-position: -350px 0;
+				background-position: -300px 0;
 				background-size: auto 100%;
 			}
 		}
