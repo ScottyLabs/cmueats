@@ -130,20 +130,24 @@ body.miku {
 				background-position: -830px 0;
 			}
 		}
-		/* mobile devices */
+
 		@media only screen and (max-device-width: 600px) {
 			& {
-				background-position: 20% center;
+				background-position: -500px 0;
 				background-size: auto 100%;
-				width: 100%;
-				max-width: 100vw;
 			}
 		}
 
-		/* iPhone and smaller mobile devices */
 		@media only screen and (max-device-width: 428px) {
 			& {
-				background-position: 25% center;
+				background-position: -400px 0;
+				background-size: auto 100%;
+			}
+		}
+
+		@media only screen and (max-device-width: 375px) {
+			& {
+				background-position: -350px 0;
 				background-size: auto 100%;
 			}
 		}
