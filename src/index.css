@@ -127,7 +127,7 @@ body.miku {
 		@media screen and (max-width: 600px) {
 			& {
 				/* position miku's face front and center */
-				background-position: -830px 0;
+				background-position: -700px 0;
 			}
 		}
 
