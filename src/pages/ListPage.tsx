@@ -162,6 +162,11 @@ function ListPage({
 							onClick={() =>
 								updateTheme(theme === 'miku' ? 'none' : 'miku')
 							}
+							onTouchStart={(e) => {
+								// so that people don't have to double tap on mobile
+								e.preventDefault();
+								updateTheme(theme === 'miku' ? 'none' : 'miku');
+							}}
 							type="button"
 							className="Locations-header__miku-toggle"
 						>
