@@ -163,6 +163,7 @@ function ListPage({
 								updateTheme(theme === 'miku' ? 'none' : 'miku')
 							}
 							onTouchEnd={(e) => {
+								e.stopPropagation();
 								e.preventDefault();
 								updateTheme(theme === 'miku' ? 'none' : 'miku');
 							}}
