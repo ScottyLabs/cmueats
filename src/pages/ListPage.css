@@ -266,7 +266,7 @@
 		opacity: 1;
 	}
 }
-.locations-container__error-text {
+.locations__error-text {
 	color: var(--text-primary);
 	font-family: var(--text-primary-font);
 	font-size: 1.5rem;

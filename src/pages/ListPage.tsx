@@ -191,7 +191,7 @@ function ListPage({
 					}
 					if (locations.length === 0)
 						return (
-							<p className="locations-container__error-text">
+							<p className="locations__error-text">
 								Oops! We received an invalid API response (or no
 								data at all). If this problem persists, please
 								let us know.
