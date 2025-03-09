@@ -4,7 +4,7 @@ import Fuse, { IFuseOptions } from 'fuse.js';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
-import getGreeting from '../util/greeting';
+import { getGreetings } from '../util/greeting';
 import './ListPage.css';
 import {
 	IReadOnlyLocation_ExtraData_Map,
@@ -13,49 +13,29 @@ import {
 } from '../types/locationTypes';
 import assert from '../util/assert';
 
-// for the location filter
 import SelectLocation from '../components/SelectLocation';
-// for the location filter
-
-// Typography
-const HeaderText = styled(Typography)({
-	color: 'white',
-	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
-	fontWeight: 800,
-	fontSize: '3em',
-});
-const ErrorText = styled(Typography)({
-	color: 'white',
-	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
-});
+import { useTheme } from '../ThemeProvider';
+import IS_MIKU_DAY from '../util/constants';
+import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
+import footerMikuUrl from '../assets/miku/miku2.png';
+import mikuBgUrl from '../assets/miku/miku.jpg';
 
 const LogoText = styled(Typography)({
-	color: '#dd3c18',
+	color: 'var(--logo-first-half)',
 	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
+	fontFamily: 'var(--text-primary-font)',
 	fontWeight: 800,
 });
 
 const FooterText = styled(Typography)({
-	color: 'white',
+	color: 'var(--text-primary)',
 	marginBottom: 20,
 	fontSize: 16,
 });
 
 const StyledAlert = styled(Alert)({
-	backgroundColor: '#23272a',
-	color: '#ffffff',
+	backgroundColor: 'var(--main-bg-accent)',
+	color: 'var(--text-primary)',
 });
 
 function getPittsburghTime() {
@@ -84,7 +64,12 @@ function ListPage({
 	extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 }) {
-	const greeting = useMemo(() => getGreeting(new Date().getHours()), []);
+	const { theme, updateTheme } = useTheme();
+	const { mobileGreeting, desktopGreeting } = useMemo(
+		() => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
+		[],
+	);
+
 	const fuse = useMemo(
 		() => new Fuse(locations ?? [], FUSE_OPTIONS),
 		[locations],
@@ -151,15 +136,15 @@ function ListPage({
 					offline. We apologize for any inconvenience. 🌐🚫
 				</StyledAlert>
 			)}
-			<div className="Container">
+			<div className="ListPage__container">
 				<header className="Locations-header">
-					<div className="Locations-header__greeting-wrapper">
-						<HeaderText
-							variant="h3"
-							className="Locations-header__greeting"
-						>
-							{greeting}
-						</HeaderText>
+					<div className="Locations-header__greeting-container">
+						<h3 className="Locations-header__greeting Locations-header__greeting--desktop">
+							{desktopGreeting}
+						</h3>
+						<h3 className="Locations-header__greeting Locations-header__greeting--mobile">
+							{mobileGreeting}
+						</h3>
 					</div>
 					<input
 						className="Locations-search"
@@ -171,9 +156,18 @@ function ListPage({
 						}}
 						placeholder="Search"
 					/>
-					{/* call the location filter */}
 					<SelectLocation SSQ={setSearchQuery} l={locations} />
-					{/* call the location filter */}
+					{IS_MIKU_DAY && (
+						<button
+							onClick={() =>
+								updateTheme(theme === 'miku' ? 'none' : 'miku')
+							}
+							type="button"
+							className="Locations-header__miku-toggle"
+						>
+							<img src={mikuKeychainUrl} alt="click me!" />
+						</button>
+					)}
 				</header>
 				{(() => {
 					if (
@@ -197,11 +191,11 @@ function ListPage({
 					}
 					if (locations.length === 0)
 						return (
-							<ErrorText variant="h4">
+							<p className="locations__error-text">
 								Oops! We received an invalid API response (or no
 								data at all). If this problem persists, please
 								let us know.
-							</ErrorText>
+							</p>
 						);
 					if (filteredLocations.length === 0)
 						return (
@@ -251,6 +245,7 @@ function ListPage({
 										key={location.conceptId}
 										index={i}
 										animate={shouldAnimateCards}
+										partOfMainGrid
 									/>
 								))}
 						</Grid>
@@ -258,50 +253,72 @@ function ListPage({
 				})()}
 			</div>
 			<footer className="footer">
-				<FooterText>
-					All times displayed in Pittsburgh local time (
-					{getPittsburghTime()}).
-				</FooterText>
-				{/* eslint-disable */}
-				<FooterText>
-					Contact{' '}
-					<a
-						href={'mailto:jaisal.patel45@gmail.com'}
-						style={{ color: 'white' }}
-					>
-						Jaisal
-					</a>
-					,{' '}
-					<a
-						href={'mailto:jmacera@andrew.cmu.edu'}
-						style={{ color: 'white' }}
-					>
-						Josef
-					</a>
-					, or{' '}
-					<a
-						href={'mailto:jhurewit@andrew.cmu.edu'}
-						style={{ color: 'white' }}
-					>
-						Jack
-					</a>{' '}
-					with any problems.
-				</FooterText>
-				<FooterText>
-					Made with ❤️ by{' '}
-					<a
-						href={'https://scottylabs.org'}
-						style={{ color: 'white' }}
-					>
-						ScottyLabs
-					</a>
-					.
-				</FooterText>
+				{theme === 'miku' ? (
+					<FooterText>
+						Blue hair, blue tie, hiding in your wifi
+						<br />
+						All times displayed in Pittsburgh local time (
+						{getPittsburghTime()}).
+					</FooterText>
+				) : (
+					<>
+						<FooterText>
+							All times displayed in Pittsburgh local time (
+							{getPittsburghTime()}).
+						</FooterText>
+						{/* eslint-disable */}
+						<FooterText>
+							Contact{' '}
+							<a
+								href={'mailto:jaisal.patel45@gmail.com'}
+								style={{ color: 'white' }}
+							>
+								Jaisal
+							</a>
+							,{' '}
+							<a
+								href={'mailto:jmacera@andrew.cmu.edu'}
+								style={{ color: 'white' }}
+							>
+								Josef
+							</a>
+							, or{' '}
+							<a
+								href={'mailto:jhurewit@andrew.cmu.edu'}
+								style={{ color: 'white' }}
+							>
+								Jack
+							</a>{' '}
+							with any problems.
+						</FooterText>
+						<FooterText>
+							Made with ❤️ by{' '}
+							<a
+								href={'https://scottylabs.org'}
+								style={{ color: 'white' }}
+							>
+								ScottyLabs
+							</a>
+							.
+						</FooterText>
+					</>
+				)}
 				{/* eslint-enable */}
 				<LogoText variant="h4">
-					cmu<span style={{ color: '#19b875' }}>:eats</span>
+					cmu
+					<span style={{ color: 'var(--logo-second-half)' }}>
+						:eats
+					</span>
 				</LogoText>
+				{theme === 'miku' && (
+					<img
+						src={footerMikuUrl}
+						alt="miku!"
+						className="footer__miku"
+					/>
+				)}
 			</footer>
+			<link rel="prefetch" href={mikuBgUrl} />
 		</div>
 	);
 }
