@@ -97,7 +97,7 @@ body {
 }
 
 .AdBanner {
-	display: none;
+	/* display: none; */
 	padding: 1rem;
 	font-size: 1.5em;
 	color: white;
@@ -120,4 +120,8 @@ body {
 	);
 	border-bottom: 2px solid hsl(210 94% 17%);
 	font-weight: 600;
+}
+
+.AdBannerLink {
+	color: white;
 }
