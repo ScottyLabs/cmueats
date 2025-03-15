@@ -1,13 +1,229 @@
+:root {
+	--navbar-height: 70px;
+	--navbar-height: calc(56px + max(env(safe-area-inset-bottom), 14px));
+
+	--main-bg: hsl(214, 7%, 19%);
+	--main-bg-accent: #23272a;
+	--text-primary: white;
+	--text-greeting: white;
+	--text-muted: #d4d4d8;
+
+	--input-bg: #23272a;
+	--input-text: var(--text-primary);
+	--input-text-placeholder: rgba(255, 255, 255, 0.785);
+
+	--card-bg: #23272a;
+	--card-header-bg: #1d1f21;
+	--card-text-title: white;
+	--card-text-description: white;
+	--card-text-muted: #8d979f;
+	--card-border-color: rgba(0, 0, 0, 0.2);
+	--card-border-width: 2px;
+
+	--dialog-bg: var(--card-bg);
+	--dialog-header-bg: var(--card-header-bg);
+
+	--footer-bg: #1e1e1e;
+	--nav-border-top: #31373e;
+	--nav-bg: #1e1e1e;
+	--selected-tab-bg: #2b2f33;
+
+	--hover-accent-color: rgba(238, 111, 82, 0.7);
+
+	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--text-secondary-font: 'Inter';
+	--button-bg: #1d1f21;
+	--button-bg--hover: #000000;
+	--button-text: white;
+
+	--location-open-text-color: #19b875;
+	--location-closed-text-color: #dd3c18;
+	--location-closed-long-term-text-color: #dd3c18;
+	--location-opens-soon-text-color: #f6cc5d;
+	--location-closes-soon-text-color: #f3f65d;
+
+	--location-open-highlight: var(--location-open-text-color);
+	--location-closed-highlight: var(--location-closed-text-color);
+	--location-closed-long-term-highlight: var(
+		--location-closed-long-term-text-color
+	);
+	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
+	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
+
+	--map-drawer-bg: #2d2f33;
+
+	--logo-first-half: #dd3c18;
+	--logo-second-half: #19b875;
+}
+
+body.miku {
+	--main-bg: hsl(178 2.4% 7.7%);
+	--main-bg-accent: hsl(206, 9%, 15%);
+	--text-primary: white;
+	--text-greeting: white;
+	--text-muted: #d4d4d8;
+
+	--input-bg: hsla(178, 100%, 17%, 0.731);
+	--input-text: var(--text-primary);
+	--input-text-placeholder: rgba(255, 255, 255, 0.785);
+
+	--card-bg: hsla(180, 24%, 22%, 0.6);
+	--card-header-bg: hsl(180, 24%, 22%, 0.6);
+	--card-text-title: hsl(190 100% 96.7%);
+	--card-text-description: hsl(178 30% 96.7%);
+	--card-text-muted: hsl(190 82.4% 60%);
+	--card-border-color: hsla(178, 100%, 67%, 0);
+	--card-border-width: 2px;
+
+	--dialog-bg: hsla(180, 4%, 22%, 1);
+	--dialog-header-bg: hsl(180, 24%, 22%, 0.6);
+
+	--footer-bg: hsl(178 100% 16.7%);
+	--nav-border-top: #31373e;
+	--selected-tab-bg: #2b2f33;
+	--nav-bg: #1e1e1e;
+	--hover-accent-color: hsl(170, 100%, 67%, 0.3);
+
+	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--text-secondary-font: 'Inter';
+	--button-bg: hsla(190, 99%, 50%, 0.626);
+	--button-bg--hover: hsla(190, 99%, 50%, 0.826);
+	--button-text: white;
+
+	--location-open-text-color: hsl(155, 76%, 71%);
+	--location-closed-text-color: hsl(332, 90%, 78%);
+	--location-closed-long-term-text-color: hsl(11, 80%, 88%);
+	--location-opens-soon-text-color: #f6cc5d;
+	--location-closes-soon-text-color: #f3f65d;
+
+	--location-open-highlight: var(--location-open-text-color);
+	--location-closed-highlight: var(--location-closed-text-color);
+	--location-closed-long-term-highlight: var(
+		--location-closed-long-term-text-color
+	);
+	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
+	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
+
+	--map-drawer-bg: #2d2f33;
+
+	--logo-first-half: hsl(11, 90%, 58%);
+	--logo-second-half: hsl(185, 68%, 54%);
+
+	.MainContent {
+		background-image: url(./assets/miku/miku.jpg);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		@media screen and (max-width: 900px) {
+			& {
+				/* position miku's face front and center */
+				background-position: -650px 0;
+			}
+		}
+		@media screen and (max-width: 600px) {
+			& {
+				/* position miku's face front and center */
+				background-position: -700px 0;
+			}
+		}
+
+		@media only screen and (max-device-width: 600px) {
+			& {
+				background-position: -620px 0;
+				background-size: auto 100%;
+			}
+		}
+
+		@media only screen and (max-device-width: 428px) {
+			& {
+				background-position: -500px 0;
+				background-size: auto 100%;
+			}
+		}
+
+		@media only screen and (max-device-width: 375px) {
+			& {
+				background-position: -440px 0;
+				background-size: auto 100%;
+			}
+		}
+	}
+	/* Adds a dark gradient at the top (so the greeting is actually readable) */
+	.ListPage__container {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		box-sizing: border-box;
+		&::before {
+			content: '';
+			z-index: -1;
+			position: absolute;
+			inset: 0;
+			height: 200px;
+			background: linear-gradient(
+				to bottom,
+				hsla(180, 70%, 30%, 0.5) 70%,
+				hsla(0, 0%, 0%, 0)
+			);
+		}
+	}
+	.locations__error-text {
+		position: relative;
+		background-color: hsla(180, 4%, 22%, 0.837);
+		backdrop-filter: blur(12px);
+		padding: 10px;
+		border-radius: 10px;
+	}
+	.card--in-main-grid {
+		backdrop-filter: blur(3px) brightness(70%);
+	}
+	.card--in-main-grid:hover {
+		background-color: hsla(180, 4%, 22%, 1);
+	}
+
+	.error-container {
+		background-color: hsla(180, 4%, 22%, 0.837);
+		backdrop-filter: blur(12px);
+		border-radius: 10px;
+	}
+}
 body {
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-		'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-		'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
 
-code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-		monospace;
+.error-container {
+	margin: 48px auto;
+	text-align: center;
+	width: fit-content;
+	padding: 20px 30px;
+	border-radius: 15px;
+}
+.error-container__title {
+	color: var(--text-primary);
+	font-family: var(--text-primary-font);
+	margin-top: 0;
+	margin-bottom: 12px;
+	font-size: 1.5rem;
+}
+.error-container__text {
+	color: var(--text-muted);
+	font-family: var(--text-secondary-font);
+	margin-bottom: 20px;
+	font-size: 1rem;
+}
+.error-container__error-button.MuiButton-root {
+	font-size: 1rem;
+	font-family: var(--text-secondary-font);
+	background-color: var(--button-bg);
+	color: var(--button-text);
+	font-weight: 600;
+	&:hover {
+		background-color: var(--button-bg--hover);
+	}
 }

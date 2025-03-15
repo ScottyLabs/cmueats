@@ -11,7 +11,6 @@ import {
 	AccordionSummary,
 	AccordionDetails,
 	CardContent,
-	CardActions,
 	Avatar,
 	Dialog,
 } from '@mui/material';
@@ -23,78 +22,79 @@ import {
 	LocationState,
 } from '../types/locationTypes';
 
-const colors: Record<LocationState, string> = {
-	[LocationState.OPEN]: '#19b875',
-	[LocationState.CLOSED]: '#dd3c18',
-	[LocationState.CLOSED_LONG_TERM]: '#dd3c18',
-	[LocationState.OPENS_SOON]: '#f6cc5d',
-	[LocationState.CLOSES_SOON]: '#f3f65d',
+const textColors: Record<LocationState, string> = {
+	[LocationState.OPEN]: 'var(--location-open-text-color)',
+	[LocationState.CLOSED]: 'var(--location-closed-text-color)',
+	[LocationState.CLOSED_LONG_TERM]:
+		'var(--location-closed-long-term-text-color)',
+	[LocationState.OPENS_SOON]: 'var(--location-opens-soon-text-color)',
+	[LocationState.CLOSES_SOON]: 'var(--location-closes-soon-text-color)',
 };
 
-const StyledCardHeader = styled(CardHeader)({
-	fontWeight: 500,
-	backgroundColor: '#1D1F21',
-});
+// highlight is for both the underline and dot color
+const highlightColors: Record<LocationState, string> = {
+	[LocationState.OPEN]: 'var(--location-open-highlight)',
+	[LocationState.CLOSED]: 'var(--location-closed-highlight)',
+	[LocationState.CLOSED_LONG_TERM]:
+		'var(--location-closed-long-term-highlight)',
+	[LocationState.OPENS_SOON]: 'var(--location-opens-soon-highlight)',
+	[LocationState.CLOSES_SOON]: 'var(--location-closes-soon-highlight)',
+};
+const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(
+	({ state }) => ({
+		fontWeight: 500,
+		alignItems: 'flex-start',
+		padding: '13px 16px',
+		borderBottom: '2px solid',
+		borderBottomColor: highlightColors[state],
+	}),
+);
 
 const CustomLink = styled(Link)({
-	color: 'white',
+	color: 'var(--card-text-title)',
 	textDecoration: 'underline',
+	textUnderlineOffset: '2px',
 });
 
 const NameText = styled(Typography)({
-	color: 'white',
 	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
+	marginBottom: 5,
+	fontFamily: 'var(--text-primary-font)',
 	textTransform: 'capitalize',
+	lineHeight: 1.2,
 });
 
 const LocationText = styled(Typography)({
-	color: '#8D979F',
-	marginBottom: '10px',
+	color: 'var(--card-text-muted)',
+	marginBottom: 16,
 	fontWeight: 500,
 	fontSize: 14,
 });
 
 const DescriptionText = styled(Typography)({
-	color: 'white',
+	color: 'var(--card-text-description)',
 });
 
-const OpenText = styled(Typography)<TextProps>(({ changesSoon }) => ({
-	color: changesSoon
-		? colors[LocationState.CLOSES_SOON]
-		: colors[LocationState.OPEN],
-	fontSize: 14,
+const StatusText = styled(Typography, {
+	shouldForwardProp: (prop) => prop !== 'state',
+})<TextProps>(({ state }) => ({
+	color: textColors[state],
+	fontSize: '1rem',
 	fontWeight: 500,
-	fontFamily:
-		'"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", ' +
-		'"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", ' +
-		'"Helvetica Neue", sans-serif',
-}));
-
-const ClosedText = styled(Typography)<TextProps>(({ changesSoon }) => ({
-	color: changesSoon
-		? colors[LocationState.OPENS_SOON]
-		: colors[LocationState.CLOSED],
-	fontSize: 14,
-	fontWeight: 500,
-	fontFamily:
-		'"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", ' +
-		'"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", ' +
-		'"Helvetica Neue", sans-serif',
+	fontFamily: 'var(--text-secondary-font)',
 }));
 
 const ActionButton = styled(Button)({
-	fontWeight: 600,
-	fontFamily:
-		'"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", ' +
-		'"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", ' +
-		'"Helvetica Neue", sans-serif',
-	color: 'white',
-	backgroundColor: '#1D1F21',
+	fontFamily: 'var(--text-secondary-font)',
+	color: 'var(--button-text)',
+	backgroundColor: 'var(--button-bg)',
+	padding: '5px 10px',
+
+	letterSpacing: -0.2,
 	elevation: 30,
+	'&:hover': {
+		backgroundColor: 'var(--button-bg--hover)',
+	},
 });
 
 const blinkingAnimation = {
@@ -114,7 +114,9 @@ const blinkingAnimation = {
 	},
 };
 
-const Dot = styled(Card)(
+const Dot = styled(Card, {
+	shouldForwardProp: (prop) => prop !== 'changesSoon' && prop !== 'state',
+})(
 	({
 		state,
 		changesSoon,
@@ -122,11 +124,11 @@ const Dot = styled(Card)(
 		state: LocationState;
 		changesSoon: boolean;
 	}) => ({
-		background: colors[state],
+		background: highlightColors[state],
 		width: '100%',
 		height: '100%',
 		borderRadius: '50%',
-		foregroundColor: colors[state],
+		foregroundColor: highlightColors[state],
 		...(changesSoon && blinkingAnimation),
 		animationName: changesSoon ? 'blinking' : undefined,
 		animationDuration: '1s',
@@ -135,16 +137,18 @@ const Dot = styled(Card)(
 );
 
 const SpecialsContent = styled(Accordion)({
-	backgroundColor: '#23272A',
+	backgroundColor: 'var(--specials-bg)',
 });
 
 function EateryCard({
 	location,
 	index = 0,
+	partOfMainGrid = false,
 	animate = false,
 }: {
 	location: IReadOnlyLocation_Combined;
 	index?: number;
+	partOfMainGrid?: boolean;
 	animate?: boolean;
 }) {
 	const {
@@ -158,7 +162,6 @@ function EateryCard({
 		todaysSoups = [],
 	} = location;
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
-	const isOpen = !location.closedLongTerm && location.isOpen;
 
 	const [modalOpen, setModalOpen] = useState(false);
 
@@ -166,33 +169,27 @@ function EateryCard({
 		<>
 			<Grid item xs={12} md={4} lg={3} xl={3}>
 				<div
-					className={`card ${animate ? 'card--animated' : ''}`}
+					className={`card ${animate ? 'card--animated' : ''} ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
 					style={{ '--card-show-delay': `${index * 50}ms` }}
 				>
 					<StyledCardHeader
 						title={
-							isOpen ? (
-								<OpenText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</OpenText>
-							) : (
-								<ClosedText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</ClosedText>
-							)
+							<StatusText
+								variant="subtitle1"
+								state={location.locationState}
+								className="card__header__text"
+							>
+								{statusMsg}
+							</StatusText>
 						}
+						state={location.locationState}
 						avatar={
 							<Avatar
 								sx={{
 									width: 12,
 									height: 12,
-									backgroundColor: '#1D1F21',
+									backgroundColor: 'transparent',
+									marginTop: '6px',
 								}}
 							>
 								<Dot
@@ -201,8 +198,9 @@ function EateryCard({
 								/>
 							</Avatar>
 						}
+						className="card__header"
 					/>
-					<CardContent>
+					<CardContent className="card__content">
 						<NameText variant="h6">
 							<CustomLink href={url} target="_blank">
 								{name}
@@ -213,27 +211,31 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-					<CardActions sx={{ marginTop: 'auto' }}>
-						{menu && (
-							<ActionButton
-								onClick={() => {
-									window.open(menu, '_blank');
-								}}
-							>
-								Menu
-							</ActionButton>
-						)}
-						{(todaysSpecials.length !== 0 ||
-							todaysSoups.length !== 0) && (
-							<ActionButton
-								onClick={() => {
-									setModalOpen(true);
-								}}
-							>
-								Specials
-							</ActionButton>
-						)}
-					</CardActions>
+					{(menu ||
+						todaysSoups.length !== 0 ||
+						todaysSpecials.length !== 0) && (
+						<div className="card__actions">
+							{menu && (
+								<ActionButton
+									onClick={() => {
+										window.open(menu, '_blank');
+									}}
+								>
+									Menu
+								</ActionButton>
+							)}
+							{(todaysSpecials.length !== 0 ||
+								todaysSoups.length !== 0) && (
+								<ActionButton
+									onClick={() => {
+										setModalOpen(true);
+									}}
+								>
+									Specials
+								</ActionButton>
+							)}
+						</div>
+					)}
 				</div>
 			</Grid>
 
@@ -244,35 +246,28 @@ function EateryCard({
 				}}
 				PaperProps={{
 					style: {
-						backgroundColor: '#23272A',
+						backgroundColor: 'transparent',
 					},
 				}}
 			>
-				<div className="card">
+				<div className="card card--dialog">
 					<StyledCardHeader
 						title={
-							isOpen ? (
-								<OpenText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</OpenText>
-							) : (
-								<ClosedText
-									variant="subtitle1"
-									changesSoon={changesSoon}
-								>
-									{statusMsg}
-								</ClosedText>
-							)
+							<StatusText
+								variant="subtitle1"
+								state={location.locationState}
+								className="card__header__text"
+							>
+								{statusMsg}
+							</StatusText>
 						}
 						avatar={
 							<Avatar
 								sx={{
 									width: 12,
 									height: 12,
-									backgroundColor: '#1D1F21',
+									backgroundColor: 'transparent',
+									marginTop: '8px',
 								}}
 							>
 								<Dot
@@ -281,8 +276,10 @@ function EateryCard({
 								/>
 							</Avatar>
 						}
+						state={location.locationState}
+						className="card--dialog__header"
 					/>
-					<CardContent>
+					<CardContent className="card__content">
 						<NameText variant="h6">
 							<CustomLink href={url} target="_blank">
 								{name}
@@ -293,11 +290,13 @@ function EateryCard({
 						</LocationText>
 					</CardContent>
 					{todaysSpecials.concat(todaysSoups).map((special) => (
-						<SpecialsContent style={{}} key={special.title}>
+						<SpecialsContent key={special.title}>
 							<AccordionSummary
 								expandIcon={
 									<ExpandMoreIcon
-										style={{ color: 'white' }}
+										style={{
+											color: 'var(--card-text-description)',
+										}}
 									/>
 								}
 								aria-controls="panel1a-content"

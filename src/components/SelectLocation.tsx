@@ -11,7 +11,7 @@ function SelectLocation({ setSearchQuery, locations }: SelectLocationProps) {
 	if (locations === undefined) {
 		return (
 			<select className="select">
-				<option value="" label="Loading..." />
+				<option value="" label="Filter by Building" />
 			</select>
 		);
 	}
