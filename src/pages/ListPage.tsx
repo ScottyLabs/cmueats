@@ -90,13 +90,16 @@ function ListPage({
 		IReadOnlyExtendedLocation[]
 	>([]);
 
+	// const [starredEateries, setStarredEateries] = useState<
+	// 	IReadOnlyExtendedLocation[]
+	// >([]);
+
 	const [starredEateries, setStarredEateries] = useState<
 		IReadOnlyExtendedLocation[]
-	>([]);
-
-	const [nonStarredEateries, setNonStarredEateries] = useState<
-		IReadOnlyExtendedLocation[]
-	>([]);
+	>(() => {
+		const storedStars = localStorage.getItem('starredEateries');
+		return storedStars ? JSON.parse(storedStars) : [];
+	});
 
 	useEffect(() => {
 		if (locations) {
@@ -154,21 +157,26 @@ function ListPage({
 	}, []);
 
 	const toggleStar = (location: IReadOnlyExtendedLocation) => {
-		const locationKey = JSON.stringify(location);
-		const updatedStars = starredEateries.some(
-			(starred) => JSON.stringify(starred) === locationKey,
-		)
-			? starredEateries.filter(
-					(starred) => JSON.stringify(starred) !== locationKey,
-				)
-			: [...starredEateries, location];
+		setStarredEateries((prevStars) => {
+			const locationKey = JSON.stringify(location);
 
-		setStarredEateries(updatedStars);
-		const setDifference = locations.filter(
-			(loc) => !updatedStars.includes(loc),
-		);
-		setNonStarredEateries(setDifference);
-		localStorage.setItem('starredEateries', JSON.stringify(updatedStars));
+			const isStarred = prevStars.some(
+				(starred) => JSON.stringify(starred) === locationKey,
+			);
+
+			const updatedStars = isStarred
+				? prevStars.filter(
+						(starred) => JSON.stringify(starred) !== locationKey,
+					)
+				: [...prevStars, location];
+
+			localStorage.setItem(
+				'starredEateries',
+				JSON.stringify(updatedStars),
+			);
+			// localStorage.clear();
+			return updatedStars;
+		});
 	};
 
 	return (

@@ -268,7 +268,12 @@ function EateryCard(
 								Specials
 							</ActionButton>
 						)}
-						<IconButton onClick={() => onToggleStar(location)}>
+						<IconButton
+							onClick={() => {
+								onToggleStar(location);
+								console.log(starred);
+							}}
+						>
 							{starred ? (
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
