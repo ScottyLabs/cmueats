@@ -70,6 +70,7 @@ function App() {
 							className="AdBannerLink"
 							href="https://forms.gle/fTnWrS7jkTFRB14DA"
 							target="_blank"
+							rel="noreferrer"
 						>
 							feedback!
 						</a>{' '}
