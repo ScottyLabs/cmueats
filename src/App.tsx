@@ -65,7 +65,7 @@ function App() {
 			<BrowserRouter>
 				<div className="App">
 					<div className="AdBanner">
-						How's your food? We want your{' '}
+						How&apos;s your food? We want your{' '}
 						<a
 							className="AdBannerLink"
 							href="https://forms.gle/fTnWrS7jkTFRB14DA"
