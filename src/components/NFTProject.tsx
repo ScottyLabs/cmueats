@@ -642,7 +642,7 @@ const nftData = [
 		// Add utility promises
 		utilities: [
 			'5% chance of extra fries when purchasing at The Underground',
-			'Makes you 3% more attractive to CS majors',
+			'Makes you 3% more attractive',
 		],
 	},
 	{
@@ -739,7 +739,7 @@ const nftData = [
 		// Add utility promises
 		utilities: [
 			'Can summon a virtual Scottie dog that only you can see',
-			'Free napkins for life (digital only)',
+			'Free napkins for life',
 		],
 	},
 ];
@@ -1650,7 +1650,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																		nft.price,
 																	),
 																)}{' '}
-																virtual trees
+																trees
 															</b>
 														</Typography>
 														<Box
