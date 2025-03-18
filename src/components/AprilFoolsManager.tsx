@@ -12,12 +12,19 @@ import {
 	Tooltip,
 	Badge,
 	IconButton,
+	LinearProgress,
+	Button,
+	Divider,
 } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DiamondIcon from '@mui/icons-material/Diamond';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import CodeIcon from '@mui/icons-material/Code';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { useTheme } from '../ThemeProvider';
 import { IS_APRIL_FOOLS } from '../util/constants';
 import BonziBuddy from './BonziBuddy';
@@ -38,7 +45,7 @@ interface Transaction {
 	timestamp: string;
 }
 
-// Smart contract state type
+// Smart contract state type - expanded with more fields
 interface SmartContractState {
 	totalMinted: number;
 	maxSupply: number;
@@ -50,6 +57,22 @@ interface SmartContractState {
 	userBalance?: number;
 	userAddress?: string;
 	isWhitelisted?: boolean;
+	lastMintTimestamp?: number;
+	totalSales?: number;
+	royaltyPercentage?: number;
+	userNFTs?: UserNFT[];
+	networkFee?: number;
+}
+
+// User's NFT type
+interface UserNFT {
+	id: number;
+	name: string;
+	rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+	image: string;
+	acquiredAt: string;
+	lastValue: number;
+	appreciationPercentage: number;
 }
 
 // Mock blockchain data - moved to component state to avoid mutations
@@ -135,7 +158,7 @@ const PremiumBanner = styled(Box)({
 // NFT Features UI components
 const NFTStatusBar = styled(Paper, {
 	shouldForwardProp: (prop) => prop !== 'minimized',
-})<{ minimized: boolean }>(({ minimized }) => ({
+})<{ minimized?: boolean }>(({ minimized }) => ({
 	position: 'fixed',
 	top: '42px', // Moved higher than before
 	right: '20px',
@@ -148,8 +171,8 @@ const NFTStatusBar = styled(Paper, {
 	display: 'flex',
 	flexDirection: 'column',
 	gap: minimized ? '0' : '4px',
-	maxWidth: minimized ? '150px' : '280px',
-	maxHeight: minimized ? '32px' : '140px',
+	maxWidth: minimized ? '150px' : '320px',
+	maxHeight: minimized ? '32px' : minimized === undefined ? '140px' : '460px',
 	overflow: 'hidden',
 	transition: 'all 0.3s ease',
 	transform: 'translateZ(0)', // Force hardware acceleration
@@ -158,7 +181,7 @@ const NFTStatusBar = styled(Paper, {
 		boxShadow: '0 6px 15px rgba(0,0,0,0.3)',
 	},
 	'@media (max-width: 768px)': {
-		maxWidth: minimized ? '150px' : '250px',
+		maxWidth: minimized ? '150px' : '300px',
 		right: '10px',
 	},
 }));
@@ -187,6 +210,46 @@ const WalletButton = styled(IconButton)({
 	'&:hover': {
 		backgroundColor: 'var(--logo-second-half)',
 	},
+});
+
+// Portfolio overview component styles
+const RarityBadge = styled(Chip)<{ rarity: string }>(({ rarity }) => {
+	const rarityColors = {
+		common: '#6B7280',
+		uncommon: '#10B981',
+		rare: '#3B82F6',
+		epic: '#8B5CF6',
+		legendary: '#F59E0B',
+	};
+
+	const color =
+		rarityColors[rarity as keyof typeof rarityColors] || '#6B7280';
+
+	return {
+		backgroundColor: color,
+		color: 'white',
+		fontSize: '0.65rem',
+		height: '20px',
+		fontWeight: 'bold',
+	};
+});
+
+const SmartContractPanel = styled(Box)({
+	backgroundColor: 'rgba(0, 0, 0, 0.6)',
+	padding: '8px',
+	borderRadius: '6px',
+	border: '1px solid var(--card-border-color)',
+	fontSize: '0.75rem',
+	fontFamily: 'monospace',
+	color: '#10B981',
+	marginTop: '6px',
+});
+
+const StatsItem = styled(Box)({
+	display: 'flex',
+	justifyContent: 'space-between',
+	fontSize: '0.75rem',
+	padding: '2px 0',
 });
 
 // April Fools toggle switch component
@@ -239,21 +302,432 @@ function NFTStatusBarComponent({
 	walletConnected,
 	pendingTransactions,
 	onConnectWallet,
+	contractState,
 }: {
 	blockchainData: typeof initialBlockchainData;
 	walletConnected: boolean;
 	pendingTransactions: Transaction[];
 	onConnectWallet: () => void;
+	contractState: SmartContractState;
 }) {
-	const [minimized, setMinimized] = useState(false);
+	const [minimized, setMinimized] = useState<boolean | undefined>(true);
+	const [activeTab, setActiveTab] = useState<
+		'dashboard' | 'portfolio' | 'contract'
+	>('dashboard');
 
 	const toggleMinimize = () => {
-		setMinimized(!minimized);
+		setMinimized((prev) => {
+			if (prev === undefined) return true;
+			return !prev;
+		});
 	};
 
 	const pendingCount = pendingTransactions.filter(
 		(tx) => tx.status === 'pending',
 	).length;
+
+	const renderTabContent = () => {
+		switch (activeTab) {
+			case 'portfolio':
+				return (
+					<Box sx={{ mt: 1 }}>
+						<Typography
+							variant="subtitle2"
+							fontWeight="bold"
+							sx={{ mb: 0.5, fontSize: '0.8rem' }}
+						>
+							Your NFT Portfolio{' '}
+							{contractState.userNFTs &&
+								`(${contractState.userNFTs.length})`}
+						</Typography>
+
+						{contractState.userNFTs &&
+						contractState.userNFTs.length > 0 ? (
+							<>
+								<Box
+									sx={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: 1,
+									}}
+								>
+									{contractState.userNFTs.map((nft) => (
+										<Box
+											key={nft.id}
+											sx={{
+												display: 'flex',
+												gap: 1,
+												alignItems: 'center',
+												p: 0.5,
+												borderRadius: '4px',
+												bgcolor: 'rgba(0,0,0,0.2)',
+											}}
+										>
+											<Box
+												sx={{
+													width: 30,
+													height: 30,
+													borderRadius: '4px',
+													bgcolor:
+														'var(--logo-first-half)',
+													flexShrink: 0,
+													display: 'flex',
+													alignItems: 'center',
+													justifyContent: 'center',
+													color: 'white',
+													fontWeight: 'bold',
+													fontSize: '0.7rem',
+												}}
+											>
+												#{nft.id}
+											</Box>
+											<Box
+												sx={{
+													flexGrow: 1,
+													overflow: 'hidden',
+												}}
+											>
+												<Box
+													sx={{
+														display: 'flex',
+														justifyContent:
+															'space-between',
+														alignItems: 'center',
+													}}
+												>
+													<Typography
+														noWrap
+														variant="caption"
+														fontWeight="bold"
+													>
+														{nft.name}
+													</Typography>
+													<RarityBadge
+														label={nft.rarity.toUpperCase()}
+														size="small"
+														rarity={nft.rarity}
+													/>
+												</Box>
+												<Box
+													sx={{
+														display: 'flex',
+														justifyContent:
+															'space-between',
+														alignItems: 'center',
+													}}
+												>
+													<Typography
+														variant="caption"
+														color="var(--text-muted)"
+														sx={{
+															fontSize: '0.65rem',
+														}}
+													>
+														Value: {nft.lastValue}{' '}
+														ETH
+													</Typography>
+													<Typography
+														variant="caption"
+														sx={{
+															fontSize: '0.65rem',
+															color:
+																nft.appreciationPercentage >=
+																0
+																	? 'var(--location-closed-text-color)'
+																	: 'var(--location-open-text-color)',
+														}}
+													>
+														{nft.appreciationPercentage >=
+														0
+															? '+'
+															: ''}
+														{
+															nft.appreciationPercentage
+														}
+														%
+													</Typography>
+												</Box>
+											</Box>
+										</Box>
+									))}
+								</Box>
+								<Button
+									size="small"
+									variant="outlined"
+									sx={{
+										mt: 1,
+										fontSize: '0.7rem',
+										borderColor: 'var(--logo-first-half)',
+										color: 'var(--text-primary)',
+									}}
+									fullWidth
+								>
+									View All NFTs
+								</Button>
+							</>
+						) : (
+							<Box sx={{ textAlign: 'center', py: 1 }}>
+								<Typography
+									variant="caption"
+									color="var(--text-muted)"
+								>
+									No NFTs in your portfolio yet
+								</Typography>
+								<Button
+									size="small"
+									variant="contained"
+									sx={{
+										mt: 1,
+										fontSize: '0.7rem',
+										bgcolor: 'var(--logo-first-half)',
+										'&:hover': {
+											bgcolor: 'var(--logo-second-half)',
+										},
+									}}
+									fullWidth
+								>
+									Browse Marketplace
+								</Button>
+							</Box>
+						)}
+					</Box>
+				);
+			case 'contract':
+				return (
+					<Box sx={{ mt: 1 }}>
+						<Typography
+							variant="subtitle2"
+							fontWeight="bold"
+							sx={{ mb: 0.5, fontSize: '0.8rem' }}
+						>
+							Smart Contract{' '}
+							<VerifiedIcon
+								sx={{
+									fontSize: '0.8rem',
+									color: 'var(--location-closed-text-color)',
+									ml: 0.5,
+								}}
+							/>
+						</Typography>
+
+						<SmartContractPanel>
+							<Typography
+								component="div"
+								variant="caption"
+								sx={{
+									fontFamily: 'monospace',
+									whiteSpace: 'nowrap',
+								}}
+							>
+								0x742d35Cc6634C0532...
+							</Typography>
+
+							<Box sx={{ mt: 0.5, fontSize: '0.7rem' }}>
+								{`contract CMUEatsNFT is ERC721, Ownable {`}
+								<br />
+								{`  uint256 public mintPrice = ${contractState.mintPrice} ether;`}
+								<br />
+								{`  bool public paused = ${contractState.paused};`}
+								<br />
+								{`  ... function mint() external payable {`}
+								<br />
+								{`  ... }`}
+							</Box>
+						</SmartContractPanel>
+
+						<Box sx={{ mt: 1.5 }}>
+							<Typography
+								variant="caption"
+								fontWeight="bold"
+								sx={{ fontSize: '0.75rem' }}
+							>
+								Contract Functions
+							</Typography>
+							<Box sx={{ display: 'flex', gap: 0.5, mt: 0.5 }}>
+								<Button
+									size="small"
+									variant="outlined"
+									sx={{
+										fontSize: '0.65rem',
+										p: '2px 8px',
+										borderColor: 'var(--logo-first-half)',
+										color: 'var(--text-primary)',
+									}}
+								>
+									mint()
+								</Button>
+								<Button
+									size="small"
+									variant="outlined"
+									sx={{
+										fontSize: '0.65rem',
+										p: '2px 8px',
+										borderColor: 'var(--text-muted)',
+										color: 'var(--text-muted)',
+									}}
+								>
+									approve()
+								</Button>
+								<Button
+									size="small"
+									variant="outlined"
+									sx={{
+										fontSize: '0.65rem',
+										p: '2px 8px',
+										borderColor: 'var(--text-muted)',
+										color: 'var(--text-muted)',
+									}}
+								>
+									stake()
+								</Button>
+							</Box>
+						</Box>
+
+						<Divider sx={{ mt: 1, mb: 1 }} />
+
+						<StatsItem>
+							<Typography
+								variant="caption"
+								color="var(--text-muted)"
+							>
+								Gas Used:
+							</Typography>
+							<Typography variant="caption" fontWeight="bold">
+								{blockchainData.gasUsed}
+							</Typography>
+						</StatsItem>
+						<StatsItem>
+							<Typography
+								variant="caption"
+								color="var(--text-muted)"
+							>
+								Network Fee:
+							</Typography>
+							<Typography variant="caption" fontWeight="bold">
+								{contractState.networkFee} ETH
+							</Typography>
+						</StatsItem>
+						<StatsItem>
+							<Typography
+								variant="caption"
+								color="var(--text-muted)"
+							>
+								Royalty:
+							</Typography>
+							<Typography variant="caption" fontWeight="bold">
+								{contractState.royaltyPercentage}%
+							</Typography>
+						</StatsItem>
+					</Box>
+				);
+			default: // dashboard
+				return (
+					<>
+						{/* More compact stats display */}
+						<Box
+							sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}
+						>
+							<GasPrice
+								icon={<LocalGasStationIcon />}
+								label={`${blockchainData.currentGasPrice} Gwei`}
+								size="small"
+								congestion={blockchainData.networkCongestion}
+							/>
+
+							<Tooltip title="Block Number">
+								<Chip
+									label={`#${blockchainData.lastBlock}`}
+									size="small"
+									color="primary"
+									variant="outlined"
+								/>
+							</Tooltip>
+						</Box>
+
+						<Box
+							sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}
+						>
+							<Tooltip title="Network Load">
+								<Chip
+									icon={<TrendingUpIcon />}
+									label={blockchainData.gasUsed}
+									size="small"
+									color="secondary"
+									variant="outlined"
+								/>
+							</Tooltip>
+
+							<Tooltip title="Pending Transactions">
+								<Badge
+									badgeContent={pendingCount}
+									color="error"
+								>
+									<Chip
+										icon={<NotificationsIcon />}
+										label="Transactions"
+										size="small"
+										variant="outlined"
+									/>
+								</Badge>
+							</Tooltip>
+						</Box>
+
+						{walletConnected && (
+							<>
+								<Typography
+									variant="caption"
+									color="var(--location-closed-text-color)"
+									noWrap
+								>
+									Wallet connected:{' '}
+									{pendingCount > 0
+										? 'Transaction pending...'
+										: 'Ready to mint'}
+								</Typography>
+
+								<Box sx={{ mt: 1 }}>
+									<Typography
+										variant="caption"
+										sx={{ display: 'block', mb: 0.5 }}
+									>
+										Collection Progress
+									</Typography>
+									<LinearProgress
+										variant="determinate"
+										value={
+											(contractState.totalMinted /
+												contractState.maxSupply) *
+											100
+										}
+										sx={{
+											height: 8,
+											borderRadius: 1,
+											backgroundColor: 'rgba(0,0,0,0.1)',
+											'& .MuiLinearProgress-bar': {
+												backgroundColor:
+													'var(--logo-first-half)',
+											},
+										}}
+									/>
+									<Typography
+										variant="caption"
+										color="var(--text-muted)"
+										sx={{
+											display: 'block',
+											mt: 0.5,
+											textAlign: 'right',
+										}}
+									>
+										{contractState.totalMinted}/
+										{contractState.maxSupply} Minted
+									</Typography>
+								</Box>
+							</>
+						)}
+					</>
+				);
+		}
+	};
 
 	return (
 		<NFTStatusBar minimized={minimized}>
@@ -316,60 +790,84 @@ function NFTStatusBarComponent({
 
 			{!minimized && (
 				<>
-					{/* More compact stats display */}
-					<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-						<GasPrice
-							icon={<LocalGasStationIcon />}
-							label={`${blockchainData.currentGasPrice} Gwei`}
-							size="small"
-							congestion={blockchainData.networkCongestion}
-						/>
-
-						<Tooltip title="Block Number">
-							<Chip
-								label={`#${blockchainData.lastBlock}`}
-								size="small"
-								color="primary"
-								variant="outlined"
-							/>
-						</Tooltip>
-					</Box>
-
-					<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-						<Tooltip title="Network Load">
-							<Chip
-								icon={<TrendingUpIcon />}
-								label={blockchainData.gasUsed}
-								size="small"
-								color="secondary"
-								variant="outlined"
-							/>
-						</Tooltip>
-
-						<Tooltip title="Pending Transactions">
-							<Badge badgeContent={pendingCount} color="error">
-								<Chip
-									icon={<NotificationsIcon />}
-									label="Transactions"
-									size="small"
-									variant="outlined"
-								/>
-							</Badge>
-						</Tooltip>
-					</Box>
-
-					{walletConnected && (
-						<Typography
-							variant="caption"
-							color="var(--location-closed-text-color)"
-							noWrap
+					{!minimized && minimized !== undefined && (
+						<Box
+							sx={{ display: 'flex', gap: 0.5, mt: 0.5, mb: 0.5 }}
 						>
-							Wallet connected:{' '}
-							{pendingCount > 0
-								? 'Transaction pending...'
-								: 'Ready to mint'}
-						</Typography>
+							<Chip
+								icon={
+									<BarChartIcon
+										sx={{ fontSize: '0.875rem' }}
+									/>
+								}
+								label="Dashboard"
+								size="small"
+								variant={
+									activeTab === 'dashboard'
+										? 'filled'
+										: 'outlined'
+								}
+								color={
+									activeTab === 'dashboard'
+										? 'primary'
+										: 'default'
+								}
+								onClick={(e) => {
+									e.stopPropagation();
+									setActiveTab('dashboard');
+								}}
+								sx={{ fontSize: '0.7rem' }}
+							/>
+							<Chip
+								icon={
+									<AccountBalanceIcon
+										sx={{ fontSize: '0.875rem' }}
+									/>
+								}
+								label="Portfolio"
+								size="small"
+								variant={
+									activeTab === 'portfolio'
+										? 'filled'
+										: 'outlined'
+								}
+								color={
+									activeTab === 'portfolio'
+										? 'primary'
+										: 'default'
+								}
+								onClick={(e) => {
+									e.stopPropagation();
+									setActiveTab('portfolio');
+								}}
+								sx={{ fontSize: '0.7rem' }}
+							/>
+							<Chip
+								icon={
+									<CodeIcon sx={{ fontSize: '0.875rem' }} />
+								}
+								label="Contract"
+								size="small"
+								variant={
+									activeTab === 'contract'
+										? 'filled'
+										: 'outlined'
+								}
+								color={
+									activeTab === 'contract'
+										? 'primary'
+										: 'default'
+								}
+								onClick={(e) => {
+									e.stopPropagation();
+									setActiveTab('contract');
+								}}
+								sx={{ fontSize: '0.7rem' }}
+							/>
+						</Box>
 					)}
+
+					{renderTabContent()}
 				</>
 			)}
 		</NFTStatusBar>
@@ -395,6 +893,29 @@ function AprilFoolsManager() {
 			whitelistActive: true,
 			publicSaleActive: false,
 			ownerAddress: '0x123...456',
+			royaltyPercentage: 5.0,
+			totalSales: 25.42,
+			networkFee: 0.002,
+			userNFTs: [
+				{
+					id: 42,
+					name: 'CMUEats Genesis #42',
+					rarity: 'epic',
+					image: 'https://placeholder.com/400',
+					acquiredAt: '2 days ago',
+					lastValue: 0.85,
+					appreciationPercentage: 27.5,
+				},
+				{
+					id: 107,
+					name: 'Campus Collection #107',
+					rarity: 'rare',
+					image: 'https://placeholder.com/400',
+					acquiredAt: '5 days ago',
+					lastValue: 0.32,
+					appreciationPercentage: -3.8,
+				},
+			],
 		});
 	const [pendingTransactions, setPendingTransactions] = useState<
 		Transaction[]
@@ -692,6 +1213,7 @@ function AprilFoolsManager() {
 						walletConnected={walletConnected}
 						pendingTransactions={pendingTransactions}
 						onConnectWallet={simulateWalletConnection}
+						contractState={smartContractState}
 					/>
 
 					{/* NFT Marketplace Button */}
