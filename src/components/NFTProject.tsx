@@ -34,7 +34,7 @@ import {
 	Snackbar,
 	Alert,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/Info';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -44,6 +44,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import WarningIcon from '@mui/icons-material/Warning';
 import { styled } from '@mui/material/styles';
+import CloseIcon from '@mui/icons-material/Close';
 import { IS_APRIL_FOOLS } from '../util/constants';
 
 // Styles
@@ -326,6 +327,16 @@ const UtilityBadge = styled(Box)({
 	alignItems: 'center',
 	gap: '4px',
 	fontWeight: 'bold',
+});
+
+// Add styled component for carbon footprint widget
+const CarbonWidget = styled(Box)({
+	backgroundColor: 'rgba(5, 150, 105, 0.05)',
+	border: '1px solid rgba(5, 150, 105, 0.2)',
+	borderRadius: '4px',
+	padding: '8px',
+	fontSize: '0.7rem',
+	marginTop: '8px',
 });
 
 // Sample template code for different contract types
@@ -792,6 +803,14 @@ const collectionStats = {
 	sevenDayChange: 15.4, // Percentage
 };
 
+// Add carbon footprint data for NFTs
+const carbonData = {
+	baseFootprint: 5420, // ridiculous base CO2 in kg
+	offsetCostPerTree: 0.01, // ETH per tree
+	treesNeeded: 12, // trees to offset one NFT
+	offsetDiscount: 25, // percent discount for buying now
+};
+
 // Liquidity pool information
 const liquidityPools = [
 	{
@@ -816,6 +835,19 @@ const currentGasPrices = {
 	average: 35,
 	fast: 50,
 };
+
+// Add the missing calculator functions
+// Function to calculate carbon footprint with intentionally ridiculous formula
+const calculateCarbonFootprint = (price: number) =>
+	Math.round(carbonData.baseFootprint * (price * 1000 + 1));
+
+// Function to calculate number of trees needed
+const calculateTreesNeeded = (carbonAmount: number) =>
+	Math.round((carbonAmount / 1000) * carbonData.treesNeeded);
+
+// Function to calculate offset cost
+const calculateOffsetCost = (trees: number) =>
+	(trees * carbonData.offsetCostPerTree).toFixed(3);
 
 interface NFTProjectProps {
 	open: boolean;
@@ -1536,9 +1568,163 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															fontSize: '0.6rem',
 															fontStyle: 'italic',
 														}}
-													>
-													</Typography>
+													/>
 												</Box>
+
+												{/* Environmental Impact Calculator */}
+												<CarbonWidget>
+													<Box
+														sx={{
+															display: 'flex',
+															justifyContent:
+																'space-between',
+															alignItems:
+																'center',
+														}}
+													>
+														<Typography
+															variant="caption"
+															fontWeight="bold"
+															color="#059669"
+														>
+															Environmental
+															Impact:
+														</Typography>
+														<Chip
+															size="small"
+															label="Offsettable"
+															sx={{
+																bgcolor:
+																	'rgba(5, 150, 105, 0.1)',
+																color: '#059669',
+																fontSize:
+																	'0.6rem',
+																height: 20,
+															}}
+														/>
+													</Box>
+
+													<Typography
+														variant="caption"
+														component="div"
+														sx={{ mt: 1 }}
+													>
+														Carbon Footprint:{' '}
+														<b>
+															{calculateCarbonFootprint(
+																nft.price,
+															).toLocaleString()}{' '}
+															kg CO₂
+														</b>
+														<Tooltip title="Equivalent to driving a Hummer around the equator 12 times while streaming videos">
+															<InfoIcon
+																sx={{
+																	fontSize: 12,
+																	ml: 0.5,
+																	color: 'var(--text-muted)',
+																	verticalAlign:
+																		'middle',
+																}}
+															/>
+														</Tooltip>
+													</Typography>
+
+													{/* Carbon offset section */}
+													<Box
+														sx={{
+															mt: 1,
+															bgcolor:
+																'rgba(5, 150, 105, 0.05)',
+															p: 1,
+															borderRadius: 1,
+														}}
+													>
+														<Typography
+															variant="caption"
+															component="div"
+														>
+															Offset by planting{' '}
+															<b>
+																{calculateTreesNeeded(
+																	calculateCarbonFootprint(
+																		nft.price,
+																	),
+																)}{' '}
+																virtual trees
+															</b>
+														</Typography>
+														<Box
+															sx={{
+																display: 'flex',
+																justifyContent:
+																	'space-between',
+																alignItems:
+																	'center',
+																mt: 0.5,
+															}}
+														>
+															<Typography
+																variant="caption"
+																color="#059669"
+																fontWeight="bold"
+															>
+																{calculateOffsetCost(
+																	calculateTreesNeeded(
+																		calculateCarbonFootprint(
+																			nft.price,
+																		),
+																	),
+																)}{' '}
+																ETH
+																<Typography
+																	component="span"
+																	variant="caption"
+																	sx={{
+																		textDecoration:
+																			'line-through',
+																		ml: 0.5,
+																		fontSize:
+																			'0.6rem',
+																	}}
+																>
+																	{(
+																		parseFloat(
+																			calculateOffsetCost(
+																				calculateTreesNeeded(
+																					calculateCarbonFootprint(
+																						nft.price,
+																					),
+																				),
+																			),
+																		) *
+																		(1 +
+																			carbonData.offsetDiscount /
+																				100)
+																	).toFixed(
+																		3,
+																	)}{' '}
+																	ETH
+																</Typography>
+															</Typography>
+															<Button
+																variant="outlined"
+																size="small"
+																sx={{
+																	fontSize:
+																		'0.6rem',
+																	p: '2px 5px',
+																	color: '#059669',
+																	borderColor:
+																		'#059669',
+																	minWidth:
+																		'unset',
+																}}
+															>
+																Plant Trees
+															</Button>
+														</Box>
+													</Box>
+												</CarbonWidget>
 											</CardContent>
 										</NFTCard>
 									</Grid>
