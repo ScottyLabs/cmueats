@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
+import AprilFoolsManager from './components/AprilFoolsManager';
 import {
 	queryLocations,
 	getExtendedLocationData as getExtraLocationData,
@@ -98,6 +99,7 @@ function App() {
 						</Routes>
 					</div>
 					<Navbar />
+					<AprilFoolsManager />
 				</div>
 			</BrowserRouter>
 		</React.StrictMode>
