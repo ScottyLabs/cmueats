@@ -1190,7 +1190,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											Release Date
 										</Typography>
 										<Typography variant="body2">
-											April 1, 2024
+											April 1, 2025
 										</Typography>
 									</Grid>
 								</Grid>
