@@ -799,6 +799,8 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	const [codeError, setCodeError] = useState('');
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState('');
+	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+	const [pendingTemplateType, setPendingTemplateType] = useState('');
 
 	const handleTabChange = (
 		_event: React.SyntheticEvent,
@@ -849,29 +851,17 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 		return (baseFee * multiplier).toFixed(4);
 	};
 
-	// Handle Contract Template Change
-	const handleContractTypeChange = (
-		event: React.ChangeEvent<{ value: unknown }>,
-	) => {
-		const type = event.target.value as string;
+	// Add a new function to handle template changes - moved up before it's used
+	const applyTemplateChange = (type: string) => {
 		const newTemplate =
 			contractTemplates[type as keyof typeof contractTemplates];
 
 		setContractType(type);
 		setContractCode(newTemplate);
-
-		// If user hasn't made custom edits, or if they confirm replacing their changes
-		if (
-			!isCodeEdited ||
-			window.confirm(
-				'Changing the template will replace your custom code. Continue?',
-			)
-		) {
-			setEditedCode(newTemplate);
-			setIsCodeEdited(false);
-			setShowCodeError(false);
-			setCodeError('');
-		}
+		setEditedCode(newTemplate);
+		setIsCodeEdited(false);
+		setShowCodeError(false);
+		setCodeError('');
 
 		// Reset parameters for different contract types
 		if (type === 'erc721') {
@@ -886,6 +876,22 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 		} else {
 			setContractName('CustomContract');
 			setContractSymbol('CUSTOM');
+		}
+	};
+
+	// Handle Contract Template Change
+	const handleContractTypeChange = (
+		event: React.ChangeEvent<{ value: unknown }>,
+	) => {
+		const type = event.target.value as string;
+
+		if (isCodeEdited) {
+			// Instead of window.confirm, store the pending change and show dialog
+			setPendingTemplateType(type);
+			setShowConfirmDialog(true);
+		} else {
+			// If no custom edits, apply changes directly
+			applyTemplateChange(type);
 		}
 	};
 
@@ -2574,6 +2580,38 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 					)}
 				</DialogContent>
 			</Box>
+
+			{/* Confirmation Dialog */}
+			<Dialog
+				open={showConfirmDialog}
+				onClose={() => setShowConfirmDialog(false)}
+				aria-labelledby="confirm-template-change-dialog"
+			>
+				<DialogContent>
+					<Typography>
+						Changing the template will replace your custom code.
+						Continue?
+					</Typography>
+				</DialogContent>
+				<Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
+					<Button
+						onClick={() => setShowConfirmDialog(false)}
+						sx={{ mr: 1 }}
+					>
+						Cancel
+					</Button>
+					<Button
+						onClick={() => {
+							setShowConfirmDialog(false);
+							applyTemplateChange(pendingTemplateType);
+						}}
+						variant="contained"
+						color="primary"
+					>
+						Confirm
+					</Button>
+				</Box>
+			</Dialog>
 		</StyledDialog>
 	);
 }

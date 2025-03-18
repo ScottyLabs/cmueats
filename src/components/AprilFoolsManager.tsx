@@ -158,33 +158,42 @@ const PremiumBanner = styled(Box)({
 // NFT Features UI components
 const NFTStatusBar = styled(Paper, {
 	shouldForwardProp: (prop) => prop !== 'minimized',
-})<{ minimized?: boolean }>(({ minimized }) => ({
-	position: 'fixed',
-	top: '42px', // Moved higher than before
-	right: '20px',
-	zIndex: 9997,
-	backgroundColor: 'var(--card-bg)',
-	padding: minimized ? '5px 8px' : '6px 8px',
-	borderRadius: '10px',
-	boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-	border: '1px solid var(--card-border-color)',
-	display: 'flex',
-	flexDirection: 'column',
-	gap: minimized ? '0' : '4px',
-	maxWidth: minimized ? '150px' : '320px',
-	maxHeight: minimized ? '32px' : minimized === undefined ? '140px' : '460px',
-	overflow: 'hidden',
-	transition: 'all 0.3s ease',
-	transform: 'translateZ(0)', // Force hardware acceleration
-	'&:hover': {
-		transform: 'translateY(-5px) translateZ(0)',
-		boxShadow: '0 6px 15px rgba(0,0,0,0.3)',
-	},
-	'@media (max-width: 768px)': {
-		maxWidth: minimized ? '150px' : '300px',
-		right: '10px',
-	},
-}));
+})<{ minimized?: boolean }>(({ minimized }) => {
+	// Helper function to determine max height
+	const getMaxHeight = () => {
+		if (minimized === true) return '32px';
+		if (minimized === undefined) return '140px';
+		return '460px';
+	};
+
+	return {
+		position: 'fixed',
+		top: '42px', // Moved higher than before
+		right: '20px',
+		zIndex: 9997,
+		backgroundColor: 'var(--card-bg)',
+		padding: minimized ? '5px 8px' : '6px 8px',
+		borderRadius: '10px',
+		boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+		border: '1px solid var(--card-border-color)',
+		display: 'flex',
+		flexDirection: 'column',
+		gap: minimized ? '0' : '4px',
+		maxWidth: minimized ? '150px' : '320px',
+		maxHeight: getMaxHeight(),
+		overflow: 'hidden',
+		transition: 'all 0.3s ease',
+		transform: 'translateZ(0)', // Force hardware acceleration
+		'&:hover': {
+			transform: 'translateY(-5px) translateZ(0)',
+			boxShadow: '0 6px 15px rgba(0,0,0,0.3)',
+		},
+		'@media (max-width: 768px)': {
+			maxWidth: minimized ? '150px' : '300px',
+			right: '10px',
+		},
+	};
+});
 
 const GasPrice = styled(Chip)(({ congestion }: { congestion: string }) => {
 	let color = '#10B981'; // green for low
