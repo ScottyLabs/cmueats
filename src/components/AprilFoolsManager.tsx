@@ -1174,7 +1174,7 @@ function AprilFoolsManager() {
 					}}
 				>
 					<DiamondIcon fontSize="small" />
-					Welcome to CMUEats Premium! (April 1st)
+					Welcome to CMUEats Premium!
 					<DiamondIcon fontSize="small" />
 				</Box>
 			</PremiumBanner>
