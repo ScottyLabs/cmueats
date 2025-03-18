@@ -313,6 +313,21 @@ const GasEstimateChip = styled(Chip)({
 	},
 });
 
+// Add styled component for utility badges
+const UtilityBadge = styled(Box)({
+	backgroundColor: 'rgba(138, 75, 175, 0.1)',
+	border: '1px dashed #8A4BAF',
+	color: '#8A4BAF',
+	padding: '4px 8px',
+	borderRadius: '4px',
+	fontSize: '0.7rem',
+	margin: '4px 0',
+	display: 'flex',
+	alignItems: 'center',
+	gap: '4px',
+	fontWeight: 'bold',
+});
+
 // Sample template code for different contract types
 const contractTemplates = {
 	erc721: `// SPDX-License-Identifier: MIT
@@ -589,6 +604,11 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Morning' },
 		],
 		sold: false,
+		// Add utility promises
+		utilities: [
+			'Grants 0.5% faster walking speed on campus',
+			'Telepathic connection with other CMUEats NFT holders',
+		],
 	},
 	{
 		id: 2,
@@ -608,6 +628,11 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Lunch' },
 		],
 		sold: false,
+		// Add utility promises
+		utilities: [
+			'5% chance of extra fries when purchasing at The Underground',
+			'Makes you 3% more attractive to CS majors',
+		],
 	},
 	{
 		id: 3,
@@ -627,6 +652,11 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Evening' },
 		],
 		sold: false,
+		// Add utility promises
+		utilities: [
+			'Telepathic connection with other CMUEats NFT holders',
+			'WiFi speed increased by 2.5% while studying',
+		],
 	},
 	{
 		id: 4,
@@ -646,6 +676,11 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Morning' },
 		],
 		sold: false,
+		// Add utility promises
+		utilities: [
+			'5% chance of extra fries when purchasing at The Underground',
+			'Immune to campus geese attacks (mostly)',
+		],
 	},
 	{
 		id: 5,
@@ -665,6 +700,12 @@ const nftData = [
 			{ trait: 'Time Period', value: 'All Day' },
 		],
 		sold: false,
+		// Add utility promises
+		utilities: [
+			'Grants 0.5% faster walking speed on campus',
+			'Professors are 7% more likely to round up your grade',
+			"Unlocks secret menu items (please don't ask what they are)",
+		],
 	},
 	{
 		id: 6,
@@ -684,6 +725,11 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Lunch' },
 		],
 		sold: false,
+		// Add utility promises
+		utilities: [
+			'Can summon a virtual Scottie dog that only you can see',
+			'Free napkins for life (digital only)',
+		],
 	},
 ];
 
@@ -1457,6 +1503,41 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													>
 														Buy Now
 													</Button>
+												</Box>
+
+												{/* Add Utility Promises section */}
+												<Box sx={{ mt: 2 }}>
+													<Typography
+														variant="caption"
+														sx={{
+															fontWeight: 'bold',
+															color: '#8A4BAF',
+														}}
+													>
+														EXCLUSIVE UTILITY
+														PROMISES:
+													</Typography>
+													{nft.utilities &&
+														nft.utilities.map(
+															(utility) => (
+																<UtilityBadge
+																	key={`${nft.id}-${utility}`}
+																>
+																	✨ {utility}
+																</UtilityBadge>
+															),
+														)}
+													<Typography
+														variant="caption"
+														sx={{
+															display: 'block',
+															mt: 1,
+															color: 'var(--text-muted)',
+															fontSize: '0.6rem',
+															fontStyle: 'italic',
+														}}
+													>
+													</Typography>
 												</Box>
 											</CardContent>
 										</NFTCard>
