@@ -29,11 +29,10 @@ import {
 	InputLabel,
 	FormHelperText,
 	Slider,
-	Accordion,
-	AccordionSummary,
-	AccordionDetails,
 	Switch,
 	FormControlLabel,
+	Snackbar,
+	Alert,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -41,7 +40,6 @@ import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import PoolIcon from '@mui/icons-material/Pool';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CodeIcon from '@mui/icons-material/Code';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -214,6 +212,37 @@ const CodeEditorBox = styled(Box)({
 	lineHeight: 1.5,
 	whiteSpace: 'pre',
 	border: '1px solid #333',
+});
+
+const EditorTextField = styled(TextField)({
+	'& .MuiInputBase-root': {
+		height: 'auto',
+		display: 'flex',
+	},
+	'& .MuiOutlinedInput-root': {
+		backgroundColor: '#1E1E2D', // Darker background for better contrast
+		color: '#D4D4D4',
+		fontFamily: 'Consolas, Monaco, "Courier New", monospace', // Better coding fonts
+		fontSize: '14px',
+		lineHeight: 1.6,
+		'& fieldset': {
+			borderColor: 'transparent',
+		},
+		'&:hover fieldset': {
+			borderColor: 'transparent',
+		},
+		'&.Mui-focused fieldset': {
+			borderColor: 'transparent',
+			borderWidth: 0,
+		},
+	},
+	'& .MuiOutlinedInput-input': {
+		padding: '16px',
+		minHeight: '380px', // Adjust to match container
+		whiteSpace: 'pre',
+		letterSpacing: 0.5,
+		width: '100%',
+	},
 });
 
 const ParameterCard = styled(Card)({
@@ -753,6 +782,8 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	const [gasOption, setGasOption] = useState('average');
 	const [contractType, setContractType] = useState('erc721');
 	const [contractCode, setContractCode] = useState(contractTemplates.erc721);
+	const [editedCode, setEditedCode] = useState(contractTemplates.erc721);
+	const [isCodeEdited, setIsCodeEdited] = useState(false);
 	const [contractName, setContractName] = useState('CMUEatsNFT');
 	const [contractSymbol, setContractSymbol] = useState('CMUEAT');
 	const [maxSupply, setMaxSupply] = useState(100);
@@ -764,6 +795,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	const [royaltyPercentage, setRoyaltyPercentage] = useState(5);
 	const [revealable, setRevealable] = useState(false);
 	const [whitelistEnabled, setWhitelistEnabled] = useState(false);
+	const [showCodeError, setShowCodeError] = useState(false);
+	const [codeError, setCodeError] = useState('');
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState('');
 
 	const handleTabChange = (
 		_event: React.SyntheticEvent,
@@ -819,10 +854,24 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 		event: React.ChangeEvent<{ value: unknown }>,
 	) => {
 		const type = event.target.value as string;
+		const newTemplate =
+			contractTemplates[type as keyof typeof contractTemplates];
+
 		setContractType(type);
-		setContractCode(
-			contractTemplates[type as keyof typeof contractTemplates],
-		);
+		setContractCode(newTemplate);
+
+		// If user hasn't made custom edits, or if they confirm replacing their changes
+		if (
+			!isCodeEdited ||
+			window.confirm(
+				'Changing the template will replace your custom code. Continue?',
+			)
+		) {
+			setEditedCode(newTemplate);
+			setIsCodeEdited(false);
+			setShowCodeError(false);
+			setCodeError('');
+		}
 
 		// Reset parameters for different contract types
 		if (type === 'erc721') {
@@ -838,6 +887,94 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 			setContractName('CustomContract');
 			setContractSymbol('CUSTOM');
 		}
+	};
+
+	// Handle code changes in the editor
+	const handleCodeChange = (newCode: string) => {
+		setEditedCode(newCode);
+		setIsCodeEdited(true);
+
+		// Basic validation - check for common syntax errors
+		if (!newCode.includes('pragma solidity')) {
+			setShowCodeError(true);
+			setCodeError('Missing Solidity version pragma statement');
+		} else if (
+			newCode.includes('contract') &&
+			!newCode.includes(contractName)
+		) {
+			setShowCodeError(true);
+			setCodeError(`Contract name should match "${contractName}"`);
+		} else {
+			setShowCodeError(false);
+			setCodeError('');
+		}
+	};
+
+	// Function to reset code to template
+	const resetToTemplate = () => {
+		const template =
+			contractTemplates[contractType as keyof typeof contractTemplates];
+		setEditedCode(template);
+		setContractCode(template);
+		setIsCodeEdited(false);
+		setShowCodeError(false);
+		setCodeError('');
+	};
+
+	// Function to apply parameter changes to code while preserving edits
+	const applyParameterChanges = () => {
+		let updatedCode = editedCode;
+
+		// Only apply changes if the code contains the relevant patterns
+		if (contractType === 'erc721') {
+			if (updatedCode.includes('uint256 public mintPrice =')) {
+				updatedCode = updatedCode.replace(
+					/uint256 public mintPrice = .*?ether/,
+					`uint256 public mintPrice = ${mintPrice} ether`,
+				);
+			}
+
+			if (updatedCode.includes('uint256 public maxSupply =')) {
+				updatedCode = updatedCode.replace(
+					/uint256 public maxSupply = \d+/,
+					`uint256 public maxSupply = ${maxSupply}`,
+				);
+			}
+
+			// Update contract name in declaration
+			if (updatedCode.includes('contract ')) {
+				updatedCode = updatedCode.replace(
+					/contract (\w+) is/,
+					`contract ${contractName} is`,
+				);
+			}
+		}
+
+		setEditedCode(updatedCode);
+	};
+
+	// Function to update code with parameters
+	const getUpdatedCode = () => {
+		// If code has been edited, return the edited version
+		if (isCodeEdited) {
+			return editedCode;
+		}
+
+		// Otherwise apply parameter changes to the template
+		let updatedCode = contractCode;
+
+		if (contractType === 'erc721') {
+			updatedCode = updatedCode.replace(
+				/uint256 public mintPrice = 0.15 ether/,
+				`uint256 public mintPrice = ${mintPrice} ether`,
+			);
+			updatedCode = updatedCode.replace(
+				/uint256 public maxSupply = 100/,
+				`uint256 public maxSupply = ${maxSupply}`,
+			);
+		}
+
+		return updatedCode;
 	};
 
 	// Start deployment process
@@ -901,23 +1038,24 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 		};
 	};
 
-	// Function to update code with parameters
-	const getUpdatedCode = () => {
-		// Only update specific placeholders in the code
-		let updatedCode = contractCode;
+	// Function to handle clipboard copy with notifications
+	const handleCopyToClipboard = (text: string, successMessage: string) => {
+		navigator.clipboard
+			.writeText(text)
+			.then(() => {
+				setSnackbarMessage(successMessage);
+				setSnackbarOpen(true);
+			})
+			.catch((err: Error) => {
+				console.error('Failed to copy text: ', err);
+				setSnackbarMessage('Failed to copy to clipboard');
+				setSnackbarOpen(true);
+			});
+	};
 
-		if (contractType === 'erc721') {
-			updatedCode = updatedCode.replace(
-				/uint256 public mintPrice = 0.15 ether/,
-				`uint256 public mintPrice = ${mintPrice} ether`,
-			);
-			updatedCode = updatedCode.replace(
-				/uint256 public maxSupply = 100/,
-				`uint256 public maxSupply = ${maxSupply}`,
-			);
-		}
-
-		return updatedCode;
+	// Function to close snackbar
+	const handleSnackbarClose = () => {
+		setSnackbarOpen(false);
 	};
 
 	if (!IS_APRIL_FOOLS) return null;
@@ -930,6 +1068,22 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 			maxWidth="md"
 			scroll="paper"
 		>
+			{/* Notification Snackbar */}
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={3000}
+				onClose={handleSnackbarClose}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+			>
+				<Alert
+					onClose={handleSnackbarClose}
+					severity="success"
+					sx={{ width: '100%' }}
+				>
+					{snackbarMessage}
+				</Alert>
+			</Snackbar>
+
 			<Box sx={{ position: 'relative' }}>
 				<IconButton
 					onClick={onClose}
@@ -2023,12 +2177,12 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															icon={
 																<ContentCopyIcon />
 															}
-															onClick={() => {
-																/* Copy to clipboard simulation */
-																alert(
+															onClick={() =>
+																handleCopyToClipboard(
+																	deployHash,
 																	'Transaction hash copied to clipboard!',
-																);
-															}}
+																)
+															}
 														/>
 													)}
 												</Box>
@@ -2072,94 +2226,192 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 										</Typography>
 
 										<Box>
-											<Tooltip title="Copy code">
+											<Tooltip title="Reset to template">
 												<IconButton
 													size="small"
 													sx={{ mr: 1 }}
+													onClick={resetToTemplate}
+													disabled={!isCodeEdited}
+												>
+													<WarningIcon fontSize="small" />
+												</IconButton>
+											</Tooltip>
+											<Tooltip title="Apply parameter changes">
+												<IconButton
+													size="small"
+													sx={{ mr: 1 }}
+													onClick={
+														applyParameterChanges
+													}
 												>
 													<ContentCopyIcon fontSize="small" />
 												</IconButton>
 											</Tooltip>
+											<Tooltip title="Copy code to clipboard">
+												<span>
+													<IconButton
+														size="small"
+														onClick={() =>
+															handleCopyToClipboard(
+																editedCode,
+																'Code copied to clipboard!',
+															)
+														}
+													>
+														<ContentCopyIcon fontSize="small" />
+													</IconButton>
+												</span>
+											</Tooltip>
 										</Box>
 									</Box>
 
-									<CodeEditorBox>
-										{getUpdatedCode()
-											.split('\n')
-											.map((line, index) => (
-												<Box
-													key={index}
-													component="div"
-													sx={{
-														fontFamily: 'monospace',
-													}}
-												>
-													{line.includes(
-														'pragma solidity',
-													) && (
-														<SyntaxHighlight type="keyword">
-															{line}
-														</SyntaxHighlight>
-													)}
-													{line.includes(
-														'import',
-													) && (
-														<SyntaxHighlight type="keyword">
-															{line}
-														</SyntaxHighlight>
-													)}
-													{line.includes(
-														'contract',
-													) && (
-														<>
-															<SyntaxHighlight type="keyword">
-																contract{' '}
-															</SyntaxHighlight>
-															<SyntaxHighlight type="type">
-																{contractName}
-															</SyntaxHighlight>
-															<SyntaxHighlight type="keyword">
-																{' '}
-																is{' '}
-															</SyntaxHighlight>
-															<SyntaxHighlight type="type">
-																{line.substring(
-																	line.indexOf(
-																		'is ',
-																	) + 3,
-																)}
-															</SyntaxHighlight>
-														</>
-													)}
-													{line.includes(
-														'function',
-													) && (
-														<SyntaxHighlight type="function">
-															{line}
-														</SyntaxHighlight>
-													)}
-													{line.includes('//') && (
-														<SyntaxHighlight type="comment">
-															{line}
-														</SyntaxHighlight>
-													)}
-													{!line.includes(
-														'pragma solidity',
-													) &&
-														!line.includes(
-															'import',
-														) &&
-														!line.includes(
-															'contract',
-														) &&
-														!line.includes(
-															'function',
-														) &&
-														!line.includes('//') &&
-														line}
-												</Box>
-											))}
-									</CodeEditorBox>
+									{/* Editable Code Area */}
+									<Box
+										sx={{
+											border: '1px solid #444',
+											borderRadius: '4px',
+											height: '400px',
+											overflow: 'auto',
+											backgroundColor: '#1E1E2D',
+											mb: 2,
+										}}
+									>
+										<EditorTextField
+											multiline
+											fullWidth
+											value={editedCode}
+											onChange={(e) =>
+												handleCodeChange(e.target.value)
+											}
+											variant="outlined"
+											sx={{
+												'& .MuiOutlinedInput-notchedOutline':
+													{
+														border: 'none',
+													},
+												'& .MuiInputBase-root': {
+													height: 'auto',
+												},
+											}}
+										/>
+									</Box>
+
+									{/* Code Error Display */}
+									{showCodeError && (
+										<Box
+											sx={{
+												mb: 2,
+												p: 2,
+												bgcolor: 'rgba(255, 0, 0, 0.1)',
+												borderRadius: '4px',
+												display: 'flex',
+												alignItems: 'center',
+											}}
+										>
+											<WarningIcon
+												sx={{ color: 'red', mr: 1 }}
+											/>
+											<Typography
+												variant="body2"
+												color="error"
+											>
+												{codeError}
+											</Typography>
+										</Box>
+									)}
+
+									{/* Original Syntax Highlighted View (hidden) */}
+									<Box sx={{ display: 'none' }}>
+										<CodeEditorBox>
+											{getUpdatedCode()
+												.split('\n')
+												.map((line, i) => {
+													// Create a more stable key that doesn't solely rely on index
+													const lineKey = `line-${i}-${line.slice(0, 10).replace(/\s/g, '')}-${Math.random().toString(36).substring(2, 7)}`;
+													return (
+														<Box
+															key={lineKey}
+															component="div"
+															sx={{
+																fontFamily:
+																	'monospace',
+															}}
+														>
+															{line.includes(
+																'pragma solidity',
+															) && (
+																<SyntaxHighlight type="keyword">
+																	{line}
+																</SyntaxHighlight>
+															)}
+															{line.includes(
+																'import',
+															) && (
+																<SyntaxHighlight type="keyword">
+																	{line}
+																</SyntaxHighlight>
+															)}
+															{line.includes(
+																'contract',
+															) && (
+																<>
+																	<SyntaxHighlight type="keyword">
+																		contract{' '}
+																	</SyntaxHighlight>
+																	<SyntaxHighlight type="type">
+																		{
+																			contractName
+																		}
+																	</SyntaxHighlight>
+																	<SyntaxHighlight type="keyword">
+																		{' '}
+																		is{' '}
+																	</SyntaxHighlight>
+																	<SyntaxHighlight type="type">
+																		{line.substring(
+																			line.indexOf(
+																				'is ',
+																			) +
+																				3,
+																		)}
+																	</SyntaxHighlight>
+																</>
+															)}
+															{line.includes(
+																'function',
+															) && (
+																<SyntaxHighlight type="function">
+																	{line}
+																</SyntaxHighlight>
+															)}
+															{line.includes(
+																'//',
+															) && (
+																<SyntaxHighlight type="comment">
+																	{line}
+																</SyntaxHighlight>
+															)}
+															{!line.includes(
+																'pragma solidity',
+															) &&
+																!line.includes(
+																	'import',
+																) &&
+																!line.includes(
+																	'contract',
+																) &&
+																!line.includes(
+																	'function',
+																) &&
+																!line.includes(
+																	'//',
+																) &&
+																line}
+														</Box>
+													);
+												})}
+										</CodeEditorBox>
+									</Box>
 
 									<Box
 										sx={{
@@ -2168,22 +2420,55 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											alignItems: 'center',
 											px: 2,
 											py: 1,
-											bgcolor: 'rgba(255, 152, 0, 0.1)',
+											bgcolor: isCodeEdited
+												? 'rgba(58, 177, 155, 0.1)'
+												: 'rgba(255, 152, 0, 0.1)',
 											borderRadius: '4px',
+											border: isCodeEdited
+												? '1px solid var(--logo-second-half)'
+												: 'none',
 										}}
 									>
-										<WarningIcon
-											sx={{ color: 'orange', mr: 1 }}
-										/>
-										<Typography
-											variant="body2"
-											color="text.secondary"
-										>
-											Note: This is a simulation. In a
-											real environment, you would need to
-											connect your wallet and pay gas fees
-											to deploy contracts.
-										</Typography>
+										{isCodeEdited ? (
+											<>
+												<CodeIcon
+													sx={{
+														color: 'var(--logo-second-half)',
+														mr: 1,
+													}}
+												/>
+												<Typography
+													variant="body2"
+													sx={{
+														color: 'var(--text-primary)',
+													}}
+												>
+													You&apos;ve made custom
+													changes to the contract.
+													These changes will be used
+													when deploying.
+												</Typography>
+											</>
+										) : (
+											<>
+												<WarningIcon
+													sx={{
+														color: 'orange',
+														mr: 1,
+													}}
+												/>
+												<Typography
+													variant="body2"
+													color="text.secondary"
+												>
+													Note: This is a simulation.
+													In a real environment, you
+													would need to connect your
+													wallet and pay gas fees to
+													deploy contracts.
+												</Typography>
+											</>
+										)}
 									</Box>
 								</Grid>
 							</Grid>
