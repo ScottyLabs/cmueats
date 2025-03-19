@@ -1,8 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useTheme } from '../ThemeProvider';
+import { IS_APRIL_FOOLS } from '../util/constants';
 import './Navbar.css';
 
 function Navbar() {
 	const location = useLocation();
+	const { theme } = useTheme();
+
+	// For April Fools, swap the labels but keep the links the same
+	const isAprilFools = IS_APRIL_FOOLS && theme === 'april-fools';
 
 	return (
 		<nav className="Navbar">
@@ -24,7 +30,7 @@ function Navbar() {
                 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
 						/>
 					</svg>
-					Locations
+					{isAprilFools ? 'Map' : 'Locations'}
 				</Link>
 				<Link to="/map">
 					<svg
@@ -44,7 +50,7 @@ function Navbar() {
                  1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"
 						/>
 					</svg>
-					Map
+					{isAprilFools ? 'Locations' : 'Map'}
 				</Link>
 				<div
 					className={`Navbar-active ${location.pathname === '/map' ? 'Navbar-active_map' : ''} Navbar-active_glow`}
