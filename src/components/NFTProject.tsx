@@ -360,6 +360,35 @@ const CarbonWidget = styled(Box)({
 	padding: '8px',
 	fontSize: '0.7rem',
 	marginTop: '8px',
+	'@media (max-width: 600px)': {
+		maxHeight: '150px',
+		overflowY: 'auto',
+		scrollbarWidth: 'thin',
+		'&::-webkit-scrollbar': {
+			width: '4px',
+		},
+		'&::-webkit-scrollbar-track': {
+			background: 'rgba(0,0,0,0.1)',
+		},
+		'&::-webkit-scrollbar-thumb': {
+			background: 'rgba(5, 150, 105, 0.5)',
+			borderRadius: '10px',
+		},
+		// Add subtle gradient fade at bottom to indicate scrollable content
+		'&::after': {
+			content: '""',
+			position: 'absolute',
+			bottom: 0,
+			left: 0,
+			right: 0,
+			height: '15px',
+			background:
+				'linear-gradient(to top, rgba(5, 150, 105, 0.1), transparent)',
+			pointerEvents: 'none',
+			borderRadius: '0 0 4px 4px',
+		},
+		position: 'relative',
+	},
 });
 
 // Sample template code for different contract types
@@ -1808,15 +1837,29 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													<Typography
 														variant="caption"
 														component="div"
-														sx={{ mt: 1 }}
+														sx={{
+															mt: 1,
+															'@media (max-width: 600px)':
+																{
+																	display:
+																		'flex',
+																	flexWrap:
+																		'wrap',
+																	alignItems:
+																		'center',
+																	mt: 1.5,
+																},
+														}}
 													>
-														Carbon Footprint:{' '}
-														<b>
-															{calculateCarbonFootprint(
-																nft.price,
-															).toLocaleString()}{' '}
-															kg CO₂
-														</b>
+														<Box component="span">
+															Carbon Footprint:{' '}
+															<b>
+																{calculateCarbonFootprint(
+																	nft.price,
+																).toLocaleString()}{' '}
+																kg CO₂
+															</b>
+														</Box>
 														<Tooltip
 															title={`Equivalent to ${Math.round(calculateCarbonFootprint(nft.price) / 5000)} trips around the equator in a Hummer, streaming 4K videos the entire time while mining Bitcoin on 3 laptops`}
 														>
@@ -1827,6 +1870,14 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																	color: 'var(--text-muted)',
 																	verticalAlign:
 																		'middle',
+																	'@media (max-width: 600px)':
+																		{
+																			fontSize: 14,
+																			ml: 1,
+																			padding:
+																				'2px',
+																			cursor: 'pointer',
+																		},
 																}}
 															/>
 														</Tooltip>
@@ -1840,6 +1891,11 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																'rgba(5, 150, 105, 0.05)',
 															p: 1,
 															borderRadius: 1,
+															'@media (max-width: 600px)':
+																{
+																	p: '8px 6px', // Slightly smaller padding on mobile
+																	mt: 1.5, // More margin top for separation
+																},
 														}}
 													>
 														<Typography
@@ -1921,6 +1977,18 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																		'#059669',
 																	minWidth:
 																		'unset',
+																	'@media (max-width: 600px)':
+																		{
+																			ml: 1, // Add some left margin on mobile
+																			p: '1px 4px',
+																			fontSize:
+																				'0.55rem',
+																		},
+																	'@media (max-width: 350px)':
+																		{
+																			whiteSpace:
+																				'nowrap',
+																		},
 																}}
 															>
 																Plant Trees
