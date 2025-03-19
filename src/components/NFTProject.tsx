@@ -45,6 +45,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import WarningIcon from '@mui/icons-material/Warning';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { IS_APRIL_FOOLS } from '../util/constants';
 
 // Styles
@@ -97,6 +99,27 @@ const StyledTab = styled(Tab)({
 	color: 'var(--text-muted)',
 	'&.Mui-selected': {
 		color: 'var(--text-primary)',
+	},
+	// Make tabs more mobile-friendly
+	padding: '6px 12px',
+	minWidth: '80px',
+	'@media (max-width: 600px)': {
+		minWidth: '50px',
+		fontSize: '0.75rem',
+		padding: '6px 8px',
+	},
+	// For very small screens - show only icons
+	'@media (max-width: 350px)': {
+		minWidth: '40px',
+		fontSize: '0.7rem',
+		padding: '6px 5px',
+		'& .MuiTab-iconWrapper': {
+			marginRight: 0,
+		},
+	},
+	// Better touch targets for mobile
+	'&.MuiButtonBase-root': {
+		touchAction: 'manipulation',
 	},
 });
 
@@ -805,7 +828,7 @@ const collectionStats = {
 
 // Add carbon footprint data for NFTs
 const carbonData = {
-	baseFootprint: 5420, // ridiculous base CO2 in kg
+	baseFootprint: 5391, // ridiculous base CO2 in kg
 	offsetCostPerTree: 0.01, // ETH per tree
 	treesNeeded: 12, // trees to offset one NFT
 	offsetDiscount: 25, // percent discount for buying now
@@ -1097,7 +1120,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 				baseGas = 2800000;
 				break;
 			case 'marketplace':
-				baseGas = 4200000;
+				baseGas = 7800000;
 				break;
 			case 'custom':
 				baseGas = 1500000;
@@ -1243,17 +1266,195 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 						onChange={handleTabChange}
 						indicatorColor="primary"
 						textColor="inherit"
+						variant="scrollable"
+						scrollButtons="auto"
+						allowScrollButtonsMobile
+						aria-label="NFT marketplace tabs"
 						sx={{
 							borderBottom: 1,
 							borderColor: 'var(--card-border-color)',
 							mb: 3,
+							// Improved mobile styling
+							'& .MuiTabs-flexContainer': {
+								justifyContent: {
+									xs: 'flex-start',
+									md: 'center',
+								},
+							},
+							'& .MuiTabs-scrollButtons': {
+								color: 'var(--text-primary)',
+							},
+							'@media (max-width: 600px)': {
+								maxWidth: 'calc(100vw - 32px)',
+							},
 						}}
 					>
-						<StyledTab label="Marketplace" />
-						<StyledTab label="Transactions" />
-						<StyledTab label="Liquidity Pools" />
-						<StyledTab label="Create Contract" />
-						<StyledTab label="About" />
+						<StyledTab
+							icon={<StorefrontIcon fontSize="small" />}
+							iconPosition="start"
+							label={
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<Box
+										sx={{
+											display: {
+												xs: 'none',
+												sm: 'block',
+											},
+										}}
+									>
+										Marketplace
+									</Box>
+									<Box
+										sx={{
+											display: {
+												xs: 'block',
+												sm: 'none',
+											},
+											'@media (max-width: 350px)': {
+												display: 'none',
+											},
+										}}
+									>
+										Market
+									</Box>
+								</Box>
+							}
+						/>
+						<StyledTab
+							icon={<ReceiptIcon fontSize="small" />}
+							iconPosition="start"
+							label={
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<Box
+										sx={{
+											display: {
+												xs: 'none',
+												sm: 'block',
+											},
+										}}
+									>
+										Transactions
+									</Box>
+									<Box
+										sx={{
+											display: {
+												xs: 'block',
+												sm: 'none',
+											},
+											'@media (max-width: 350px)': {
+												display: 'none',
+											},
+										}}
+									>
+										Txns
+									</Box>
+								</Box>
+							}
+						/>
+						<StyledTab
+							icon={<PoolIcon fontSize="small" />}
+							iconPosition="start"
+							label={
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<Box
+										sx={{
+											display: {
+												xs: 'none',
+												sm: 'block',
+											},
+										}}
+									>
+										Liquidity Pools
+									</Box>
+									<Box
+										sx={{
+											display: {
+												xs: 'block',
+												sm: 'none',
+											},
+											'@media (max-width: 350px)': {
+												display: 'none',
+											},
+										}}
+									>
+										Pools
+									</Box>
+								</Box>
+							}
+						/>
+						<StyledTab
+							icon={<CodeIcon fontSize="small" />}
+							iconPosition="start"
+							label={
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<Box
+										sx={{
+											display: {
+												xs: 'none',
+												sm: 'block',
+											},
+										}}
+									>
+										Create Contract
+									</Box>
+									<Box
+										sx={{
+											display: {
+												xs: 'block',
+												sm: 'none',
+											},
+											'@media (max-width: 350px)': {
+												display: 'none',
+											},
+										}}
+									>
+										Create
+									</Box>
+								</Box>
+							}
+						/>
+						<StyledTab
+							icon={<InfoIcon fontSize="small" />}
+							iconPosition="start"
+							label={
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<Box
+										sx={{
+											'@media (max-width: 350px)': {
+												display: 'none',
+											},
+										}}
+									>
+										About
+									</Box>
+								</Box>
+							}
+						/>
 					</Tabs>
 
 					{tabValue === 0 && (
@@ -1616,7 +1817,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															).toLocaleString()}{' '}
 															kg CO₂
 														</b>
-														<Tooltip title="Equivalent to driving a Hummer around the equator 12 times while streaming videos">
+														<Tooltip
+															title={`Equivalent to ${Math.round(calculateCarbonFootprint(nft.price) / 5000)} trips around the equator in a Hummer, streaming 4K videos the entire time while mining Bitcoin on 3 laptops`}
+														>
 															<InfoIcon
 																sx={{
 																	fontSize: 12,
@@ -2734,11 +2937,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													variant="body2"
 													color="text.secondary"
 												>
-													Note: This is a simulation.
-													In a real environment, you
-													would need to connect your
-													wallet and pay gas fees to
-													deploy contracts.
+													Note: Your wallet must be
+													connected, and you must pay
+													gas fees to deploy
+													contracts.
 												</Typography>
 											</>
 										)}
@@ -2838,11 +3040,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 								paragraph
 								fontWeight="bold"
 								color="#F87171"
-							>
-								Note: This is an April Fools&apos; joke. NFTs
-								are not actually available for purchase through
-								CMUEats.
-							</Typography>
+							/>
 						</Box>
 					)}
 				</DialogContent>
