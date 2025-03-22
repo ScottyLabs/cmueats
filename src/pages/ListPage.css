@@ -1,9 +1,17 @@
 .ListPage {
 	display: flex;
 	flex-direction: column;
-	min-height: 100%; /* So footer (the contact info one) actually stays at the bottom */
+	min-height: 100%; /* So the contact info footer actually stays at the bottom */
 }
-
+.ListPage__container {
+	padding: 72px 48px 0;
+	flex-grow: 1;
+	@media screen and (max-width: 900px) {
+		& {
+			padding: 50px 15px;
+		}
+	}
+}
 .badge-accent {
 	color: #105c03;
 	background: #19b875;
@@ -13,10 +21,110 @@
 
 .Locations-header {
 	display: grid;
-	grid-gap: 1rem; 
-	padding: 3rem 0;
+	grid-gap: 1rem;
+	padding-bottom: 48px;
+	position: relative;
 }
+.Locations-header__miku-toggle {
+	position: absolute;
+	top: -290px;
+	left: min(55%, 630px);
+	mask-image: url('../assets/miku/miku-keychain.svg');
+	mask-position: bottom;
+	mask-size: contain;
+	padding: 0;
+	background-color: transparent;
+	border: none;
+	line-height: 0;
+	cursor: pointer;
+	transition: 0.3s all;
+	transform-origin: top;
+	animation: 3s sway infinite cubic-bezier(0.364212, 0, 0.635788, 1);
+	&:hover {
+		top: -280px;
+		&:active {
+			top: -272px;
+		}
+	}
+	& img {
+		height: 410px;
+	}
+}
+@media screen and (max-width: 900px) {
+	.Locations-header__miku-toggle {
+		right: -20px;
+		left: auto;
+	}
+}
+@keyframes sway {
+	0%,
+	100% {
+		transform: rotate(1deg);
+	}
+	50% {
+		transform: rotate(-1deg);
+	}
+}
+.Locations-header__greeting-container {
+	container-type: inline-size;
+	& .Locations-header__greeting--desktop {
+		display: none;
+	}
+	padding-left: 2px;
+	/* 600px is the approximate width of the location dropdown selector (we are also assuming that the desktop greeting is less than 600px wide) */
+	@container (min-width: 600px) {
+		& .Locations-header__greeting--desktop {
+			display: block;
+		}
+		& .Locations-header__greeting--mobile {
+			display: none;
+		}
+	}
+}
+/* we need this to properly animate the mask gradient */
+@property --right-cutoff {
+	syntax: '<percentage>';
+	inherits: false;
+	initial-value: 0%;
+}
+.Locations-header__greeting {
+	color: var(--text-greeting);
+	margin: 0;
+	font-family: var(--text-primary-font);
+	font-weight: 800;
+	font-size: 2.5rem;
 
+	--right-cutoff: 100%;
+	width: fit-content;
+	animation: slide-in 1.2s forwards;
+	animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
+	/* we add a delay so it doesn't look jittery on page load */
+	animation-delay: 0.1s;
+	opacity: 0;
+
+	mask-image: linear-gradient(
+		to right,
+		rgba(0, 0, 0, 1) 0%,
+		rgba(0, 0, 0, 1) var(--right-cutoff),
+		rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
+	);
+}
+@keyframes slide-in {
+	0% {
+		opacity: 0;
+		/* clip-path: inset(0px 100% 0px 0px); */
+		transform: translate(-10px, 0);
+		--right-cutoff: 0%;
+	}
+	20% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+		transform: translate(0, 0);
+		--right-cutoff: 100%;
+	}
+}
 @media screen and (min-width: 900px) {
 	.Locations-header {
 		grid-template-columns: 1fr 300px;
@@ -27,32 +135,148 @@
 .Locations-search {
 	display: block;
 	width: 100%;
+	/* stays at the top when greeting text wraps */
+	align-self: start;
 	padding: 0.8rem 1rem;
 	padding-left: 3rem;
 	border-radius: 1rem;
-	background: #23272a;
+	background: var(--input-bg);
 	outline: none;
 	border: 1px solid transparent;
 	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
 	transition: all 0.2s;
 	font-family: inherit;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	/* Heroicons v2.0.12 by Refactoring UI Inc., used under MIT license */
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='rgba(255, 255, 255, .6)' class='w-5 h-5'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd'/%3E%3C/svg%3E");
 	background-size: 20px;
 	background-repeat: no-repeat;
 	background-position: 1rem center;
-	color: white;
+	color: var(--input-text);
 	font-weight: 500;
+	&::-webkit-search-decoration {
+		display: none;
+	}
+	&:focus {
+		transition: all 0.5s;
+		box-shadow: 0 0 40px var(--hover-accent-color);
+		border-color: var(--hover-accent-color);
+		outline: none;
+	}
+	&::placeholder {
+		color: var(--input-text-placeholder);
+	}
 }
 
-.Locations-search::-webkit-search-decoration {
-	display: none;
+.card {
+	box-sizing: border-box;
+	height: 100%;
+
+	background-color: var(--card-bg);
+	border: var(--card-border-width) solid var(--card-border-color);
+	border-radius: 7px;
+
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	transition: 0.3s all;
+}
+.card__header {
+	background: var(--card-header-bg);
+}
+/* additional .card__header needed to override MUI styles. We can discard when we finish migration */
+.card__header .card__header__text {
+	line-height: 1.6;
+	text-underline-offset: 20px;
 }
 
-.Locations-search:focus {
-	transition: all 0.5s;
-	box-shadow: 0 0 40px #ee6f52;
-	border-color: #ee6f52;
-	outline: none;
+.card .card__content {
+	padding: 24px 16px 32px;
+	@media screen and (max-width: 900px) {
+		padding: 24px 16px;
+	}
+}
+.card__actions {
+	/* makes sure footer is actually on the bottom (we're in a flexbox column layout) */
+	margin-top: auto;
+	padding: 0 16px 16px 16px;
+	margin-left: -2px; /* the illusion of alignment */
+
+	display: flex;
+	gap: 12px;
+}
+/* the overlay card */
+.card--dialog {
+	background: var(--dialog-bg);
+}
+.card--dialog__header {
+	background: var(--dialog-header-bg);
+}
+
+.card--animated {
+	opacity: 0;
+	--card-show-delay: 0s;
+	--fade-in-animation: fade-in 0.7s forwards var(--card-show-delay)
+		cubic-bezier(0.08, 0.67, 0.64, 1.01);
+	animation: var(--fade-in-animation);
+
+	&:hover {
+		animation:
+			var(--fade-in-animation),
+			glow-animation 1.5s ease 0s infinite;
+	}
+}
+
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+		transform: translate(-10px, 0);
+		filter: blur(3px);
+	}
+	55% {
+		filter: blur(0);
+	}
+
+	100% {
+		transform: translate(0, 0);
+		opacity: 1;
+		filter: blur(0);
+	}
+}
+@keyframes glow-animation {
+	0% {
+		box-shadow: 0 0 5px var(--hover-accent-color);
+	}
+	50% {
+		box-shadow: 0 0 20px var(--hover-accent-color);
+	}
+	100% {
+		box-shadow: 0 0 5px var(--hover-accent-color);
+	}
+}
+@keyframes oscillate-opacity {
+	0% {
+		opacity: 1;
+	}
+	30% {
+		opacity: 0.6;
+	}
+	90% {
+		opacity: 1;
+	}
+}
+.locations__error-text {
+	color: var(--text-primary);
+	font-family: var(--text-primary-font);
+	font-size: 1.5rem;
+	width: fit-content;
+}
+
+.skeleton-card--animated {
+	opacity: 0;
+	--oscillate-delay: 0s;
+	animation:
+		fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
+		oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
 }

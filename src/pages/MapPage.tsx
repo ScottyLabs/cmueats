@@ -8,7 +8,10 @@ import {
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
-import { IReadOnlyExtendedLocation } from '../types/locationTypes';
+import {
+	IReadOnlyLocation_FromAPI_PostProcessed,
+	IReadOnlyLocation_ExtraData_Map,
+} from '../types/locationTypes';
 
 const token = process.env.VITE_MAPKITJS_TOKEN;
 
@@ -22,8 +25,10 @@ function abbreviate(longName: string) {
 
 function MapPage({
 	locations,
+	extraLocationData,
 }: {
-	locations: IReadOnlyExtendedLocation[] | undefined;
+	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+	extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
 }) {
 	const [selectedLocationIndex, setSelectedLocationIndex] =
 		useState<number>();
@@ -49,10 +54,17 @@ function MapPage({
 		}),
 		[],
 	);
-	if (!locations) return undefined;
 
+	const extendedLocationData =
+		locations && extraLocationData
+			? locations.map((location) => ({
+					...location,
+					...extraLocationData[location.conceptId],
+				}))
+			: undefined;
 	return (
 		<div className="MapPage">
+<<<<<<< HEAD
 			<Map
 				token={token as string}
 				colorScheme={ColorScheme.Dark}
@@ -111,6 +123,75 @@ function MapPage({
 					)}
 				</div>
 			</CSSTransition>
+=======
+			{extendedLocationData && (
+				<>
+					<Map
+						token={token as string}
+						colorScheme={ColorScheme.Dark}
+						initialRegion={initialRegion}
+						excludedPOICategories={[
+							PointOfInterestCategory.Restaurant,
+						]}
+						cameraBoundary={cameraBoundary}
+						minCameraDistance={100}
+						maxCameraDistance={1000}
+						showsUserLocationControl
+						allowWheelToZoom
+					>
+						{extendedLocationData.map((location, locationIndex) => {
+							if (!location.coordinates) return undefined;
+							return (
+								<Marker
+									key={location.conceptId}
+									latitude={location.coordinates.lat}
+									longitude={location.coordinates.lng}
+									color={
+										!location.closedLongTerm &&
+										location.isOpen
+											? '#69bb36'
+											: '#ff5b40'
+									}
+									glyphText={abbreviate(location.name)}
+									onSelect={() => {
+										setSelectedLocationIndex(locationIndex);
+										setDrawerVisible(true);
+									}}
+									onDeselect={() => {
+										if (
+											selectedLocationIndex ===
+											locationIndex
+										) {
+											setDrawerVisible(false);
+										}
+									}}
+								/>
+							);
+						})}
+					</Map>
+					<CSSTransition
+						classNames="DrawerTransition"
+						timeout={300}
+						in={isDrawerVisible}
+						mountOnEnter
+						unmountOnExit
+						nodeRef={drawerRef}
+					>
+						<div className="MapDrawer" ref={drawerRef}>
+							{selectedLocationIndex !== undefined && (
+								<EateryCard
+									location={
+										extendedLocationData[
+											selectedLocationIndex
+										]
+									}
+								/>
+							)}
+						</div>
+					</CSSTransition>
+				</>
+			)}
+>>>>>>> 07df56d6409df101ebc02cf0d2b579ad26141b52
 		</div>
 	);
 }

@@ -5,10 +5,11 @@ import { DateTime } from 'luxon';
 import {
 	LocationState,
 	ITimeSlotTime,
-	IReadOnlyLocation,
-	IReadOnlyLocationStatus,
+	IReadOnlyLocation_FromAPI_PostProcessed,
+	IReadOnlyLocation_ExtraData,
 	ITimeSlots,
-	IReadOnlyAPILocation,
+	IReadOnlyLocation_FromAPI_PreProcessed,
+	IReadOnlyLocation_ExtraData_Map,
 } from '../types/locationTypes';
 import {
 	diffInMinutes,
@@ -92,7 +93,7 @@ export function getStatusMessage(
 export function getLocationStatus(
 	timeSlots: ITimeSlots,
 	now: DateTime,
-): IReadOnlyLocationStatus {
+): IReadOnlyLocation_ExtraData {
 	assert(
 		isValidTimeSlotArray(timeSlots),
 		`${JSON.stringify(timeSlots)} is invalid!`,
@@ -129,7 +130,7 @@ export function getLocationStatus(
 }
 export async function queryLocations(
 	cmuEatsAPIUrl: string,
-): Promise<IReadOnlyLocation[]> {
+): Promise<IReadOnlyLocation_FromAPI_PostProcessed[]> {
 	try {
 		// Query locations
 		const { data } = await axios.get(cmuEatsAPIUrl);
@@ -148,11 +149,11 @@ export async function queryLocations(
 				console.error('original obj', error._original);
 				// eslint-disable-next-line no-alert
 				alert(
-					`${location.name} has invalid corresponding data! Ignoring location and continuing validation. Please notify the CMUEats team.`,
+					`${location.name} has invalid data! Ignoring location and continuing validation. Please notify the CMUEats team.`,
 				);
 			}
 			return error === undefined;
-		}) as IReadOnlyAPILocation[];
+		}) as IReadOnlyLocation_FromAPI_PreProcessed[];
 
 		return validLocations.map((location) => ({
 			...location,
@@ -161,5 +162,37 @@ export async function queryLocations(
 	} catch (err: any) {
 		console.error(err);
 		return [];
+	}
+}
+
+export function getExtendedLocationData(
+	locations?: IReadOnlyLocation_FromAPI_PostProcessed[],
+): IReadOnlyLocation_ExtraData_Map | undefined {
+	// Remove .setZone('America/New_York') and change time in computer settings when testing
+	// Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
+	const now = DateTime.now().setZone('America/New_York');
+	return locations?.reduce(
+		(acc, location) => ({
+			...acc,
+			[location.conceptId]: {
+				...getLocationStatus(location.times, now),
+			},
+		}),
+		{},
+	); // foldl!
+}
+export class LocationChecker {
+	locations?: IReadOnlyLocation_FromAPI_PostProcessed[];
+
+	constructor(locations?: IReadOnlyLocation_FromAPI_PostProcessed[]) {
+		this.locations = locations;
+	}
+
+	assertExtraDataInSync(extraData?: IReadOnlyLocation_ExtraData_Map) {
+		this.locations?.forEach((location) => {
+			if (!extraData || !(location.conceptId in extraData)) {
+				console.error(location.conceptId, 'missing from extraData!');
+			}
+		});
 	}
 }
