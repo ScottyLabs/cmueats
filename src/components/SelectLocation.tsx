@@ -37,11 +37,7 @@ function SelectLocation({
 			onChange={(e) => setlocationFilterSearchQuery(e.target.value)}
 			className="select"
 		>
-			<option
-				value=""
-				key="Filter by Building"
-				label="Filter by Building"
-			/>
+			<option value="" key="All Buildings" label="All Buildings" />
 			{dedeupedLocationStrings.map((location) => (
 				<option key={location} value={location}>
 					{location}
