@@ -3,30 +3,38 @@ import { IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes'
 import './SelectLocation.css';
 
 type SelectLocationProps = {
-	setSearchQuery: (value: React.SetStateAction<string>) => void;
+	setlocationFilterSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 };
 
-function SelectLocation({ setSearchQuery, locations }: SelectLocationProps) {
+function getPrimaryLocation(locationString: string) {
+	return locationString.indexOf(',') === -1
+		? locationString
+		: locationString.slice(0, locationString.indexOf(','));
+}
+
+function SelectLocation({
+	setlocationFilterSearchQuery,
+	locations,
+}: SelectLocationProps) {
 	if (locations === undefined) {
 		return (
 			<select className="select">
-				<option value="" label="Filter by Building" />
+				<option value="" label="Loading..." />
 			</select>
 		);
 	}
 
 	let locationStrings = locations.map((locationObj) => locationObj.location);
-	locationStrings = locationStrings.map((locationObj) =>
-		locationObj.indexOf(',') === -1
-			? locationObj
-			: locationObj.slice(0, locationObj.indexOf(',')),
+	locationStrings = locations.map((locationObj) =>
+		getPrimaryLocation(locationObj.location),
 	);
 
-	locationStrings = Array.from(new Set(locationStrings));
+	const dedeupedLocationStrings = [...new Set(locationStrings)];
+
 	return (
 		<select
-			onChange={(e) => setSearchQuery(e.target.value)}
+			onChange={(e) => setlocationFilterSearchQuery(e.target.value)}
 			className="select"
 		>
 			<option
@@ -34,15 +42,13 @@ function SelectLocation({ setSearchQuery, locations }: SelectLocationProps) {
 				key="Filter by Building"
 				label="Filter by Building"
 			/>
-			{locationStrings.map((location) => (
+			{dedeupedLocationStrings.map((location) => (
 				<option key={location} value={location}>
 					{location}
 				</option>
 			))}
 		</select>
 	);
-
-	return <>BUG: breaks if removed</>;
 }
 
 export default SelectLocation;

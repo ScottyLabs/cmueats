@@ -14,27 +14,11 @@ import {
 import assert from '../util/assert';
 
 import SelectLocation from '../components/SelectLocation';
-// for the location filter
-
-// Typography
-const HeaderText = styled(Typography)({
-	color: 'white',
-	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
-	fontWeight: 800,
-	fontSize: '3em',
-});
-const ErrorText = styled(Typography)({
-	color: 'white',
-	padding: 0,
-	fontFamily:
-		'"Zilla Slab", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ' +
-		'"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", ' +
-		'"Droid Sans", "Helvetica Neue", sans-serif',
-});
+import { useTheme } from '../ThemeProvider';
+import IS_MIKU_DAY from '../util/constants';
+import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
+import footerMikuUrl from '../assets/miku/miku2.png';
+import mikuBgUrl from '../assets/miku/miku.jpg';
 
 const LogoText = styled(Typography)({
 	color: 'var(--logo-first-half)',
@@ -95,15 +79,39 @@ function ListPage({
 	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
-	const filteredLocations = useMemo(
-		() =>
+	// TEST
+	const [locationFilterSearchQuery, setlocationFilterSearchQuery] =
+		useState('');
+	// TEST
+
+	// TEST
+	const filteredLocations = useMemo(() => {
+		const searchResults =
 			processedSearchQuery.length === 0
 				? (locations ?? [])
 				: fuse
 						.search(processedSearchQuery)
-						.map((result) => result.item),
-		[fuse, searchQuery],
-	);
+						.map((result) => result.item);
+
+		const locationFilterResults = new Set(
+			fuse
+				.search(locationFilterSearchQuery)
+				.map((results) => results.item),
+		);
+
+		let intersection = [];
+
+		if (locationFilterSearchQuery === '') {
+			intersection = searchResults;
+		} else {
+			intersection = [...searchResults].filter((item) =>
+				locationFilterResults.has(item),
+			);
+		}
+
+		return intersection;
+	}, [fuse, searchQuery, locationFilterSearchQuery]);
+	// TEST
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -172,9 +180,28 @@ function ListPage({
 						}}
 						placeholder="Search"
 					/>
-					{/* call the location filter */}
-					<SelectLocation SSQ={setSearchQuery} l={locations} />
-					{/* call the location filter */}
+					<SelectLocation
+						setlocationFilterSearchQuery={
+							setlocationFilterSearchQuery
+						}
+						locations={locations}
+					/>
+					{IS_MIKU_DAY && (
+						<button
+							onClick={() =>
+								updateTheme(theme === 'miku' ? 'none' : 'miku')
+							}
+							onTouchEnd={(e) => {
+								e.stopPropagation();
+								e.preventDefault();
+								updateTheme(theme === 'miku' ? 'none' : 'miku');
+							}}
+							type="button"
+							className="Locations-header__miku-toggle"
+						>
+							<img src={mikuKeychainUrl} alt="click me!" />
+						</button>
+					)}
 				</header>
 				{(() => {
 					if (
