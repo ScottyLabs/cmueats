@@ -79,15 +79,39 @@ function ListPage({
 	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
-	const filteredLocations = useMemo(
-		() =>
+	// TEST
+	const [locationFilterSearchQuery, setlocationFilterSearchQuery] =
+		useState('');
+	// TEST
+
+	// TEST
+	const filteredLocations = useMemo(() => {
+		const searchResults =
 			processedSearchQuery.length === 0
 				? (locations ?? [])
 				: fuse
 						.search(processedSearchQuery)
-						.map((result) => result.item),
-		[fuse, searchQuery],
-	);
+						.map((result) => result.item);
+
+		const locationFilterResults = new Set(
+			fuse
+				.search(locationFilterSearchQuery)
+				.map((results) => results.item),
+		);
+
+		let intersection = [];
+
+		if (locationFilterSearchQuery === '') {
+			intersection = searchResults;
+		} else {
+			intersection = [...searchResults].filter((item) =>
+				locationFilterResults.has(item),
+			);
+		}
+
+		return intersection;
+	}, [fuse, searchQuery, locationFilterSearchQuery]);
+	// TEST
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -156,7 +180,12 @@ function ListPage({
 						}}
 						placeholder="Search"
 					/>
-					<SelectLocation SSQ={setSearchQuery} l={locations} />
+					<SelectLocation
+						setlocationFilterSearchQuery={
+							setlocationFilterSearchQuery
+						}
+						locations={locations}
+					/>
 					{IS_MIKU_DAY && (
 						<button
 							onClick={() =>

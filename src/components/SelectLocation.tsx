@@ -3,43 +3,52 @@ import { IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes'
 import './SelectLocation.css';
 
 type SelectLocationProps = {
-	SSQ: (value: React.SetStateAction<string>) => void;
-	l: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+	setlocationFilterSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 };
 
-function SelectLocation({ SSQ, l }: SelectLocationProps) {
-	if (l === undefined) {
+function getPrimaryLocation(locationString: string) {
+	return locationString.indexOf(',') === -1
+		? locationString
+		: locationString.slice(0, locationString.indexOf(','));
+}
+
+function SelectLocation({
+	setlocationFilterSearchQuery,
+	locations,
+}: SelectLocationProps) {
+	if (locations === undefined) {
 		return (
 			<select className="select">
-				<option value="" label="Filter by Building" />
+				<option value="" label="Loading..." />
 			</select>
 		);
 	}
 
-	let lStrings = l.map((locationObj) => locationObj.location);
-	lStrings = lStrings.map((locationObj) =>
-		locationObj.indexOf(',') === -1
-			? locationObj
-			: locationObj.slice(0, locationObj.indexOf(',')),
-	);
-	lStrings = lStrings.filter(
-		(item, index) => lStrings.indexOf(item) === index,
+	let locationStrings = locations.map((locationObj) => locationObj.location);
+	locationStrings = locations.map((locationObj) =>
+		getPrimaryLocation(locationObj.location),
 	);
 
+	const dedeupedLocationStrings = [...new Set(locationStrings)];
+
 	return (
-		<select onChange={(e) => SSQ(e.target.value)} className="select">
-			<option value="" label="Filter by Building" />
-			{lStrings.map((ll) => (
-				<option key={ll} value={ll}>
-					{ll}
+		<select
+			onChange={(e) => setlocationFilterSearchQuery(e.target.value)}
+			className="select"
+		>
+			<option
+				value=""
+				key="Filter by Building"
+				label="Filter by Building"
+			/>
+			{dedeupedLocationStrings.map((location) => (
+				<option key={location} value={location}>
+					{location}
 				</option>
 			))}
 		</select>
 	);
-
-	// The whole thing breaks if this useless, extraneous piece is deleted.
-	// i don't know why.
-	return <>🥥</>;
 }
 
 export default SelectLocation;
