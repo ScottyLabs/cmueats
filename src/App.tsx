@@ -65,15 +65,18 @@ function App() {
 			<BrowserRouter>
 				<div className="App">
 					<div className="AdBanner">
-						Register for{' '}
+						How&apos;s your food? We want your{' '}
 						<a
-							href="https://go.scottylabs.org/tartanhacks-cmueats"
-							style={{ color: 'white' }}
+							className="AdBannerLink"
+							href="https://forms.gle/fTnWrS7jkTFRB14DA"
+							target="_blank"
+							rel="noreferrer"
 						>
-							<strong>TartanHacks</strong>
-						</a>
-						, Pittsburgh&apos;s LARGEST hackathon! 🖥️
+							feedback!
+						</a>{' '}
+						It only takes 30 seconds.
 					</div>
+
 					<div className="MainContent">
 						<Routes>
 							<Route
