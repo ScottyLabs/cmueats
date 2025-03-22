@@ -168,15 +168,25 @@ function ListPage({
 				? prevStars.filter(
 						(starred) => JSON.stringify(starred) !== locationKey,
 					)
-				: [...prevStars, location];
+				: prevStars.some(
+							(starred) =>
+								JSON.stringify(starred) === locationKey,
+					  )
+					? prevStars
+					: [...prevStars, location];
 
+			// setTimeout(() => {
 			localStorage.setItem(
 				'starredEateries',
 				JSON.stringify(updatedStars),
 			);
+			// }, 0);
 			// localStorage.clear();
+			console.log('updatedStars: ', updatedStars);
+			console.log('starredEateries:', starredEateries);
 			return updatedStars;
 		});
+		console.log('starredEateries:', starredEateries);
 	};
 
 	return (
