@@ -40,7 +40,7 @@
 	z-index: 2;
 	left: 0;
 	top: 0;
-	width: 50%;
+	width: 33.33%;
 	height: 100%;
 	background-color: #2b2f33;
 	border-radius: 999px;
@@ -51,6 +51,10 @@
 
 .Navbar-active_map {
 	transform: translateX(100%);
+}
+
+.Navbar-active_feedback {
+	transform: translateX(200%);
 }
 
 .Navbar-active_glow {

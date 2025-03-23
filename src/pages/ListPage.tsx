@@ -262,23 +262,40 @@ function ListPage({
 						href={'mailto:jaisal.patel45@gmail.com'}
 						style={{ color: 'white' }}
 					>
-						Jaisal
-					</a>
-					,{' '}
-					<a
-						href={'mailto:jmacera@andrew.cmu.edu'}
-						style={{ color: 'white' }}
-					>
-						Josef
-					</a>
-					, or{' '}
+						Jaisal 
+					</a> {' '}
+					or{' '}
 					<a
 						href={'mailto:jhurewit@andrew.cmu.edu'}
 						style={{ color: 'white' }}
 					>
 						Jack
 					</a>{' '}
-					with any problems.
+					with any problems, or fill out our feedback form{' '}
+					<a
+						href={'https://forms.gle/7JxgdgDhWMznQJdk9'}
+						style={{ color: 'white' }}
+					>
+						here
+					</a>.
+
+				</FooterText>
+				<FooterText>
+					Contact{' '}
+					<a
+						href={'mailto:dining@andrew.cmu.edu'}
+						style={{ color: 'white' }}
+					>
+						Dining Service
+					</a>
+					, or take the {' '}
+					<a
+						href={'https://forms.gle/fTnWrS7jkTFRB14DA'}
+						style={{ color: 'white' }}
+					>
+						dining survey
+					</a>{' '}
+					for dining experience feedback.
 				</FooterText>
 				<FooterText>
 					Made with ❤️ by{' '}
