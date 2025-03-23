@@ -331,7 +331,7 @@ function ListPage({
 								href={'mailto:dining@andrew.cmu.edu'}
 								style={{ color: 'white' }}
 							>
-								Dining Service
+								Dining Services
 							</a>
 							, or take the {' '}
 							<a
