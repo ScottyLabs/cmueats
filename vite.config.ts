@@ -1,4 +1,3 @@
-import million from 'million/compiler';
 import { defineConfig, loadEnv } from 'vite';
 import { checker } from 'vite-plugin-checker';
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
@@ -100,7 +99,6 @@ export default defineConfig(({ command, mode }) => {
       'process.env.REACT_APP_PUBLIC_POSTHOG_KEY': JSON.stringify(posthog),
     },
     plugins: [
-      million.vite({ auto: true }),
       react(),
       viteTsconfigPaths(),
       svgrPlugin(),

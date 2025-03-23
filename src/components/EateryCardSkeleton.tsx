@@ -9,8 +9,8 @@ import {
 } from '@mui/material';
 
 const StyledCard = styled(Card)({
-	backgroundColor: '#23272A',
-	border: '2px solid rgba(0, 0, 0, 0.2)',
+	backgroundColor: 'var(--card-bg)',
+	border: 'var(--card-border-width) solid var(--card-border-color)',
 	textAlign: 'left',
 	borderRadius: 7,
 	height: '100%',
@@ -19,7 +19,7 @@ const StyledCard = styled(Card)({
 
 const StyledCardHeader = styled(CardHeader)({
 	fontWeight: 500,
-	backgroundColor: '#1D1F21',
+	backgroundColor: 'var(--card-header-bg)',
 });
 
 const SkeletonText = styled(Skeleton)({
@@ -48,7 +48,7 @@ function EateryCardSkeleton({ index }: { index: number }) {
 							sx={{
 								width: 12,
 								height: 12,
-								backgroundColor: '#1D1F21',
+								backgroundColor: 'var(--card-header-bg)',
 							}}
 						>
 							<Skeleton

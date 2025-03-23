@@ -1,9 +1,9 @@
 .Navbar {
 	height: var(--navbar-height);
-	background-color: #1e1e1e;
+	background-color: var(--nav-bg);
 	padding: 14px;
 	box-sizing: border-box;
-	border-top: 2px solid #31373e;
+	border-top: 2px solid var(--nav-border-top);
 }
 
 .Navbar-links {
@@ -24,7 +24,7 @@
 	justify-content: center;
 	font-family: 'Zilla Slab', sans-serif;
 	font-weight: 500;
-	color: white;
+	color: var(--text-primary);
 	font-size: 16px;
 	text-decoration: none;
 }
@@ -42,7 +42,7 @@
 	top: 0;
 	width: 33.33%;
 	height: 100%;
-	background-color: #2b2f33;
+	background-color: var(--selected-tab-bg);
 	border-radius: 999px;
 	transition:
 		transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -59,7 +59,7 @@
 
 .Navbar-active_glow {
 	box-shadow:
-		0 0 5px #ee6f52,
-		0 0 10px #ee6f52,
-		0 0 15px #ee6f52;
+		0 0 5px var(--hover-accent-color),
+		0 0 10px var(--hover-accent-color),
+		0 0 15px var(--hover-accent-color);
 }
