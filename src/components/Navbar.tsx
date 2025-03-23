@@ -4,6 +4,13 @@ import './Navbar.css';
 function Navbar() {
 	const location = useLocation();
 
+	let activeClass = '';
+	if (location.pathname === '/map') {
+		activeClass = 'Navbar-active_map';
+	} else if (location.pathname === '/feedback') {
+		activeClass = 'Navbar-active_feedback';
+	}
+
 	return (
 		<nav className="Navbar">
 			<div className="Navbar-links">
@@ -72,13 +79,7 @@ function Navbar() {
 					Feedback
 				</a>
 				<div
-					className={`Navbar-active ${
-						location.pathname === '/map'
-							? 'Navbar-active_map'
-							: location.pathname === '/feedback'
-							? 'Navbar-active_feedback'
-							: ''
-					} Navbar-active_glow`}
+					className={`Navbar-active ${activeClass} Navbar-active_glow`}
 				/>
 			</div>
 		</nav>
