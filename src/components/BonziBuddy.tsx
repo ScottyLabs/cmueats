@@ -98,15 +98,16 @@ const bonziTips = [
 
 interface BonziBuddyProps {
 	onSubscribeClick: () => void;
+	subscribed?: boolean;
 }
 
-function BonziBuddy({ onSubscribeClick }: BonziBuddyProps) {
+function BonziBuddy({ onSubscribeClick, subscribed = false }: BonziBuddyProps) {
 	const [open, setOpen] = useState(false);
 	const [currentTip, setCurrentTip] = useState('');
 
 	// Randomly show Bonzi with tips
 	useEffect(() => {
-		if (!IS_APRIL_FOOLS) return undefined;
+		if (!IS_APRIL_FOOLS || subscribed) return undefined;
 
 		// Show Bonzi after 20-40 seconds
 		const initialTimeout = setTimeout(
@@ -134,7 +135,7 @@ function BonziBuddy({ onSubscribeClick }: BonziBuddyProps) {
 			clearTimeout(initialTimeout);
 			clearInterval(intervalId);
 		};
-	}, []);
+	}, [subscribed]);
 
 	const handleClose = () => {
 		setOpen(false);
@@ -145,7 +146,7 @@ function BonziBuddy({ onSubscribeClick }: BonziBuddyProps) {
 		onSubscribeClick();
 	};
 
-	if (!IS_APRIL_FOOLS) return null;
+	if (!IS_APRIL_FOOLS || subscribed) return null;
 
 	return (
 		<>

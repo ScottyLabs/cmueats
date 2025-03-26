@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DiamondIcon from '@mui/icons-material/Diamond';
@@ -25,11 +26,13 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import CodeIcon from '@mui/icons-material/Code';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import CasinoIcon from '@mui/icons-material/Casino';
 import { useTheme } from '../ThemeProvider';
 import { IS_APRIL_FOOLS } from '../util/constants';
 import BonziBuddy from './BonziBuddy';
 import NFTProject from './NFTProject';
 import MicrotransactionPaywall from './MicrotransactionPaywall';
+import CasinoGame from './CasinoGame';
 
 // Define Theme type to match what's defined in ThemeProvider
 type Theme = 'none' | 'miku' | 'april-fools';
@@ -312,12 +315,14 @@ function NFTStatusBarComponent({
 	pendingTransactions,
 	onConnectWallet,
 	contractState,
+	onOpenCasino,
 }: {
 	blockchainData: typeof initialBlockchainData;
 	walletConnected: boolean;
 	pendingTransactions: Transaction[];
 	onConnectWallet: () => void;
 	contractState: SmartContractState;
+	onOpenCasino: () => void;
 }) {
 	const [minimized, setMinimized] = useState<boolean | undefined>(true);
 	const [activeTab, setActiveTab] = useState<
@@ -355,9 +360,10 @@ function NFTStatusBarComponent({
 							<>
 								<Box
 									sx={{
-										display: 'flex',
-										flexDirection: 'column',
-										gap: 1,
+										maxHeight: '260px',
+										overflowY: 'auto',
+										pr: 0.5,
+										mr: -0.5,
 									}}
 								>
 									{contractState.userNFTs.map((nft) => (
@@ -365,94 +371,120 @@ function NFTStatusBarComponent({
 											key={nft.id}
 											sx={{
 												display: 'flex',
-												gap: 1,
 												alignItems: 'center',
-												p: 0.5,
-												borderRadius: '4px',
-												bgcolor: 'rgba(0,0,0,0.2)',
+												p: 1,
+												mb: 1,
+												borderRadius: '6px',
+												backgroundColor:
+													'rgba(0, 0, 0, 0.2)',
+												border: '1px solid rgba(255, 255, 255, 0.1)',
 											}}
 										>
 											<Box
 												sx={{
-													width: 30,
-													height: 30,
+													width: '30px',
+													height: '30px',
 													borderRadius: '4px',
-													bgcolor:
-														'var(--logo-first-half)',
-													flexShrink: 0,
-													display: 'flex',
-													alignItems: 'center',
-													justifyContent: 'center',
-													color: 'white',
-													fontWeight: 'bold',
-													fontSize: '0.7rem',
-												}}
-											>
-												#{nft.id}
-											</Box>
-											<Box
-												sx={{
-													flexGrow: 1,
+													bgcolor: 'gray',
+													mr: 1,
 													overflow: 'hidden',
 												}}
 											>
+												{/* NFT Image would go here */}
+											</Box>
+											<Box sx={{ flexGrow: 1 }}>
+												<Typography
+													variant="caption"
+													sx={{
+														display: 'block',
+														fontWeight: 'bold',
+														lineHeight: 1.2,
+													}}
+												>
+													{nft.name}
+												</Typography>
 												<Box
 													sx={{
 														display: 'flex',
-														justifyContent:
-															'space-between',
 														alignItems: 'center',
+														gap: 0.5,
 													}}
 												>
-													<Typography
-														noWrap
-														variant="caption"
-														fontWeight="bold"
-													>
-														{nft.name}
-													</Typography>
 													<RarityBadge
-														label={nft.rarity.toUpperCase()}
-														size="small"
+														label={
+															nft.rarity
+																.charAt(0)
+																.toUpperCase() +
+															nft.rarity.slice(1)
+														}
 														rarity={nft.rarity}
+														size="small"
 													/>
-												</Box>
-												<Box
-													sx={{
-														display: 'flex',
-														justifyContent:
-															'space-between',
-														alignItems: 'center',
-													}}
-												>
 													<Typography
 														variant="caption"
 														color="var(--text-muted)"
 														sx={{
-															fontSize: '0.65rem',
+															fontSize: '0.6rem',
 														}}
 													>
-														Value: {nft.lastValue}{' '}
-														ETH
+														{nft.acquiredAt}
 													</Typography>
+												</Box>
+											</Box>
+											<Box
+												sx={{
+													display: 'flex',
+													flexDirection: 'column',
+													alignItems: 'flex-end',
+												}}
+											>
+												<Typography
+													variant="caption"
+													sx={{
+														fontWeight: 'bold',
+														color: 'white',
+													}}
+												>
+													{nft.lastValue} ETH
+												</Typography>
+												<Box
+													sx={{
+														display: 'flex',
+														alignItems: 'center',
+													}}
+												>
+													{nft.appreciationPercentage >=
+													0 ? (
+														<TrendingUpIcon
+															sx={{
+																fontSize:
+																	'0.75rem',
+																color: '#10B981',
+															}}
+														/>
+													) : (
+														<TrendingDownIcon
+															sx={{
+																fontSize:
+																	'0.75rem',
+																color: '#EF4444',
+															}}
+														/>
+													)}
 													<Typography
 														variant="caption"
 														sx={{
-															fontSize: '0.65rem',
+															fontSize: '0.6rem',
 															color:
 																nft.appreciationPercentage >=
 																0
-																	? 'var(--location-closed-text-color)'
-																	: 'var(--location-open-text-color)',
+																	? '#10B981'
+																	: '#EF4444',
 														}}
 													>
-														{nft.appreciationPercentage >=
-														0
-															? '+'
-															: ''}
-														{
-															nft.appreciationPercentage
-														}
+														{Math.abs(
+															nft.appreciationPercentage,
+														)}
 														%
 													</Typography>
 												</Box>
@@ -460,19 +492,40 @@ function NFTStatusBarComponent({
 										</Box>
 									))}
 								</Box>
-								<Button
-									size="small"
-									variant="outlined"
-									sx={{
-										mt: 1,
-										fontSize: '0.7rem',
-										borderColor: 'var(--logo-first-half)',
-										color: 'var(--text-primary)',
-									}}
-									fullWidth
-								>
-									View All NFTs
-								</Button>
+								<Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+									<Button
+										size="small"
+										variant="outlined"
+										sx={{
+											fontSize: '0.7rem',
+											borderColor:
+												'var(--logo-first-half)',
+											color: 'var(--text-primary)',
+										}}
+										fullWidth
+									>
+										View All NFTs
+									</Button>
+									<Button
+										size="small"
+										variant="contained"
+										startIcon={<CasinoIcon />}
+										onClick={(e) => {
+											e.stopPropagation();
+											onOpenCasino();
+										}}
+										sx={{
+											fontSize: '0.7rem',
+											bgcolor: '#D30000',
+											color: 'white',
+											'&:hover': {
+												bgcolor: '#FF0000',
+											},
+										}}
+									>
+										Casino
+									</Button>
+								</Box>
 							</>
 						) : (
 							<Box sx={{ textAlign: 'center', py: 1 }}>
@@ -482,21 +535,42 @@ function NFTStatusBarComponent({
 								>
 									No NFTs in your portfolio yet
 								</Typography>
-								<Button
-									size="small"
-									variant="contained"
-									sx={{
-										mt: 1,
-										fontSize: '0.7rem',
-										bgcolor: 'var(--logo-first-half)',
-										'&:hover': {
-											bgcolor: 'var(--logo-second-half)',
-										},
-									}}
-									fullWidth
-								>
-									Browse Marketplace
-								</Button>
+								<Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+									<Button
+										size="small"
+										variant="contained"
+										sx={{
+											fontSize: '0.7rem',
+											bgcolor: 'var(--logo-first-half)',
+											'&:hover': {
+												bgcolor:
+													'var(--logo-second-half)',
+											},
+										}}
+										fullWidth
+									>
+										Browse Marketplace
+									</Button>
+									<Button
+										size="small"
+										variant="contained"
+										startIcon={<CasinoIcon />}
+										onClick={(e) => {
+											e.stopPropagation();
+											onOpenCasino();
+										}}
+										sx={{
+											fontSize: '0.7rem',
+											bgcolor: '#D30000',
+											color: 'white',
+											'&:hover': {
+												bgcolor: '#FF0000',
+											},
+										}}
+									>
+										Casino
+									</Button>
+								</Box>
 							</Box>
 						)}
 					</Box>
@@ -889,6 +963,7 @@ function AprilFoolsManager() {
 	const [viewCount, setViewCount] = useState(0);
 	const [showPaywall, setShowPaywall] = useState(false);
 	const [showNFTProject, setShowNFTProject] = useState(false);
+	const [showPremiumBanner, setShowPremiumBanner] = useState(true);
 	const [hasSubscribed, setHasSubscribed] = useState(false);
 	const [blockchainData, setBlockchainData] = useState(initialBlockchainData);
 	const [isAprilFoolsModeEnabled, setIsAprilFoolsModeEnabled] =
@@ -935,6 +1010,7 @@ function AprilFoolsManager() {
 	);
 	const [showNotification, setShowNotification] = useState(false);
 	const [notificationMessage, setNotificationMessage] = useState('');
+	const [casinoDialogOpen, setCasinoDialogOpen] = useState(false);
 
 	// Display welcome notification
 	useEffect(() => {
@@ -1157,9 +1233,11 @@ function AprilFoolsManager() {
 			// Reset April Fools features
 			setShowPaywall(false);
 			setShowNFTProject(false);
+			setShowPremiumBanner(false);
 		} else {
 			// Turning ON April Fools mode
 			updateTheme('april-fools');
+			setShowPremiumBanner(true);
 		}
 	};
 
@@ -1171,22 +1249,24 @@ function AprilFoolsManager() {
 	if (!IS_APRIL_FOOLS) return null;
 
 	return (
-		<Box sx={{ position: 'relative', height: '0', overflow: 'visible' }}>
-			{/* Premium Greeting - always visible on April Fools */}
-			<PremiumBanner>
-				<Box
-					sx={{
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-						gap: 1,
-					}}
-				>
-					<DiamondIcon fontSize="small" />
-					Welcome to CMUEats Premium!
-					<DiamondIcon fontSize="small" />
-				</Box>
-			</PremiumBanner>
+		<Box sx={{ width: '100%', position: 'relative' }}>
+			{/* Premium subscription banner */}
+			{showPremiumBanner && (
+				<PremiumBanner>
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							gap: 1,
+						}}
+					>
+						<DiamondIcon fontSize="small" />
+						Welcome to CMUEats Premium!
+						<DiamondIcon fontSize="small" />
+					</Box>
+				</PremiumBanner>
+			)}
 
 			{/* Add spacing for content below the banner */}
 			<Box sx={{ paddingTop: '34px' }} />
@@ -1223,10 +1303,14 @@ function AprilFoolsManager() {
 						pendingTransactions={pendingTransactions}
 						onConnectWallet={simulateWalletConnection}
 						contractState={smartContractState}
+						onOpenCasino={() => setCasinoDialogOpen(true)}
 					/>
 
 					{/* NFT Marketplace Button */}
-					<BonziBuddy onSubscribeClick={handleBonziSubscribeClick} />
+					<BonziBuddy
+						onSubscribeClick={handleBonziSubscribeClick}
+						subscribed={hasSubscribed}
+					/>
 
 					{/* NFT Marketplace */}
 					<NFTProject
@@ -1240,6 +1324,12 @@ function AprilFoolsManager() {
 						open={showPaywall}
 						onClose={() => setShowPaywall(false)}
 						onPaymentComplete={handlePaymentComplete}
+					/>
+
+					{/* Casino Game */}
+					<CasinoGame
+						open={casinoDialogOpen}
+						onClose={() => setCasinoDialogOpen(false)}
 					/>
 				</>
 			)}
