@@ -464,26 +464,21 @@ export default function RouletteGame({
 			aria-labelledby="roulette-game-title"
 		>
 			<GameHeader>
-				<Box
-					sx={{
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-					}}
-				>
+				<Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
 					<IconButton
-						edge="start"
-						color="inherit"
 						onClick={onClose}
+						sx={{ color: '#fff' }}
 						aria-label="close"
-						sx={{ color: 'white' }}
 					>
 						<CloseIcon />
 					</IconButton>
-					<MainTitle variant="h4">
-						<CasinoIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-						Casino Royale: Roulette
-					</MainTitle>
+				</Box>
+
+				<MainTitle variant="h3">CMUEats Private Academy</MainTitle>
+				<Typography variant="h5" sx={{ color: '#ccc', mt: 1 }}>
+					CMUEats: The Ultimate Gambling Experience
+				</Typography>
+				<Box sx={{ position: 'absolute', top: 8, left: 8, zIndex: 1 }}>
 					<PlayerChip
 						icon={<AttachMoneyIcon />}
 						label={`Balance: $${balance.toFixed(2)}`}
