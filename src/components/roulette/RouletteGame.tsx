@@ -41,7 +41,7 @@ const StyledDialog = styled(Dialog)({
 
 const GameHeader = styled(Box)({
 	background: 'linear-gradient(135deg, #1E1E2D 0%, #2D0A0A 100%)',
-	padding: '20px',
+	padding: '20px 20px 40px 20px',
 	textAlign: 'center',
 	position: 'relative',
 	overflow: 'hidden',
@@ -475,7 +475,10 @@ export default function RouletteGame({
 				</Box>
 
 				<MainTitle variant="h3">CMUEats Private Academy</MainTitle>
-				<Typography variant="h5" sx={{ color: '#ccc', mt: 1 }}>
+				<Typography
+					variant="h5"
+					sx={{ color: '#ccc', mt: 1, mb: 2, lineHeight: 1.4 }}
+				>
 					CMUEats: The Ultimate Gambling Experience
 				</Typography>
 				<Box sx={{ position: 'absolute', top: 8, left: 8, zIndex: 1 }}>
@@ -486,7 +489,12 @@ export default function RouletteGame({
 				</Box>
 			</GameHeader>
 
-			<DialogContent sx={{ backgroundColor: '#1E1E2D', padding: '20px' }}>
+			<DialogContent
+				sx={{
+					backgroundColor: '#1E1E2D',
+					padding: '20px 20px 40px 20px',
+				}}
+			>
 				<Grid container spacing={3}>
 					{/* Game Status Info */}
 					<Grid item xs={12}>
