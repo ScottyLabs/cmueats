@@ -404,7 +404,7 @@ export default function RouletteGame({
 				<IconButton
 					size="small"
 					onClick={() => setShowHistory(!showHistory)}
-					sx={{ color: 'white' }}
+					sx={{ color: 'white', zIndex: 1000 }}
 				>
 					{showHistory ? <CloseIcon /> : <HistoryIcon />}
 				</IconButton>

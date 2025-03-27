@@ -2036,7 +2036,14 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			onBackdropClick={onClose}
 		>
 			<GameHeader>
-				<Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
+				<Box
+					sx={{
+						position: 'absolute',
+						top: 8,
+						right: 8,
+						zIndex: 1000,
+					}}
+				>
 					<IconButton
 						onClick={onClose}
 						sx={{ color: '#fff' }}
