@@ -925,6 +925,19 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	const [snackbarMessage, setSnackbarMessage] = useState('');
 	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 	const [pendingTemplateType, setPendingTemplateType] = useState('');
+	const [stakedNFTs, setStakedNFTs] = useState<number[]>([]);
+	const [stakeRewards, setStakeRewards] = useState<number>(0);
+	const [userLiquidity, setUserLiquidity] = useState<{
+		[key: string]: number;
+	}>({
+		'CMUEats-ETH': 0,
+		'CMUEats-USDC': 0,
+	});
+
+	// Add state for liquidity dialog
+	const [liquidityDialogOpen, setLiquidityDialogOpen] = useState(false);
+	const [selectedPoolId, setSelectedPoolId] = useState('');
+	const [liquidityAmount, setLiquidityAmount] = useState(0.5);
 
 	const handleTabChange = (
 		_event: React.SyntheticEvent,
@@ -1186,6 +1199,88 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	// Function to close snackbar
 	const handleSnackbarClose = () => {
 		setSnackbarOpen(false);
+	};
+
+	// Handle NFT staking
+	const handleStakeNFT = (nftId: number) => {
+		if (stakedNFTs.includes(nftId)) {
+			// Unstake NFT
+			setStakedNFTs(stakedNFTs.filter((id) => id !== nftId));
+			// Pay out accumulated rewards
+			const payout = stakeRewards;
+			setStakeRewards(0);
+
+			setSnackbarMessage(
+				`NFT #${nftId} unstaked! You received ${payout.toFixed(3)} ETH rewards.`,
+			);
+			setSnackbarOpen(true);
+		} else {
+			// Stake NFT
+			setStakedNFTs([...stakedNFTs, nftId]);
+			setSnackbarMessage(
+				`NFT #${nftId} staked! You'll earn 0.05 ETH per day.`,
+			);
+			setSnackbarOpen(true);
+
+			// Set up reward accumulation (simplified for the demo)
+			// In a real app, this would use a better approach than setInterval
+			const timer = setInterval(() => {
+				setStakeRewards((prev) => prev + 0.05);
+			}, 30000); // Accelerated timer for demo: 0.05 ETH every 30 seconds
+
+			// Clean up interval if component unmounts
+			return () => clearInterval(timer);
+		}
+	};
+
+	// Handle providing liquidity
+	const handleProvideLiquidity = (poolId: string, amount: number) => {
+		// Update user's liquidity position
+		setUserLiquidity({
+			...userLiquidity,
+			[poolId]: (userLiquidity[poolId] || 0) + amount,
+		});
+
+		// Show success message
+		setSnackbarMessage(
+			`Added ${amount} ETH to the ${poolId} liquidity pool!`,
+		);
+		setSnackbarOpen(true);
+
+		// Update UI to show the user is now a provider
+		// In a real app, this would update the smart contract state
+	};
+
+	// Function to calculate current rewards from liquidity
+	const calculateLiquidityRewards = (poolId: string) => {
+		const userAmount = userLiquidity[poolId] || 0;
+		if (userAmount === 0) return 0;
+
+		// Find the APR for this pool
+		const pool = liquidityPools.find((p) => p.name === poolId);
+		if (!pool) return 0;
+
+		// Extract APR percentage
+		const aprPercentage = parseFloat(pool.apr.replace('%', ''));
+
+		// Calculate daily rewards (APR / 365)
+		return ((userAmount * aprPercentage) / 100 / 365).toFixed(5);
+	};
+
+	// Add right above the return statement
+	const handleOpenLiquidityDialog = (poolId: string) => {
+		setSelectedPoolId(poolId);
+		setLiquidityAmount(0.5);
+		setLiquidityDialogOpen(true);
+	};
+
+	const handleCloseLiquidityDialog = () => {
+		setLiquidityDialogOpen(false);
+	};
+
+	const handleSubmitLiquidity = () => {
+		handleProvideLiquidity(selectedPoolId, liquidityAmount);
+		setLiquidityDialogOpen(false);
 	};
 
 	if (!IS_APRIL_FOOLS) return null;
@@ -1765,6 +1860,52 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													>
 														Buy Now
 													</Button>
+													<Button
+														variant={
+															stakedNFTs.includes(
+																nft.id,
+															)
+																? 'contained'
+																: 'outlined'
+														}
+														onClick={(e) => {
+															e.stopPropagation();
+															handleStakeNFT(
+																nft.id,
+															);
+														}}
+														sx={{
+															ml: 1,
+															borderColor:
+																'var(--location-closed-text-color)',
+															color: stakedNFTs.includes(
+																nft.id,
+															)
+																? 'white'
+																: 'var(--location-closed-text-color)',
+															bgcolor:
+																stakedNFTs.includes(
+																	nft.id,
+																)
+																	? 'var(--location-closed-text-color)'
+																	: 'transparent',
+															'&:hover': {
+																bgcolor:
+																	stakedNFTs.includes(
+																		nft.id,
+																	)
+																		? 'var(--location-closed-text-color)'
+																		: 'rgba(211, 0, 0, 0.04)',
+																opacity: 0.9,
+															},
+														}}
+													>
+														{stakedNFTs.includes(
+															nft.id,
+														)
+															? 'Unstake'
+															: 'Stake'}
+													</Button>
 												</Box>
 
 												{/* Add Utility Promises section */}
@@ -2222,9 +2363,36 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																	'var(--location-closed-text-color)',
 																color: 'var(--location-closed-text-color)',
 															}}
+															onClick={() =>
+																handleOpenLiquidityDialog(
+																	pool.name,
+																)
+															}
 														>
-															Provide Liquidity
+															{userLiquidity[
+																pool.name
+															] > 0
+																? `Add More Liquidity (Current: ${userLiquidity[pool.name]} ETH)`
+																: 'Provide Liquidity'}
 														</Button>
+
+														{userLiquidity[
+															pool.name
+														] > 0 && (
+															<Box sx={{ mt: 1 }}>
+																<Typography
+																	variant="caption"
+																	color="var(--text-muted)"
+																>
+																	Daily
+																	Rewards:{' '}
+																	{calculateLiquidityRewards(
+																		pool.name,
+																	)}{' '}
+																	ETH
+																</Typography>
+															</Box>
+														)}
 													</Grid>
 												</Grid>
 											</CardContent>
@@ -2246,38 +2414,51 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 								</Typography>
 								<Typography variant="body2" paragraph>
 									Stake your CMUEats NFTs to earn 0.05 ETH per
-									day. Current staking pool: 35 NFTs staked.
+									day. Current staking pool:{' '}
+									{35 + stakedNFTs.length} NFTs staked.
 								</Typography>
-								<Box sx={{ mb: 2 }}>
-									<Typography
-										variant="body2"
-										color="var(--text-muted)"
-										gutterBottom
-									>
-										Pool Capacity
-									</Typography>
-									<LinearProgress
-										variant="determinate"
-										value={35}
-										sx={{
-											height: 10,
-											borderRadius: 5,
-											backgroundColor: 'var(--card-bg)',
-											'& .MuiLinearProgress-bar': {
-												backgroundColor:
+
+								{stakedNFTs.length > 0 && (
+									<Box sx={{ mb: 2 }}>
+										<Typography
+											variant="body2"
+											fontWeight="bold"
+											color="var(--location-closed-text-color)"
+										>
+											Your Staked NFTs:{' '}
+											{stakedNFTs.join(', ')}
+										</Typography>
+										<Typography variant="body2">
+											Earned Rewards:{' '}
+											{stakeRewards.toFixed(3)} ETH
+										</Typography>
+										<Button
+											variant="contained"
+											sx={{
+												mt: 1,
+												bgcolor:
 													'var(--location-closed-text-color)',
-											},
-										}}
-									/>
-									<Typography
-										variant="caption"
-										color="var(--text-muted)"
-										align="right"
-										sx={{ display: 'block', mt: 0.5 }}
-									>
-										35/100 NFTs
-									</Typography>
-								</Box>
+												'&:hover': {
+													bgcolor:
+														'var(--location-closed-text-color)',
+													opacity: 0.9,
+												},
+											}}
+											onClick={() => {
+												const payout = stakeRewards;
+												setStakeRewards(0);
+												setSnackbarMessage(
+													`Claimed ${payout.toFixed(3)} ETH in staking rewards!`,
+												);
+												setSnackbarOpen(true);
+											}}
+											disabled={stakeRewards <= 0}
+										>
+											Claim Rewards
+										</Button>
+									</Box>
+								)}
+
 								<Button
 									variant="contained"
 									fullWidth
@@ -3143,6 +3324,89 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 					>
 						Confirm
 					</Button>
+				</Box>
+			</Dialog>
+
+			{/* Liquidity Dialog */}
+			<Dialog
+				open={liquidityDialogOpen}
+				onClose={handleCloseLiquidityDialog}
+				sx={{
+					'& .MuiPaper-root': {
+						backgroundColor: 'var(--card-bg)',
+						color: 'var(--text-primary)',
+					},
+				}}
+			>
+				<Box sx={{ p: 3 }}>
+					<Typography variant="h6" gutterBottom>
+						Provide Liquidity to {selectedPoolId}
+					</Typography>
+
+					<Typography
+						variant="body2"
+						color="var(--text-muted)"
+						sx={{ mb: 2 }}
+					>
+						Provide ETH to the pool to earn{' '}
+						{liquidityPools.find((p) => p.name === selectedPoolId)
+							?.apr || '0%'}{' '}
+						APR.
+					</Typography>
+
+					<TextField
+						fullWidth
+						label="Amount (ETH)"
+						type="number"
+						value={liquidityAmount}
+						onChange={(e) =>
+							setLiquidityAmount(parseFloat(e.target.value) || 0)
+						}
+						InputProps={{
+							inputProps: {
+								min: 0.1,
+								step: 0.1,
+							},
+						}}
+						sx={{
+							mb: 3,
+							'& .MuiOutlinedInput-root': {
+								color: 'var(--text-primary)',
+							},
+							'& .MuiInputLabel-root': {
+								color: 'var(--text-muted)',
+							},
+						}}
+					/>
+
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'flex-end',
+							gap: 2,
+						}}
+					>
+						<Button
+							onClick={handleCloseLiquidityDialog}
+							sx={{ color: 'var(--text-muted)' }}
+						>
+							Cancel
+						</Button>
+						<Button
+							variant="contained"
+							onClick={handleSubmitLiquidity}
+							sx={{
+								background: 'var(--location-closed-text-color)',
+								'&:hover': {
+									background:
+										'var(--location-closed-text-color)',
+									opacity: 0.9,
+								},
+							}}
+						>
+							Provide Liquidity
+						</Button>
+					</Box>
 				</Box>
 			</Dialog>
 		</StyledDialog>
