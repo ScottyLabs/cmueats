@@ -1135,20 +1135,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									gap: 2,
 								}}
 							>
-								<Avatar
+								<Typography
+									variant="h5"
 									sx={{
-										width: 80,
-										height: 80,
-										backgroundColor: '#D30000',
+										fontWeight: 'bold',
+										color: '#D30000',
+										mb: 2,
 									}}
 								>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: 'bold' }}
-									>
-										Higher or Lower
-									</Typography>
-								</Avatar>
+									Higher or Lower
+								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ textAlign: 'center', minHeight: 60 }}
@@ -1183,20 +1179,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									gap: 2,
 								}}
 							>
-								<Avatar
+								<Typography
+									variant="h5"
 									sx={{
-										width: 80,
-										height: 80,
-										backgroundColor: '#D30000',
+										fontWeight: 'bold',
+										color: '#D30000',
+										mb: 2,
 									}}
 								>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: 'bold' }}
-									>
-										Memory Match
-									</Typography>
-								</Avatar>
+									Memory Match
+								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ textAlign: 'center', minHeight: 60 }}
@@ -1231,20 +1223,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									gap: 2,
 								}}
 							>
-								<Avatar
+								<Typography
+									variant="h5"
 									sx={{
-										width: 80,
-										height: 80,
-										backgroundColor: '#D30000',
+										fontWeight: 'bold',
+										color: '#D30000',
+										mb: 2,
 									}}
 								>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: 'bold' }}
-									>
-										Coin Flip
-									</Typography>
-								</Avatar>
+									Coin Flip
+								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ textAlign: 'center', minHeight: 60 }}
@@ -1277,20 +1265,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									gap: 2,
 								}}
 							>
-								<Avatar
+								<Typography
+									variant="h5"
 									sx={{
-										width: 80,
-										height: 80,
-										backgroundColor: '#D30000',
+										fontWeight: 'bold',
+										color: '#D30000',
+										mb: 2,
 									}}
 								>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: 'bold' }}
-									>
-										Slots
-									</Typography>
-								</Avatar>
+									Slots
+								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ textAlign: 'center', minHeight: 60 }}
@@ -1323,20 +1307,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									gap: 2,
 								}}
 							>
-								<Avatar
+								<Typography
+									variant="h5"
 									sx={{
-										width: 80,
-										height: 80,
-										backgroundColor: '#D30000',
+										fontWeight: 'bold',
+										color: '#D30000',
+										mb: 2,
 									}}
 								>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: 'bold' }}
-									>
-										Poker
-									</Typography>
-								</Avatar>
+									Poker
+								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ textAlign: 'center', minHeight: 60 }}
@@ -1371,20 +1351,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									gap: 2,
 								}}
 							>
-								<Avatar
+								<Typography
+									variant="h5"
 									sx={{
-										width: 80,
-										height: 80,
-										backgroundColor: '#D30000',
+										fontWeight: 'bold',
+										color: '#D30000',
+										mb: 2,
 									}}
 								>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: 'bold' }}
-									>
-										Card Counting
-									</Typography>
-								</Avatar>
+									Card Counting
+								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ textAlign: 'center', minHeight: 60 }}
@@ -1426,20 +1402,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									gap: 2,
 								}}
 							>
-								<Avatar
+								<Typography
+									variant="h5"
 									sx={{
-										width: 80,
-										height: 80,
-										backgroundColor: '#D30000',
+										fontWeight: 'bold',
+										color: '#D30000',
+										mb: 2,
 									}}
 								>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: 'bold' }}
-									>
-										Roulette
-									</Typography>
-								</Avatar>
+									Roulette
+								</Typography>
 								<Typography
 									variant="body2"
 									sx={{ textAlign: 'center', minHeight: 60 }}
