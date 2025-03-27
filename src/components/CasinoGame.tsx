@@ -22,6 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import CelebrationIcon from '@mui/icons-material/Celebration';
+import { CardCountingGame } from './cardCounting';
 
 // Styled components for Kakegurui theme
 const StyledDialog = styled(Dialog)({
@@ -241,6 +242,7 @@ const GAMES = {
 	COIN_FLIP: 'coin_flip',
 	SLOTS: 'slots',
 	POKER: 'poker',
+	CARD_COUNTING: 'card_counting',
 };
 
 // Card games utils
@@ -1356,6 +1358,54 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						</CardContent>
 					</CasinoCard>
 				</Grid>
+				<Grid item xs={12} sm={6} md={3}>
+					<CasinoCard
+						onClick={() => handleGameSelect(GAMES.CARD_COUNTING)}
+					>
+						<Box
+							sx={{
+								p: 1,
+								background: '#D30000',
+								textAlign: 'center',
+							}}
+						>
+							<Typography variant="subtitle1" fontWeight="bold">
+								Card Counting
+							</Typography>
+						</Box>
+						<CardContent>
+							<Typography variant="body2">
+								Learn and practice card counting techniques to
+								improve your blackjack game.
+							</Typography>
+							<Box
+								sx={{
+									mt: 2,
+									display: 'flex',
+									justifyContent: 'center',
+									flexWrap: 'wrap',
+									gap: 1,
+								}}
+							>
+								<GameCard
+									sx={{ width: '40px', height: '60px' }}
+								>
+									<CardValue>2</CardValue>
+								</GameCard>
+								<GameCard
+									sx={{ width: '40px', height: '60px' }}
+								>
+									<CardValue>10</CardValue>
+								</GameCard>
+								<GameCard
+									sx={{ width: '40px', height: '60px' }}
+								>
+									<CardValue>A</CardValue>
+								</GameCard>
+							</Box>
+						</CardContent>
+					</CasinoCard>
+				</Grid>
 			</Grid>
 		</Box>
 	);
@@ -1908,6 +1958,8 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 				return renderSlotsGame();
 			case GAMES.POKER:
 				return renderPokerGame();
+			case GAMES.CARD_COUNTING:
+				return <CardCountingGame />;
 			default:
 				return null;
 		}
