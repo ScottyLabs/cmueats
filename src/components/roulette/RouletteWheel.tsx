@@ -139,7 +139,7 @@ const NumberText = styled(Typography, {
 	fontWeight: 'bold',
 	fontSize: '16px',
 	textShadow: '0 0 3px rgba(0,0,0,0.8)',
-	transform: `rotate(${-rotatePosition}deg)`, // Counter-rotate to keep text upright
+	transform: `rotate(${180 - rotatePosition}deg)`,
 	zIndex: 3,
 }));
 
@@ -238,44 +238,23 @@ export default function RouletteWheel({
 			const spinDuration = 6000; // 6 seconds, matches the CSS transition
 
 			setTimeout(() => {
-				// FIRST STEP: Calculate the result number (which pocket the ball lands in)
-				const normalizedPosition = (360 - (finalRotation % 360)) % 360;
+				// FIRST STEP: Determine a random winning number
+				const randomIndex = Math.floor(
+					Math.random() * ROULETTE_NUMBERS.length,
+				);
+				const resultNumber = ROULETTE_NUMBERS[randomIndex].number;
 
-				// Find which pocket the ball lands in
-				let resultPocket = ROULETTE_NUMBERS[0]; // Default to 0
-				for (let i = 0; i < ROULETTE_NUMBERS.length; i += 1) {
-					const nextIndex = (i + 1) % ROULETTE_NUMBERS.length;
-					const startPos = ROULETTE_NUMBERS[i].position;
-					let endPos = ROULETTE_NUMBERS[nextIndex].position;
-
-					if (endPos < startPos) endPos += 360;
-
-					if (
-						normalizedPosition >= startPos &&
-						normalizedPosition < endPos
-					) {
-						resultPocket = ROULETTE_NUMBERS[i];
-						break;
-					}
-				}
-
-				// Get the result number
-				const resultNumber = resultPocket.number;
+				// Set the result
 				setResult(resultNumber);
 
-				// SECOND STEP: Explicitly find the exact position of this number on the wheel
-				// Wait a small delay to make the transition visible
-				setTimeout(() => {
-					// Get the actual position for the number that was hit
-					for (let i = 0; i < ROULETTE_NUMBERS.length; i += 1) {
-						if (ROULETTE_NUMBERS[i].number === resultNumber) {
-							// Set the ball exactly to this number's position
-							setBallPosition(ROULETTE_NUMBERS[i].position);
-							setBallLanded(true);
-							break;
-						}
-					}
-				}, 300);
+				// SECOND STEP: Explicitly position the ball at that number
+				const targetNumber = ROULETTE_NUMBERS.find(
+					(num) => num.number === resultNumber,
+				);
+				if (targetNumber) {
+					setBallPosition(targetNumber.position);
+					setBallLanded(true);
+				}
 
 				// Notify parent of result after the landing animation
 				setTimeout(() => {
