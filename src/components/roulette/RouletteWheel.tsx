@@ -56,8 +56,7 @@ const RouletteContainer = styled(Box)({
 	width: '100%',
 	maxWidth: '600px',
 	height: '600px',
-	margin: '0 auto',
-	perspective: '1200px',
+	margin: '20px auto',
 });
 
 const WheelContainer = styled(Box)({
@@ -65,8 +64,10 @@ const WheelContainer = styled(Box)({
 	width: '400px',
 	height: '400px',
 	margin: '0 auto',
-	perspective: '1200px',
 	transformStyle: 'preserve-3d',
+	display: 'flex',
+	justifyContent: 'center',
+	alignItems: 'center',
 });
 
 const Wheel = styled(Box, {
@@ -78,25 +79,27 @@ const Wheel = styled(Box, {
 		width: '100%',
 		height: '100%',
 		borderRadius: '50%',
+		border: '5px solid #000',
 		backgroundImage:
 			'radial-gradient(circle, #424242 0%, #212121 70%, #000000 100%)',
-		transform: `rotateX(70deg) rotateZ(${rotationDegrees}deg)`,
+		transform: `rotateZ(${rotationDegrees}deg)`,
 		transformStyle: 'preserve-3d',
 		transition: spinning
 			? 'transform 6s cubic-bezier(0.1, 0.7, 0.15, 1)'
 			: 'none',
-		boxShadow: '0 0 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3)',
+		boxShadow: '0 0 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.5)',
 		'&::after': {
 			content: '""',
 			position: 'absolute',
-			top: '5%',
-			left: '5%',
-			width: '90%',
-			height: '90%',
+			top: '20%',
+			left: '20%',
+			width: '60%',
+			height: '60%',
 			borderRadius: '50%',
 			backgroundImage:
 				'radial-gradient(circle, #572c0e 0%, #3e1e08 100%)',
 			boxShadow: 'inset 0 0 15px rgba(0,0,0,0.6)',
+			zIndex: 3,
 		},
 	}),
 );
@@ -107,56 +110,59 @@ const NumberSlot = styled(Box, {
 	position: 'absolute',
 	top: '0',
 	left: '50%',
-	width: '30px',
-	height: '170px',
+	width: '35px',
+	height: '200px',
 	transformOrigin: 'bottom center',
 	transform: `translateX(-50%) rotate(${rotatePosition}deg)`,
 	zIndex: 2,
 	'&::before': {
 		content: '""',
 		position: 'absolute',
-		top: '10px',
+		top: '5px',
 		left: '0',
 		width: '100%',
-		height: '60px',
+		height: '120px',
 		backgroundColor: color,
-		clipPath: 'polygon(0 0, 100% 0, 85% 100%, 15% 100%)',
+		clipPath: 'polygon(0 0, 100% 0, 90% 100%, 10% 100%)',
 		boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
 	},
 }));
 
-const NumberText = styled(Typography)({
+const NumberText = styled(Typography, {
+	shouldForwardProp: (prop) => prop !== 'rotatePosition',
+})<{ rotatePosition?: number }>(({ rotatePosition = 0 }) => ({
 	position: 'absolute',
 	top: '20px',
 	width: '100%',
 	textAlign: 'center',
 	color: 'white',
 	fontWeight: 'bold',
-	fontSize: '12px',
+	fontSize: '16px',
 	textShadow: '0 0 3px rgba(0,0,0,0.8)',
-	transform: 'rotateX(-70deg)',
+	transform: `rotate(${-rotatePosition}deg)`, // Counter-rotate to keep text upright
 	zIndex: 3,
-});
+}));
 
 const Ball = styled(Box, {
 	shouldForwardProp: (prop) =>
 		prop !== 'rotatePosition' && prop !== 'visible' && prop !== 'landed',
-})<{ rotatePosition: number; visible: boolean; landed: boolean }>(
-	({ rotatePosition, visible, landed }) => ({
+})<{ rotatePosition: number; visible?: boolean; landed: boolean }>(
+	({ rotatePosition, visible = true, landed }) => ({
 		position: 'absolute',
-		top: landed ? '80px' : '20px',
+		top: '50%',
 		left: '50%',
-		width: '12px',
-		height: '12px',
+		width: '16px',
+		height: '16px',
 		borderRadius: '50%',
-		backgroundColor: '#e0e0e0',
-		transform: `translateX(-50%) rotate(${rotatePosition}deg) translateX(${landed ? 130 : 155}px)`,
+		backgroundColor: 'white',
+		transform: `rotate(${rotatePosition}deg) translateY(-170px)`,
 		opacity: visible ? 1 : 0,
 		transformOrigin: 'center center',
 		transition: landed
-			? 'transform 1s ease-out, top 1s ease-out'
-			: 'transform 6s cubic-bezier(0.2, 0.8, 0.2, 1)',
-		boxShadow: '0 0 5px rgba(255,255,255,0.8)',
+			? 'transform 2s cubic-bezier(0.32, 0.94, 0.60, 1)'
+			: 'transform 6s cubic-bezier(0.33, 0.9, 0.67, 1)',
+		boxShadow:
+			'0 0 15px rgba(255,255,255,1), 0 0 10px rgba(255,255,255,0.8)',
 		zIndex: 5,
 	}),
 );
@@ -179,7 +185,7 @@ const Separator = styled(Box)({
 	top: '0',
 	left: '50%',
 	width: '2px',
-	height: '175px',
+	height: '200px',
 	background:
 		'linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent)',
 	transformOrigin: 'bottom center',
@@ -201,33 +207,11 @@ export default function RouletteWheel({
 	const [rotationDegrees, setRotationDegrees] = useState(0);
 	const [ballPosition, setBallPosition] = useState(0);
 	const [result, setResult] = useState<number | null>(null);
-	const ballVisible = true;
 	const [ballLanded, setBallLanded] = useState(false);
 
 	// Refs to track animation state
 	const spinCompleted = useRef(false);
 	const wheelRef = useRef<HTMLDivElement>(null);
-
-	// Function to calculate the winning number based on final rotation
-	const calculateResult = (finalRotation: number) => {
-		// Normalize rotation to 0-360 range
-		const normalizedRotation = (360 - (finalRotation % 360)) % 360;
-
-		// Find the pocket that matches the ball's position
-		for (let i = 0; i < ROULETTE_NUMBERS.length; i += 1) {
-			const nextIndex = (i + 1) % ROULETTE_NUMBERS.length;
-			const startPos = ROULETTE_NUMBERS[i].position;
-			let endPos = ROULETTE_NUMBERS[nextIndex].position;
-
-			if (endPos < startPos) endPos += 360;
-
-			if (normalizedRotation >= startPos && normalizedRotation < endPos) {
-				return ROULETTE_NUMBERS[i].number;
-			}
-		}
-
-		return 0; // Default to 0 if not found
-	};
 
 	// Handle spin animation
 	useEffect(() => {
@@ -238,35 +222,67 @@ export default function RouletteWheel({
 			setBallLanded(false);
 			setResult(null);
 
-			// Generate random number of complete rotations (5-10 rotations plus random offset)
+			// Generate random number of complete rotations
 			const rotations = 5 + Math.floor(Math.random() * 5);
 			const randomOffset = Math.random() * 360;
 			const finalRotation =
 				rotationDegrees - (rotations * 360 + randomOffset);
 
-			// Set ball to spin in opposite direction
-			const ballOffset = Math.random() * 120 - 60; // Ball lands slightly off from wheel position
-			const finalBallPosition =
-				(rotations * 360 + randomOffset + ballOffset) % 360;
-
 			// Update wheel rotation
 			setRotationDegrees(finalRotation);
-			setBallPosition(finalBallPosition);
+
+			// Set ball to rotate in opposite direction
+			setBallPosition(-finalRotation);
 
 			// After animation completes, calculate result and notify parent
 			const spinDuration = 6000; // 6 seconds, matches the CSS transition
 
 			setTimeout(() => {
-				const resultNumber = calculateResult(finalRotation);
-				setResult(resultNumber);
-				setBallLanded(true);
+				// FIRST STEP: Calculate the result number (which pocket the ball lands in)
+				const normalizedPosition = (360 - (finalRotation % 360)) % 360;
 
-				// Notify parent of result after a delay
+				// Find which pocket the ball lands in
+				let resultPocket = ROULETTE_NUMBERS[0]; // Default to 0
+				for (let i = 0; i < ROULETTE_NUMBERS.length; i += 1) {
+					const nextIndex = (i + 1) % ROULETTE_NUMBERS.length;
+					const startPos = ROULETTE_NUMBERS[i].position;
+					let endPos = ROULETTE_NUMBERS[nextIndex].position;
+
+					if (endPos < startPos) endPos += 360;
+
+					if (
+						normalizedPosition >= startPos &&
+						normalizedPosition < endPos
+					) {
+						resultPocket = ROULETTE_NUMBERS[i];
+						break;
+					}
+				}
+
+				// Get the result number
+				const resultNumber = resultPocket.number;
+				setResult(resultNumber);
+
+				// SECOND STEP: Explicitly find the exact position of this number on the wheel
+				// Wait a small delay to make the transition visible
+				setTimeout(() => {
+					// Get the actual position for the number that was hit
+					for (let i = 0; i < ROULETTE_NUMBERS.length; i += 1) {
+						if (ROULETTE_NUMBERS[i].number === resultNumber) {
+							// Set the ball exactly to this number's position
+							setBallPosition(ROULETTE_NUMBERS[i].position);
+							setBallLanded(true);
+							break;
+						}
+					}
+				}, 300);
+
+				// Notify parent of result after the landing animation
 				setTimeout(() => {
 					setSpinning(false);
 					spinCompleted.current = false;
 					onSpinComplete(resultNumber);
-				}, 1000);
+				}, 2000);
 			}, spinDuration);
 		}
 	}, [spinning, rotationDegrees, setSpinning, onSpinComplete]);
@@ -301,7 +317,9 @@ export default function RouletteWheel({
 							rotatePosition={num.position}
 							color={num.color}
 						>
-							<NumberText>{num.number}</NumberText>
+							<NumberText rotatePosition={num.position}>
+								{num.number}
+							</NumberText>
 						</NumberSlot>
 					))}
 					{renderSeparators()}
@@ -309,7 +327,7 @@ export default function RouletteWheel({
 				</Wheel>
 				<Ball
 					rotatePosition={ballPosition}
-					visible={ballVisible}
+					visible
 					landed={ballLanded}
 				/>
 			</WheelContainer>
