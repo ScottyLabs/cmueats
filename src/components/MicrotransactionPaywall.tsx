@@ -14,8 +14,6 @@ import {
 	RadioGroup,
 	FormControlLabel,
 	FormControl,
-	Divider,
-	Checkbox,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
@@ -110,10 +108,9 @@ const subscriptionPlans = [
 
 // Payment method icons/options
 const paymentMethods = [
-	{ id: 'credit', name: 'Credit Card' },
 	{ id: 'paypal', name: 'PayPal' },
 	{ id: 'crypto', name: 'Cryptocurrency' },
-	{ id: 'meal', name: 'Meal Plan Points' },
+	{ id: 'meal', name: 'Meal Blocks' },
 ];
 
 interface MicrotransactionPaywallProps {
@@ -129,8 +126,9 @@ function MicrotransactionPaywall({
 }: MicrotransactionPaywallProps) {
 	const [activeStep, setActiveStep] = useState(0);
 	const [selectedPlan, setSelectedPlan] = useState('standard');
-	const [paymentMethod, setPaymentMethod] = useState('credit');
-	const [termsAccepted, setTermsAccepted] = useState(false);
+	const [paymentMethod, setPaymentMethod] = useState('paypal');
+	const [cmuEmail, setCmuEmail] = useState('');
+	const [cmuPassword, setCmuPassword] = useState('');
 
 	// Mock steps in the payment process
 	const steps = ['Choose Plan', 'Payment Method', 'Review & Confirm'];
@@ -166,8 +164,87 @@ function MicrotransactionPaywall({
 		setPaymentMethod(event.target.value);
 	};
 
-	const handleTermsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setTermsAccepted(event.target.checked);
+	const renderPaymentForm = () => {
+		switch (paymentMethod) {
+			case 'paypal':
+				return (
+					<Box sx={{ mt: 2 }}>
+						<Typography variant="body1" gutterBottom>
+							You will be redirected to PayPal to complete your
+							payment.
+						</Typography>
+						<Button
+							variant="contained"
+							color="primary"
+							fullWidth
+							sx={{ mt: 2 }}
+							onClick={handlePaymentComplete}
+						>
+							Continue to PayPal
+						</Button>
+					</Box>
+				);
+			case 'crypto':
+				return (
+					<Box sx={{ mt: 2 }}>
+						<Typography variant="body1" gutterBottom>
+							Send payment to the following address:
+						</Typography>
+						<Box
+							sx={{
+								p: 2,
+								bgcolor: '#f5f5f5',
+								borderRadius: 1,
+								wordBreak: 'break-all',
+								fontFamily: 'monospace',
+							}}
+						>
+							0x742d35Cc6634C0532925a3b844Bc454e4438f44e
+						</Box>
+						<Button
+							variant="contained"
+							color="primary"
+							fullWidth
+							sx={{ mt: 2 }}
+							onClick={handlePaymentComplete}
+						>
+							I&apos;ve Sent the Payment
+						</Button>
+					</Box>
+				);
+			case 'meal':
+				return (
+					<Box sx={{ mt: 2 }}>
+						<TextField
+							fullWidth
+							label="CMU Email"
+							variant="outlined"
+							value={cmuEmail}
+							onChange={(e) => setCmuEmail(e.target.value)}
+							sx={{ mb: 2 }}
+						/>
+						<TextField
+							fullWidth
+							label="Password"
+							type="password"
+							variant="outlined"
+							value={cmuPassword}
+							onChange={(e) => setCmuPassword(e.target.value)}
+							sx={{ mb: 2 }}
+						/>
+						<Button
+							variant="contained"
+							color="primary"
+							fullWidth
+							onClick={handlePaymentComplete}
+						>
+							Verify and Pay with Meal Blocks
+						</Button>
+					</Box>
+				);
+			default:
+				return null;
+		}
 	};
 
 	if (!IS_APRIL_FOOLS) return null;
@@ -281,7 +358,7 @@ function MicrotransactionPaywall({
 					{activeStep === 1 && (
 						<Box>
 							<Typography variant="h6" gutterBottom>
-								Payment Method
+								Select Payment Method
 							</Typography>
 							<FormControl
 								component="fieldset"
@@ -297,162 +374,75 @@ function MicrotransactionPaywall({
 										<Box
 											key={method.id}
 											sx={{
-												mb: 2,
 												p: 2,
+												mb: 2,
 												border: '1px solid #eee',
-												borderRadius: '8px',
+												borderRadius: 1,
+												'&:hover': {
+													bgcolor: '#f9f9f9',
+												},
 											}}
 										>
 											<FormControlLabel
 												value={method.id}
 												control={<Radio />}
-												label={method.name}
+												label={
+													<Typography variant="subtitle1">
+														{method.name}
+													</Typography>
+												}
 											/>
 										</Box>
 									))}
 								</RadioGroup>
 							</FormControl>
-
-							{paymentMethod === 'credit' && (
-								<Box sx={{ mt: 3 }}>
-									<TextField
-										label="Card Number"
-										fullWidth
-										sx={{ mb: 2 }}
-										placeholder="1234 5678 9012 3456"
-									/>
-									<Box sx={{ display: 'flex', gap: 2 }}>
-										<TextField
-											label="Expiration Date"
-											placeholder="MM/YY"
-											sx={{ flex: 1 }}
-										/>
-										<TextField
-											label="CVV"
-											placeholder="123"
-											sx={{ flex: 1 }}
-										/>
-									</Box>
-								</Box>
-							)}
 						</Box>
 					)}
 
 					{activeStep === 2 && (
 						<Box>
 							<Typography variant="h6" gutterBottom>
-								Review Your Order
+								Review & Confirm
 							</Typography>
-
-							<Box
-								sx={{
-									bgcolor: '#f9f9f9',
-									p: 3,
-									borderRadius: '8px',
-									mb: 3,
-								}}
-							>
-								<Typography
-									variant="subtitle1"
-									fontWeight="bold"
-								>
+							<Box sx={{ mb: 3 }}>
+								<Typography variant="subtitle1">
+									Selected Plan:{' '}
 									{
 										subscriptionPlans.find(
-											(plan) => plan.id === selectedPlan,
+											(p) => p.id === selectedPlan,
 										)?.name
 									}
 								</Typography>
-								<Typography
-									variant="h5"
-									color="primary"
-									sx={{ my: 1 }}
-								>
-									{
-										subscriptionPlans.find(
-											(plan) => plan.id === selectedPlan,
-										)?.price
-									}
-									/month
-								</Typography>
-								<Typography
-									variant="body2"
-									color="text.secondary"
-								>
-									Billed monthly. Cancel anytime.
-								</Typography>
-							</Box>
-
-							<Divider sx={{ my: 2 }} />
-
-							<Box
-								sx={{
-									display: 'flex',
-									justifyContent: 'space-between',
-									mb: 2,
-								}}
-							>
-								<Typography>Payment Method:</Typography>
-								<Typography fontWeight="bold">
+								<Typography variant="subtitle1">
+									Payment Method:{' '}
 									{
 										paymentMethods.find(
-											(method) =>
-												method.id === paymentMethod,
+											(m) => m.id === paymentMethod,
 										)?.name
 									}
 								</Typography>
 							</Box>
-
-							<Box sx={{ mt: 4 }}>
-								<FormControlLabel
-									control={
-										<Checkbox
-											checked={termsAccepted}
-											onChange={handleTermsChange}
-										/>
-									}
-									label={
-										<Typography variant="body2">
-											I agree to the Terms of Service and
-											acknowledge that this is just an
-											April Fools&apos; Day prank.
-										</Typography>
-									}
-								/>
-							</Box>
+							{renderPaymentForm()}
 						</Box>
 					)}
 
 					<Box
 						sx={{
 							display: 'flex',
-							justifyContent: 'space-between',
-							mt: 4,
+							justifyContent: 'flex-end',
+							mt: 3,
 						}}
 					>
-						<Button
-							disabled={activeStep === 0}
-							onClick={handleBack}
-						>
-							Back
-						</Button>
-						<Button
-							variant="contained"
-							onClick={handleNext}
-							disabled={
-								activeStep === steps.length - 1 &&
-								!termsAccepted
-							}
-							sx={{
-								background:
-									'linear-gradient(45deg, #FF5F6D 30%, #FFC371 90%)',
-								boxShadow:
-									'0 3px 5px 2px rgba(255, 105, 135, .3)',
-							}}
-						>
-							{activeStep === steps.length - 1
-								? 'Complete Payment'
-								: 'Next'}
-						</Button>
+						{activeStep > 0 && (
+							<Button onClick={handleBack} sx={{ mr: 1 }}>
+								Back
+							</Button>
+						)}
+						{activeStep < steps.length - 1 && (
+							<Button variant="contained" onClick={handleNext}>
+								Next
+							</Button>
+						)}
 					</Box>
 				</DialogContent>
 			</Box>

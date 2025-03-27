@@ -93,7 +93,7 @@ const bonziTips = [
 	"Your friends are all using CMUEats Premium. Don't miss out!",
 	'Get dining hall notifications straight to your phone with our Premium Alert Service!',
 	'Our AI can predict what you want to eat! Subscribe to Premium Taste for just $7.99/month!',
-	'Exclusive April offer: Buy our Premium NFT collection and get 10% off all future subscriptions!',
+	'Exclusive April offer: Subscribe to CMUEats Premium and get 10% off all future subscriptions!',
 ];
 
 interface BonziBuddyProps {

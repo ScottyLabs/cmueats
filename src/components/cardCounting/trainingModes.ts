@@ -2,9 +2,9 @@ import { TrainingMode } from './types';
 
 export const TRAINING_MODES: TrainingMode[] = [
 	{
-		name: 'Basic Counting',
+		name: 'Card Counting Practice',
 		description:
-			'Practice counting cards one at a time with no time pressure. Perfect for beginners learning a new system.',
+			'Learn the basics of card counting in a stress-free environment.',
 		difficulty: 'beginner',
 		features: {
 			timeLimit: false,
@@ -16,8 +16,9 @@ export const TRAINING_MODES: TrainingMode[] = [
 		},
 		settings: {
 			numDecks: 1,
-			penetration: 0.75,
+			penetration: 1,
 			speed: 'slow',
+			timePerCard: 3,
 		},
 	},
 	{

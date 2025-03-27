@@ -165,13 +165,6 @@ const CardBack = styled(Box)({
 	justifyContent: 'center',
 });
 
-const OpponentAvatar = styled(Avatar)({
-	width: 80,
-	height: 80,
-	border: '3px solid #D30000',
-	boxShadow: '0 0 15px rgba(211, 0, 0, 0.5)',
-});
-
 const GameAnimation = styled(Box)({
 	width: '100%',
 	display: 'flex',
@@ -202,36 +195,13 @@ const InsanityEffect = styled(Box)({
 const opponents = [
 	{
 		id: 1,
-		name: 'Expert Gambler',
+		name: 'House',
 		avatar: 'https://i.imgur.com/bWcQnAW.jpg',
-		difficulty: 'Expert',
-		description:
-			'An expert gambler who enjoys the thrill of risking everything.',
-		specialty: 'Unpredictable strategies',
-		winRate: 0.85,
-		style: 'High-risk, high-reward',
-	},
-	{
-		id: 2,
-		name: 'Strategic Player',
-		avatar: 'https://i.imgur.com/C4BwpQe.jpg',
-		difficulty: 'Intermediate',
-		description:
-			'Calculative and strategic player with a balanced approach.',
-		specialty: 'Psychological warfare',
-		winRate: 0.75,
-		style: 'Balanced aggression',
-	},
-	{
-		id: 3,
-		name: 'Reckless Gambler',
-		avatar: 'https://i.imgur.com/XUprpYN.jpg',
 		difficulty: 'Hard',
-		description:
-			'Reckless gambler obsessed with the thrill of taking big risks.',
-		specialty: 'Unpredictable moves',
-		winRate: 0.6,
-		style: 'Chaotic and unpredictable',
+		description: 'The house always wins. Play at your own risk.',
+		specialty: 'Unbeatable odds',
+		winRate: 0.92,
+		style: 'High-risk, high-reward',
 	},
 ];
 
@@ -271,9 +241,6 @@ interface CasinoGameProps {
 function CasinoGame({ open, onClose }: CasinoGameProps) {
 	// Game state
 	const [balance, setBalance] = useState(1000); // Starting balance
-	const [selectedOpponent, setSelectedOpponent] = useState<number | null>(
-		null,
-	);
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
 	const [betAmount, setBetAmount] = useState(50);
 	const [gameState, setGameState] = useState('selecting'); // selecting, betting, playing, result
@@ -438,33 +405,13 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 	// Helper functions for difficulty modifiers
 	const getDifficultyModifier = (difficulty: string): number => {
-		if (difficulty === 'Expert') return 0.7;
-		if (difficulty === 'Intermediate') return 0.85;
+		if (difficulty === 'Hard') return 0.7;
 		return 1;
 	};
 
 	const getWinChance = (difficulty: string): number => {
-		if (difficulty === 'Expert') return 0.35;
-		if (difficulty === 'Intermediate') return 0.45;
+		if (difficulty === 'Hard') return 0.25;
 		return 0.55;
-	};
-
-	const getOpponentMatchChance = (difficulty: string): number => {
-		if (difficulty === 'Expert') return 0.6;
-		if (difficulty === 'Intermediate') return 0.45;
-		return 0.3;
-	};
-
-	const getSlotWinProbability = (difficulty: string): number => {
-		if (difficulty === 'Expert') return 0.15;
-		if (difficulty === 'Intermediate') return 0.25;
-		return 0.35;
-	};
-
-	const getDifficultyColor = (difficulty: string): string => {
-		if (difficulty === 'Expert') return '#FFD700';
-		if (difficulty === 'Intermediate') return '#D30000';
-		return '#3B82F6';
 	};
 
 	// Helper function for coin flip result
@@ -487,8 +434,10 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 		// Apply opponent difficulty modifier
 		let actualWinnings = winnings;
-		if (result === 'win' && selectedOpponent) {
-			const opponent = opponents.find((o) => o.id === selectedOpponent);
+		if (result === 'win' && selectedGame) {
+			const opponent = opponents.find(
+				(o) => o.id === Number(selectedGame),
+			);
 			if (opponent) {
 				const difficultyModifier = getDifficultyModifier(
 					opponent.difficulty,
@@ -617,7 +566,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 	// Reset game when dialog closes
 	const resetGame = () => {
-		setSelectedOpponent(null);
 		setSelectedGame(null);
 		setBetAmount(50);
 		setGameState('selecting');
@@ -643,10 +591,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			resetGame();
 		}
 	}, [open]);
-
-	const handleOpponentSelect = (opponentId: number) => {
-		setSelectedOpponent(opponentId);
-	};
 
 	const handleGameSelect = (game: string) => {
 		setSelectedGame(game);
@@ -699,9 +643,9 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 			// Get opponent difficulty factor
 			let winChance = 0.5; // default 50/50
-			if (selectedOpponent) {
+			if (selectedGame) {
 				const opponent = opponents.find(
-					(o) => o.id === selectedOpponent,
+					(o) => o.id === Number(selectedGame),
 				);
 				if (opponent) {
 					winChance = getWinChance(opponent.difficulty);
@@ -805,15 +749,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		// Simulate coin flip with some delay for suspense
 		setTimeout(() => {
 			// Base win chance adjusted by opponent difficulty
-			let winChance = 0.5; // default 50/50
-			if (selectedOpponent) {
-				const opponent = opponents.find(
-					(o) => o.id === selectedOpponent,
-				);
-				if (opponent) {
-					winChance = getWinChance(opponent.difficulty);
-				}
-			}
+			const winChance = 0.25; // default 25/75
 
 			// Determine result first
 			const playerWins = Math.random() < winChance;
@@ -859,17 +795,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					);
 
 					// Opponent gets a turn based on difficulty
-					let opponentMatchChance = 0.3; // default
-					if (selectedOpponent) {
-						const opponent = opponents.find(
-							(o) => o.id === selectedOpponent,
-						);
-						if (opponent) {
-							opponentMatchChance = getOpponentMatchChance(
-								opponent.difficulty,
-							);
-						}
-					}
+					const opponentMatchChance = 0.7; // default
 
 					const remainingIndices = Array.from({
 						length: matchingCards.length,
@@ -974,15 +900,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			const random = Math.random();
 
 			// Different win probabilities based on opponent difficulty
-			let winProbability = 0.35; // default
-			if (selectedOpponent) {
-				const opponent = opponents.find(
-					(o) => o.id === selectedOpponent,
-				);
-				if (opponent) {
-					winProbability = getSlotWinProbability(opponent.difficulty);
-				}
-			}
+			const winProbability = 0.15; // default
 
 			if (random < winProbability) {
 				// Win - all symbols match or special win patterns
@@ -1062,89 +980,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		const cardSuit = card.slice(-1); // Get suit
 		return `match-card-${cardValue}-${cardSuit}-${position}`;
 	};
-
-	const renderOpponentSelection = () => (
-		<Box>
-			<Typography variant="h5" sx={{ mb: 2 }}>
-				Choose Your Opponent
-			</Typography>
-			<Grid container spacing={2}>
-				{opponents.map((opponent) => (
-					<Grid item xs={12} sm={4} key={opponent.id}>
-						<CasinoCard
-							onClick={() => handleOpponentSelect(opponent.id)}
-							sx={{
-								border:
-									selectedOpponent === opponent.id
-										? '2px solid #FFD700'
-										: '1px solid #3D3D55',
-								transform:
-									selectedOpponent === opponent.id
-										? 'translateY(-5px)'
-										: 'none',
-							}}
-						>
-							<Box
-								sx={{
-									p: 1,
-									background: '#D30000',
-									textAlign: 'center',
-								}}
-							>
-								<Typography
-									variant="subtitle1"
-									fontWeight="bold"
-								>
-									{opponent.name}
-								</Typography>
-							</Box>
-							<CardContent>
-								<Box
-									sx={{
-										display: 'flex',
-										justifyContent: 'center',
-										mb: 2,
-									}}
-								>
-									<OpponentAvatar
-										src={opponent.avatar}
-										alt={opponent.name}
-									/>
-								</Box>
-								<Chip
-									label={opponent.difficulty}
-									size="small"
-									sx={{
-										mb: 1,
-										bgcolor: getDifficultyColor(
-											opponent.difficulty,
-										),
-										color: 'white',
-										fontWeight: 'bold',
-									}}
-								/>
-								<Typography variant="body2" sx={{ mb: 1 }}>
-									{opponent.description}
-								</Typography>
-								<Typography
-									variant="caption"
-									sx={{ display: 'block', color: '#aaa' }}
-								>
-									Specialty: {opponent.specialty}
-								</Typography>
-								<Typography
-									variant="caption"
-									sx={{ display: 'block', color: '#aaa' }}
-								>
-									Win Rate: {opponent.winRate * 100}%
-								</Typography>
-							</CardContent>
-						</CasinoCard>
-					</Grid>
-				))}
-			</Grid>
-		</Box>
-	);
 
 	const renderGameSelection = () => (
 		<Box>
@@ -1966,8 +1801,8 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	};
 
 	const renderGameResultUI = () => {
-		const opponent = selectedOpponent
-			? opponents.find((o) => o.id === selectedOpponent)
+		const opponent = selectedGame
+			? opponents.find((o) => o.id === Number(selectedGame))
 			: null;
 
 		return (
@@ -2075,10 +1910,21 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	};
 
 	return (
-		<StyledDialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+		<StyledDialog
+			open={open}
+			onClose={onClose}
+			maxWidth="md"
+			fullWidth
+			disableEscapeKeyDown={false}
+			onBackdropClick={onClose}
+		>
 			<GameHeader>
 				<Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
-					<IconButton onClick={onClose} sx={{ color: '#fff' }}>
+					<IconButton
+						onClick={onClose}
+						sx={{ color: '#fff' }}
+						aria-label="close"
+					>
 						<CloseIcon />
 					</IconButton>
 				</Box>
@@ -2092,10 +1938,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			<DialogContent
 				sx={{ backgroundColor: '#1E1E2D', position: 'relative' }}
 			>
-				{gameState === 'selecting' &&
-					(selectedOpponent === null
-						? renderOpponentSelection()
-						: renderGameSelection())}
+				{gameState === 'selecting' && renderGameSelection()}
 
 				{gameState === 'betting' && renderBettingUI()}
 

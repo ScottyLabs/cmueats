@@ -1138,8 +1138,7 @@ function AprilFoolsManager() {
 
 	// Handle clicking subscribe in the Bonzi component
 	const handleBonziSubscribeClick = () => {
-		setShowNFTProject(true);
-		simulateWalletConnection();
+		setShowPaywall(true);
 	};
 
 	// Handle buying an NFT
