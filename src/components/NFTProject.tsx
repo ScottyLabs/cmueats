@@ -654,7 +654,7 @@ const nftData = [
 		name: 'CMUEats #001',
 		image: 'https://via.placeholder.com/300/6D28D9/FFFFFF?text=CMUEats+NFT+001',
 		price: 0.25,
-		priceHistory: [0.15, 0.18, 0.22, 0.25],
+		priceHistory: [0.18, 0.22, 0.25],
 		description:
 			"Ultra rare CMUEats collector's item featuring a legendary dining hall experience.",
 		owner: '0x742...1a3b',
@@ -667,7 +667,6 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Morning' },
 		],
 		sold: false,
-		// Add utility promises
 		utilities: [
 			'Grants 0.5% faster walking speed on campus',
 			'Telepathic connection with other CMUEats NFT holders',
@@ -678,7 +677,7 @@ const nftData = [
 		name: 'CMUEats #042',
 		image: 'https://via.placeholder.com/300/4F46E5/FFFFFF?text=CMUEats+NFT+042',
 		price: 0.15,
-		priceHistory: [0.08, 0.12, 0.15],
+		priceHistory: [0.12, 0.13, 0.15],
 		description:
 			'Limited edition artwork commemorating the grand opening of the Tepper Quad cafe.',
 		owner: '0xf3c...9d21',
@@ -691,7 +690,6 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Lunch' },
 		],
 		sold: false,
-		// Add utility promises
 		utilities: [
 			'5% chance of extra fries when purchasing at The Underground',
 			'Makes you 3% more attractive',
@@ -702,7 +700,7 @@ const nftData = [
 		name: 'CMUEats #107',
 		image: 'https://via.placeholder.com/300/8B5CF6/FFFFFF?text=CMUEats+NFT+107',
 		price: 0.4,
-		priceHistory: [0.25, 0.3, 0.38, 0.42, 0.39, 0.4],
+		priceHistory: [0.35, 0.38, 0.4],
 		description:
 			'Rare digital collectible featuring the famous Entropy playlist from the Underground.',
 		owner: '0xa12...8e67',
@@ -715,7 +713,6 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Evening' },
 		],
 		sold: false,
-		// Add utility promises
 		utilities: [
 			'Telepathic connection with other CMUEats NFT holders',
 			'WiFi speed increased by 2.5% while studying',
@@ -726,7 +723,7 @@ const nftData = [
 		name: 'CMUEats #233',
 		image: 'https://via.placeholder.com/300/3B82F6/FFFFFF?text=CMUEats+NFT+233',
 		price: 0.12,
-		priceHistory: [0.05, 0.08, 0.1, 0.12],
+		priceHistory: [0.08, 0.1, 0.12],
 		description:
 			'A historic moment from the ABP line during finals week. Only 3 in existence.',
 		owner: '0x098...f4e2',
@@ -739,7 +736,6 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Morning' },
 		],
 		sold: false,
-		// Add utility promises
 		utilities: [
 			'5% chance of extra fries when purchasing at The Underground',
 			'Immune to campus geese attacks (mostly)',
@@ -750,7 +746,7 @@ const nftData = [
 		name: 'CMUEats #304',
 		image: 'https://via.placeholder.com/300/6366F1/FFFFFF?text=CMUEats+NFT+304',
 		price: 0.75,
-		priceHistory: [0.45, 0.5, 0.6, 0.72, 0.75],
+		priceHistory: [0.65, 0.7, 0.75],
 		description:
 			'The legendary platinum membership pass. Grants virtual bragging rights.',
 		owner: '0xd56...2a89',
@@ -763,7 +759,6 @@ const nftData = [
 			{ trait: 'Time Period', value: 'All Day' },
 		],
 		sold: false,
-		// Add utility promises
 		utilities: [
 			'Grants 0.5% faster walking speed on campus',
 			'Professors are 7% more likely to round up your grade',
@@ -775,7 +770,7 @@ const nftData = [
 		name: 'CMUEats #418',
 		image: 'https://via.placeholder.com/300/A855F7/FFFFFF?text=CMUEats+NFT+418',
 		price: 0.22,
-		priceHistory: [0.15, 0.18, 0.22],
+		priceHistory: [0.18, 0.2, 0.22],
 		description:
 			'Ultra-limited 3D model of the famous Sushi Too bento box.',
 		owner: '0x321...7f40',
@@ -788,7 +783,6 @@ const nftData = [
 			{ trait: 'Time Period', value: 'Lunch' },
 		],
 		sold: false,
-		// Add utility promises
 		utilities: [
 			'Can summon a virtual Scottie dog that only you can see',
 			'Free napkins for life',
@@ -1699,7 +1693,13 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														color="var(--text-muted)"
 													>
 														Last sold for{' '}
-														{nft.lastSold}
+														{
+															nft.priceHistory[
+																nft.priceHistory
+																	.length - 2
+															]
+														}{' '}
+														ETH {nft.lastSold}
 													</Typography>
 													<Box
 														sx={{
