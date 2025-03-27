@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Container,
 	Box,
@@ -11,11 +11,19 @@ import {
 	Card,
 	CardContent,
 	CardActions,
+	Snackbar,
 } from '@mui/material';
 import { CARD_COUNTING_SYSTEMS } from './systems';
 import { TRAINING_MODES } from './trainingModes';
 import TrainingInterface from './TrainingInterface';
 import { CardCountingSystem, TrainingMode, TrainingStats } from './types';
+
+interface CardCountingGameProps {
+	onWin: (multiplier: number) => void;
+	onLose: () => void;
+	balance: number;
+	betAmount: number;
+}
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -38,7 +46,13 @@ function TabPanel(props: TabPanelProps) {
 	);
 }
 
-function CardCountingGame() {
+function CardCountingGame({
+	onWin,
+	onLose,
+	balance,
+	betAmount,
+}: CardCountingGameProps) {
+	// Using balance and betAmount for betting features
 	const [currentTab, setCurrentTab] = useState(0);
 	const [selectedSystem, setSelectedSystem] = useState<CardCountingSystem>(
 		CARD_COUNTING_SYSTEMS[0],
@@ -53,6 +67,12 @@ function CardCountingGame() {
 		averageResponseTime: 0,
 		accuracy: 0,
 	});
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState('');
+
+	const handleSnackbarClose = () => {
+		setSnackbarOpen(false);
+	};
 
 	const handleTabChange = (
 		_event: React.SyntheticEvent,
@@ -70,6 +90,14 @@ function CardCountingGame() {
 	};
 
 	const handleStartTraining = () => {
+		// Check if player has enough balance for the bet
+		if (balance < betAmount) {
+			setSnackbarMessage(
+				"You don't have enough balance for this training session",
+			);
+			setSnackbarOpen(true);
+			return;
+		}
 		setShowTraining(true);
 	};
 
@@ -77,6 +105,16 @@ function CardCountingGame() {
 		setTrainingStats(stats);
 		setShowTraining(false);
 	};
+
+	useEffect(() => {
+		if (trainingStats.accuracy > 90) {
+			onWin(2);
+		} else if (trainingStats.accuracy > 70) {
+			onWin(1);
+		} else if (trainingStats.totalDecisions > 0) {
+			onLose();
+		}
+	}, [trainingStats, onWin, onLose]);
 
 	if (showTraining) {
 		return (
@@ -94,6 +132,20 @@ function CardCountingGame() {
 				<Typography variant="h4" component="h1" gutterBottom>
 					Card Counting Training
 				</Typography>
+
+				{/* Display current balance and bet amount */}
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						mb: 2,
+					}}
+				>
+					<Typography variant="body1">Balance: ${balance}</Typography>
+					<Typography variant="body1">
+						Current Bet: ${betAmount}
+					</Typography>
+				</Box>
 
 				<Paper sx={{ width: '100%', mb: 2 }}>
 					<Tabs
@@ -250,11 +302,19 @@ function CardCountingGame() {
 						color="primary"
 						size="large"
 						onClick={handleStartTraining}
+						disabled={balance < betAmount}
 					>
-						Start Training
+						Start Training (Bet: ${betAmount})
 					</Button>
 				</Box>
 			</Box>
+
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={handleSnackbarClose}
+				message={snackbarMessage}
+			/>
 		</Container>
 	);
 }

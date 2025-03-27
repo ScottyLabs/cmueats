@@ -344,7 +344,7 @@ function NFTStatusBarComponent({
 		switch (activeTab) {
 			case 'portfolio':
 				return (
-					<Box sx={{ mt: 1 }}>
+					<Box sx={{ mt: 2 }}>
 						<Typography
 							variant="subtitle2"
 							fontWeight="bold"
@@ -573,6 +573,41 @@ function NFTStatusBarComponent({
 								</Box>
 							</Box>
 						)}
+
+						{/* Add a highlighted button for roulette */}
+						<Box sx={{ mt: 2, textAlign: 'center' }}>
+							<Button
+								variant="contained"
+								size="small"
+								startIcon={<CasinoIcon />}
+								onClick={onOpenCasino}
+								sx={{
+									background:
+										'linear-gradient(45deg, #D30000 30%, #FF8E53 90%)',
+									boxShadow:
+										'0 3px 5px 2px rgba(255, 105, 135, .3)',
+									color: 'white',
+									fontWeight: 'bold',
+									animation: 'pulse 2s infinite',
+									'@keyframes pulse': {
+										'0%': {
+											boxShadow:
+												'0 0 0 0 rgba(255, 0, 0, 0.7)',
+										},
+										'70%': {
+											boxShadow:
+												'0 0 0 10px rgba(255, 0, 0, 0)',
+										},
+										'100%': {
+											boxShadow:
+												'0 0 0 0 rgba(255, 0, 0, 0)',
+										},
+									},
+								}}
+							>
+								Play Roulette at VIP Casino!
+							</Button>
+						</Box>
 					</Box>
 				);
 			case 'contract':

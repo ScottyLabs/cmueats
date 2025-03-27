@@ -1,3 +1,7 @@
+import CardCountingGame from './CardCountingGame';
+
+export { CardCountingGame };
+
 export type {
 	Card,
 	Deck,
@@ -13,5 +17,4 @@ export * from './utils';
 export * from './config';
 export * from './strategy';
 export type { BlackjackHand, BlackjackGameState } from './blackjack';
-export { default as CardCountingGame } from './CardCountingGame';
 export { default as TrainingInterface } from './TrainingInterface';

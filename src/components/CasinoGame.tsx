@@ -23,6 +23,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import { CardCountingGame } from './cardCounting';
+import { RouletteGame } from './roulette';
 
 // Styled components for Kakegurui theme
 const StyledDialog = styled(Dialog)({
@@ -213,6 +214,7 @@ const GAMES = {
 	SLOTS: 'slots',
 	POKER: 'poker',
 	CARD_COUNTING: 'card_counting',
+	ROULETTE: 'roulette',
 };
 
 // Card games utils
@@ -564,11 +566,8 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setIsLoading(false);
 	};
 
-	// Reset game when dialog closes
-	const resetGame = () => {
-		setSelectedGame(null);
-		setBetAmount(50);
-		setGameState('selecting');
+	// Reset game state for game selection
+	const resetGameState = () => {
 		setGameResult(null);
 		setPlayerCard(null);
 		setOpponentCard(null);
@@ -586,6 +585,14 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setPokerResult('');
 	};
 
+	// Reset game when dialog closes
+	const resetGame = () => {
+		setSelectedGame(null);
+		setBetAmount(50);
+		setGameState('selecting');
+		resetGameState();
+	};
+
 	useEffect(() => {
 		if (!open) {
 			resetGame();
@@ -595,13 +602,8 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const handleGameSelect = (game: string) => {
 		setSelectedGame(game);
 		setGameState('betting');
-
-		// Setup game-specific initial state
-		if (game === GAMES.MATCHING) {
-			setupMatchingGame();
-		} else if (game === GAMES.POKER) {
-			handlePokerDeal();
-		}
+		setBetAmount(50);
+		resetGameState();
 	};
 
 	const handleBetChange = (_event: Event, newValue: number | number[]) => {
@@ -982,261 +984,347 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	};
 
 	const renderGameSelection = () => (
-		<Box>
-			<Typography variant="h5" sx={{ mb: 2 }}>
-				Choose Your Game
-			</Typography>
-			<Grid container spacing={2}>
-				<Grid item xs={12} sm={6} md={3}>
+		<Box sx={{ py: 3 }}>
+			<MainTitle variant="h4" sx={{ mb: 4, textAlign: 'center' }}>
+				Choose Your Game of Chance
+			</MainTitle>
+			<Grid container spacing={3}>
+				<Grid item xs={12} sm={6} md={4}>
 					<CasinoCard
 						onClick={() => handleGameSelect(GAMES.HIGHER_LOWER)}
 					>
-						<Box
-							sx={{
-								p: 1,
-								background: '#D30000',
-								textAlign: 'center',
-							}}
-						>
-							<Typography variant="subtitle1" fontWeight="bold">
-								Higher or Lower
-							</Typography>
-						</Box>
 						<CardContent>
-							<Typography variant="body2">
-								Predict if the next card will be higher or lower
-								than yours.
-							</Typography>
 							<Box
 								sx={{
-									mt: 2,
 									display: 'flex',
-									justifyContent: 'center',
-									gap: 1,
-								}}
-							>
-								<GameCard
-									sx={{ width: '40px', height: '60px' }}
-								>
-									<CardValue>?</CardValue>
-								</GameCard>
-								<Box
-									sx={{
-										display: 'flex',
-										alignItems: 'center',
-									}}
-								>
-									<Typography>vs</Typography>
-								</Box>
-								<GameCard
-									sx={{ width: '40px', height: '60px' }}
-								>
-									<CardValue>?</CardValue>
-								</GameCard>
-							</Box>
-						</CardContent>
-					</CasinoCard>
-				</Grid>
-				<Grid item xs={12} sm={6} md={3}>
-					<CasinoCard
-						onClick={() => handleGameSelect(GAMES.MATCHING)}
-					>
-						<Box
-							sx={{
-								p: 1,
-								background: '#D30000',
-								textAlign: 'center',
-							}}
-						>
-							<Typography variant="subtitle1" fontWeight="bold">
-								Memory Match
-							</Typography>
-						</Box>
-						<CardContent>
-							<Typography variant="body2">
-								Find all matching pairs before your opponent.
-							</Typography>
-							<Box
-								sx={{
-									mt: 2,
-									display: 'flex',
-									justifyContent: 'center',
-									flexWrap: 'wrap',
-								}}
-							>
-								{[1, 2, 3, 4].map((num) => (
-									<GameCard
-										key={`match-card-${num}`}
-										sx={{
-											width: '30px',
-											height: '40px',
-											m: 0.5,
-										}}
-									>
-										<CardBack />
-									</GameCard>
-								))}
-							</Box>
-						</CardContent>
-					</CasinoCard>
-				</Grid>
-				<Grid item xs={12} sm={6} md={3}>
-					<CasinoCard
-						onClick={() => handleGameSelect(GAMES.COIN_FLIP)}
-					>
-						<Box
-							sx={{
-								p: 1,
-								background: '#D30000',
-								textAlign: 'center',
-							}}
-						>
-							<Typography variant="subtitle1" fontWeight="bold">
-								Coin Flip
-							</Typography>
-						</Box>
-						<CardContent>
-							<Typography variant="body2">
-								Bet on heads or tails in this classic game of
-								chance.
-							</Typography>
-							<Box
-								sx={{
-									mt: 2,
-									display: 'flex',
-									justifyContent: 'center',
+									flexDirection: 'column',
+									alignItems: 'center',
+									gap: 2,
 								}}
 							>
 								<Avatar
 									sx={{
-										width: 50,
-										height: 50,
-										bgcolor: 'gold',
-										color: 'black',
+										width: 80,
+										height: 80,
+										backgroundColor: '#D30000',
 									}}
 								>
-									<Typography fontWeight="bold">?</Typography>
-								</Avatar>
-							</Box>
-						</CardContent>
-					</CasinoCard>
-				</Grid>
-				<Grid item xs={12} sm={6} md={3}>
-					<CasinoCard onClick={() => handleGameSelect(GAMES.SLOTS)}>
-						<Box
-							sx={{
-								p: 1,
-								background: '#D30000',
-								textAlign: 'center',
-							}}
-						>
-							<Typography variant="subtitle1" fontWeight="bold">
-								Slots
-							</Typography>
-						</Box>
-						<CardContent>
-							<Typography variant="body2">
-								Test your luck with the slot machine. Match
-								symbols to win!
-							</Typography>
-							<Box
-								sx={{
-									mt: 2,
-									display: 'flex',
-									justifyContent: 'center',
-									gap: 1,
-								}}
-							>
-								<Box sx={{ fontSize: '1.5rem' }}>🍒</Box>
-								<Box sx={{ fontSize: '1.5rem' }}>7️⃣</Box>
-								<Box sx={{ fontSize: '1.5rem' }}>💎</Box>
-							</Box>
-						</CardContent>
-					</CasinoCard>
-				</Grid>
-				<Grid item xs={12} sm={6} md={3}>
-					<CasinoCard onClick={() => handleGameSelect(GAMES.POKER)}>
-						<Box
-							sx={{
-								p: 1,
-								background: '#D30000',
-								textAlign: 'center',
-							}}
-						>
-							<Typography variant="subtitle1" fontWeight="bold">
-								Poker
-							</Typography>
-						</Box>
-						<CardContent>
-							<Typography variant="body2">
-								Play Five Card Draw. Keep the cards you want,
-								draw new ones for a winning hand.
-							</Typography>
-							<Box
-								sx={{
-									mt: 2,
-									display: 'flex',
-									justifyContent: 'center',
-									flexWrap: 'wrap',
-									gap: 1,
-								}}
-							>
-								{['♠', '♥', '♦', '♣'].map((suit) => (
-									<Box
-										key={`poker-suit-${suit}`}
-										sx={{ fontSize: '1.2rem' }}
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: 'bold' }}
 									>
-										{suit}
-									</Box>
-								))}
+										Higher or Lower
+									</Typography>
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ textAlign: 'center', minHeight: 60 }}
+								>
+									Predict if the next card will be higher or
+									lower than yours.
+								</Typography>
+								<ActionButton
+									variant="contained"
+									fullWidth
+									onClick={() =>
+										handleGameSelect(GAMES.HIGHER_LOWER)
+									}
+									startIcon={<AttachMoneyIcon />}
+								>
+									Play Higher or Lower
+								</ActionButton>
 							</Box>
 						</CardContent>
 					</CasinoCard>
 				</Grid>
-				<Grid item xs={12} sm={6} md={3}>
+				<Grid item xs={12} sm={6} md={4}>
+					<CasinoCard
+						onClick={() => handleGameSelect(GAMES.MATCHING)}
+					>
+						<CardContent>
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+									gap: 2,
+								}}
+							>
+								<Avatar
+									sx={{
+										width: 80,
+										height: 80,
+										backgroundColor: '#D30000',
+									}}
+								>
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: 'bold' }}
+									>
+										Memory Match
+									</Typography>
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ textAlign: 'center', minHeight: 60 }}
+								>
+									Find all matching pairs before your
+									opponent.
+								</Typography>
+								<ActionButton
+									variant="contained"
+									fullWidth
+									onClick={() =>
+										handleGameSelect(GAMES.MATCHING)
+									}
+									startIcon={<AttachMoneyIcon />}
+								>
+									Play Memory Match
+								</ActionButton>
+							</Box>
+						</CardContent>
+					</CasinoCard>
+				</Grid>
+				<Grid item xs={12} sm={6} md={4}>
+					<CasinoCard
+						onClick={() => handleGameSelect(GAMES.COIN_FLIP)}
+					>
+						<CardContent>
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+									gap: 2,
+								}}
+							>
+								<Avatar
+									sx={{
+										width: 80,
+										height: 80,
+										backgroundColor: '#D30000',
+									}}
+								>
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: 'bold' }}
+									>
+										Coin Flip
+									</Typography>
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ textAlign: 'center', minHeight: 60 }}
+								>
+									Bet on heads or tails in this classic game
+									of chance.
+								</Typography>
+								<ActionButton
+									variant="contained"
+									fullWidth
+									onClick={() =>
+										handleGameSelect(GAMES.COIN_FLIP)
+									}
+									startIcon={<AttachMoneyIcon />}
+								>
+									Play Coin Flip
+								</ActionButton>
+							</Box>
+						</CardContent>
+					</CasinoCard>
+				</Grid>
+				<Grid item xs={12} sm={6} md={4}>
+					<CasinoCard onClick={() => handleGameSelect(GAMES.SLOTS)}>
+						<CardContent>
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+									gap: 2,
+								}}
+							>
+								<Avatar
+									sx={{
+										width: 80,
+										height: 80,
+										backgroundColor: '#D30000',
+									}}
+								>
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: 'bold' }}
+									>
+										Slots
+									</Typography>
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ textAlign: 'center', minHeight: 60 }}
+								>
+									Test your luck with the slot machine. Match
+									symbols to win!
+								</Typography>
+								<ActionButton
+									variant="contained"
+									fullWidth
+									onClick={() =>
+										handleGameSelect(GAMES.SLOTS)
+									}
+									startIcon={<AttachMoneyIcon />}
+								>
+									Play Slots
+								</ActionButton>
+							</Box>
+						</CardContent>
+					</CasinoCard>
+				</Grid>
+				<Grid item xs={12} sm={6} md={4}>
+					<CasinoCard onClick={() => handleGameSelect(GAMES.POKER)}>
+						<CardContent>
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+									gap: 2,
+								}}
+							>
+								<Avatar
+									sx={{
+										width: 80,
+										height: 80,
+										backgroundColor: '#D30000',
+									}}
+								>
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: 'bold' }}
+									>
+										Poker
+									</Typography>
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ textAlign: 'center', minHeight: 60 }}
+								>
+									Play Five Card Draw. Keep the cards you
+									want, draw new ones for a winning hand.
+								</Typography>
+								<ActionButton
+									variant="contained"
+									fullWidth
+									onClick={() =>
+										handleGameSelect(GAMES.POKER)
+									}
+									startIcon={<AttachMoneyIcon />}
+								>
+									Play Poker
+								</ActionButton>
+							</Box>
+						</CardContent>
+					</CasinoCard>
+				</Grid>
+				<Grid item xs={12} sm={6} md={4}>
 					<CasinoCard
 						onClick={() => handleGameSelect(GAMES.CARD_COUNTING)}
 					>
-						<Box
-							sx={{
-								p: 1,
-								background: '#D30000',
-								textAlign: 'center',
-							}}
-						>
-							<Typography variant="subtitle1" fontWeight="bold">
-								Card Counting
-							</Typography>
-						</Box>
 						<CardContent>
-							<Typography variant="body2">
-								Learn and practice card counting techniques to
-								improve your blackjack game.
-							</Typography>
 							<Box
 								sx={{
-									mt: 2,
 									display: 'flex',
-									justifyContent: 'center',
-									flexWrap: 'wrap',
-									gap: 1,
+									flexDirection: 'column',
+									alignItems: 'center',
+									gap: 2,
 								}}
 							>
-								<GameCard
-									sx={{ width: '40px', height: '60px' }}
+								<Avatar
+									sx={{
+										width: 80,
+										height: 80,
+										backgroundColor: '#D30000',
+									}}
 								>
-									<CardValue>2</CardValue>
-								</GameCard>
-								<GameCard
-									sx={{ width: '40px', height: '60px' }}
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: 'bold' }}
+									>
+										Card Counting
+									</Typography>
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ textAlign: 'center', minHeight: 60 }}
 								>
-									<CardValue>10</CardValue>
-								</GameCard>
-								<GameCard
-									sx={{ width: '40px', height: '60px' }}
+									Learn and practice card counting techniques
+									to improve your blackjack game.
+								</Typography>
+								<ActionButton
+									variant="contained"
+									fullWidth
+									onClick={() =>
+										handleGameSelect(GAMES.CARD_COUNTING)
+									}
+									startIcon={<AttachMoneyIcon />}
 								>
-									<CardValue>A</CardValue>
-								</GameCard>
+									Play Card Counting
+								</ActionButton>
+							</Box>
+						</CardContent>
+					</CasinoCard>
+				</Grid>
+				<Grid item xs={12} sm={6} md={4}>
+					<CasinoCard
+						sx={{
+							transform: 'translateY(0)',
+							transition: 'transform 0.3s ease',
+							'&:hover': {
+								transform: 'translateY(-10px)',
+							},
+						}}
+						onClick={() => handleGameSelect(GAMES.ROULETTE)}
+					>
+						<CardContent>
+							<Box
+								sx={{
+									display: 'flex',
+									flexDirection: 'column',
+									alignItems: 'center',
+									gap: 2,
+								}}
+							>
+								<Avatar
+									sx={{
+										width: 80,
+										height: 80,
+										backgroundColor: '#D30000',
+									}}
+								>
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: 'bold' }}
+									>
+										Roulette
+									</Typography>
+								</Avatar>
+								<Typography
+									variant="body2"
+									sx={{ textAlign: 'center', minHeight: 60 }}
+								>
+									The classic casino game of chance. Place
+									your bets on numbers, colors, or groups and
+									watch the wheel spin!
+								</Typography>
+								<ActionButton
+									variant="contained"
+									fullWidth
+									onClick={() =>
+										handleGameSelect(GAMES.ROULETTE)
+									}
+									startIcon={<AttachMoneyIcon />}
+								>
+									Play Roulette
+								</ActionButton>
 							</Box>
 						</CardContent>
 					</CasinoCard>
@@ -1782,6 +1870,37 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	);
 
 	const renderGameContent = () => {
+		if (gameState === 'selecting') {
+			return renderGameSelection();
+		}
+
+		if (selectedGame === GAMES.CARD_COUNTING) {
+			return (
+				<CardCountingGame
+					onWin={(multiplier: number) =>
+						handleGameResult('win', multiplier || 1)
+					}
+					onLose={() => handleGameResult('lose')}
+					balance={balance}
+					betAmount={betAmount}
+				/>
+			);
+		}
+
+		if (selectedGame === GAMES.ROULETTE) {
+			return (
+				<RouletteGame
+					open
+					onClose={() => {
+						resetGame();
+						setSelectedGame(null);
+						setGameState('selecting');
+					}}
+					initialBalance={balance}
+				/>
+			);
+		}
+
 		switch (selectedGame) {
 			case GAMES.HIGHER_LOWER:
 				return renderHigherLowerGame();
@@ -1793,8 +1912,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 				return renderSlotsGame();
 			case GAMES.POKER:
 				return renderPokerGame();
-			case GAMES.CARD_COUNTING:
-				return <CardCountingGame />;
 			default:
 				return null;
 		}
