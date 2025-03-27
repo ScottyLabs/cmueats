@@ -118,7 +118,7 @@ const NumberSlot = styled(Box, {
 	'&::before': {
 		content: '""',
 		position: 'absolute',
-		top: '5px',
+		top: '0',
 		left: '0',
 		width: '100%',
 		height: '120px',
@@ -143,29 +143,24 @@ const NumberText = styled(Typography, {
 	zIndex: 3,
 }));
 
+// Use fixed position for the ball
 const Ball = styled(Box, {
-	shouldForwardProp: (prop) =>
-		prop !== 'rotatePosition' && prop !== 'visible' && prop !== 'landed',
-})<{ rotatePosition: number; visible?: boolean; landed: boolean }>(
-	({ rotatePosition, visible = true, landed }) => ({
-		position: 'absolute',
-		top: '50%',
-		left: '50%',
-		width: '16px',
-		height: '16px',
-		borderRadius: '50%',
-		backgroundColor: 'white',
-		transform: `rotate(${rotatePosition}deg) translateY(-170px)`,
-		opacity: visible ? 1 : 0,
-		transformOrigin: 'center center',
-		transition: landed
-			? 'transform 2s cubic-bezier(0.32, 0.94, 0.60, 1)'
-			: 'transform 6s cubic-bezier(0.33, 0.9, 0.67, 1)',
-		boxShadow:
-			'0 0 15px rgba(255,255,255,1), 0 0 10px rgba(255,255,255,0.8)',
-		zIndex: 5,
-	}),
-);
+	shouldForwardProp: (prop) => prop !== 'visible' && prop !== 'landed',
+})<{ visible?: boolean; landed: boolean }>(({ visible = true, landed }) => ({
+	position: 'absolute',
+	top: '-14px', // Position at exact top edge
+	left: '50%',
+	width: '24px',
+	height: '24px',
+	borderRadius: '50%',
+	backgroundColor: 'white',
+	transform: 'translateX(-50%)',
+	opacity: visible ? 1 : 0,
+	transition: landed ? 'transform 0.3s ease-out' : 'none',
+	boxShadow:
+		'0 0 20px #fff, 0 0 15px rgba(255,255,255,0.8), inset 0 0 5px rgba(0,0,0,0.2)',
+	zIndex: 10,
+}));
 
 const Center = styled(Box)({
 	position: 'absolute',
@@ -192,6 +187,19 @@ const Separator = styled(Box)({
 	zIndex: 3,
 });
 
+// Add a more visible marker for the winning position
+const WinMarker = styled(Box)({
+	position: 'absolute',
+	top: '-2px',
+	left: '50%',
+	width: '4px',
+	height: '15px',
+	backgroundColor: '#FFD700',
+	transform: 'translateX(-50%)',
+	zIndex: 9,
+	boxShadow: '0 0 10px #FFD700, 0 0 5px #FFD700',
+});
+
 // Props for the RouletteWheel component
 interface RouletteWheelProps {
 	onSpinComplete: (result: number) => void;
@@ -205,13 +213,43 @@ export default function RouletteWheel({
 	setSpinning,
 }: RouletteWheelProps) {
 	const [rotationDegrees, setRotationDegrees] = useState(0);
-	const [ballPosition, setBallPosition] = useState(0);
 	const [result, setResult] = useState<number | null>(null);
 	const [ballLanded, setBallLanded] = useState(false);
 
 	// Refs to track animation state
 	const spinCompleted = useRef(false);
 	const wheelRef = useRef<HTMLDivElement>(null);
+
+	// Function to calculate which number is at the marker position with improved accuracy
+	const calculateNumberAtMarker = (rotation: number): number => {
+		// Normalize the rotation to 0-360 range
+		const normalizedRotation = (360 - (rotation % 360)) % 360;
+
+		// Find the closest pocket to the marker position
+		let closestNumber = ROULETTE_NUMBERS[0].number;
+		let minDistance = 360;
+
+		// Check each pocket to find the closest one
+		for (let i = 0; i < ROULETTE_NUMBERS.length; i += 1) {
+			const pocket = ROULETTE_NUMBERS[i];
+
+			// Calculate distance between pocket and marker (accounting for wrapping)
+			let distance = Math.abs(pocket.position - normalizedRotation);
+
+			// Handle wrapping around 360 degrees
+			if (distance > 180) {
+				distance = 360 - distance;
+			}
+
+			// If this pocket is closer than previous closest, update
+			if (distance < minDistance) {
+				minDistance = distance;
+				closestNumber = pocket.number;
+			}
+		}
+
+		return closestNumber;
+	};
 
 	// Handle spin animation
 	useEffect(() => {
@@ -223,45 +261,31 @@ export default function RouletteWheel({
 			setResult(null);
 
 			// Generate random number of complete rotations
-			const rotations = 5 + Math.floor(Math.random() * 5);
+			const baseRotations = 5 + Math.floor(Math.random() * 5);
 			const randomOffset = Math.random() * 360;
 			const finalRotation =
-				rotationDegrees - (rotations * 360 + randomOffset);
+				rotationDegrees - (baseRotations * 360 + randomOffset);
 
 			// Update wheel rotation
 			setRotationDegrees(finalRotation);
 
-			// Set ball to rotate in opposite direction
-			setBallPosition(-finalRotation);
-
-			// After animation completes, calculate result and notify parent
-			const spinDuration = 6000; // 6 seconds, matches the CSS transition
+			// After animation completes, calculate result based on final position
+			const spinDuration = 6000;
 
 			setTimeout(() => {
-				// FIRST STEP: Determine a random winning number
-				const randomIndex = Math.floor(
-					Math.random() * ROULETTE_NUMBERS.length,
-				);
-				const resultNumber = ROULETTE_NUMBERS[randomIndex].number;
+				// Calculate which number is at the marker position
+				const resultNumber = calculateNumberAtMarker(finalRotation);
 
-				// Set the result
+				// Set result and complete the animation
 				setResult(resultNumber);
+				setBallLanded(true);
 
-				// SECOND STEP: Explicitly position the ball at that number
-				const targetNumber = ROULETTE_NUMBERS.find(
-					(num) => num.number === resultNumber,
-				);
-				if (targetNumber) {
-					setBallPosition(targetNumber.position);
-					setBallLanded(true);
-				}
-
-				// Notify parent of result after the landing animation
+				// Notify parent of result after a delay
 				setTimeout(() => {
 					setSpinning(false);
 					spinCompleted.current = false;
 					onSpinComplete(resultNumber);
-				}, 2000);
+				}, 1000);
 			}, spinDuration);
 		}
 	}, [spinning, rotationDegrees, setSpinning, onSpinComplete]);
@@ -304,11 +328,8 @@ export default function RouletteWheel({
 					{renderSeparators()}
 					<Center />
 				</Wheel>
-				<Ball
-					rotatePosition={ballPosition}
-					visible
-					landed={ballLanded}
-				/>
+				<WinMarker />
+				<Ball visible landed={ballLanded} />
 			</WheelContainer>
 			{result !== null && (
 				<Typography
