@@ -153,7 +153,7 @@ interface RouletteGameProps {
 export default function RouletteGame({
 	open,
 	onClose,
-	initialBalance = 1000,
+	initialBalance = 2500,
 }: RouletteGameProps) {
 	// Game state
 	const [balance, setBalance] = useState(initialBalance);
@@ -161,7 +161,6 @@ export default function RouletteGame({
 	const [selectedBets, setSelectedBets] = useState<RouletteBet[]>([]);
 	const [gameState, setGameState] = useState<GameState>('idle');
 	const [spinning, setSpinning] = useState(false);
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [currentResult, setResult] = useState<number | null>(null);
 	const [resultHistory, setResultHistory] = useState<RouletteResult[]>([]);
 	const [showAlert, setShowAlert] = useState(false);
@@ -172,6 +171,15 @@ export default function RouletteGame({
 	const [showHistory, setShowHistory] = useState(false);
 	const [totalBet, setTotalBet] = useState(0);
 	const [lastWinAmount, setLastWinAmount] = useState(0);
+
+	// Add loan dialog state
+	const [showLoanDialog, setShowLoanDialog] = useState(false);
+	const [loanAmount, setLoanAmount] = useState(500);
+
+	// Save balance to localStorage when it changes
+	useEffect(() => {
+		localStorage.setItem('cmueats-balance', balance.toString());
+	}, [balance]);
 
 	// Helper function to get color code from color name
 	const getColorCode = (color: 'red' | 'black' | 'green'): string => {
@@ -386,6 +394,20 @@ export default function RouletteGame({
 		setBetAmount(newValue as number);
 	};
 
+	// Handle loan request
+	const handleLoanRequest = () => {
+		if (balance <= 100) {
+			setBalance((prev) => prev + loanAmount);
+			displayAlert(`Successfully borrowed $${loanAmount}!`, 'success');
+			setShowLoanDialog(false);
+		} else {
+			displayAlert(
+				'Loans are only available when your balance falls below $100.',
+				'error',
+			);
+		}
+	};
+
 	// Render the history section
 	const renderHistory = () => (
 		<Box sx={{ mt: 3 }}>
@@ -533,6 +555,26 @@ export default function RouletteGame({
 												{lastWinAmount.toFixed(2)}
 											</Typography>
 										)}
+
+									{/* Add loan button when balance is low */}
+									{balance < 100 && (
+										<Box sx={{ mt: 1 }}>
+											<Button
+												size="small"
+												variant="outlined"
+												sx={{
+													color: '#D30000',
+													borderColor: '#D30000',
+													fontSize: '0.7rem',
+												}}
+												onClick={() =>
+													setShowLoanDialog(true)
+												}
+											>
+												Need a Loan?
+											</Button>
+										</Box>
+									)}
 								</Grid>
 								<Grid
 									item
@@ -644,6 +686,52 @@ export default function RouletteGame({
 					{alertMessage}
 				</Alert>
 			</Snackbar>
+
+			{/* Add Loan Dialog */}
+			<Dialog
+				open={showLoanDialog}
+				onClose={() => setShowLoanDialog(false)}
+				maxWidth="xs"
+			>
+				<Box sx={{ p: 3, backgroundColor: '#1E1E2D', color: 'white' }}>
+					<Typography variant="h6" sx={{ mb: 2 }}>
+						Request Loan
+					</Typography>
+					<Typography variant="body2" sx={{ mb: 2 }}>
+						How much would you like to borrow?
+					</Typography>
+					<BetSlider
+						value={loanAmount}
+						onChange={(_, value) => setLoanAmount(value as number)}
+						min={100}
+						max={1000}
+						step={100}
+						valueLabelDisplay="on"
+						valueLabelFormat={(value) => `$${value}`}
+						sx={{ mb: 3 }}
+					/>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<Button
+							onClick={() => setShowLoanDialog(false)}
+							variant="outlined"
+							sx={{ color: 'white', borderColor: 'white' }}
+						>
+							Cancel
+						</Button>
+						<ActionButton
+							variant="contained"
+							onClick={handleLoanRequest}
+						>
+							Get Loan
+						</ActionButton>
+					</Box>
+				</Box>
+			</Dialog>
 		</StyledDialog>
 	);
 }

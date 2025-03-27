@@ -241,8 +241,22 @@ interface CasinoGameProps {
 }
 
 function CasinoGame({ open, onClose }: CasinoGameProps) {
+	// Load balance from localStorage or use default
+	const [balance, setBalance] = useState(() => {
+		const savedBalance = localStorage.getItem('cmueats-balance');
+		return savedBalance ? Number(savedBalance) : 2500;
+	});
+
+	// Add state for loan interface
+	const [showLoanDialog, setShowLoanDialog] = useState(false);
+	const [loanAmount, setLoanAmount] = useState(500);
+
+	// Save balance when it changes
+	useEffect(() => {
+		localStorage.setItem('cmueats-balance', balance.toString());
+	}, [balance]);
+
 	// Game state
-	const [balance, setBalance] = useState(1000); // Starting balance
 	const [selectedGame, setSelectedGame] = useState<string | null>(null);
 	const [betAmount, setBetAmount] = useState(50);
 	const [gameState, setGameState] = useState('selecting'); // selecting, betting, playing, result
@@ -983,6 +997,23 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		return `match-card-${cardValue}-${cardSuit}-${position}`;
 	};
 
+	// Add loan handling function
+	const handleLoanRequest = () => {
+		if (balance <= 100) {
+			setBalance((prev) => prev + loanAmount);
+			setAlertMessage(`Successfully borrowed $${loanAmount}!`);
+			setAlertSeverity('success');
+			setShowAlert(true);
+			setShowLoanDialog(false);
+		} else {
+			setAlertMessage(
+				'Loans are only available when your balance falls below $100.',
+			);
+			setAlertSeverity('error');
+			setShowAlert(true);
+		}
+	};
+
 	const renderGameSelection = () => (
 		<Box sx={{ py: 3 }}>
 			<MainTitle variant="h4" sx={{ mb: 4, textAlign: 'center' }}>
@@ -1364,13 +1395,75 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 				>
 					<PlayerChip
 						icon={<AttachMoneyIcon />}
-						label={`Balance: ${balance} tokens`}
+						label={`Balance: $${balance.toFixed(2)}`}
 					/>
 					<ActionButton onClick={handleStartGame}>
 						Start Game
 					</ActionButton>
 				</Box>
+
+				{balance < 100 && (
+					<Box sx={{ mt: 2, textAlign: 'center' }}>
+						<Typography
+							variant="body2"
+							color="error"
+							sx={{ mb: 1 }}
+						>
+							Low on funds? Take a loan!
+						</Typography>
+						<ActionButton
+							onClick={() => setShowLoanDialog(true)}
+							size="small"
+							variant="outlined"
+						>
+							Get Loan
+						</ActionButton>
+					</Box>
+				)}
 			</GameInfoBox>
+
+			{/* Loan Dialog */}
+			<Dialog
+				open={showLoanDialog}
+				onClose={() => setShowLoanDialog(false)}
+				maxWidth="xs"
+			>
+				<Box sx={{ p: 3, backgroundColor: '#1E1E2D', color: 'white' }}>
+					<Typography variant="h6" sx={{ mb: 2 }}>
+						Request Loan
+					</Typography>
+					<Typography variant="body2" sx={{ mb: 2 }}>
+						How much would you like to borrow?
+					</Typography>
+					<BetSlider
+						value={loanAmount}
+						onChange={(_, value) => setLoanAmount(value as number)}
+						min={100}
+						max={1000}
+						step={100}
+						valueLabelDisplay="on"
+						valueLabelFormat={(value) => `$${value}`}
+						sx={{ mb: 3 }}
+					/>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<Button
+							onClick={() => setShowLoanDialog(false)}
+							variant="outlined"
+							sx={{ color: 'white', borderColor: 'white' }}
+						>
+							Cancel
+						</Button>
+						<ActionButton onClick={handleLoanRequest}>
+							Get Loan
+						</ActionButton>
+					</Box>
+				</Box>
+			</Dialog>
 		</Box>
 	);
 
