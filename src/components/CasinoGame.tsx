@@ -240,6 +240,283 @@ interface CasinoGameProps {
 	onClose: () => void;
 }
 
+// Define new styled components for the slot machine
+const SlotMachineContainer = styled(Box)({
+	backgroundColor: '#420000',
+	background: 'linear-gradient(135deg, #5c0000 0%, #a10000 100%)',
+	borderRadius: '20px',
+	padding: '20px',
+	maxWidth: '600px',
+	margin: '0 auto',
+	boxShadow:
+		'0 10px 25px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2)',
+	border: '10px solid #2D0A0A',
+	position: 'relative',
+	overflow: 'hidden',
+	'&::before': {
+		content: '""',
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		height: '10px',
+		background:
+			'linear-gradient(180deg, rgba(255,215,0,0.5) 0%, rgba(255,215,0,0) 100%)',
+		borderRadius: '8px 8px 0 0',
+	},
+});
+
+const SlotHeader = styled(Box)({
+	textAlign: 'center',
+	marginBottom: '15px',
+	padding: '10px',
+	borderRadius: '8px',
+	backgroundColor: 'rgba(0,0,0,0.3)',
+	border: '1px solid rgba(255,255,255,0.1)',
+	boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)',
+});
+
+const SlotTitle = styled(Typography)({
+	fontFamily: '"Cinzel", serif',
+	color: '#FFD700',
+	textShadow:
+		'0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3)',
+	fontWeight: 'bold',
+	letterSpacing: '2px',
+});
+
+const SlotDisplayWindow = styled(Box)({
+	backgroundColor: '#000',
+	borderRadius: '10px',
+	padding: '15px 25px',
+	margin: '0 auto 20px',
+	border: '8px solid #4a3800',
+	boxShadow: 'inset 0 0 20px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5)',
+	display: 'flex',
+	justifyContent: 'center',
+	gap: '15px',
+	position: 'relative',
+	'&::before': {
+		content: '""',
+		position: 'absolute',
+		top: '-15px',
+		left: '10px',
+		right: '10px',
+		height: '15px',
+		background:
+			'linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.4) 50%, transparent 100%)',
+		animation: 'lightMovement 3s infinite',
+	},
+	'&::after': {
+		content: '""',
+		position: 'absolute',
+		bottom: '-15px',
+		left: '10px',
+		right: '10px',
+		height: '15px',
+		background:
+			'linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.4) 50%, transparent 100%)',
+		animation: 'lightMovement 3s infinite reverse',
+	},
+	'@keyframes lightMovement': {
+		'0%': { transform: 'translateX(-30px)', opacity: 0.3 },
+		'50%': { transform: 'translateX(30px)', opacity: 0.7 },
+		'100%': { transform: 'translateX(-30px)', opacity: 0.3 },
+	},
+});
+
+const SlotReel = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'isSpinning' && prop !== 'spinDelay',
+})<{ isSpinning: boolean; spinDelay: number }>(({ isSpinning, spinDelay }) => ({
+	width: '100px',
+	height: '140px',
+	backgroundColor: '#ffffff',
+	borderRadius: '8px',
+	boxShadow: 'inset 0 0 10px rgba(0,0,0,0.6)',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	fontSize: '4rem',
+	position: 'relative',
+	overflow: 'hidden',
+	animation: isSpinning
+		? `slotSpin 0.1s ${spinDelay}ms infinite linear`
+		: 'none',
+	transition: 'all 0.5s ease',
+	'&::after': {
+		content: '""',
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		background:
+			'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 10%, transparent 90%, rgba(255,255,255,0.3) 100%)',
+		pointerEvents: 'none',
+	},
+	'@keyframes slotSpin': {
+		'0%': { transform: 'translateY(-20px)' },
+		'100%': { transform: 'translateY(20px)' },
+	},
+}));
+
+const SlotSymbol = styled(Box)({
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	width: '100%',
+	height: '100%',
+	fontSize: '3.8rem',
+	fontWeight: 'bold',
+});
+
+const SlotLever = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'pulled',
+})<{ pulled: boolean }>(({ pulled }) => ({
+	position: 'absolute',
+	top: '50%',
+	right: '-25px',
+	transform: pulled ? 'translateY(-50%) rotate(30deg)' : 'translateY(-50%)',
+	width: '30px',
+	height: '180px',
+	cursor: 'pointer',
+	transition: 'transform 0.3s ease',
+	'&:hover': {
+		transform: pulled
+			? 'translateY(-50%) rotate(30deg)'
+			: 'translateY(-50%) rotate(-5deg)',
+	},
+}));
+
+const LeverBase = styled(Box)({
+	position: 'absolute',
+	top: '50%',
+	right: '-10px',
+	transform: 'translateY(-50%)',
+	width: '25px',
+	height: '60px',
+	borderRadius: '15px',
+	background: 'linear-gradient(90deg, #5c5c5c 0%, #303030 100%)',
+	boxShadow: '0 5px 10px rgba(0,0,0,0.5)',
+	zIndex: 1,
+});
+
+const LeverArm = styled(Box)({
+	position: 'absolute',
+	top: '0',
+	right: '8px',
+	width: '15px',
+	height: '120px',
+	borderRadius: '8px',
+	background: 'linear-gradient(90deg, #8B0000 0%, #D30000 100%)',
+	boxShadow: '0 5px 8px rgba(0,0,0,0.3)',
+});
+
+const LeverKnob = styled(Box)({
+	position: 'absolute',
+	top: '-30px',
+	right: '0',
+	width: '30px',
+	height: '30px',
+	borderRadius: '50%',
+	background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
+	boxShadow: '0 5px 8px rgba(0,0,0,0.3)',
+	border: '2px solid #8B0000',
+});
+
+const SlotControls = styled(Box)({
+	display: 'flex',
+	justifyContent: 'center',
+	marginTop: '20px',
+	gap: '15px',
+});
+
+const SlotButton = styled(Button)({
+	backgroundColor: '#D30000',
+	color: '#fff',
+	fontWeight: 'bold',
+	borderRadius: '20px',
+	padding: '12px 25px',
+	boxShadow:
+		'0 5px 10px rgba(0,0,0,0.3), inset 0 1px 3px rgba(255,255,255,0.3)',
+	'&:hover': {
+		backgroundColor: '#FF0000',
+		boxShadow:
+			'0 7px 14px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.3)',
+	},
+	'&.Mui-disabled': {
+		backgroundColor: '#3D3D55',
+		color: '#aaa',
+	},
+});
+
+const PaylineBox = styled(Box)({
+	position: 'absolute',
+	left: '0',
+	right: '0',
+	top: '50%',
+	transform: 'translateY(-50%)',
+	height: '5px',
+	backgroundColor: '#FFD700',
+	opacity: 0.7,
+	zIndex: 2,
+	pointerEvents: 'none',
+});
+
+const CasinoLights = styled(Box)({
+	position: 'absolute',
+	top: 0,
+	left: 0,
+	right: 0,
+	height: '6px',
+	display: 'flex',
+	justifyContent: 'space-between',
+});
+
+const Light = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'delay',
+})<{ delay: number }>(({ delay }) => ({
+	width: '6px',
+	height: '6px',
+	borderRadius: '50%',
+	backgroundColor: '#FFD700',
+	animation: `pulse 1s ${delay}ms infinite`,
+	'@keyframes pulse': {
+		'0%': { opacity: 0.2, boxShadow: '0 0 2px #FFD700' },
+		'50%': { opacity: 1, boxShadow: '0 0 10px #FFD700, 0 0 20px #FFD700' },
+		'100%': { opacity: 0.2, boxShadow: '0 0 2px #FFD700' },
+	},
+}));
+
+const PayoutTable = styled(Box)({
+	marginTop: '20px',
+	backgroundColor: 'rgba(0,0,0,0.4)',
+	borderRadius: '12px',
+	padding: '15px',
+	border: '1px solid rgba(255,255,255,0.1)',
+	boxShadow: 'inset 0 0 15px rgba(0,0,0,0.6)',
+});
+
+const WinnerDisplay = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'isWinning',
+})<{ isWinning: boolean }>(({ isWinning }) => ({
+	backgroundColor: isWinning ? 'rgba(0, 0, 0, 0.6)' : 'transparent',
+	borderRadius: '10px',
+	padding: isWinning ? '10px' : '0',
+	marginTop: isWinning ? '20px' : '0',
+	textAlign: 'center',
+	overflow: 'hidden',
+	height: isWinning ? 'auto' : '0',
+	opacity: isWinning ? 1 : 0,
+	transition: 'all 0.5s ease',
+	animation: isWinning ? 'winningPulse 2s infinite' : 'none',
+	'@keyframes winningPulse': {
+		'0%': { boxShadow: '0 0 15px 5px rgba(255, 215, 0, 0.3)' },
+		'50%': { boxShadow: '0 0 25px 10px rgba(255, 215, 0, 0.7)' },
+		'100%': { boxShadow: '0 0 15px 5px rgba(255, 215, 0, 0.3)' },
+	},
+}));
+
 function CasinoGame({ open, onClose }: CasinoGameProps) {
 	// Load balance from localStorage or use default
 	const [balance, setBalance] = useState(() => {
@@ -288,6 +565,8 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	// Slots game states
 	const [spinning, setSpinning] = useState(false);
 	const [spinResult, setSpinResult] = useState<string[]>(['', '', '']);
+	// Add lever state at the component level, not inside the render function
+	const [leverPulled, setLeverPulled] = useState(false);
 
 	// Poker game states
 	const [pokerHand, setPokerHand] = useState<string[]>([]);
@@ -1826,48 +2105,24 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		</Box>
 	);
 
-	const renderSlotReels = (reels: string[], isSpinning: boolean) => (
-		<>
-			{reels.map((symbol, index) => {
-				const keyName = `slot-reel-${index}`;
-				const keyframeAnimation = isSpinning
-					? `spin${index} 0.2s infinite`
-					: 'none';
+	// Update the renderSlotReels function with the new UI
+	const renderSlotReels = (reels: string[], isSpinning: boolean) => {
+		const reelPositions = ['left', 'middle', 'right']; // Fixed identifiers for reel positions
 
-				return (
-					<Box
-						key={keyName}
-						sx={{
-							width: '80px',
-							height: '100px',
-							bgcolor: '#000',
-							borderRadius: '5px',
-							border: '1px solid #333',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							fontSize: '2.5rem',
-							animation: keyframeAnimation,
-							'@keyframes spin0': {
-								'0%': { transform: 'translateY(-10px)' },
-								'100%': { transform: 'translateY(10px)' },
-							},
-							'@keyframes spin1': {
-								'0%': { transform: 'translateY(-15px)' },
-								'100%': { transform: 'translateY(15px)' },
-							},
-							'@keyframes spin2': {
-								'0%': { transform: 'translateY(-20px)' },
-								'100%': { transform: 'translateY(20px)' },
-							},
-						}}
+		return (
+			<>
+				{reels.map((symbol, index) => (
+					<SlotReel
+						key={`slot-reel-${reelPositions[index]}`}
+						isSpinning={isSpinning}
+						spinDelay={index * 50}
 					>
-						{symbol || '?'}
-					</Box>
-				);
-			})}
-		</>
-	);
+						<SlotSymbol>{symbol || '?'}</SlotSymbol>
+					</SlotReel>
+				))}
+			</>
+		);
+	};
 
 	const renderPokerCards = (
 		hand: string[],
@@ -1916,89 +2171,173 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		</>
 	);
 
-	const renderSlotsGame = () => (
-		<Box>
-			<Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
-				Slot Machine
-			</Typography>
+	// Replace the renderSlotsGame function with the enhanced version
+	const renderSlotsGame = () => {
+		const isWinning = gameResult === 'win' && !spinning && !isLoading;
 
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-				}}
-			>
-				<Box
-					sx={{
-						display: 'flex',
-						justifyContent: 'center',
-						gap: 2,
-						mb: 4,
-						bgcolor: 'rgba(0,0,0,0.3)',
-						p: 3,
-						borderRadius: '10px',
-						border: '2px solid #D30000',
-						boxShadow: '0 0 15px rgba(211, 0, 0, 0.3) inset',
-						width: 'fit-content',
-					}}
-				>
-					{renderSlotReels(spinResult, spinning)}
-				</Box>
+		const handleLeverPull = () => {
+			if (spinning || isLoading) return;
+			setLeverPulled(true);
+			setTimeout(() => {
+				handleSlotSpin();
+				setTimeout(() => setLeverPulled(false), 1000);
+			}, 300);
+		};
 
-				<ActionButton
-					onClick={handleSlotSpin}
-					disabled={spinning || isLoading}
-					sx={{ minWidth: '150px' }}
-				>
-					{spinning ? 'Spinning...' : 'Spin'}
-				</ActionButton>
+		// Create lights for casino effect
+		const renderLights = () => {
+			// Use fixed identifiers for lights instead of indexes
+			const lightPositions = [
+				'top-left',
+				'top-center-left',
+				'top-center',
+				'top-center-right',
+				'top-right',
+				'middle-left',
+				'middle-center-left',
+				'middle-center',
+				'middle-center-right',
+				'middle-right',
+				'bottom-left',
+				'bottom-center-left',
+				'bottom-center',
+				'bottom-center-right',
+				'bottom-right',
+				'border-left',
+				'border-center-left',
+				'border-center',
+				'border-center-right',
+				'border-right',
+			];
 
-				<Box sx={{ mt: 3, textAlign: 'center' }}>
-					<Typography
-						variant="caption"
-						sx={{ color: '#aaa', display: 'block', mb: 1 }}
-					>
-						Payouts
-					</Typography>
-					<Box
-						sx={{
-							display: 'flex',
-							gap: 2,
-							justifyContent: 'center',
-							flexWrap: 'wrap',
-						}}
-					>
-						<Chip
-							label="🍒🍒🍒 = 2x"
-							size="small"
-							sx={{ bgcolor: '#572424' }}
+			const lights = [];
+			for (let i = 0; i < 20; i += 1) {
+				lights.push(
+					<Light
+						key={`casino-light-${lightPositions[i]}`}
+						delay={(i * 100) % 500}
+					/>,
+				);
+			}
+			return lights;
+		};
+
+		return (
+			<Box sx={{ pt: 2, pb: 4 }}>
+				<SlotMachineContainer>
+					<CasinoLights>{renderLights()}</CasinoLights>
+
+					<SlotHeader>
+						<SlotTitle variant="h4">LUCKY SPINS</SlotTitle>
+						<Typography variant="subtitle1" color="#FFD700">
+							Match symbols to win big!
+						</Typography>
+					</SlotHeader>
+
+					<SlotDisplayWindow>
+						<PaylineBox />
+						{renderSlotReels(spinResult, spinning)}
+					</SlotDisplayWindow>
+
+					<SlotLever pulled={leverPulled} onClick={handleLeverPull}>
+						<LeverBase />
+						<LeverArm />
+						<LeverKnob />
+					</SlotLever>
+
+					<WinnerDisplay isWinning={isWinning}>
+						<Typography
+							variant="h5"
+							sx={{
+								color: '#FFD700',
+								fontWeight: 'bold',
+								textShadow: '0 0 10px rgba(255, 215, 0, 0.7)',
+							}}
+						>
+							WINNER!
+						</Typography>
+					</WinnerDisplay>
+
+					<SlotControls>
+						<Typography
+							variant="h6"
+							sx={{ color: '#FFD700', alignSelf: 'center' }}
+						>
+							${betAmount.toFixed(2)}
+						</Typography>
+
+						<SlotButton
+							variant="contained"
+							onClick={handleSlotSpin}
+							disabled={spinning || isLoading}
+							startIcon={<AttachMoneyIcon />}
+						>
+							{spinning ? 'SPINNING...' : 'SPIN'}
+						</SlotButton>
+
+						<PlayerChip
+							icon={<AttachMoneyIcon />}
+							label={`$${balance.toFixed(2)}`}
 						/>
-						<Chip
-							label="🍋🍋🍋 = 2x"
-							size="small"
-							sx={{ bgcolor: '#572424' }}
-						/>
-						<Chip
-							label="🍊🍊🍊 = 2x"
-							size="small"
-							sx={{ bgcolor: '#572424' }}
-						/>
-						<Chip
-							label="7️⃣7️⃣7️⃣ = 3x"
-							size="small"
-							sx={{ bgcolor: '#8B0000' }}
-						/>
-						<Chip
-							label="💎💎💎 = 5x"
-							size="small"
-							sx={{ bgcolor: '#4B0082' }}
-						/>
-					</Box>
-				</Box>
+					</SlotControls>
+
+					<PayoutTable>
+						<Typography
+							variant="subtitle2"
+							sx={{
+								color: '#FFD700',
+								marginBottom: '10px',
+								textAlign: 'center',
+							}}
+						>
+							PAYTABLE
+						</Typography>
+						<Grid container spacing={1} justifyContent="center">
+							<Grid item xs={4}>
+								<Chip
+									label="🍒🍒🍒 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍋🍋🍋 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍊🍊🍊 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={6}>
+								<Chip
+									label="7️⃣7️⃣7️⃣ = 3×"
+									size="small"
+									sx={{ bgcolor: '#8B0000', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={6}>
+								<Chip
+									label="💎💎💎 = 5×"
+									size="small"
+									sx={{
+										bgcolor: '#4B0082',
+										width: '100%',
+										color: '#FFD700',
+									}}
+								/>
+							</Grid>
+						</Grid>
+					</PayoutTable>
+				</SlotMachineContainer>
 			</Box>
-		</Box>
-	);
+		);
+	};
 
 	const renderPokerGame = () => (
 		<Box>

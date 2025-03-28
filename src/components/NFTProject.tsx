@@ -1214,23 +1214,23 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 				`NFT #${nftId} unstaked! You received ${payout.toFixed(3)} ETH rewards.`,
 			);
 			setSnackbarOpen(true);
-		} else {
-			// Stake NFT
-			setStakedNFTs([...stakedNFTs, nftId]);
-			setSnackbarMessage(
-				`NFT #${nftId} staked! You'll earn 0.05 ETH per day.`,
-			);
-			setSnackbarOpen(true);
-
-			// Set up reward accumulation (simplified for the demo)
-			// In a real app, this would use a better approach than setInterval
-			const timer = setInterval(() => {
-				setStakeRewards((prev) => prev + 0.05);
-			}, 30000); // Accelerated timer for demo: 0.05 ETH every 30 seconds
-
-			// Clean up interval if component unmounts
-			return () => clearInterval(timer);
+			return undefined;
 		}
+
+		// Stake NFT
+		setStakedNFTs([...stakedNFTs, nftId]);
+		setSnackbarMessage(
+			`NFT #${nftId} staked! You'll earn 0.05 ETH per day.`,
+		);
+		setSnackbarOpen(true);
+
+		// Set up reward accumulation (simplified for the demo)
+		// In a real app, this would use a better approach than setInterval
+		const timer = setInterval(() => {
+			setStakeRewards((prev) => prev + 0.05);
+		}, 30000); // Accelerated timer for demo: 0.05 ETH every 30 seconds
+
+		return () => clearInterval(timer);
 	};
 
 	// Handle providing liquidity
