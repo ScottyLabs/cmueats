@@ -15,7 +15,7 @@ import assert from '../util/assert';
 
 import SelectLocation from '../components/SelectLocation';
 import { useTheme } from '../ThemeProvider';
-import IS_MIKU_DAY from '../util/constants';
+import IS_MIKU_DAY, { IS_APRIL_FOOLS } from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
@@ -66,8 +66,12 @@ function ListPage({
 }) {
 	const { theme, updateTheme } = useTheme();
 	const { mobileGreeting, desktopGreeting } = useMemo(
-		() => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
-		[],
+		() =>
+			getGreetings(new Date().getHours(), {
+				isMikuDay: IS_MIKU_DAY,
+				isAprilFools: IS_APRIL_FOOLS && theme === 'april-fools',
+			}),
+		[theme],
 	);
 
 	const fuse = useMemo(

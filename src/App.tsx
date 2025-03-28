@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { IS_APRIL_FOOLS } from './util/constants';
 
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
+import AprilFoolsManager from './components/AprilFoolsManager';
 import {
 	queryLocations,
 	getExtendedLocationData as getExtraLocationData,
@@ -15,10 +17,24 @@ import {
 	IReadOnlyLocation_FromAPI_PostProcessed,
 	IReadOnlyLocation_ExtraData_Map,
 } from './types/locationTypes';
+import NFTProject from './components/NFTProject';
+import CasinoGame from './components/CasinoGame';
 
 const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5010/locations'; // for debugging purposes (note that you need an example-response.json file in the /public folder)
+
+function NFTWrapper() {
+	const navigate = useNavigate();
+	return (
+		<NFTProject open onClose={() => navigate('/')} onBuyClick={() => {}} />
+	);
+}
+
+function CasinoWrapper() {
+	const navigate = useNavigate();
+	return <CasinoGame open onClose={() => navigate('/')} />;
+}
 
 function App() {
 	// Load locations
@@ -94,10 +110,23 @@ function App() {
 									/>
 								}
 							/>
+							{IS_APRIL_FOOLS && (
+								<>
+									<Route
+										path="/nft"
+										element={<NFTWrapper />}
+									/>
+									<Route
+										path="/casino"
+										element={<CasinoWrapper />}
+									/>
+								</>
+							)}
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
 					</div>
 					<Navbar />
+					<AprilFoolsManager />
 				</div>
 			</BrowserRouter>
 		</React.StrictMode>

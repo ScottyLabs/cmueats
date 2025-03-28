@@ -62,6 +62,7 @@ const eveningShort = [
 ];
 interface Special {
 	isMikuDay: boolean;
+	isAprilFools?: boolean;
 }
 const getRandomStringFrom = (greetings: string[]) => {
 	if (greetings.length === 0) return 'Welcome to CMUEats!';
@@ -70,6 +71,7 @@ const getRandomStringFrom = (greetings: string[]) => {
 const getGreeting = (hours: number, special?: Special) => {
 	assert(bounded(hours, 0, 24));
 
+	if (special?.isAprilFools) return 'Ready to make a bag?';
 	if (special?.isMikuDay) return 'Happy Miku Day! (March 9th)';
 	if (hours < 6) {
 		return getRandomStringFrom(graveyard);
@@ -87,7 +89,8 @@ const getGreeting = (hours: number, special?: Special) => {
 	return 'Welcome to CMUEats!';
 };
 const getGreetingMobile = (hours: number, special?: Special) => {
-	if (special?.isMikuDay) return 'Happy Miku Day!';
+	if (special?.isAprilFools) return 'Ready to make a bag?';
+	if (special?.isMikuDay) return 'Happy Miku Day! (March 9th)';
 	if (hours < 6) {
 		return getRandomStringFrom(graveyardShort);
 	}

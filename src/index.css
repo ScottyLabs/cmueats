@@ -191,6 +191,65 @@ body.miku {
 		border-radius: 10px;
 	}
 }
+
+body.april-fools {
+	--main-bg: hsl(214, 7%, 19%);
+	--main-bg-accent: #23272a;
+	--text-primary: white;
+	--text-greeting: white;
+	--text-muted: #d4d4d8;
+
+	--input-bg: #23272a;
+	--input-text: var(--text-primary);
+	--input-text-placeholder: rgba(255, 255, 255, 0.785);
+
+	--card-bg: #23272a;
+	--card-header-bg: #1d1f21;
+	--card-text-title: white;
+	--card-text-description: white;
+	--card-text-muted: #8d979f;
+	--card-border-color: rgba(0, 0, 0, 0.2);
+	--card-border-width: 2px;
+
+	--dialog-bg: var(--card-bg);
+	--dialog-header-bg: var(--card-header-bg);
+
+	--footer-bg: #1e1e1e;
+	--nav-border-top: #31373e;
+	--nav-bg: #1e1e1e;
+	--selected-tab-bg: #2b2f33;
+
+	--hover-accent-color: rgba(238, 111, 82, 0.7);
+
+	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--text-secondary-font: 'Inter';
+	--button-bg: #1d1f21;
+	--button-bg--hover: #000000;
+	--button-text: white;
+
+	/* Swapped colors for April Fools */
+	--location-open-text-color: #dd3c18;
+	--location-closed-text-color: #19b875;
+	--location-closed-long-term-text-color: #19b875;
+	--location-opens-soon-text-color: #f3f65d;
+	--location-closes-soon-text-color: #f6cc5d;
+
+	--location-open-highlight: var(--location-open-text-color);
+	--location-closed-highlight: var(--location-closed-text-color);
+	--location-closed-long-term-highlight: var(
+		--location-closed-long-term-text-color
+	);
+	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
+	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
+
+	--map-drawer-bg: #2d2f33;
+
+	--logo-first-half: #dd3c18;
+	--logo-second-half: #19b875;
+}
+
 body {
 	margin: 0;
 	-webkit-font-smoothing: antialiased;
