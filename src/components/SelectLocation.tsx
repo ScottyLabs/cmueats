@@ -5,8 +5,21 @@ import './SelectLocation.css';
 type SelectLocationProps = {
 	setlocationFilterSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+	setlocationFilterSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 };
 
+function getPrimaryLocation(locationString: string) {
+	return locationString.indexOf(',') === -1
+		? locationString
+		: locationString.slice(0, locationString.indexOf(','));
+}
+
+function SelectLocation({
+	setlocationFilterSearchQuery,
+	locations,
+}: SelectLocationProps) {
+	if (locations === undefined) {
 function getPrimaryLocation(locationString: string) {
 	return locationString.indexOf(',') === -1
 		? locationString
@@ -21,6 +34,7 @@ function SelectLocation({
 		return (
 			<select className="select">
 				<option value="" label="Loading..." />
+				<option value="" label="Loading..." />
 			</select>
 		);
 	}
@@ -28,7 +42,12 @@ function SelectLocation({
 	let locationStrings = locations.map((locationObj) => locationObj.location);
 	locationStrings = locations.map((locationObj) =>
 		getPrimaryLocation(locationObj.location),
+	let locationStrings = locations.map((locationObj) => locationObj.location);
+	locationStrings = locations.map((locationObj) =>
+		getPrimaryLocation(locationObj.location),
 	);
+
+	const dedeupedLocationStrings = [...new Set(locationStrings)];
 
 	const dedeupedLocationStrings = [...new Set(locationStrings)];
 

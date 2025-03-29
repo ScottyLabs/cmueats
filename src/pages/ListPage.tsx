@@ -299,44 +299,61 @@ function ListPage({
 					<FooterText>
 						Blue hair, blue tie, hiding in your wifi
 						<br />
-						All times displayed in Pittsburgh local time (
+						All times are displayed in Pittsburgh local time (
 						{getPittsburghTime()}).
 					</FooterText>
 				) : (
 					<>
 						<FooterText>
-							All times displayed in Pittsburgh local time (
+							All times are displayed in Pittsburgh local time (
 							{getPittsburghTime()}).
 						</FooterText>
-						{/* eslint-disable */}
 						<FooterText>
-							Contact{' '}
+							If you encounter any problems, please contact{' '}
 							<a
-								href={'mailto:jaisal.patel45@gmail.com'}
+								href="mailto:jaisal.patel45@gmail.com"
 								style={{ color: 'white' }}
 							>
 								Jaisal
-							</a>
-							,{' '}
+							</a>{' '}
+							or{' '}
 							<a
-								href={'mailto:jmacera@andrew.cmu.edu'}
-								style={{ color: 'white' }}
-							>
-								Josef
-							</a>
-							, or{' '}
-							<a
-								href={'mailto:jhurewit@andrew.cmu.edu'}
+								href="mailto:jhurewit@andrew.cmu.edu"
 								style={{ color: 'white' }}
 							>
 								Jack
+							</a>
+							, or fill out our{' '}
+							<a
+								href="https://forms.gle/7JxgdgDhWMznQJdk9"
+								style={{ color: 'white' }}
+							>
+								feedback form
+							</a>
+							.
+						</FooterText>
+						<FooterText>
+							To provide feedback on your dining experience,
+							please contact{' '}
+							<a
+								href="mailto:dining@andrew.cmu.edu"
+								style={{ color: 'white' }}
+							>
+								Dining Services
 							</a>{' '}
-							with any problems.
+							or take the{' '}
+							<a
+								href="https://forms.gle/fTnWrS7jkTFRB14DA"
+								style={{ color: 'white' }}
+							>
+								dining survey
+							</a>
+							.
 						</FooterText>
 						<FooterText>
 							Made with ❤️ by{' '}
 							<a
-								href={'https://scottylabs.org'}
+								href="https://scottylabs.org"
 								style={{ color: 'white' }}
 							>
 								ScottyLabs
@@ -345,7 +362,6 @@ function ListPage({
 						</FooterText>
 					</>
 				)}
-				{/* eslint-enable */}
 				<LogoText variant="h4">
 					cmu
 					<span style={{ color: 'var(--logo-second-half)' }}>
