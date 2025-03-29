@@ -14,6 +14,9 @@ import {
 import assert from '../util/assert';
 
 import SelectLocation from '../components/SelectLocation';
+//TEST
+import SelectTime from '../components/SelectTime';
+//TEST
 import { useTheme } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
@@ -78,13 +81,9 @@ function ListPage({
 	const [searchQuery, setSearchQuery] = useState('');
 	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
-
-	// TEST
 	const [locationFilterSearchQuery, setlocationFilterSearchQuery] =
 		useState('');
-	// TEST
 
-	// TEST
 	const filteredLocations = useMemo(() => {
 		const searchResults =
 			processedSearchQuery.length === 0
@@ -111,7 +110,6 @@ function ListPage({
 
 		return intersection;
 	}, [fuse, searchQuery, locationFilterSearchQuery]);
-	// TEST
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -180,12 +178,22 @@ function ListPage({
 						}}
 						placeholder="Search"
 					/>
-					<SelectLocation
-						setlocationFilterSearchQuery={
-							setlocationFilterSearchQuery
-						}
-						locations={locations}
-					/>
+					{/* TEST */}
+					<div>
+						<SelectLocation
+							setlocationFilterSearchQuery={
+								setlocationFilterSearchQuery
+							}
+							locations={locations}
+						/>
+						<SelectTime
+							setlocationFilterSearchQuery={
+								setlocationFilterSearchQuery
+							}
+							locations={locations}
+						/>
+					</div>
+					{/* TEST */}
 					{IS_MIKU_DAY && (
 						<button
 							onClick={() =>
