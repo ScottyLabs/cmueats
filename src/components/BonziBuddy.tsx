@@ -14,7 +14,7 @@ import { IS_APRIL_FOOLS } from '../util/constants';
 // Styles
 const BonziContainer = styled(Box)({
 	position: 'fixed',
-	bottom: '80px',
+	bottom: '125px',
 	right: '20px',
 	zIndex: 9999,
 	cursor: 'pointer',

@@ -91,7 +91,7 @@ const initialBlockchainData = {
 // Styled components for the toggle switch
 const StyledToggleBox = styled(Box)({
 	position: 'fixed',
-	bottom: '15px',
+	bottom: '80px',
 	right: '20px',
 	zIndex: 10000,
 	backgroundColor: 'rgba(34, 34, 36, 0.95)',
@@ -171,7 +171,7 @@ const NFTStatusBar = styled(Paper, {
 
 	return {
 		position: 'fixed',
-		top: '42px', // Moved higher than before
+		top: '15px',
 		right: '20px',
 		zIndex: 9997,
 		backgroundColor: 'var(--card-bg)',

@@ -85,7 +85,7 @@ const PriceTag = styled(Box)({
 
 const GasTag = styled(Box)({
 	backgroundColor: 'var(--location-opens-soon-text-color)',
-	color: 'white',
+	color: 'black', // Changed from white to black for better contrast on yellow background
 	padding: '2px 6px',
 	borderRadius: '4px',
 	fontWeight: 'bold',
@@ -330,7 +330,7 @@ const DeployButton = styled(Button)({
 const GasEstimateChip = styled(Chip)({
 	backgroundColor: 'var(--card-header-bg)',
 	border: '1px solid var(--location-open-text-color)',
-	color: 'var(--text-primary)',
+	color: 'white', // White text by default
 	fontWeight: 'bold',
 	'& .MuiChip-icon': {
 		color: 'var(--location-open-text-color)',
@@ -1851,9 +1851,45 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													<Button
 														variant="contained"
 														color="primary"
-														onClick={() =>
-															onBuyClick(nft.id)
-														}
+														onClick={() => {
+															// Call original handler
+															onBuyClick(nft.id);
+
+															// Show initial purchasing message
+															setSnackbarMessage(
+																`Purchasing NFT: ${nft.name} for ${nft.price} ETH...`,
+															);
+															setSnackbarOpen(
+																true,
+															);
+
+															// Simulate blockchain transaction completion after delay
+															setTimeout(() => {
+																// Generate fake transaction hash
+																const txHash = `0x${Math.random().toString(16).substring(2, 15)}...${Math.random().toString(16).substring(2, 6)}`;
+
+																// Show transaction completed message
+																setSnackbarMessage(
+																	`Transaction successful! You now own ${nft.name}. Transaction hash: ${txHash}`,
+																);
+																setSnackbarOpen(
+																	true,
+																);
+
+																// Show another success message after a short delay
+																setTimeout(
+																	() => {
+																		setSnackbarMessage(
+																			`NFT has been transferred to your wallet. Enjoy your new digital asset!`,
+																		);
+																		setSnackbarOpen(
+																			true,
+																		);
+																	},
+																	3000,
+																);
+															}, 2000);
+														}}
 														sx={{
 															background:
 																'linear-gradient(45deg, var(--logo-first-half) 30%, var(--logo-second-half) 90%)',
@@ -2112,6 +2148,14 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															<Button
 																variant="outlined"
 																size="small"
+																onClick={() => {
+																	setSnackbarMessage(
+																		`Successfully planted ${calculateTreesNeeded(calculateCarbonFootprint(nft.price))} trees! Carbon footprint offset.`,
+																	);
+																	setSnackbarOpen(
+																		true,
+																	);
+																}}
 																sx={{
 																	fontSize:
 																		'0.6rem',
@@ -2441,10 +2485,15 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												mt: 1,
 												bgcolor:
 													'var(--location-closed-text-color)',
+												color: 'white !important', // Added !important to override any other styles
+												fontWeight: 'bold', // Make text bold for better visibility
 												'&:hover': {
 													bgcolor:
 														'var(--location-closed-text-color)',
 													opacity: 0.9,
+												},
+												'&.Mui-disabled': {
+													color: 'rgba(255, 255, 255, 0.7) !important', // Keep text white even when disabled
 												},
 											}}
 											onClick={() => {
@@ -2465,6 +2514,85 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 								<Button
 									variant="contained"
 									fullWidth
+									onClick={() => {
+										// Show initial staking message
+										setSnackbarMessage(
+											'Preparing NFTs for staking...',
+										);
+										setSnackbarOpen(true);
+
+										// Simulate blockchain interaction delay
+										setTimeout(() => {
+											// Generate fake transaction hash
+											const txHash = `0x${Math.random().toString(16).substring(2, 15)}...${Math.random().toString(16).substring(2, 6)}`;
+
+											// Pick random NFTs from the marketplace to stake
+											const availableNfts = nftData
+												.filter(
+													(nft) =>
+														!stakedNFTs.includes(
+															nft.id,
+														),
+												)
+												.map((nft) => nft.id);
+
+											if (availableNfts.length > 0) {
+												// Stake up to 2 random NFTs
+												const numToStake = Math.min(
+													2,
+													availableNfts.length,
+												);
+												const nftsToStake = [];
+
+												for (
+													let i = 0;
+													i < numToStake;
+													i += 1
+												) {
+													const randomIndex =
+														Math.floor(
+															Math.random() *
+																availableNfts.length,
+														);
+													nftsToStake.push(
+														availableNfts[
+															randomIndex
+														],
+													);
+													availableNfts.splice(
+														randomIndex,
+														1,
+													);
+												}
+
+												// Update staked NFTs
+												setStakedNFTs([
+													...stakedNFTs,
+													...nftsToStake,
+												]);
+
+												// Show success message
+												setSnackbarMessage(
+													`Successfully staked NFT${nftsToStake.length > 1 ? 's' : ''} #${nftsToStake.join(', #')}! Transaction hash: ${txHash}`,
+												);
+												setSnackbarOpen(true);
+
+												// Show earning message after a delay
+												setTimeout(() => {
+													setSnackbarMessage(
+														`Your staked NFTs will earn approximately 0.05 ETH per day per NFT.`,
+													);
+													setSnackbarOpen(true);
+												}, 3000);
+											} else {
+												// No NFTs available to stake
+												setSnackbarMessage(
+													'No available NFTs to stake. Purchase NFTs from the marketplace first.',
+												);
+												setSnackbarOpen(true);
+											}
+										}, 2000);
+									}}
 									sx={{
 										background:
 											'linear-gradient(45deg, var(--logo-first-half) 30%, var(--logo-second-half) 90%)',
@@ -2913,6 +3041,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
+														sx={{ color: 'white' }}
 													/>
 													<Chip
 														icon={
@@ -2931,6 +3060,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
+														sx={{ color: 'white' }}
 													/>
 													<Chip
 														icon={
@@ -2946,6 +3076,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
+														sx={{ color: 'white' }}
 													/>
 												</Box>
 											</Box>
@@ -2971,6 +3102,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													}
 													label={`${calculateDeployGas().gas} gas`}
 													size="small"
+													sx={{ color: 'white' }}
 												/>
 											</Box>
 
@@ -2995,6 +3127,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													}
 													label={`${calculateDeployGas().cost} ETH`}
 													size="small"
+													sx={{ color: 'white' }}
 												/>
 											</Box>
 
@@ -3023,7 +3156,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														<Chip
 															label={`Transaction: ${deployHash}`}
 															size="small"
-															sx={{ mt: 1 }}
+															sx={{
+																mt: 1,
+																color: 'white',
+															}}
 															icon={
 																<ContentCopyIcon />
 															}
