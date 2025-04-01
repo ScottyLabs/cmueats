@@ -171,7 +171,7 @@ const NFTStatusBar = styled(Paper, {
 
 	return {
 		position: 'fixed',
-		top: '15px',
+		top: '45px',
 		right: '20px',
 		zIndex: 9997,
 		backgroundColor: 'var(--card-bg)',
