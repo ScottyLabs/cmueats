@@ -55,6 +55,10 @@ const GameHeader = styled(Box)({
 			"url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D30000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E\")",
 		zIndex: 0,
 	},
+	// Add responsive padding for better spacing on mobile
+	'@media (max-width: 600px)': {
+		padding: '15px 15px 30px 15px',
+	},
 });
 
 const MainTitle = styled(Typography)({
@@ -209,7 +213,6 @@ const opponents = [
 // Games
 const GAMES = {
 	HIGHER_LOWER: 'higher_lower',
-	MATCHING: 'matching',
 	COIN_FLIP: 'coin_flip',
 	SLOTS: 'slots',
 	CARD_COUNTING: 'card_counting',
@@ -571,11 +574,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const [prediction, setPrediction] = useState<'higher' | 'lower' | null>(
 		null,
 	);
-	const [matchingCards, setMatchingCards] = useState<string[]>([]);
-	const [revealedIndices, setRevealedIndices] = useState<number[]>([]);
-	const [lastRevealedIndex, setLastRevealedIndex] = useState<number | null>(
-		null,
-	);
 	const [coinSide, setCoinSide] = useState<'heads' | 'tails' | null>(null);
 	const [playerChoice, setPlayerChoice] = useState<'heads' | 'tails' | null>(
 		null,
@@ -587,13 +585,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const [leverPulled, setLeverPulled] = useState(false);
 	const [winningLine, setWinningLine] = useState(false);
 	const [pendingResult, setPendingResult] = useState(false);
-
-	// Add game difficulty settings and timer state
-	const [memoryGameDifficulty, setMemoryGameDifficulty] = useState<
-		'easy' | 'medium' | 'hard'
-	>('medium');
-	const [timeRemaining, setTimeRemaining] = useState<number>(60);
-	const timerRef = useRef<NodeJS.Timeout | null>(null);
 
 	// Add timer refs to properly handle cleanup
 	const timerRefs = useRef<NodeJS.Timeout[]>([]);
@@ -725,229 +716,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		}
 	};
 
-	// Setup matching game
-	const setupMatchingGame = () => {
-		// Clear any existing timer
-		if (timerRef.current) {
-			clearInterval(timerRef.current);
-		}
-
-		// Create a deck of cards
-		const allCards = cardSuits.flatMap((suit) =>
-			cardValues.map((value) => `${value}${suit}`),
-		);
-
-		// Shuffle the full deck
-		const shuffled = [...allCards].sort(() => 0.5 - Math.random());
-
-		// Select cards based on difficulty
-		let numPairs: number;
-		let timeLimit: number;
-
-		switch (memoryGameDifficulty) {
-			case 'easy':
-				numPairs = 3; // 6 cards total
-				timeLimit = 60;
-				break;
-			case 'hard':
-				numPairs = 8; // 16 cards total
-				timeLimit = 45;
-				break;
-			case 'medium':
-			default:
-				numPairs = 5; // 10 cards total
-				timeLimit = 50;
-				break;
-		}
-
-		// Select cards for the game
-		const selected = shuffled.slice(0, numPairs);
-
-		// Create pairs
-		setMatchingCards(
-			[...selected, ...selected].sort(() => 0.5 - Math.random()),
-		);
-
-		// Reset game state
-		setRevealedIndices([]);
-		setLastRevealedIndex(null);
-
-		// Set timer
-		setTimeRemaining(timeLimit);
-
-		// Start the timer
-		timerRef.current = setInterval(() => {
-			setTimeRemaining((prev) => {
-				const newTime = prev - 1;
-				if (newTime <= 0) {
-					if (timerRef.current) {
-						clearInterval(timerRef.current);
-					}
-					return 0;
-				}
-				return newTime;
-			});
-		}, 1000) as NodeJS.Timeout;
-	};
-
-	// Make sure to clean up timer when component unmounts or game changes
-	useEffect(
-		() => () => {
-			if (timerRef.current) {
-				clearInterval(timerRef.current);
-			}
-		},
-		[],
-	);
-
-	// Update handleCardReveal to stop timer when game ends
-	const handleCardReveal = (index: number) => {
-		if (revealedIndices.includes(index) || isLoading) return;
-
-		const newRevealedIndices = [...revealedIndices, index];
-		setRevealedIndices(newRevealedIndices);
-
-		if (lastRevealedIndex === null) {
-			setLastRevealedIndex(index);
-		} else {
-			setIsLoading(true);
-			// Check if the two cards match
-			if (matchingCards[lastRevealedIndex] === matchingCards[index]) {
-				// Match found
-				if (newRevealedIndices.length === matchingCards.length) {
-					// All cards matched - player wins
-					// Stop timer
-					if (timerRef.current) {
-						clearInterval(timerRef.current);
-					}
-					// Calculate bonus based on remaining time
-					const timeBonus = Math.floor(timeRemaining / 10);
-					const multiplier = timeBonus > 0 ? 1 + timeBonus * 0.1 : 1;
-
-					setTimeout(() => {
-						handleGameResult('win', multiplier);
-						setIsLoading(false);
-					}, 1000);
-				} else {
-					setIsLoading(false);
-				}
-			} else {
-				// No match - hide cards after a delay
-				setTimeout(() => {
-					setRevealedIndices(
-						newRevealedIndices.filter(
-							(i) => i !== lastRevealedIndex && i !== index,
-						),
-					);
-
-					// Opponent gets a turn based on difficulty
-					let opponentMatchChance: number;
-
-					// Adjust opponent skill based on difficulty
-					switch (memoryGameDifficulty) {
-						case 'easy':
-							opponentMatchChance = 0.3; // 30% chance to find a match
-							break;
-						case 'hard':
-							opponentMatchChance = 0.8; // 80% chance to find a match
-							break;
-						case 'medium':
-						default:
-							opponentMatchChance = 0.5; // 50% chance to find a match
-							break;
-					}
-
-					const remainingIndices = Array.from({
-						length: matchingCards.length,
-					})
-						.map((_, i) => i)
-						.filter((i) => !newRevealedIndices.includes(i));
-
-					if (
-						remainingIndices.length >= 2 &&
-						Math.random() < opponentMatchChance
-					) {
-						// Find matching cards in remaining
-						const cardPairs = remainingIndices.reduce(
-							(pairs, idx) => {
-								const card = matchingCards[idx];
-								const updatedPairs = { ...pairs };
-								if (!updatedPairs[card])
-									updatedPairs[card] = [];
-								updatedPairs[card].push(idx);
-								return updatedPairs;
-							},
-							{} as Record<string, number[]>,
-						);
-
-						const pairsFound = Object.values(cardPairs).filter(
-							(indices) => indices.length === 2,
-						);
-
-						if (pairsFound.length > 0) {
-							// Opponent found a pair
-							const chosenPair =
-								pairsFound[
-									Math.floor(
-										Math.random() * pairsFound.length,
-									)
-								];
-							setTimeout(() => {
-								setRevealedIndices([
-									...newRevealedIndices.filter(
-										(i) =>
-											i !== lastRevealedIndex &&
-											i !== index,
-									),
-									...chosenPair,
-								]);
-
-								// Check if all cards are now revealed
-								if (
-									newRevealedIndices.length -
-										2 +
-										chosenPair.length ===
-									matchingCards.length
-								) {
-									// Game over - player loses
-									if (timerRef.current) {
-										clearInterval(timerRef.current);
-									}
-									handleGameResult('lose');
-								}
-								setIsLoading(false);
-							}, 1000);
-						} else {
-							setIsLoading(false);
-						}
-					} else {
-						setIsLoading(false);
-					}
-				}, 1000);
-			}
-			setLastRevealedIndex(null);
-		}
-	};
-
 	// Reset game state for game selection
 	const resetGameState = () => {
-		// Original code
 		setGameResult(null);
 		setPlayerCard(null);
 		setOpponentCard(null);
 		setPrediction(null);
-		setMatchingCards([]);
-		setRevealedIndices([]);
-		setLastRevealedIndex(null);
 		setCoinSide(null);
 		setPlayerChoice(null);
 		setSpinning(false);
 		setSpinResult(['', '', '']);
-
-		// New: Stop any active timers
-		if (timerRef.current) {
-			clearInterval(timerRef.current);
-		}
 	};
 
 	// Reset game when dialog closes
@@ -994,8 +772,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			setPlayerCard(`${cardValues[randomIdx]}${randomSuit}`);
 		} else if (selectedGame === GAMES.COIN_FLIP) {
 			// No setup needed yet
-		} else if (selectedGame === GAMES.MATCHING) {
-			setupMatchingGame(); // Start the memory game with timer
 		}
 	};
 
@@ -1288,21 +1064,10 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setPrediction(null);
 		setCoinSide(null);
 		setPlayerChoice(null);
-
-		if (selectedGame === GAMES.MATCHING) {
-			setupMatchingGame();
-		}
 	};
 
 	const handleAlertClose = () => {
 		setShowAlert(false);
-	};
-
-	// Add a helper function to generate unique card IDs
-	const generateCardId = (card: string, position: number): string => {
-		const cardValue = card.slice(0, -1); // Remove suit
-		const cardSuit = card.slice(-1); // Get suit
-		return `match-card-${cardValue}-${cardSuit}-${position}`;
 	};
 
 	// Add loan handling function
@@ -1327,7 +1092,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			<MainTitle variant="h4" sx={{ mb: 4, textAlign: 'center' }}>
 				Choose Your Game of Chance
 			</MainTitle>
-			<Grid container spacing={3}>
+			<Grid container spacing={3} justifyContent="center">
 				<Grid item xs={12} sm={6} md={4}>
 					<CasinoCard
 						onClick={() => handleGameSelect(GAMES.HIGHER_LOWER)}
@@ -1367,50 +1132,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									startIcon={<AttachMoneyIcon />}
 								>
 									Play Higher or Lower
-								</ActionButton>
-							</Box>
-						</CardContent>
-					</CasinoCard>
-				</Grid>
-				<Grid item xs={12} sm={6} md={4}>
-					<CasinoCard
-						onClick={() => handleGameSelect(GAMES.MATCHING)}
-					>
-						<CardContent>
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									alignItems: 'center',
-									gap: 2,
-								}}
-							>
-								<Typography
-									variant="h5"
-									sx={{
-										fontWeight: 'bold',
-										color: '#D30000',
-										mb: 2,
-									}}
-								>
-									Memory Match
-								</Typography>
-								<Typography
-									variant="body2"
-									sx={{ textAlign: 'center', minHeight: 60 }}
-								>
-									Find all matching pairs before your
-									opponent.
-								</Typography>
-								<ActionButton
-									variant="contained"
-									fullWidth
-									onClick={() =>
-										handleGameSelect(GAMES.MATCHING)
-									}
-									startIcon={<AttachMoneyIcon />}
-								>
-									Play Memory Match
 								</ActionButton>
 							</Box>
 						</CardContent>
@@ -1623,61 +1344,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						valueLabelFormat={(value) => `$${value}`}
 					/>
 				</Box>
-
-				{/* Show difficulty selector only for memory game */}
-				{selectedGame === GAMES.MATCHING && (
-					<Box sx={{ mb: 2 }}>
-						<Typography variant="body2" sx={{ mb: 1 }}>
-							Select Difficulty:
-						</Typography>
-						<Box
-							sx={{
-								display: 'flex',
-								gap: 2,
-								justifyContent: 'center',
-							}}
-						>
-							<Button
-								variant={
-									memoryGameDifficulty === 'easy'
-										? 'contained'
-										: 'outlined'
-								}
-								color="primary"
-								onClick={() => setMemoryGameDifficulty('easy')}
-								sx={{ flexGrow: 1 }}
-							>
-								Easy (6 cards)
-							</Button>
-							<Button
-								variant={
-									memoryGameDifficulty === 'medium'
-										? 'contained'
-										: 'outlined'
-								}
-								color="primary"
-								onClick={() =>
-									setMemoryGameDifficulty('medium')
-								}
-								sx={{ flexGrow: 1 }}
-							>
-								Medium (10 cards)
-							</Button>
-							<Button
-								variant={
-									memoryGameDifficulty === 'hard'
-										? 'contained'
-										: 'outlined'
-								}
-								color="primary"
-								onClick={() => setMemoryGameDifficulty('hard')}
-								sx={{ flexGrow: 1 }}
-							>
-								Hard (16 cards)
-							</Button>
-						</Box>
-					</Box>
-				)}
 
 				<Box
 					sx={{
@@ -1941,80 +1607,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					</Box>
 				</>
 			)}
-		</Box>
-	);
-
-	const renderMatchingGame = () => (
-		<Box>
-			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					mb: 2,
-				}}
-			>
-				<Typography variant="h6" sx={{ textAlign: 'center' }}>
-					Find the matching pairs
-				</Typography>
-
-				{/* Timer display */}
-				<Typography
-					variant="h6"
-					sx={{
-						color: timeRemaining < 10 ? '#D30000' : 'white',
-						animation:
-							timeRemaining < 10 ? 'pulse 1s infinite' : 'none',
-						'@keyframes pulse': {
-							'0%': { opacity: 1 },
-							'50%': { opacity: 0.5 },
-							'100%': { opacity: 1 },
-						},
-					}}
-				>
-					Time: {timeRemaining}s
-				</Typography>
-			</Box>
-
-			{/* Game board */}
-			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'center',
-					flexWrap: 'wrap',
-					maxWidth: '600px',
-					margin: '0 auto 20px',
-				}}
-			>
-				{matchingCards.map((card, index) => (
-					<GameCard
-						key={generateCardId(card, index)}
-						onClick={() =>
-							!revealedIndices.includes(index) &&
-							!isLoading &&
-							handleCardReveal(index)
-						}
-						sx={{
-							cursor: revealedIndices.includes(index)
-								? 'default'
-								: 'pointer',
-							margin: '5px',
-							transition: 'transform 0.2s',
-							'&:hover': {
-								transform: revealedIndices.includes(index)
-									? 'none'
-									: 'scale(1.05)',
-							},
-						}}
-					>
-						{revealedIndices.includes(index) ? (
-							<CardValue>{card}</CardValue>
-						) : (
-							<CardBack />
-						)}
-					</GameCard>
-				))}
-			</Box>
 		</Box>
 	);
 
@@ -2499,45 +2091,10 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		switch (selectedGame) {
 			case GAMES.HIGHER_LOWER:
 				return renderHigherLowerGame();
-			case GAMES.MATCHING:
-				return renderMatchingGame();
 			case GAMES.COIN_FLIP:
 				return renderCoinFlipGame();
 			case GAMES.SLOTS:
 				return renderSlotsGame();
-			case GAMES.CARD_COUNTING:
-				return (
-					<CardCountingGame
-						onWin={(multiplier: number) =>
-							handleGameResult('win', multiplier || 1)
-						}
-						onLose={() => handleGameResult('lose')}
-						balance={balance}
-						betAmount={betAmount}
-					/>
-				);
-			case GAMES.ROULETTE:
-				return (
-					<RouletteGame
-						open
-						onClose={() => {
-							resetGame();
-							setSelectedGame(null);
-							setGameState('selecting');
-							// Force a re-render to fully close the dialog
-							setTimeout(() => {
-								setBalance((prev) => {
-									localStorage.setItem(
-										'cmueats-balance',
-										prev.toString(),
-									);
-									return prev;
-								});
-							}, 50);
-						}}
-						initialBalance={balance}
-					/>
-				);
 			default:
 				return null;
 		}
@@ -2692,13 +2249,33 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						textAlign: 'center',
 						fontWeight: 700,
 						letterSpacing: '0.5px',
+						// Add responsive font size
+						fontSize: { xs: '1.75rem', sm: '2.125rem' },
 					}}
 				>
 					CMUEats Private Academy
 				</MainTitle>
 				<Typography
 					variant="h5"
-					sx={{ color: '#ccc', mt: 1, mb: 2, lineHeight: 1.4 }}
+					sx={{
+						color: '#fff',
+						mt: 1,
+						mb: 2,
+						lineHeight: 1.4,
+						// Increase font size significantly
+						fontSize: { xs: '1.5rem', sm: '2rem' },
+						// Ensure text can wrap
+						wordBreak: 'break-word',
+						// Add padding on sides for readability
+						px: { xs: 1, sm: 2 },
+						maxWidth: '100%',
+						// Add letter spacing for emphasis
+						letterSpacing: '1px',
+						// Add text shadow for better visibility
+						textShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
+						// Add font weight for emphasis
+						fontWeight: 500,
+					}}
 				>
 					CMUEats: The Ultimate Gambling Experience
 				</Typography>
