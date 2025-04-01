@@ -275,6 +275,8 @@ const ParameterCard = styled(Card)({
 	borderRadius: '8px',
 	border: '1px solid var(--card-border-color)',
 	marginBottom: '16px',
+	overflowY: 'auto',
+	maxHeight: '700px', // Changed from 500px to 700px
 });
 
 const SyntaxHighlight = styled('span')(({ type }: { type: string }) => {
@@ -2860,7 +2862,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												</>
 											)}
 
-											<Box sx={{ mt: 3 }}>
+											<Box sx={{ mt: 3, mb: 3, pb: 2 }}>
 												<Typography
 													variant="subtitle2"
 													gutterBottom
@@ -2995,6 +2997,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													}
 													sx={{
 														mt: 1,
+														mb: 2,
 														display: 'block',
 													}}
 												/>
