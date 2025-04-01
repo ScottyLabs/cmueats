@@ -85,7 +85,7 @@ const PriceTag = styled(Box)({
 
 const GasTag = styled(Box)({
 	backgroundColor: 'var(--location-opens-soon-text-color)',
-	color: 'black',
+	color: 'black', // Changed from white to black for better contrast on yellow background
 	padding: '2px 6px',
 	borderRadius: '4px',
 	fontWeight: 'bold',
@@ -275,6 +275,8 @@ const ParameterCard = styled(Card)({
 	borderRadius: '8px',
 	border: '1px solid var(--card-border-color)',
 	marginBottom: '16px',
+	overflowY: 'auto',
+	maxHeight: '700px', // Changed from 500px to 700px
 });
 
 const SyntaxHighlight = styled('span')(({ type }: { type: string }) => {
@@ -330,7 +332,7 @@ const DeployButton = styled(Button)({
 const GasEstimateChip = styled(Chip)({
 	backgroundColor: 'var(--card-header-bg)',
 	border: '1px solid var(--location-open-text-color)',
-	color: 'var(--text-primary)',
+	color: 'white', // White text by default
 	fontWeight: 'bold',
 	'& .MuiChip-icon': {
 		color: 'var(--location-open-text-color)',
@@ -909,7 +911,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	const [editedCode, setEditedCode] = useState(contractTemplates.erc721);
 	const [isCodeEdited, setIsCodeEdited] = useState(false);
 	const [contractName, setContractName] = useState('CMUEatsNFT');
-	const [contractSymbol, setContractSymbol] = useState('CMUEAT');
+	const [contractSymbol, setContractSymbol] = useState('CMUEATS');
 	const [maxSupply, setMaxSupply] = useState(100);
 	const [mintPrice, setMintPrice] = useState(0.15);
 	const [deployStep, setDeployStep] = useState(0);
@@ -1003,7 +1005,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 		// Reset parameters for different contract types
 		if (type === 'erc721') {
 			setContractName('CMUEatsNFT');
-			setContractSymbol('CMUEAT');
+			setContractSymbol('CMUEATS');
 		} else if (type === 'erc1155') {
 			setContractName('CMUEatsMultiToken');
 			setContractSymbol('CMUMTT');
@@ -1688,6 +1690,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												? 'primary'
 												: 'default'
 										}
+										sx={{ color: 'white' }}
 									/>
 									<Chip
 										icon={<LocalGasStationIcon />}
@@ -1699,6 +1702,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												? 'primary'
 												: 'default'
 										}
+										sx={{ color: 'white' }}
 									/>
 									<Chip
 										icon={<LocalGasStationIcon />}
@@ -1710,6 +1714,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												? 'primary'
 												: 'default'
 										}
+										sx={{ color: 'white' }}
 									/>
 								</Box>
 							</Box>
@@ -1848,9 +1853,45 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													<Button
 														variant="contained"
 														color="primary"
-														onClick={() =>
-															onBuyClick(nft.id)
-														}
+														onClick={() => {
+															// Call original handler
+															onBuyClick(nft.id);
+
+															// Show initial purchasing message
+															setSnackbarMessage(
+																`Purchasing NFT: ${nft.name} for ${nft.price} ETH...`,
+															);
+															setSnackbarOpen(
+																true,
+															);
+
+															// Simulate blockchain transaction completion after delay
+															setTimeout(() => {
+																// Generate fake transaction hash
+																const txHash = `0x${Math.random().toString(16).substring(2, 15)}...${Math.random().toString(16).substring(2, 6)}`;
+
+																// Show transaction completed message
+																setSnackbarMessage(
+																	`Transaction successful! You now own ${nft.name}. Transaction hash: ${txHash}`,
+																);
+																setSnackbarOpen(
+																	true,
+																);
+
+																// Show another success message after a short delay
+																setTimeout(
+																	() => {
+																		setSnackbarMessage(
+																			`NFT has been transferred to your wallet. Enjoy your new digital asset!`,
+																		);
+																		setSnackbarOpen(
+																			true,
+																		);
+																	},
+																	3000,
+																);
+															}, 2000);
+														}}
 														sx={{
 															background:
 																'linear-gradient(45deg, var(--logo-first-half) 30%, var(--logo-second-half) 90%)',
@@ -2109,6 +2150,14 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															<Button
 																variant="outlined"
 																size="small"
+																onClick={() => {
+																	setSnackbarMessage(
+																		`Successfully planted ${calculateTreesNeeded(calculateCarbonFootprint(nft.price))} trees! Carbon footprint offset.`,
+																	);
+																	setSnackbarOpen(
+																		true,
+																	);
+																}}
 																sx={{
 																	fontSize:
 																		'0.6rem',
@@ -2438,10 +2487,15 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												mt: 1,
 												bgcolor:
 													'var(--location-closed-text-color)',
+												color: 'white !important', // Added !important to override any other styles
+												fontWeight: 'bold', // Make text bold for better visibility
 												'&:hover': {
 													bgcolor:
 														'var(--location-closed-text-color)',
 													opacity: 0.9,
+												},
+												'&.Mui-disabled': {
+													color: 'rgba(255, 255, 255, 0.7) !important', // Keep text white even when disabled
 												},
 											}}
 											onClick={() => {
@@ -2462,6 +2516,85 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 								<Button
 									variant="contained"
 									fullWidth
+									onClick={() => {
+										// Show initial staking message
+										setSnackbarMessage(
+											'Preparing NFTs for staking...',
+										);
+										setSnackbarOpen(true);
+
+										// Simulate blockchain interaction delay
+										setTimeout(() => {
+											// Generate fake transaction hash
+											const txHash = `0x${Math.random().toString(16).substring(2, 15)}...${Math.random().toString(16).substring(2, 6)}`;
+
+											// Pick random NFTs from the marketplace to stake
+											const availableNfts = nftData
+												.filter(
+													(nft) =>
+														!stakedNFTs.includes(
+															nft.id,
+														),
+												)
+												.map((nft) => nft.id);
+
+											if (availableNfts.length > 0) {
+												// Stake up to 2 random NFTs
+												const numToStake = Math.min(
+													2,
+													availableNfts.length,
+												);
+												const nftsToStake = [];
+
+												for (
+													let i = 0;
+													i < numToStake;
+													i += 1
+												) {
+													const randomIndex =
+														Math.floor(
+															Math.random() *
+																availableNfts.length,
+														);
+													nftsToStake.push(
+														availableNfts[
+															randomIndex
+														],
+													);
+													availableNfts.splice(
+														randomIndex,
+														1,
+													);
+												}
+
+												// Update staked NFTs
+												setStakedNFTs([
+													...stakedNFTs,
+													...nftsToStake,
+												]);
+
+												// Show success message
+												setSnackbarMessage(
+													`Successfully staked NFT${nftsToStake.length > 1 ? 's' : ''} #${nftsToStake.join(', #')}! Transaction hash: ${txHash}`,
+												);
+												setSnackbarOpen(true);
+
+												// Show earning message after a delay
+												setTimeout(() => {
+													setSnackbarMessage(
+														`Your staked NFTs will earn approximately 0.05 ETH per day per NFT.`,
+													);
+													setSnackbarOpen(true);
+												}, 3000);
+											} else {
+												// No NFTs available to stake
+												setSnackbarMessage(
+													'No available NFTs to stake. Purchase NFTs from the marketplace first.',
+												);
+												setSnackbarOpen(true);
+											}
+										}, 2000);
+									}}
 									sx={{
 										background:
 											'linear-gradient(45deg, var(--logo-first-half) 30%, var(--logo-second-half) 90%)',
@@ -2509,7 +2642,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												fullWidth
 												sx={{ mb: 2 }}
 											>
-												<InputLabel>
+												<InputLabel
+													sx={{ color: 'white' }}
+												>
 													Contract Type
 												</InputLabel>
 												<Select
@@ -2518,6 +2653,14 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													onChange={
 														handleContractTypeChange as any
 													}
+													sx={{
+														color: 'white',
+														'& .MuiSelect-icon': {
+															color: 'white',
+														},
+														'& .MuiInputBase-input':
+															{ color: 'white' },
+													}}
 												>
 													<MenuItem value="erc721">
 														ERC-721 (NFT)
@@ -2532,7 +2675,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														Custom Contract
 													</MenuItem>
 												</Select>
-												<FormHelperText>
+												<FormHelperText
+													sx={{ color: 'white' }}
+												>
 													Select the type of contract
 													to deploy
 												</FormHelperText>
@@ -2553,6 +2698,29 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													contractType ===
 													'marketplace'
 												}
+												InputLabelProps={{
+													sx: { color: 'white' },
+												}}
+												InputProps={{
+													sx: {
+														color: 'white',
+														'& .MuiOutlinedInput-notchedOutline':
+															{
+																borderColor:
+																	'rgba(255, 255, 255, 0.3)',
+															},
+														'&:hover .MuiOutlinedInput-notchedOutline':
+															{
+																borderColor:
+																	'rgba(255, 255, 255, 0.5)',
+															},
+														'&.Mui-focused .MuiOutlinedInput-notchedOutline':
+															{
+																borderColor:
+																	'rgba(255, 255, 255, 0.7)',
+															},
+													},
+												}}
 											/>
 
 											{contractType !== 'marketplace' && (
@@ -2567,6 +2735,29 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													fullWidth
 													margin="normal"
 													variant="outlined"
+													InputLabelProps={{
+														sx: { color: 'white' },
+													}}
+													InputProps={{
+														sx: {
+															color: 'white',
+															'& .MuiOutlinedInput-notchedOutline':
+																{
+																	borderColor:
+																		'rgba(255, 255, 255, 0.3)',
+																},
+															'&:hover .MuiOutlinedInput-notchedOutline':
+																{
+																	borderColor:
+																		'rgba(255, 255, 255, 0.5)',
+																},
+															'&.Mui-focused .MuiOutlinedInput-notchedOutline':
+																{
+																	borderColor:
+																		'rgba(255, 255, 255, 0.7)',
+																},
+														},
+													}}
 												/>
 											)}
 
@@ -2577,6 +2768,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														<Typography
 															variant="body2"
 															gutterBottom
+															sx={{
+																color: 'white',
+															}}
 														>
 															Maximum Supply
 														</Typography>
@@ -2608,6 +2802,13 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															min={100}
 															max={10000}
 															valueLabelDisplay="auto"
+															sx={{
+																color: 'white',
+																'& .MuiSlider-markLabel':
+																	{
+																		color: 'white',
+																	},
+															}}
 														/>
 													</Box>
 
@@ -2615,6 +2816,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														<Typography
 															variant="body2"
 															gutterBottom
+															sx={{
+																color: 'white',
+															}}
 														>
 															Mint Price (ETH)
 														</Typography>
@@ -2646,15 +2850,23 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															min={0.01}
 															max={1}
 															valueLabelDisplay="auto"
+															sx={{
+																color: 'white',
+																'& .MuiSlider-markLabel':
+																	{
+																		color: 'white',
+																	},
+															}}
 														/>
 													</Box>
 												</>
 											)}
 
-											<Box sx={{ mt: 3 }}>
+											<Box sx={{ mt: 3, mb: 3, pb: 2 }}>
 												<Typography
 													variant="subtitle2"
 													gutterBottom
+													sx={{ color: 'white' }}
 												>
 													Advanced Options
 												</Typography>
@@ -2673,14 +2885,24 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															}
 														/>
 													}
-													label="Enable Royalties"
+													label={
+														<Typography
+															sx={{
+																color: 'white',
+															}}
+														>
+															Enable Royalties
+														</Typography>
+													}
 												/>
 
 												{enableRoyalties && (
 													<Box sx={{ ml: 3, mt: 1 }}>
 														<Typography
 															variant="caption"
-															color="var(--text-muted)"
+															sx={{
+																color: 'white',
+															}}
 														>
 															Royalty Percentage
 														</Typography>
@@ -2701,11 +2923,20 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															max={10}
 															valueLabelDisplay="auto"
 															size="small"
-															sx={{ mt: 1 }}
+															sx={{
+																mt: 1,
+																color: 'white',
+																'& .MuiSlider-markLabel':
+																	{
+																		color: 'white',
+																	},
+															}}
 														/>
 														<Typography
 															variant="caption"
-															color="var(--text-muted)"
+															sx={{
+																color: 'white',
+															}}
 														>
 															{royaltyPercentage}%
 															royalties on
@@ -2726,7 +2957,15 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															}
 														/>
 													}
-													label="Delayed Reveal"
+													label={
+														<Typography
+															sx={{
+																color: 'white',
+															}}
+														>
+															Delayed Reveal
+														</Typography>
+													}
 													sx={{
 														mt: 1,
 														display: 'block',
@@ -2747,9 +2986,18 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															}
 														/>
 													}
-													label="Whitelist Presale"
+													label={
+														<Typography
+															sx={{
+																color: 'white',
+															}}
+														>
+															Whitelist Presale
+														</Typography>
+													}
 													sx={{
 														mt: 1,
+														mb: 2,
 														display: 'block',
 													}}
 												/>
@@ -2763,6 +3011,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Typography
 												variant="h6"
 												gutterBottom
+												sx={{ color: 'white' }}
 											>
 												Deploy Contract
 											</Typography>
@@ -2770,7 +3019,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Box sx={{ mb: 2 }}>
 												<Typography
 													variant="body2"
-													color="var(--text-muted)"
+													sx={{ color: 'white' }}
 													gutterBottom
 												>
 													Gas Price:
@@ -2795,6 +3044,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
+														sx={{ color: 'white' }}
 													/>
 													<Chip
 														icon={
@@ -2813,6 +3063,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
+														sx={{ color: 'white' }}
 													/>
 													<Chip
 														icon={
@@ -2828,6 +3079,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
+														sx={{ color: 'white' }}
 													/>
 												</Box>
 											</Box>
@@ -2841,7 +3093,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													mb: 2,
 												}}
 											>
-												<Typography variant="body2">
+												<Typography
+													variant="body2"
+													sx={{ color: 'white' }}
+												>
 													Estimated Gas:
 												</Typography>
 												<GasEstimateChip
@@ -2850,6 +3105,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													}
 													label={`${calculateDeployGas().gas} gas`}
 													size="small"
+													sx={{ color: 'white' }}
 												/>
 											</Box>
 
@@ -2862,7 +3118,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													mb: 3,
 												}}
 											>
-												<Typography variant="body2">
+												<Typography
+													variant="body2"
+													sx={{ color: 'white' }}
+												>
 													Estimated Cost:
 												</Typography>
 												<GasEstimateChip
@@ -2871,6 +3130,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													}
 													label={`${calculateDeployGas().cost} ETH`}
 													size="small"
+													sx={{ color: 'white' }}
 												/>
 											</Box>
 
@@ -2884,6 +3144,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													<Typography
 														variant="body2"
 														gutterBottom
+														sx={{ color: 'white' }}
 													>
 														{deployStep === 1 &&
 															'Compiling contract...'}
@@ -2898,7 +3159,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														<Chip
 															label={`Transaction: ${deployHash}`}
 															size="small"
-															sx={{ mt: 1 }}
+															sx={{
+																mt: 1,
+																color: 'white',
+															}}
 															icon={
 																<ContentCopyIcon />
 															}
