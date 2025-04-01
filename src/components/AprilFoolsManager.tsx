@@ -669,7 +669,7 @@ function NFTStatusBarComponent({
 										fontSize: '0.65rem',
 										p: '2px 8px',
 										borderColor: 'var(--logo-first-half)',
-										color: 'var(--text-primary)',
+										color: 'white',
 									}}
 								>
 									mint()
@@ -681,7 +681,7 @@ function NFTStatusBarComponent({
 										fontSize: '0.65rem',
 										p: '2px 8px',
 										borderColor: 'var(--text-muted)',
-										color: 'var(--text-muted)',
+										color: 'white',
 									}}
 								>
 									approve()
@@ -693,7 +693,7 @@ function NFTStatusBarComponent({
 										fontSize: '0.65rem',
 										p: '2px 8px',
 										borderColor: 'var(--text-muted)',
-										color: 'var(--text-muted)',
+										color: 'white',
 									}}
 								>
 									stake()
@@ -758,6 +758,7 @@ function NFTStatusBarComponent({
 									size="small"
 									color="primary"
 									variant="outlined"
+									sx={{ color: 'white' }}
 								/>
 							</Tooltip>
 						</Box>
@@ -772,6 +773,7 @@ function NFTStatusBarComponent({
 									size="small"
 									color="secondary"
 									variant="outlined"
+									sx={{ color: 'white' }}
 								/>
 							</Tooltip>
 
@@ -785,6 +787,7 @@ function NFTStatusBarComponent({
 										label="Transactions"
 										size="small"
 										variant="outlined"
+										sx={{ color: 'white' }}
 									/>
 								</Badge>
 							</Tooltip>
@@ -875,7 +878,11 @@ function NFTStatusBarComponent({
 								size="small"
 								label={`${blockchainData.currentGasPrice}G`}
 								color="primary"
-								sx={{ height: 20, fontSize: '0.65rem' }}
+								sx={{
+									height: 20,
+									fontSize: '0.65rem',
+									color: 'white',
+								}}
 							/>
 							NFT {pendingCount > 0 && '⚡'}{' '}
 							{minimized ? '▼' : '▲'}
@@ -934,7 +941,7 @@ function NFTStatusBarComponent({
 									e.stopPropagation();
 									setActiveTab('dashboard');
 								}}
-								sx={{ fontSize: '0.7rem' }}
+								sx={{ fontSize: '0.7rem', color: 'white' }}
 							/>
 							<Chip
 								icon={
@@ -958,7 +965,7 @@ function NFTStatusBarComponent({
 									e.stopPropagation();
 									setActiveTab('portfolio');
 								}}
-								sx={{ fontSize: '0.7rem' }}
+								sx={{ fontSize: '0.7rem', color: 'white' }}
 							/>
 							<Chip
 								icon={
@@ -980,7 +987,7 @@ function NFTStatusBarComponent({
 									e.stopPropagation();
 									setActiveTab('contract');
 								}}
-								sx={{ fontSize: '0.7rem' }}
+								sx={{ fontSize: '0.7rem', color: 'white' }}
 							/>
 						</Box>
 					)}
