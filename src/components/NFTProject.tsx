@@ -1414,7 +1414,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 						CMUEats NFT Marketplace
 					</Typography>
 					<Typography variant="h6" component="p">
-						Exclusive digital collectibles for premium CMUEats users
+						Exclusive digital collectibles for CMUEats users
 					</Typography>
 
 					{/* 3D Rotating Logo */}
