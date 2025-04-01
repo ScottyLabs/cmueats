@@ -1119,16 +1119,25 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 		// Simulate slot machine spinning with randomized delay
 		const symbols = [
-			'🧋',
-			'🍕',
-			'🌮',
-			'🍔',
-			'🍣',
-			'🍜',
-			'🍱',
-			'🥘',
-			'🍩',
-			'🍦',
+			'🧋', // Boba tea (jackpot - 5x)
+			'🍕', // Pizza
+			'🌮', // Taco
+			'🍔', // Hamburger
+			'🍣', // Sushi (3x)
+			'🍜', // Ramen
+			'🍱', // Bento box
+			'🥘', // Paella/food in pan
+			'🍩', // Donut
+			'🍦', // Ice cream
+			'🍪', // Cookie
+			'🍗', // Chicken
+			'🥞', // Pancakes
+			'🥨', // Pretzel
+			'🍚', // Rice
+			'🥐', // Croissant
+			'🥪', // Sandwich
+			'🧁', // Cupcake (3x)
+			'🍟', // French fries (3x)
 		];
 		const spinDuration = 2000 + Math.random() * 1000;
 
@@ -1151,7 +1160,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 			// Different win probabilities based on opponent difficulty
 			const winProbability = 0.15; // default
-			let multiplier = 0;
 
 			if (random < winProbability) {
 				// Win - all symbols match or special win patterns
@@ -1159,19 +1167,41 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					symbols[Math.floor(Math.random() * symbols.length)];
 
 				// Special case for 🍣 (bigger win) or 🧋 (jackpot)
-				if (Math.random() < 0.1) {
-					finalResult.push('🍣', '🍣', '🍣');
-					multiplier = 3; // Triple multiplier
+				if (Math.random() < 0.08) {
+					// 3x payout group - one of the 3x symbols
+					const specialSymbols = ['🍣', '🧁', '🍟'];
+					const chosenSpecial =
+						specialSymbols[
+							Math.floor(Math.random() * specialSymbols.length)
+						];
+					finalResult.push(
+						chosenSpecial,
+						chosenSpecial,
+						chosenSpecial,
+					);
+					setWinningLine(true);
+
+					// Delay before showing result screen
+					safeSetTimeout(() => {
+						handleGameResult('win', 3); // Triple multiplier
+					}, 2500);
 				} else if (Math.random() < 0.03) {
 					finalResult.push('🧋', '🧋', '🧋');
-					multiplier = 5; // 5x multiplier for boba jackpot
+					setWinningLine(true);
+
+					// Delay before showing result screen
+					safeSetTimeout(() => {
+						handleGameResult('win', 5); // 5x multiplier for boba jackpot
+					}, 2500);
 				} else {
 					finalResult.push(winSymbol, winSymbol, winSymbol);
-					multiplier = 2; // Standard win
-				}
+					setWinningLine(true);
 
-				// Set winning line to show highlight
-				setWinningLine(true);
+					// Delay before showing result screen
+					safeSetTimeout(() => {
+						handleGameResult('win', 2); // Standard win
+					}, 2500);
+				}
 			} else {
 				// Loss - random non-matching symbols
 				const a = symbols[Math.floor(Math.random() * symbols.length)];
@@ -1201,22 +1231,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 				}
 
 				finalResult.push(a, b, c);
+
+				// Delay before showing result screen
+				safeSetTimeout(() => {
+					handleGameResult('lose');
+				}, 2500);
 			}
 
 			setSpinResult(finalResult);
 			setSpinning(false);
 			setIsLoading(false);
-
-			// Delay before showing result screen
-			safeSetTimeout(() => {
-				if (multiplier > 0) {
-					handleGameResult('win', multiplier);
-				} else {
-					handleGameResult('lose');
-				}
-				// Reset winning line after transitioning
-				setWinningLine(false);
-			}, 2500); // 2.5 second delay to show the final result
 		}, spinDuration);
 	};
 
@@ -1426,7 +1450,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									sx={{ textAlign: 'center', minHeight: 60 }}
 								>
 									Test your luck with the slot machine. Match
-									delicious food symbols to win!
+									delicious food emojis to win!
 								</Typography>
 								<ActionButton
 									variant="contained"
@@ -2015,7 +2039,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					<SlotHeader>
 						<SlotTitle variant="h4">CMUEats Lucky Spins</SlotTitle>
 						<Typography variant="subtitle1" color="#FFD700">
-							Match delicious food symbols to win!
+							Match delicious food emojis to win!
 						</Typography>
 					</SlotHeader>
 
@@ -2148,6 +2172,90 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 							</Grid>
 							<Grid item xs={4}>
 								<Chip
+									label="🍱🍱🍱 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🥘🥘🥘 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍩🍩🍩 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍦🍦🍦 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍪🍪🍪 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍗🍗🍗 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🥞🥞🥞 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🥨🥨🥨 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍚🍚🍚 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🥐🥐🥐 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🥪🥪🥪 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🧁🧁🧁 = 3×"
+									size="small"
+									sx={{ bgcolor: '#8B0000', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
 									label="🍣🍣🍣 = 3×"
 									size="small"
 									sx={{ bgcolor: '#8B0000', width: '100%' }}
@@ -2155,12 +2263,23 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 							</Grid>
 							<Grid item xs={4}>
 								<Chip
+									label="🍟🍟🍟 = 3×"
+									size="small"
+									sx={{ bgcolor: '#8B0000', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Chip
 									label="🧋🧋🧋 = 5×"
 									size="small"
 									sx={{
 										bgcolor: '#4B0082',
 										width: '100%',
 										color: '#FFD700',
+										fontWeight: 'bold',
+										fontSize: '1rem',
+										height: '28px',
+										mt: 1,
 									}}
 								/>
 							</Grid>
@@ -2368,6 +2487,13 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			</Box>
 		);
 	};
+
+	// Add a useEffect to reset the winning line when the game result changes
+	useEffect(() => {
+		if (gameResult !== null) {
+			setWinningLine(false);
+		}
+	}, [gameResult]);
 
 	return (
 		<StyledDialog
