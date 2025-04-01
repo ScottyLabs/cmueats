@@ -486,17 +486,37 @@ export default function RouletteGame({
 			aria-labelledby="roulette-game-title"
 		>
 			<GameHeader>
-				<Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}>
+				<Box
+					sx={{
+						position: 'absolute',
+						top: 8,
+						right: 8,
+						zIndex: 9999,
+					}}
+				>
 					<IconButton
 						onClick={onClose}
-						sx={{ color: '#fff' }}
+						sx={{
+							color: '#fff',
+							position: 'relative',
+							zIndex: 9999,
+						}}
 						aria-label="close"
 					>
 						<CloseIcon />
 					</IconButton>
 				</Box>
 
-				<MainTitle variant="h3">CMUEats Private Academy</MainTitle>
+				<MainTitle
+					variant="h4"
+					sx={{
+						textAlign: 'center',
+						fontWeight: 700,
+						letterSpacing: '0.5px',
+					}}
+				>
+					CMUEats Private Academy
+				</MainTitle>
 				<Typography
 					variant="h5"
 					sx={{ color: '#ccc', mt: 1, mb: 2, lineHeight: 1.4 }}

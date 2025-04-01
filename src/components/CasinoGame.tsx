@@ -1069,8 +1069,8 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 		// Simulate coin flip with some delay for suspense
 		safeSetTimeout(() => {
-			// Base win chance adjusted by opponent difficulty
-			const winChance = 0.25; // default 25/75
+			// Base win chance adjusted to 49/51 in favor of house
+			const winChance = 0.49; // changed from 0.25 to 0.49 for 49/51 odds
 
 			// Determine result first
 			const playerWins = Math.random() < winChance;
@@ -2095,6 +2095,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						resetGame();
 						setSelectedGame(null);
 						setGameState('selecting');
+						// Force a re-render to fully close the dialog
+						setTimeout(() => {
+							setBalance((prev) => {
+								localStorage.setItem(
+									'cmueats-balance',
+									prev.toString(),
+								);
+								return prev;
+							});
+						}, 50);
 					}}
 					initialBalance={balance}
 				/>
@@ -2129,6 +2139,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 							resetGame();
 							setSelectedGame(null);
 							setGameState('selecting');
+							// Force a re-render to fully close the dialog
+							setTimeout(() => {
+								setBalance((prev) => {
+									localStorage.setItem(
+										'cmueats-balance',
+										prev.toString(),
+									);
+									return prev;
+								});
+							}, 50);
 						}}
 						initialBalance={balance}
 					/>
@@ -2262,7 +2282,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						position: 'absolute',
 						top: 8,
 						right: 8,
-						zIndex: 1000,
+						zIndex: 9999, // Increased from 1000 to 9999
 					}}
 				>
 					<IconButton
@@ -2274,7 +2294,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					</IconButton>
 				</Box>
 
-				<MainTitle variant="h3">CMUEats Private Academy</MainTitle>
+				<MainTitle
+					variant="h4"
+					sx={{
+						textAlign: 'center',
+						fontWeight: 700,
+						letterSpacing: '0.5px',
+					}}
+				>
+					CMUEats Private Academy
+				</MainTitle>
 				<Typography
 					variant="h5"
 					sx={{ color: '#ccc', mt: 1, mb: 2, lineHeight: 1.4 }}

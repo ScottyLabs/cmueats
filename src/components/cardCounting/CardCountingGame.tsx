@@ -152,8 +152,13 @@ function CardCountingGame({
 						value={currentTab}
 						onChange={handleTabChange}
 						indicatorColor="primary"
-						textColor="primary"
+						textColor="inherit"
 						centered
+						sx={{
+							'& .MuiTab-root': {
+								color: 'white',
+							},
+						}}
 					>
 						<Tab label="Counting Systems" />
 						<Tab label="Training Modes" />
@@ -179,7 +184,7 @@ function CardCountingGame({
 												{system.name}
 											</Typography>
 											<Typography
-												color="textSecondary"
+												color="white"
 												gutterBottom
 											>
 												Difficulty: {system.difficulty}
@@ -230,7 +235,7 @@ function CardCountingGame({
 												{mode.name}
 											</Typography>
 											<Typography
-												color="textSecondary"
+												color="white"
 												gutterBottom
 											>
 												Difficulty: {mode.difficulty}
