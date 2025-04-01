@@ -601,7 +601,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		callback: () => void,
 		delay: number,
 	): NodeJS.Timeout => {
-		const timer = setTimeout(callback, delay);
+		const timer = setTimeout(callback, delay) as NodeJS.Timeout;
 		timerRefs.current.push(timer);
 		return timer;
 	};
