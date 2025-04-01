@@ -253,7 +253,7 @@ const SmartContractPanel = styled(Box)({
 	border: '1px solid var(--card-border-color)',
 	fontSize: '0.75rem',
 	fontFamily: 'monospace',
-	color: '#10B981',
+	color: 'white',
 	marginTop: '6px',
 });
 
@@ -262,6 +262,7 @@ const StatsItem = styled(Box)({
 	justifyContent: 'space-between',
 	fontSize: '0.75rem',
 	padding: '2px 0',
+	color: 'white',
 });
 
 // April Fools toggle switch component
@@ -353,7 +354,7 @@ function NFTStatusBarComponent({
 						<Typography
 							variant="subtitle2"
 							fontWeight="bold"
-							sx={{ mb: 0.5, fontSize: '0.8rem' }}
+							sx={{ mb: 0.5, fontSize: '0.8rem', color: 'white' }}
 						>
 							Your NFT Portfolio{' '}
 							{contractState.userNFTs &&
@@ -505,30 +506,11 @@ function NFTStatusBarComponent({
 											fontSize: '0.7rem',
 											borderColor:
 												'var(--logo-first-half)',
-											color: 'var(--text-primary)',
+											color: 'white',
 										}}
 										fullWidth
 									>
-										View All NFTs
-									</Button>
-									<Button
-										size="small"
-										variant="contained"
-										startIcon={<CasinoIcon />}
-										onClick={(e) => {
-											e.stopPropagation();
-											onOpenCasino();
-										}}
-										sx={{
-											fontSize: '0.7rem',
-											bgcolor: '#D30000',
-											color: 'white',
-											'&:hover': {
-												bgcolor: '#FF0000',
-											},
-										}}
-									>
-										Casino
+										VIEW ALL NFTS
 									</Button>
 								</Box>
 							</>
@@ -555,25 +537,6 @@ function NFTStatusBarComponent({
 										fullWidth
 									>
 										Browse Marketplace
-									</Button>
-									<Button
-										size="small"
-										variant="contained"
-										startIcon={<CasinoIcon />}
-										onClick={(e) => {
-											e.stopPropagation();
-											onOpenCasino();
-										}}
-										sx={{
-											fontSize: '0.7rem',
-											bgcolor: '#D30000',
-											color: 'white',
-											'&:hover': {
-												bgcolor: '#FF0000',
-											},
-										}}
-									>
-										Casino
 									</Button>
 								</Box>
 							</Box>
@@ -610,7 +573,7 @@ function NFTStatusBarComponent({
 									},
 								}}
 							>
-								Play Roulette at VIP Casino!
+								TEST YOUR LUCK AT VIP CASINO!
 							</Button>
 						</Box>
 					</Box>
@@ -621,7 +584,7 @@ function NFTStatusBarComponent({
 						<Typography
 							variant="subtitle2"
 							fontWeight="bold"
-							sx={{ mb: 0.5, fontSize: '0.8rem' }}
+							sx={{ mb: 0.5, fontSize: '0.8rem', color: 'white' }}
 						>
 							Smart Contract{' '}
 							<VerifiedIcon
@@ -640,12 +603,19 @@ function NFTStatusBarComponent({
 								sx={{
 									fontFamily: 'monospace',
 									whiteSpace: 'nowrap',
+									color: 'white',
 								}}
 							>
 								0x742d35Cc6634C0532...
 							</Typography>
 
-							<Box sx={{ mt: 0.5, fontSize: '0.7rem' }}>
+							<Box
+								sx={{
+									mt: 0.5,
+									fontSize: '0.7rem',
+									color: 'white',
+								}}
+							>
 								{`contract CMUEatsNFT is ERC721, Ownable {`}
 								<br />
 								{`  uint256 public mintPrice = ${contractState.mintPrice} ether;`}
@@ -662,7 +632,7 @@ function NFTStatusBarComponent({
 							<Typography
 								variant="caption"
 								fontWeight="bold"
-								sx={{ fontSize: '0.75rem' }}
+								sx={{ fontSize: '0.75rem', color: 'white' }}
 							>
 								Contract Functions
 							</Typography>
@@ -709,35 +679,38 @@ function NFTStatusBarComponent({
 						<Divider sx={{ mt: 1, mb: 1 }} />
 
 						<StatsItem>
-							<Typography
-								variant="caption"
-								color="var(--text-muted)"
-							>
+							<Typography variant="caption" color="white">
 								Gas Used:
 							</Typography>
-							<Typography variant="caption" fontWeight="bold">
+							<Typography
+								variant="caption"
+								fontWeight="bold"
+								color="white"
+							>
 								{blockchainData.gasUsed}
 							</Typography>
 						</StatsItem>
 						<StatsItem>
-							<Typography
-								variant="caption"
-								color="var(--text-muted)"
-							>
+							<Typography variant="caption" color="white">
 								Network Fee:
 							</Typography>
-							<Typography variant="caption" fontWeight="bold">
+							<Typography
+								variant="caption"
+								fontWeight="bold"
+								color="white"
+							>
 								{contractState.networkFee} ETH
 							</Typography>
 						</StatsItem>
 						<StatsItem>
-							<Typography
-								variant="caption"
-								color="var(--text-muted)"
-							>
+							<Typography variant="caption" color="white">
 								Royalty:
 							</Typography>
-							<Typography variant="caption" fontWeight="bold">
+							<Typography
+								variant="caption"
+								fontWeight="bold"
+								color="white"
+							>
 								{contractState.royaltyPercentage}%
 							</Typography>
 						</StatsItem>
@@ -814,7 +787,11 @@ function NFTStatusBarComponent({
 								<Box sx={{ mt: 1 }}>
 									<Typography
 										variant="caption"
-										sx={{ display: 'block', mb: 0.5 }}
+										sx={{
+											display: 'block',
+											mb: 0.5,
+											color: 'white',
+										}}
 									>
 										Collection Progress
 									</Typography>
@@ -837,11 +814,11 @@ function NFTStatusBarComponent({
 									/>
 									<Typography
 										variant="caption"
-										color="var(--text-muted)"
 										sx={{
 											display: 'block',
 											mt: 0.5,
 											textAlign: 'right',
+											color: 'white',
 										}}
 									>
 										{contractState.totalMinted}/
@@ -868,7 +845,7 @@ function NFTStatusBarComponent({
 			>
 				<Typography
 					variant="subtitle2"
-					color="var(--text-primary)"
+					color="white"
 					noWrap
 					sx={{
 						display: 'flex',
