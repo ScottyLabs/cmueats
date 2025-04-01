@@ -516,6 +516,26 @@ const WinnerDisplay = styled(Box, {
 	},
 }));
 
+// Add a new state to track winning paylines
+const WinningPayline = styled(Box)({
+	position: 'absolute',
+	left: '0',
+	right: '0',
+	top: '50%',
+	transform: 'translateY(-50%)',
+	height: '8px',
+	backgroundColor: '#FFD700',
+	opacity: 0.9,
+	zIndex: 5,
+	pointerEvents: 'none',
+	animation: 'pulse 1s infinite',
+	'@keyframes pulse': {
+		'0%': { opacity: 0.7, boxShadow: '0 0 5px 2px #FFD700' },
+		'50%': { opacity: 1, boxShadow: '0 0 15px 5px #FFD700' },
+		'100%': { opacity: 0.7, boxShadow: '0 0 5px 2px #FFD700' },
+	},
+});
+
 function CasinoGame({ open, onClose }: CasinoGameProps) {
 	// Load balance from localStorage or use default
 	const [balance, setBalance] = useState(() => {
@@ -565,6 +585,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const [spinning, setSpinning] = useState(false);
 	const [spinResult, setSpinResult] = useState<string[]>(['', '', '']);
 	const [leverPulled, setLeverPulled] = useState(false);
+	const [winningLine, setWinningLine] = useState(false);
 
 	// Add game difficulty settings and timer state
 	const [memoryGameDifficulty, setMemoryGameDifficulty] = useState<
@@ -1094,6 +1115,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 		setSpinning(true);
 		setIsLoading(true);
+		setWinningLine(false);
 
 		// Simulate slot machine spinning with randomized delay
 		const symbols = [
@@ -1129,23 +1151,27 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 			// Different win probabilities based on opponent difficulty
 			const winProbability = 0.15; // default
+			let multiplier = 0;
 
 			if (random < winProbability) {
 				// Win - all symbols match or special win patterns
 				const winSymbol =
 					symbols[Math.floor(Math.random() * symbols.length)];
 
-				// Special case for 7️⃣ (bigger win) or 💎 (jackpot)
+				// Special case for 🍣 (bigger win) or 🧋 (jackpot)
 				if (Math.random() < 0.1) {
 					finalResult.push('🍣', '🍣', '🍣');
-					handleGameResult('win', 3); // Triple multiplier
+					multiplier = 3; // Triple multiplier
 				} else if (Math.random() < 0.03) {
 					finalResult.push('🧋', '🧋', '🧋');
-					handleGameResult('win', 5); // 5x multiplier for boba jackpot
+					multiplier = 5; // 5x multiplier for boba jackpot
 				} else {
 					finalResult.push(winSymbol, winSymbol, winSymbol);
-					handleGameResult('win', 2); // Standard win
+					multiplier = 2; // Standard win
 				}
+
+				// Set winning line to show highlight
+				setWinningLine(true);
 			} else {
 				// Loss - random non-matching symbols
 				const a = symbols[Math.floor(Math.random() * symbols.length)];
@@ -1175,12 +1201,22 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 				}
 
 				finalResult.push(a, b, c);
-				handleGameResult('lose');
 			}
 
 			setSpinResult(finalResult);
 			setSpinning(false);
 			setIsLoading(false);
+
+			// Delay before showing result screen
+			safeSetTimeout(() => {
+				if (multiplier > 0) {
+					handleGameResult('win', multiplier);
+				} else {
+					handleGameResult('lose');
+				}
+				// Reset winning line after transitioning
+				setWinningLine(false);
+			}, 2500); // 2.5 second delay to show the final result
 		}, spinDuration);
 	};
 
@@ -1963,6 +1999,14 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			return lights;
 		};
 
+		// Check if we have a winning combination - all three symbols are the same
+		const hasWinningCombination =
+			!spinning &&
+			spinResult.length === 3 &&
+			spinResult[0] === spinResult[1] &&
+			spinResult[1] === spinResult[2] &&
+			spinResult[0] !== '';
+
 		return (
 			<Box sx={{ pt: 2, pb: 4 }}>
 				<SlotMachineContainer>
@@ -1977,6 +2021,10 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 					<SlotDisplayWindow>
 						<PaylineBox />
+						{/* Show winning payline when there's a match */}
+						{winningLine && hasWinningCombination && (
+							<WinningPayline />
+						)}
 						{renderSlotReels(spinResult, spinning)}
 					</SlotDisplayWindow>
 
@@ -1985,6 +2033,37 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						<LeverArm />
 						<LeverKnob />
 					</SlotLever>
+
+					{/* Show message when winning combination appears */}
+					{hasWinningCombination && winningLine && (
+						<Box
+							sx={{
+								mt: 2,
+								p: 1,
+								bgcolor: 'rgba(0, 0, 0, 0.7)',
+								borderRadius: '8px',
+								textAlign: 'center',
+								animation: 'fadeIn 0.5s',
+								'@keyframes fadeIn': {
+									'0%': { opacity: 0 },
+									'100%': { opacity: 1 },
+								},
+							}}
+						>
+							<Typography
+								variant="h5"
+								sx={{
+									color: '#FFD700',
+									fontWeight: 'bold',
+									textShadow: '0 0 10px #FFD700',
+								}}
+							>
+								{spinResult[0] === '🧋'
+									? 'JACKPOT!'
+									: 'WINNER!'}
+							</Typography>
+						</Box>
+					)}
 
 					<WinnerDisplay isWinning={isWinning}>
 						<Typography
