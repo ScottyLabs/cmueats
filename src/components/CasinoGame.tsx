@@ -597,7 +597,10 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	);
 
 	// Helper function to safely set timeouts
-	const safeSetTimeout = (callback: () => void, delay: number) => {
+	const safeSetTimeout = (
+		callback: () => void,
+		delay: number,
+	): NodeJS.Timeout => {
 		const timer = setTimeout(callback, delay);
 		timerRefs.current.push(timer);
 		return timer;
@@ -921,17 +924,16 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		// Start the timer
 		timerRef.current = setInterval(() => {
 			setTimeRemaining((prev) => {
-				if (prev <= 1) {
-					// Time's up - player loses
+				const newTime = prev - 1;
+				if (newTime <= 0) {
 					if (timerRef.current) {
 						clearInterval(timerRef.current);
 					}
-					handleGameResult('lose');
 					return 0;
 				}
-				return prev - 1;
+				return newTime;
 			});
-		}, 1000);
+		}, 1000) as NodeJS.Timeout;
 	};
 
 	// Make sure to clean up timer when component unmounts or game changes
