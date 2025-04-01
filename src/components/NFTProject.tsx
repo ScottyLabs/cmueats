@@ -1,3 +1,4 @@
+// ESLint: This file has been fixed - apostrophes in strings properly escaped
 import React, { useState } from 'react';
 import {
 	Dialog,
@@ -649,145 +650,150 @@ contract CustomContract {
 }`,
 };
 
-// Updated NFT data with additional properties
+// Updated NFT data with Pokemon-style card designs and descriptions
 const nftData = [
 	{
 		id: 1,
-		name: 'CMUEats #001',
-		image: 'https://via.placeholder.com/300/6D28D9/FFFFFF?text=CMUEats+NFT+001',
+		name: 'Espresso Depresso',
+		image: '/images/cards/card1.png',
 		price: 0.25,
 		priceHistory: [0.18, 0.22, 0.25],
 		description:
-			"Ultra rare CMUEats collector's item featuring a legendary dining hall experience.",
+			'RARE COLLECTIBLE - The perfect companion for your 3AM debugging sessions. This caffeinated card is guaranteed to keep you coding long after your sanity has left the chat.',
 		owner: '0x742...1a3b',
-		rarity: 'legendary',
+		rarity: 'rare',
 		rarityScore: 98,
 		lastSold: '2 days ago',
 		attributes: [
 			{ trait: 'Location', value: 'The Underground' },
-			{ trait: 'Food Type', value: 'Coffee' },
-			{ trait: 'Time Period', value: 'Morning' },
+			{ trait: 'HP', value: '115' },
+			{ trait: 'Ability', value: 'Coffee Rush' },
+			{ trait: 'Attack', value: 'Midnight Munch' },
 		],
 		sold: false,
 		utilities: [
-			'Grants 0.5% faster walking speed on campus',
-			'Telepathic connection with other CMUEats NFT holders',
+			'Emerges at 2AM when coding projects are due',
+			'Works only between 11 PM and 6 AM',
 		],
 	},
 	{
 		id: 2,
-		name: 'CMUEats #042',
-		image: 'https://via.placeholder.com/300/4F46E5/FFFFFF?text=CMUEats+NFT+042',
-		price: 0.15,
-		priceHistory: [0.12, 0.13, 0.15],
+		name: "Stack'd Saboteur",
+		image: '/images/cards/card2.png',
+		price: 0.35,
+		priceHistory: [0.25, 0.3, 0.35],
 		description:
-			'Limited edition artwork commemorating the grand opening of the Tepper Quad cafe.',
+			"ULTRA RARE - The food safety inspector that strikes fear into the hearts of dining establishments. Own this card and you'll never look at a burger the same way again.",
 		owner: '0xf3c...9d21',
-		rarity: 'rare',
-		rarityScore: 78,
-		lastSold: '1 week ago',
+		rarity: 'ultra-rare',
+		rarityScore: 92,
+		lastSold: '3 days ago',
 		attributes: [
-			{ trait: 'Location', value: 'Tepper Quad' },
-			{ trait: 'Food Type', value: 'Sandwich' },
-			{ trait: 'Time Period', value: 'Lunch' },
+			{ trait: 'Location', value: "Stack'd" },
+			{ trait: 'HP', value: '188' },
+			{ trait: 'Ability', value: 'Third Party Trouble' },
+			{ trait: 'Attack', value: 'Burger Betrayal' },
 		],
 		sold: false,
 		utilities: [
-			'5% chance of extra fries when purchasing at The Underground',
-			'Makes you 3% more attractive',
+			'Attach a "Food Safety Violation" card to your opponent\'s active Pokemon',
+			'Your opponent must miss their next three classes if food poisoned',
 		],
 	},
 	{
 		id: 3,
-		name: 'CMUEats #107',
-		image: 'https://via.placeholder.com/300/8B5CF6/FFFFFF?text=CMUEats+NFT+107',
+		name: 'Wok and Roll Express',
+		image: '/images/cards/card1.png',
 		price: 0.4,
 		priceHistory: [0.35, 0.38, 0.4],
 		description:
-			'Rare digital collectible featuring the famous Entropy playlist from the Underground.',
+			'LEGENDARY - So spicy it comes with its own fire extinguisher. Side effects may include temporary loss of taste buds and spontaneous tears of joy/pain.',
 		owner: '0xa12...8e67',
-		rarity: 'epic',
-		rarityScore: 91,
+		rarity: 'legendary',
+		rarityScore: 95,
 		lastSold: '4 days ago',
 		attributes: [
-			{ trait: 'Location', value: 'Entropy' },
-			{ trait: 'Food Type', value: 'Pizza' },
-			{ trait: 'Time Period', value: 'Evening' },
+			{ trait: 'Location', value: 'Hunan Express' },
+			{ trait: 'HP', value: '160' },
+			{ trait: 'Ability', value: 'Szechuan Strike' },
+			{ trait: 'Attack', value: 'FIERY WOK' },
 		],
 		sold: false,
 		utilities: [
-			'Telepathic connection with other CMUEats NFT holders',
-			'WiFi speed increased by 2.5% while studying',
+			'Flip a coin. If heads, the opposing Pokémon is now Burned (from the legendary spice levels)',
+			'Spicy flavor overwhelms opponents',
 		],
 	},
 	{
 		id: 4,
-		name: 'CMUEats #233',
-		image: 'https://via.placeholder.com/300/3B82F6/FFFFFF?text=CMUEats+NFT+233',
-		price: 0.12,
-		priceHistory: [0.08, 0.1, 0.12],
+		name: 'Schatz and Awe',
+		image: '/images/cards/card2.png',
+		price: 0.22,
+		priceHistory: [0.18, 0.2, 0.22],
 		description:
-			'A historic moment from the ABP line during finals week. Only 3 in existence.',
+			"UNCOMMON - The only card that lets you eat until you literally can't move. Comes with unlimited refills and guaranteed food coma.",
 		owner: '0x098...f4e2',
 		rarity: 'uncommon',
 		rarityScore: 65,
 		lastSold: '2 weeks ago',
 		attributes: [
-			{ trait: 'Location', value: 'ABP' },
-			{ trait: 'Food Type', value: 'Bagel' },
-			{ trait: 'Time Period', value: 'Morning' },
+			{ trait: 'Location', value: 'Schatz Dining' },
+			{ trait: 'HP', value: '120' },
+			{ trait: 'Ability', value: 'Order Up!' },
+			{ trait: 'Attack', value: 'Endless Refills' },
 		],
 		sold: false,
 		utilities: [
-			'5% chance of extra fries when purchasing at The Underground',
-			'Immune to campus geese attacks (mostly)',
+			'Heal 30 HP from this Pokemon',
+			"Opponent's Active Pokemon is now Asleep",
 		],
 	},
 	{
 		id: 5,
-		name: 'CMUEats #304',
-		image: 'https://via.placeholder.com/300/6366F1/FFFFFF?text=CMUEats+NFT+304',
-		price: 0.75,
-		priceHistory: [0.65, 0.7, 0.75],
+		name: 'Ramen Revelation',
+		image: '/images/cards/card1.png',
+		price: 0.45,
+		priceHistory: [0.38, 0.42, 0.45],
 		description:
-			'The legendary platinum membership pass. Grants virtual bragging rights.',
+			'RARE HOLO - The leakiest container in Pittsburgh, guaranteed to ruin at least one backpack. Worth it for the flavor though!',
 		owner: '0xd56...2a89',
-		rarity: 'legendary',
-		rarityScore: 99,
-		lastSold: '3 days ago',
+		rarity: 'rare-holo',
+		rarityScore: 88,
+		lastSold: '1 week ago',
 		attributes: [
-			{ trait: 'Location', value: 'All Locations' },
-			{ trait: 'Food Type', value: 'Premium' },
-			{ trait: 'Time Period', value: 'All Day' },
+			{ trait: 'Location', value: 'Revelations Noodle' },
+			{ trait: 'HP', value: '145' },
+			{ trait: 'Attack', value: 'Leaky Container' },
+			{ trait: 'Illustrator', value: 'Nood enjoyer' },
 		],
 		sold: false,
 		utilities: [
-			'Grants 0.5% faster walking speed on campus',
-			'Professors are 7% more likely to round up your grade',
-			"Unlocks secret menu items (please don't ask what they are)",
+			'Flip a coin. If tails, this Pokémon does 20 damage to itself',
+			'Legend has it that ordering a specific combination of ingredients can summon the mythical Revelations Noodle',
 		],
 	},
 	{
 		id: 6,
-		name: 'CMUEats #418',
-		image: 'https://via.placeholder.com/300/A855F7/FFFFFF?text=CMUEats+NFT+418',
-		price: 0.22,
-		priceHistory: [0.18, 0.2, 0.22],
+		name: 'Plan Demandium',
+		image: '/images/cards/card2.png',
+		price: 0.15,
+		priceHistory: [0.1, 0.12, 0.15],
 		description:
-			'Ultra-limited 3D model of the famous Sushi Too bento box.',
+			'COMMON - Required for freshmen who enjoy complicated plans with limited food options. Choose wisely, your GPA may depend on it!',
 		owner: '0x321...7f40',
 		rarity: 'common',
 		rarityScore: 42,
 		lastSold: '5 days ago',
 		attributes: [
-			{ trait: 'Location', value: 'Sushi Too' },
-			{ trait: 'Food Type', value: 'Sushi' },
-			{ trait: 'Time Period', value: 'Lunch' },
+			{ trait: 'Type', value: 'Administrative' },
+			{ trait: 'HP', value: '100' },
+			{ trait: 'Ability', value: 'Red Plan / Blue Plan' },
+			{ trait: 'Illustrator', value: 'Dining Plan' },
 		],
 		sold: false,
 		utilities: [
-			'Can summon a virtual Scottie dog that only you can see',
-			'Free napkins for life',
+			'Required for freshman at CMU',
+			'Get either the red plan or the blue plan',
 		],
 	},
 ];
@@ -1733,9 +1739,13 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Box sx={{ position: 'relative' }}>
 												<CardMedia
 													component="img"
-													height="200"
+													height="300"
 													image={nft.image}
 													alt={nft.name}
+													sx={{
+														objectFit: 'contain',
+														padding: '10px 0',
+													}}
 												/>
 												<Box
 													sx={{
