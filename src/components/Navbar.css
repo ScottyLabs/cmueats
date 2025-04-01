@@ -4,6 +4,10 @@
 	padding: 14px;
 	box-sizing: border-box;
 	border-top: 2px solid var(--nav-border-top);
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	z-index: 1000;
 }
 
 .Navbar-links {
@@ -13,7 +17,7 @@
 	grid-auto-flow: column;
 	height: 40px;
 	margin: 0 auto;
-	max-width: 500px;
+	max-width: 800px;
 }
 
 .Navbar-links a {
@@ -25,14 +29,14 @@
 	font-family: 'Zilla Slab', sans-serif;
 	font-weight: 500;
 	color: var(--text-primary);
-	font-size: 16px;
+	font-size: 14px;
 	text-decoration: none;
+	gap: 6px;
 }
 
 .Navbar-links svg {
-	width: 24px;
-	height: 24px;
-	margin-right: 0.4em;
+	width: 20px;
+	height: 20px;
 }
 
 .Navbar-active {
@@ -40,7 +44,7 @@
 	z-index: 2;
 	left: 0;
 	top: 0;
-	width: 50%;
+	width: 25%;
 	height: 100%;
 	background-color: var(--selected-tab-bg);
 	border-radius: 999px;
@@ -53,9 +57,31 @@
 	transform: translateX(100%);
 }
 
+.Navbar-active_nft {
+	transform: translateX(200%);
+}
+
+.Navbar-active_casino {
+	transform: translateX(300%);
+}
+
 .Navbar-active_glow {
 	box-shadow:
 		0 0 5px var(--hover-accent-color),
 		0 0 10px var(--hover-accent-color),
 		0 0 15px var(--hover-accent-color);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+	.Navbar-links a {
+		font-size: 12px;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.Navbar-links svg {
+		width: 18px;
+		height: 18px;
+	}
 }

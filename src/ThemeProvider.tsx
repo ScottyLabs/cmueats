@@ -5,9 +5,9 @@ import {
 	useLayoutEffect,
 	useMemo,
 } from 'react';
-import IS_MIKU_DAY from './util/constants';
+import IS_MIKU_DAY, { IS_APRIL_FOOLS } from './util/constants';
 
-type Theme = 'none' | 'miku';
+type Theme = 'none' | 'miku' | 'april-fools';
 
 const ThemeContext = createContext<{
 	theme: Theme;
@@ -15,11 +15,13 @@ const ThemeContext = createContext<{
 }>({ theme: 'none', updateTheme: () => {} });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-	const [theme, setTheme] = useState<Theme>(() =>
-		IS_MIKU_DAY && localStorage.getItem('theme') === 'miku'
-			? 'miku'
-			: 'none',
-	);
+	const [theme, setTheme] = useState<Theme>(() => {
+		if (IS_APRIL_FOOLS) return 'april-fools';
+		if (IS_MIKU_DAY && localStorage.getItem('theme') === 'miku')
+			return 'miku';
+		return 'none';
+	});
+
 	useLayoutEffect(() => {
 		document.body.className = theme;
 	}, [theme]);
