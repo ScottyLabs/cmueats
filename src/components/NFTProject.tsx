@@ -782,7 +782,7 @@ const nftData = [
 		price: 0.15,
 		priceHistory: [0.1, 0.12, 0.15],
 		description:
-			'COMMON - Required for freshmen who enjoy complicated plans with limited food options. Choose wisely, your GPA may depend on it!',
+			'COMMON - Required for freshmen who enjoy complicated plans with limited food options. Choose wisely—your GPA may depend on it!',
 		owner: '0x321...7f40',
 		rarity: 'common',
 		rarityScore: 42,
