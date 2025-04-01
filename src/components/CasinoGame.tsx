@@ -635,6 +635,31 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		}
 	};
 
+	// Helper function to get card comparison result
+	const getCardComparisonLabel = (
+		opCard: string,
+		plCard: string,
+	): 'HIGHER' | 'LOWER' | 'EQUAL' => {
+		if (getCardValue(opCard) > getCardValue(plCard)) {
+			return 'HIGHER';
+		}
+		if (getCardValue(opCard) < getCardValue(plCard)) {
+			return 'LOWER';
+		}
+		return 'EQUAL';
+	};
+
+	// Helper function to get detailed card comparison text
+	const getCardComparisonText = (opCard: string, plCard: string): string => {
+		if (getCardValue(opCard) > getCardValue(plCard)) {
+			return `${opCard} is higher than ${plCard}`;
+		}
+		if (getCardValue(opCard) < getCardValue(plCard)) {
+			return `${opCard} is lower than ${plCard}`;
+		}
+		return `${opCard} is equal to ${plCard}`;
+	};
+
 	// Helper functions for difficulty modifiers
 	const getDifficultyModifier = (difficulty: string): number => {
 		if (difficulty === 'Hard') return 0.7;
@@ -1078,10 +1103,15 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			const randomSuit =
 				cardSuits[Math.floor(Math.random() * cardSuits.length)];
 			const opponentCardValue = `${cardValues[opponentValueIndex]}${randomSuit}`;
-			setOpponentCard(opponentCardValue);
 
-			handleGameResult(result);
+			// Set the opponent's card and immediately stop loading so it's visible
+			setOpponentCard(opponentCardValue);
 			setIsLoading(false);
+
+			// Add a delay to allow players to see the card comparison before showing result
+			safeSetTimeout(() => {
+				handleGameResult(result);
+			}, 3000); // Show card comparison for 3 seconds before transitioning
 		}, 1000);
 	};
 
@@ -1733,62 +1763,183 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const renderHigherLowerGame = () => (
 		<Box>
 			<Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
-				Your Card
+				Higher or Lower
 			</Typography>
 
-			<Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-				<GameCard>
-					<CardValue>{playerCard}</CardValue>
-				</GameCard>
-			</Box>
-
 			{!prediction ? (
-				<Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-					<ActionButton
-						onClick={() => handleHigherLowerPrediction('higher')}
-					>
-						Higher
-					</ActionButton>
-					<ActionButton
-						onClick={() => handleHigherLowerPrediction('lower')}
-					>
-						Lower
-					</ActionButton>
-				</Box>
-			) : (
-				<Box>
+				<>
 					<Typography
-						variant="h6"
+						variant="body1"
 						sx={{ mb: 2, textAlign: 'center' }}
 					>
-						You predicted: {prediction.toUpperCase()}
+						Will the next card be higher or lower than yours?
 					</Typography>
 
 					<Box
 						sx={{
 							display: 'flex',
 							justifyContent: 'center',
-							alignItems: 'center',
-							gap: 3,
+							mb: 3,
 						}}
 					>
 						<GameCard>
 							<CardValue>{playerCard}</CardValue>
 						</GameCard>
+					</Box>
 
-						{isLoading ? (
-							<CircularProgress color="secondary" />
-						) : (
-							<GameCard>
-								{opponentCard ? (
-									<CardValue>{opponentCard}</CardValue>
-								) : (
-									<CardBack />
-								)}
-							</GameCard>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							gap: 2,
+						}}
+					>
+						<ActionButton
+							onClick={() =>
+								handleHigherLowerPrediction('higher')
+							}
+						>
+							Higher
+						</ActionButton>
+						<ActionButton
+							onClick={() => handleHigherLowerPrediction('lower')}
+						>
+							Lower
+						</ActionButton>
+					</Box>
+				</>
+			) : (
+				<>
+					<Typography
+						variant="body1"
+						sx={{ mb: 3, textAlign: 'center' }}
+					>
+						You predicted:{' '}
+						<strong>{prediction.toUpperCase()}</strong>
+					</Typography>
+
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							gap: 2,
+						}}
+					>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								gap: 3,
+								position: 'relative',
+							}}
+						>
+							<Box sx={{ textAlign: 'center' }}>
+								<Typography variant="body2" sx={{ mb: 1 }}>
+									Your Card
+								</Typography>
+								<GameCard>
+									<CardValue>{playerCard}</CardValue>
+								</GameCard>
+							</Box>
+
+							{isLoading ? (
+								<CircularProgress color="secondary" />
+							) : (
+								<>
+									<Box
+										sx={{
+											position: 'absolute',
+											top: '50%',
+											left: '50%',
+											transform: 'translate(-50%, -50%)',
+											zIndex: 10,
+										}}
+									>
+										{opponentCard && (
+											<Chip
+												label={getCardComparisonLabel(
+													opponentCard,
+													playerCard!,
+												)}
+												color={
+													(prediction === 'higher' &&
+														getCardValue(
+															opponentCard,
+														) >
+															getCardValue(
+																playerCard!,
+															)) ||
+													(prediction === 'lower' &&
+														getCardValue(
+															opponentCard,
+														) <
+															getCardValue(
+																playerCard!,
+															))
+														? 'success'
+														: 'error'
+												}
+												sx={{
+													fontWeight: 'bold',
+													fontSize: '0.9rem',
+													boxShadow:
+														'0 0 10px rgba(0,0,0,0.5)',
+												}}
+											/>
+										)}
+									</Box>
+
+									<Box sx={{ textAlign: 'center' }}>
+										<Typography
+											variant="body2"
+											sx={{ mb: 1 }}
+										>
+											Dealer&apos;s Card
+										</Typography>
+										<GameCard>
+											{opponentCard ? (
+												<CardValue>
+													{opponentCard}
+												</CardValue>
+											) : (
+												<CardBack />
+											)}
+										</GameCard>
+									</Box>
+								</>
+							)}
+						</Box>
+
+						{/* Result explanation */}
+						{opponentCard && !isLoading && (
+							<Box sx={{ textAlign: 'center', mt: 2 }}>
+								<Typography variant="body1">
+									{getCardComparisonText(
+										opponentCard,
+										playerCard!,
+									)}
+								</Typography>
+								<Typography
+									variant="body1"
+									sx={{
+										mt: 1,
+										fontWeight: 'bold',
+										color:
+											gameResult === 'win'
+												? '#FFD700'
+												: '#D30000',
+									}}
+								>
+									{gameResult === 'win'
+										? 'You Win!'
+										: 'You Lose!'}
+								</Typography>
+							</Box>
 						)}
 					</Box>
-				</Box>
+				</>
 			)}
 		</Box>
 	);
