@@ -316,6 +316,7 @@ function NFTStatusBarComponent({
 	onConnectWallet,
 	contractState,
 	onOpenCasino,
+	onToggleMarketplace,
 }: {
 	blockchainData: typeof initialBlockchainData;
 	walletConnected: boolean;
@@ -323,6 +324,7 @@ function NFTStatusBarComponent({
 	onConnectWallet: () => void;
 	contractState: SmartContractState;
 	onOpenCasino: () => void;
+	onToggleMarketplace: () => void;
 }) {
 	const [minimized, setMinimized] = useState<boolean | undefined>(true);
 	const [activeTab, setActiveTab] = useState<
@@ -330,10 +332,13 @@ function NFTStatusBarComponent({
 	>('dashboard');
 
 	const toggleMinimize = () => {
-		setMinimized((prev) => {
-			if (prev === undefined) return true;
-			return !prev;
-		});
+		const newValue = !minimized;
+		setMinimized(newValue);
+
+		// Call the parent's toggle function when expanding
+		if (newValue === false) {
+			onToggleMarketplace();
+		}
 	};
 
 	const pendingCount = pendingTransactions.filter(
@@ -1057,6 +1062,9 @@ function AprilFoolsManager() {
 	// Display welcome notification
 	useEffect(() => {
 		if (IS_APRIL_FOOLS) {
+			// Always show NFT Dashboard when in April Fools mode
+			setShowNFTProject(true);
+
 			setNotificationMessage(
 				'Welcome to the exclusive NFT marketplace! 🎉',
 			);
@@ -1218,11 +1226,41 @@ function AprilFoolsManager() {
 					),
 				);
 
-				// Increment total minted
-				setSmartContractState((prev) => ({
-					...prev,
-					totalMinted: prev.totalMinted + 1,
-				}));
+				// Increment total minted and add to user's collection
+				setSmartContractState((prevState) => {
+					const rarityTypes: Array<
+						'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'
+					> = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+					const randomRarity =
+						rarityTypes[
+							Math.floor(Math.random() * rarityTypes.length)
+						];
+
+					const updatedNFTs = [
+						...(prevState.userNFTs || []),
+						{
+							id: nftId,
+							name: `CMUEats #${nftId}`,
+							rarity: randomRarity,
+							image: '/images/cards/card1.png',
+							acquiredAt: 'Just now',
+							lastValue: 0.15 + Math.random() * 0.3,
+							appreciationPercentage:
+								Math.random() > 0.5
+									? Math.random() * 30
+									: -Math.random() * 15,
+						},
+					];
+
+					return {
+						...prevState,
+						totalMinted: Math.min(
+							prevState.totalMinted + 1,
+							prevState.maxSupply,
+						),
+						userNFTs: updatedNFTs,
+					};
+				});
 
 				// Show confirmation notification
 				setNotificationMessage(
@@ -1230,8 +1268,10 @@ function AprilFoolsManager() {
 				);
 				setShowNotification(true);
 
-				// Show paywall for payment
-				setShowPaywall(true);
+				// Only show paywall occasionally
+				if (Math.random() > 0.7) {
+					setShowPaywall(true);
+				}
 			},
 			3000 + Math.random() * 4000,
 		); // Random confirmation time
@@ -1285,6 +1325,12 @@ function AprilFoolsManager() {
 	// Handle notification close
 	const handleNotificationClose = () => {
 		setShowNotification(false);
+	};
+
+	// Handle clicking the NFT Status Bar to expand or view full marketplace
+	const handleNFTStatusBarClick = () => {
+		// Toggle between showing the full marketplace and just the status bar
+		setShowNFTProject(!showNFTProject);
 	};
 
 	if (!IS_APRIL_FOOLS) return null;
@@ -1345,6 +1391,7 @@ function AprilFoolsManager() {
 						onConnectWallet={simulateWalletConnection}
 						contractState={smartContractState}
 						onOpenCasino={() => setCasinoDialogOpen(true)}
+						onToggleMarketplace={handleNFTStatusBarClick}
 					/>
 
 					{/* NFT Marketplace Button */}
