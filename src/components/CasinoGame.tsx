@@ -1096,7 +1096,18 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setIsLoading(true);
 
 		// Simulate slot machine spinning with randomized delay
-		const symbols = ['🍒', '🍋', '7️⃣', '🍊', '💎'];
+		const symbols = [
+			'🧋',
+			'🍕',
+			'🌮',
+			'🍔',
+			'🍣',
+			'🍜',
+			'🍱',
+			'🥘',
+			'🍩',
+			'🍦',
+		];
 		const spinDuration = 2000 + Math.random() * 1000;
 
 		// Animate spinning
@@ -1126,11 +1137,11 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 				// Special case for 7️⃣ (bigger win) or 💎 (jackpot)
 				if (Math.random() < 0.1) {
-					finalResult.push('7️⃣', '7️⃣', '7️⃣');
+					finalResult.push('🍣', '🍣', '🍣');
 					handleGameResult('win', 3); // Triple multiplier
 				} else if (Math.random() < 0.03) {
-					finalResult.push('💎', '💎', '💎');
-					handleGameResult('win', 5); // 5x multiplier for diamond jackpot
+					finalResult.push('🧋', '🧋', '🧋');
+					handleGameResult('win', 5); // 5x multiplier for boba jackpot
 				} else {
 					finalResult.push(winSymbol, winSymbol, winSymbol);
 					handleGameResult('win', 2); // Standard win
@@ -1379,7 +1390,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									sx={{ textAlign: 'center', minHeight: 60 }}
 								>
 									Test your luck with the slot machine. Match
-									symbols to win!
+									delicious food symbols to win!
 								</Typography>
 								<ActionButton
 									variant="contained"
@@ -1958,9 +1969,9 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					<CasinoLights>{renderLights()}</CasinoLights>
 
 					<SlotHeader>
-						<SlotTitle variant="h4">LUCKY SPINS</SlotTitle>
+						<SlotTitle variant="h4">CMUEats Lucky Spins</SlotTitle>
 						<Typography variant="subtitle1" color="#FFD700">
-							Match symbols to win big!
+							Match delicious food symbols to win!
 						</Typography>
 					</SlotHeader>
 
@@ -2008,6 +2019,11 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						<PlayerChip
 							icon={<AttachMoneyIcon />}
 							label={`$${balance.toFixed(2)}`}
+							sx={{
+								alignSelf: 'center',
+								display: 'flex',
+								justifyContent: 'center',
+							}}
 						/>
 					</SlotControls>
 
@@ -2020,40 +2036,47 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 								textAlign: 'center',
 							}}
 						>
-							PAYTABLE
+							MEAL PAYTABLE
 						</Typography>
 						<Grid container spacing={1} justifyContent="center">
 							<Grid item xs={4}>
 								<Chip
-									label="🍒🍒🍒 = 2×"
+									label="🍕🍕🍕 = 2×"
 									size="small"
 									sx={{ bgcolor: '#572424', width: '100%' }}
 								/>
 							</Grid>
 							<Grid item xs={4}>
 								<Chip
-									label="🍋🍋🍋 = 2×"
+									label="🌮🌮🌮 = 2×"
 									size="small"
 									sx={{ bgcolor: '#572424', width: '100%' }}
 								/>
 							</Grid>
 							<Grid item xs={4}>
 								<Chip
-									label="🍊🍊🍊 = 2×"
+									label="🍔🍔🍔 = 2×"
 									size="small"
 									sx={{ bgcolor: '#572424', width: '100%' }}
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={4}>
 								<Chip
-									label="7️⃣7️⃣7️⃣ = 3×"
+									label="🍜🍜🍜 = 2×"
+									size="small"
+									sx={{ bgcolor: '#572424', width: '100%' }}
+								/>
+							</Grid>
+							<Grid item xs={4}>
+								<Chip
+									label="🍣🍣🍣 = 3×"
 									size="small"
 									sx={{ bgcolor: '#8B0000', width: '100%' }}
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={4}>
 								<Chip
-									label="💎💎💎 = 5×"
+									label="🧋🧋🧋 = 5×"
 									size="small"
 									sx={{
 										bgcolor: '#4B0082',
