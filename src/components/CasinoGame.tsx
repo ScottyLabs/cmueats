@@ -586,6 +586,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const [spinResult, setSpinResult] = useState<string[]>(['', '', '']);
 	const [leverPulled, setLeverPulled] = useState(false);
 	const [winningLine, setWinningLine] = useState(false);
+	const [pendingResult, setPendingResult] = useState(false);
 
 	// Add game difficulty settings and timer state
 	const [memoryGameDifficulty, setMemoryGameDifficulty] = useState<
@@ -1116,6 +1117,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setSpinning(true);
 		setIsLoading(true);
 		setWinningLine(false);
+		setPendingResult(true);
 
 		// Simulate slot machine spinning with randomized delay
 		const symbols = [
@@ -1184,6 +1186,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					// Delay before showing result screen
 					safeSetTimeout(() => {
 						handleGameResult('win', 3); // Triple multiplier
+						setPendingResult(false);
 					}, 2500);
 				} else if (Math.random() < 0.03) {
 					finalResult.push('🧋', '🧋', '🧋');
@@ -1192,6 +1195,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					// Delay before showing result screen
 					safeSetTimeout(() => {
 						handleGameResult('win', 5); // 5x multiplier for boba jackpot
+						setPendingResult(false);
 					}, 2500);
 				} else {
 					finalResult.push(winSymbol, winSymbol, winSymbol);
@@ -1200,6 +1204,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 					// Delay before showing result screen
 					safeSetTimeout(() => {
 						handleGameResult('win', 2); // Standard win
+						setPendingResult(false);
 					}, 2500);
 				}
 			} else {
@@ -1235,6 +1240,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 				// Delay before showing result screen
 				safeSetTimeout(() => {
 					handleGameResult('lose');
+					setPendingResult(false);
 				}, 2500);
 			}
 
@@ -1976,8 +1982,15 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const renderSlotsGame = () => {
 		const isWinning = gameResult === 'win' && !spinning && !isLoading;
 
+		// Helper function to get spin button text
+		const getSpinButtonText = () => {
+			if (spinning) return 'SPINNING...';
+			if (pendingResult) return 'PROCESSING...';
+			return 'SPIN';
+		};
+
 		const handleLeverPull = () => {
-			if (spinning || isLoading) return;
+			if (spinning || isLoading || pendingResult) return;
 			setLeverPulled(true);
 			safeSetTimeout(() => {
 				handleSlotSpin();
@@ -2113,10 +2126,10 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 						<SlotButton
 							variant="contained"
 							onClick={handleSlotSpin}
-							disabled={spinning || isLoading}
+							disabled={spinning || isLoading || pendingResult}
 							startIcon={<AttachMoneyIcon />}
 						>
-							{spinning ? 'SPINNING...' : 'SPIN'}
+							{getSpinButtonText()}
 						</SlotButton>
 
 						<PlayerChip
