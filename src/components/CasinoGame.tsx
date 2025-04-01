@@ -212,7 +212,6 @@ const GAMES = {
 	MATCHING: 'matching',
 	COIN_FLIP: 'coin_flip',
 	SLOTS: 'slots',
-	POKER: 'poker',
 	CARD_COUNTING: 'card_counting',
 	ROULETTE: 'roulette',
 };
@@ -565,20 +564,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	// Slots game states
 	const [spinning, setSpinning] = useState(false);
 	const [spinResult, setSpinResult] = useState<string[]>(['', '', '']);
-	// Add lever state at the component level, not inside the render function
 	const [leverPulled, setLeverPulled] = useState(false);
-
-	// Poker game states
-	const [pokerHand, setPokerHand] = useState<string[]>([]);
-	const [selectedCards, setSelectedCards] = useState<boolean[]>([
-		false,
-		false,
-		false,
-		false,
-		false,
-	]);
-	const [pokerStage, setPokerStage] = useState<'initial' | 'draw'>('initial');
-	const [pokerResult, setPokerResult] = useState<string>('');
 
 	// Add game difficulty settings and timer state
 	const [memoryGameDifficulty, setMemoryGameDifficulty] = useState<
@@ -647,107 +633,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		return choice === 'heads' ? 'tails' : 'heads';
 	};
 
-	// Evaluate poker hand strength
-	const evaluatePokerHand = (hand: string[]) => {
-		// Extract values and suits
-		const values = hand.map((card) => card.slice(0, -1));
-		const suits = hand.map((card) => card.slice(-1));
-
-		// Count value frequencies
-		const valueCounts = values.reduce(
-			(counts, value) => {
-				const updatedCounts = { ...counts };
-				if (!updatedCounts[value]) updatedCounts[value] = 0;
-				updatedCounts[value] += 1;
-				return updatedCounts;
-			},
-			{} as Record<string, number>,
-		);
-
-		const valueFreq = Object.values(valueCounts).sort((a, b) => b - a);
-		const isFlush = suits.every((suit) => suit === suits[0]);
-
-		// Check for straight
-		const valueIndices = values
-			.map((v) => {
-				const index = cardValues.indexOf(v);
-				return index >= 0 ? index : parseInt(v, 10) - 2;
-			})
-			.sort((a, b) => a - b);
-
-		const isSequential = valueIndices.every(
-			(val, i) => i === 0 || val === valueIndices[i - 1] + 1,
-		);
-		const isStraight =
-			isSequential ||
-			// Check for A-2-3-4-5 straight
-			(valueIndices[0] === 0 &&
-				valueIndices[1] === 1 &&
-				valueIndices[2] === 2 &&
-				valueIndices[3] === 3 &&
-				valueIndices[4] === 12);
-
-		// Determine hand type and multiplier
-		if (isFlush && isStraight) {
-			const isRoyal =
-				values.includes('10') &&
-				values.includes('J') &&
-				values.includes('Q') &&
-				values.includes('K') &&
-				values.includes('A');
-			if (isRoyal) {
-				return { hand: 'Royal Flush! 🤑', multiplier: 100 };
-			}
-			return { hand: 'Straight Flush! 🔥', multiplier: 50 };
-		}
-
-		if (valueFreq[0] === 4) {
-			return { hand: 'Four of a Kind! 💪', multiplier: 20 };
-		}
-
-		if (valueFreq[0] === 3 && valueFreq[1] === 2) {
-			return { hand: 'Full House! 🏠', multiplier: 10 };
-		}
-
-		if (isFlush) {
-			return { hand: 'Flush! 💦', multiplier: 7 };
-		}
-
-		if (isStraight) {
-			return { hand: 'Straight! ➡️', multiplier: 5 };
-		}
-
-		if (valueFreq[0] === 3) {
-			return { hand: 'Three of a Kind! 👌', multiplier: 3 };
-		}
-
-		if (valueFreq[0] === 2 && valueFreq[1] === 2) {
-			return { hand: 'Two Pair! ✌️', multiplier: 2 };
-		}
-
-		if (valueFreq[0] === 2) {
-			return { hand: 'Pair! 👍', multiplier: 1 };
-		}
-
-		// Check for high card, compare to Jacks or Better
-		const highCardValue = values
-			.map((v) => {
-				if (v === 'A') return 14;
-				if (v === 'K') return 13;
-				if (v === 'Q') return 12;
-				if (v === 'J') return 11;
-				return parseInt(v, 10);
-			})
-			.sort((a, b) => b - a)[0];
-
-		if (highCardValue >= 11) {
-			// J, Q, K, A
-			return { hand: 'High Card (J or better)', multiplier: 0.5 };
-		}
-
-		return { hand: 'High Card', multiplier: 0 };
-	};
-
 	const handleGameResult = (
 		result: 'win' | 'lose',
 		multiplier: number = 1,
@@ -791,84 +676,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		if (Math.random() < 0.2 && balance > 1000) {
 			setInsanityMode(true);
 		}
-	};
-
-	// Now the poker game functions
-	const handlePokerDeal = () => {
-		setIsLoading(true);
-		safeSetTimeout(() => {
-			// Reset poker state
-			setPokerStage('initial');
-			setSelectedCards([false, false, false, false, false]);
-			setPokerResult('');
-
-			// Deal new cards
-			const deck = cardSuits.flatMap((suit) =>
-				cardValues.map((value) => `${value}${suit}`),
-			);
-			const shuffled = [...deck].sort(() => 0.5 - Math.random());
-			const newHand = shuffled.slice(0, 5);
-			setPokerHand(newHand);
-
-			// Evaluate hand
-			const result = evaluatePokerHand(newHand);
-			setPokerResult(result.hand);
-
-			setIsLoading(false);
-		}, 1000);
-	};
-
-	// Handle drawing new cards in poker
-	const handlePokerDraw = () => {
-		setIsLoading(true);
-
-		// Keep selected cards, replace unselected ones
-		const deck = cardSuits.flatMap((suit) =>
-			cardValues.map((value) => `${value}${suit}`),
-		);
-		const shuffled = [...deck].sort(() => 0.5 - Math.random());
-
-		const newHand = [...pokerHand];
-		let deckIndex = 0;
-
-		// Replace unselected cards
-		for (let i = 0; i < 5; i += 1) {
-			if (!selectedCards[i]) {
-				while (
-					shuffled[deckIndex] &&
-					pokerHand.includes(shuffled[deckIndex])
-				) {
-					deckIndex += 1;
-				}
-				newHand[i] = shuffled[deckIndex];
-				deckIndex += 1;
-			}
-		}
-
-		setPokerHand(newHand);
-
-		// Evaluate final hand
-		const result = evaluatePokerHand(newHand);
-		setPokerResult(result.hand);
-
-		// Determine if player wins or loses based on hand strength
-		safeSetTimeout(() => {
-			if (result.multiplier > 0) {
-				handleGameResult('win', result.multiplier);
-			} else {
-				handleGameResult('lose');
-			}
-			setIsLoading(false);
-		}, 1000);
-	};
-
-	// Handle card selection for poker
-	const toggleCardSelection = (index: number) => {
-		if (pokerStage !== 'initial') return;
-
-		const newSelection = [...selectedCards];
-		newSelection[index] = !newSelection[index];
-		setSelectedCards(newSelection);
 	};
 
 	// Setup matching game
@@ -1089,10 +896,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setPlayerChoice(null);
 		setSpinning(false);
 		setSpinResult(['', '', '']);
-		setPokerHand([]);
-		setSelectedCards([false, false, false, false, false]);
-		setPokerStage('initial');
-		setPokerResult('');
 
 		// New: Stop any active timers
 		if (timerRef.current) {
@@ -1144,8 +947,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 			setPlayerCard(`${cardValues[randomIdx]}${randomSuit}`);
 		} else if (selectedGame === GAMES.COIN_FLIP) {
 			// No setup needed yet
-		} else if (selectedGame === GAMES.POKER) {
-			handlePokerDeal();
 		} else if (selectedGame === GAMES.MATCHING) {
 			setupMatchingGame(); // Start the memory game with timer
 		}
@@ -1589,48 +1390,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 									startIcon={<AttachMoneyIcon />}
 								>
 									Play Slots
-								</ActionButton>
-							</Box>
-						</CardContent>
-					</CasinoCard>
-				</Grid>
-				<Grid item xs={12} sm={6} md={4}>
-					<CasinoCard onClick={() => handleGameSelect(GAMES.POKER)}>
-						<CardContent>
-							<Box
-								sx={{
-									display: 'flex',
-									flexDirection: 'column',
-									alignItems: 'center',
-									gap: 2,
-								}}
-							>
-								<Typography
-									variant="h5"
-									sx={{
-										fontWeight: 'bold',
-										color: '#D30000',
-										mb: 2,
-									}}
-								>
-									Poker
-								</Typography>
-								<Typography
-									variant="body2"
-									sx={{ textAlign: 'center', minHeight: 60 }}
-								>
-									Play Five Card Draw. Keep the cards you
-									want, draw new ones for a winning hand.
-								</Typography>
-								<ActionButton
-									variant="contained"
-									fullWidth
-									onClick={() =>
-										handleGameSelect(GAMES.POKER)
-									}
-									startIcon={<AttachMoneyIcon />}
-								>
-									Play Poker
 								</ActionButton>
 							</Box>
 						</CardContent>
@@ -2143,54 +1902,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		);
 	};
 
-	const renderPokerCards = (
-		hand: string[],
-		selected: boolean[],
-		stage: string,
-		loading: boolean,
-		onCardSelect: (index: number) => void,
-	) => (
-		<>
-			{hand.map((card, index) => {
-				const keyName = `poker-card-${index}`;
-				const isSelected = selected[index];
-				const isInitialStage = stage === 'initial';
-				const cardColor =
-					card.endsWith('♥') || card.endsWith('♦')
-						? 'red'
-						: 'black';
-
-				return (
-					<GameCard
-						key={keyName}
-						onClick={() => isInitialStage && onCardSelect(index)}
-						sx={{
-							transform: isSelected
-								? 'translateY(-15px)'
-								: 'none',
-							cursor: isInitialStage ? 'pointer' : 'default',
-							border: isSelected
-								? '2px solid #FFD700'
-								: undefined,
-							opacity: loading ? 0.7 : 1,
-							transition: 'transform 0.2s, border 0.2s',
-						}}
-					>
-						<CardValue
-							sx={{
-								color: cardColor,
-								fontSize: '1.25rem',
-							}}
-						>
-							{card}
-						</CardValue>
-					</GameCard>
-				);
-			})}
-		</>
-	);
-
-	// Replace the renderSlotsGame function with the enhanced version
 	const renderSlotsGame = () => {
 		const isWinning = gameResult === 'win' && !spinning && !isLoading;
 
@@ -2358,131 +2069,6 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		);
 	};
 
-	const renderPokerGame = () => (
-		<Box>
-			<Typography variant="h6" sx={{ mb: 2, textAlign: 'center' }}>
-				Five Card Draw Poker
-			</Typography>
-
-			{pokerResult && (
-				<Box sx={{ textAlign: 'center', mb: 2 }}>
-					<Typography
-						variant="h6"
-						color={pokerResult.includes('!') ? '#FFD700' : '#aaa'}
-					>
-						{pokerResult}
-					</Typography>
-				</Box>
-			)}
-
-			<Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-				{renderPokerCards(
-					pokerHand,
-					selectedCards,
-					pokerStage,
-					isLoading,
-					toggleCardSelection,
-				)}
-			</Box>
-
-			{isLoading ? (
-				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					<CircularProgress color="secondary" />
-				</Box>
-			) : (
-				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					{pokerStage === 'initial' ? (
-						<ActionButton onClick={handlePokerDraw}>
-							Draw New Cards
-						</ActionButton>
-					) : (
-						<ActionButton onClick={handlePokerDeal}>
-							Deal New Hand
-						</ActionButton>
-					)}
-				</Box>
-			)}
-
-			<Box sx={{ mt: 4, textAlign: 'center' }}>
-				<Typography
-					variant="caption"
-					sx={{ color: '#aaa', display: 'block', mb: 1 }}
-				>
-					Payouts
-				</Typography>
-				<Grid
-					container
-					spacing={1}
-					sx={{ maxWidth: '600px', margin: '0 auto' }}
-				>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Pair: 1x"
-							size="small"
-							sx={{ bgcolor: '#3F3F5F' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Two Pair: 2x"
-							size="small"
-							sx={{ bgcolor: '#3F3F5F' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Three of a Kind: 3x"
-							size="small"
-							sx={{ bgcolor: '#3F3F5F' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Straight: 5x"
-							size="small"
-							sx={{ bgcolor: '#4A4A6A' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Flush: 7x"
-							size="small"
-							sx={{ bgcolor: '#4A4A6A' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Full House: 10x"
-							size="small"
-							sx={{ bgcolor: '#5A5A7A' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Four of a Kind: 20x"
-							size="small"
-							sx={{ bgcolor: '#8B0000' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Straight Flush: 50x"
-							size="small"
-							sx={{ bgcolor: '#4B0082' }}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={4}>
-						<Chip
-							label="Royal Flush: 100x"
-							size="small"
-							sx={{ bgcolor: '#550000', color: '#FFD700' }}
-						/>
-					</Grid>
-				</Grid>
-			</Box>
-		</Box>
-	);
-
 	const renderGameContent = () => {
 		if (gameState === 'selecting') {
 			return renderGameSelection();
@@ -2524,8 +2110,29 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 				return renderCoinFlipGame();
 			case GAMES.SLOTS:
 				return renderSlotsGame();
-			case GAMES.POKER:
-				return renderPokerGame();
+			case GAMES.CARD_COUNTING:
+				return (
+					<CardCountingGame
+						onWin={(multiplier: number) =>
+							handleGameResult('win', multiplier || 1)
+						}
+						onLose={() => handleGameResult('lose')}
+						balance={balance}
+						betAmount={betAmount}
+					/>
+				);
+			case GAMES.ROULETTE:
+				return (
+					<RouletteGame
+						open
+						onClose={() => {
+							resetGame();
+							setSelectedGame(null);
+							setGameState('selecting');
+						}}
+						initialBalance={balance}
+					/>
+				);
 			default:
 				return null;
 		}
