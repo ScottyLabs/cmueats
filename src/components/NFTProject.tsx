@@ -69,6 +69,9 @@ const NFTCard = styled(Card)({
 	borderRadius: '12px',
 	border: '1px solid var(--card-border-color)',
 	transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+	display: 'flex',
+	flexDirection: 'column',
+	height: '100%',
 	'&:hover': {
 		transform: 'translateY(-5px)',
 		boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
@@ -659,7 +662,7 @@ const nftData = [
 		price: 0.25,
 		priceHistory: [0.18, 0.22, 0.25],
 		description:
-			'RARE COLLECTIBLE - The perfect companion for your 3AM debugging sessions. This caffeinated card is guaranteed to keep you coding long after your sanity has left the chat.',
+			'RARE COLLECTIBLE - The perfect companion for your 3 AM debugging sessions. This caffeinated card is guaranteed to keep you coding long after your sanity has left the chat.',
 		owner: '0x742...1a3b',
 		rarity: 'rare',
 		rarityScore: 98,
@@ -996,6 +999,65 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 		return (baseFee * multiplier).toFixed(4);
 	};
 
+	// Function to reset code to template
+	const resetToTemplate = () => {
+		const template =
+			contractTemplates[contractType as keyof typeof contractTemplates];
+		setEditedCode(template);
+		setContractCode(template);
+		setIsCodeEdited(false);
+		setShowCodeError(false);
+		setCodeError('');
+
+		// Add notification
+		setSnackbarMessage(`Reset to ${contractType.toUpperCase()} template`);
+		setSnackbarOpen(true);
+	};
+
+	// Function to apply parameter changes to code while preserving edits
+	const applyParameterChanges = () => {
+		let updatedCode = editedCode;
+		let changesApplied = false;
+
+		// Only apply changes if the code contains the relevant patterns
+		if (contractType === 'erc721') {
+			if (updatedCode.includes('uint256 public mintPrice =')) {
+				updatedCode = updatedCode.replace(
+					/uint256 public mintPrice = .*?ether/,
+					`uint256 public mintPrice = ${mintPrice} ether`,
+				);
+				changesApplied = true;
+			}
+
+			if (updatedCode.includes('uint256 public maxSupply =')) {
+				updatedCode = updatedCode.replace(
+					/uint256 public maxSupply = \d+/,
+					`uint256 public maxSupply = ${maxSupply}`,
+				);
+				changesApplied = true;
+			}
+
+			// Update contract name in declaration
+			if (updatedCode.includes('contract ')) {
+				updatedCode = updatedCode.replace(
+					/contract (\w+) is/,
+					`contract ${contractName} is`,
+				);
+				changesApplied = true;
+			}
+		}
+
+		setEditedCode(updatedCode);
+
+		// Add notification
+		if (changesApplied) {
+			setSnackbarMessage('Contract parameters applied to code');
+		} else {
+			setSnackbarMessage('No parameters found to update in current code');
+		}
+		setSnackbarOpen(true);
+	};
+
 	// Add a new function to handle template changes - moved up before it's used
 	const applyTemplateChange = (type: string) => {
 		const newTemplate =
@@ -1007,6 +1069,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 		setIsCodeEdited(false);
 		setShowCodeError(false);
 		setCodeError('');
+
+		// Add notification
+		setSnackbarMessage(`Contract type changed to ${type.toUpperCase()}`);
+		setSnackbarOpen(true);
 
 		// Reset parameters for different contract types
 		if (type === 'erc721') {
@@ -1022,86 +1088,6 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 			setContractName('CustomContract');
 			setContractSymbol('CUSTOM');
 		}
-	};
-
-	// Handle Contract Template Change
-	const handleContractTypeChange = (
-		event: React.ChangeEvent<{ value: unknown }>,
-	) => {
-		const type = event.target.value as string;
-
-		if (isCodeEdited) {
-			// Instead of window.confirm, store the pending change and show dialog
-			setPendingTemplateType(type);
-			setShowConfirmDialog(true);
-		} else {
-			// If no custom edits, apply changes directly
-			applyTemplateChange(type);
-		}
-	};
-
-	// Handle code changes in the editor
-	const handleCodeChange = (newCode: string) => {
-		setEditedCode(newCode);
-		setIsCodeEdited(true);
-
-		// Basic validation - check for common syntax errors
-		if (!newCode.includes('pragma solidity')) {
-			setShowCodeError(true);
-			setCodeError('Missing Solidity version pragma statement');
-		} else if (
-			newCode.includes('contract') &&
-			!newCode.includes(contractName)
-		) {
-			setShowCodeError(true);
-			setCodeError(`Contract name should match "${contractName}"`);
-		} else {
-			setShowCodeError(false);
-			setCodeError('');
-		}
-	};
-
-	// Function to reset code to template
-	const resetToTemplate = () => {
-		const template =
-			contractTemplates[contractType as keyof typeof contractTemplates];
-		setEditedCode(template);
-		setContractCode(template);
-		setIsCodeEdited(false);
-		setShowCodeError(false);
-		setCodeError('');
-	};
-
-	// Function to apply parameter changes to code while preserving edits
-	const applyParameterChanges = () => {
-		let updatedCode = editedCode;
-
-		// Only apply changes if the code contains the relevant patterns
-		if (contractType === 'erc721') {
-			if (updatedCode.includes('uint256 public mintPrice =')) {
-				updatedCode = updatedCode.replace(
-					/uint256 public mintPrice = .*?ether/,
-					`uint256 public mintPrice = ${mintPrice} ether`,
-				);
-			}
-
-			if (updatedCode.includes('uint256 public maxSupply =')) {
-				updatedCode = updatedCode.replace(
-					/uint256 public maxSupply = \d+/,
-					`uint256 public maxSupply = ${maxSupply}`,
-				);
-			}
-
-			// Update contract name in declaration
-			if (updatedCode.includes('contract ')) {
-				updatedCode = updatedCode.replace(
-					/contract (\w+) is/,
-					`contract ${contractName} is`,
-				);
-			}
-		}
-
-		setEditedCode(updatedCode);
 	};
 
 	// Function to update code with parameters
@@ -1132,17 +1118,31 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	const handleDeploy = () => {
 		setIsDeploying(true);
 		setDeployStep(1);
+		setSnackbarMessage('Starting contract deployment process...');
+		setSnackbarOpen(true);
 
 		// Simulate deployment steps with timeouts
 		setTimeout(() => {
 			setDeployStep(2);
+			setSnackbarMessage('Compiling contract... Optimizing gas costs...');
+			setSnackbarOpen(true);
+
 			setTimeout(() => {
 				setDeployStep(3);
-				setDeployHash(
-					`0x${Math.random().toString(16).substring(2, 30)}...`,
+				const hash = `0x${Math.random().toString(16).substring(2, 30)}...`;
+				setDeployHash(hash);
+				setSnackbarMessage(
+					`Deploying to blockchain... Transaction: ${hash}`,
 				);
+				setSnackbarOpen(true);
+
 				setTimeout(() => {
 					setDeployStep(4);
+					setSnackbarMessage(
+						`Contract successfully deployed! Address: 0x${Math.random().toString(16).substring(2, 10)}...`,
+					);
+					setSnackbarOpen(true);
+
 					setTimeout(() => {
 						setIsDeploying(false);
 						setDeployStep(0);
@@ -1289,6 +1289,79 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 	const handleSubmitLiquidity = () => {
 		handleProvideLiquidity(selectedPoolId, liquidityAmount);
 		setLiquidityDialogOpen(false);
+	};
+
+	// Function to handle gas option selection
+	const handleGasOptionSelect = (option: string) => {
+		setGasOption(option);
+		const gasPriceGwei =
+			currentGasPrices[option as keyof typeof currentGasPrices];
+		setSnackbarMessage(`Gas price set to ${gasPriceGwei} Gwei (${option})`);
+		setSnackbarOpen(true);
+	};
+
+	// Handle Contract Template Change
+	const handleContractTypeChange = (
+		event: React.ChangeEvent<{ value: unknown }>,
+	) => {
+		const type = event.target.value as string;
+
+		if (isCodeEdited) {
+			// Instead of window.confirm, store the pending change and show dialog
+			setPendingTemplateType(type);
+			setShowConfirmDialog(true);
+		} else {
+			// If no custom edits, apply changes directly
+			applyTemplateChange(type);
+		}
+	};
+
+	// Handle code changes in the editor
+	const handleCodeChange = (newCode: string) => {
+		setEditedCode(newCode);
+		setIsCodeEdited(true);
+
+		// Basic validation - check for common syntax errors
+		if (!newCode.includes('pragma solidity')) {
+			setShowCodeError(true);
+			setCodeError('Missing Solidity version pragma statement');
+		} else if (
+			newCode.includes('contract') &&
+			!newCode.includes(contractName)
+		) {
+			setShowCodeError(true);
+			setCodeError(`Contract name should match "${contractName}"`);
+		} else {
+			setShowCodeError(false);
+			setCodeError('');
+		}
+	};
+
+	// Handle max supply change
+	const handleMaxSupplyChange = (_: any, value: number | number[]) => {
+		const newValue = Array.isArray(value) ? value[0] : value;
+		setMaxSupply(newValue);
+		setSnackbarMessage(`Max supply updated to ${newValue}`);
+		setSnackbarOpen(true);
+	};
+
+	// Handle Mint Price Change
+	const handleMintPriceChange = (_: any, value: number | number[]) => {
+		const newValue = Array.isArray(value) ? value[0] : value;
+		setMintPrice(newValue);
+		setSnackbarMessage(`Mint price updated to ${newValue} ETH`);
+		setSnackbarOpen(true);
+	};
+
+	// Handle Royalty Percentage Change
+	const handleRoyaltyPercentageChange = (
+		_: any,
+		value: number | number[],
+	) => {
+		const newValue = Array.isArray(value) ? value[0] : value;
+		setRoyaltyPercentage(newValue);
+		setSnackbarMessage(`Royalty percentage set to ${newValue}%`);
+		setSnackbarOpen(true);
 	};
 
 	if (!IS_APRIL_FOOLS) return null;
@@ -1690,7 +1763,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 										icon={<LocalGasStationIcon />}
 										label={`Slow: ${currentGasPrices.slow}`}
 										size="small"
-										onClick={() => setGasOption('slow')}
+										onClick={() =>
+											handleGasOptionSelect('slow')
+										}
 										color={
 											gasOption === 'slow'
 												? 'primary'
@@ -1702,7 +1777,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 										icon={<LocalGasStationIcon />}
 										label={`Average: ${currentGasPrices.average}`}
 										size="small"
-										onClick={() => setGasOption('average')}
+										onClick={() =>
+											handleGasOptionSelect('average')
+										}
 										color={
 											gasOption === 'average'
 												? 'primary'
@@ -1714,7 +1791,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 										icon={<LocalGasStationIcon />}
 										label={`Fast: ${currentGasPrices.fast}`}
 										size="small"
-										onClick={() => setGasOption('fast')}
+										onClick={() =>
+											handleGasOptionSelect('fast')
+										}
 										color={
 											gasOption === 'fast'
 												? 'primary'
@@ -1761,7 +1840,13 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													/>
 												</Box>
 											</Box>
-											<CardContent>
+											<CardContent
+												sx={{
+													flexGrow: 1,
+													display: 'flex',
+													flexDirection: 'column',
+												}}
+											>
 												<Box
 													sx={{
 														display: 'flex',
@@ -1769,11 +1854,13 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															'space-between',
 														alignItems: 'center',
 														mb: 1,
+														flexGrow: 1,
 													}}
 												>
 													<Typography
 														variant="h6"
 														gutterBottom={false}
+														sx={{ flexGrow: 1 }}
 													>
 														{nft.name}
 													</Typography>
@@ -1789,9 +1876,27 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													variant="body2"
 													color="var(--text-muted)"
 													sx={{
-														height: '40px',
-														overflow: 'hidden',
+														minHeight: '40px',
+														height: 'auto',
+														maxHeight: '80px',
+														overflow: 'auto',
 														mb: 2,
+														'&::-webkit-scrollbar':
+															{
+																width: '4px',
+															},
+														'&::-webkit-scrollbar-track':
+															{
+																background:
+																	'rgba(0,0,0,0.1)',
+															},
+														'&::-webkit-scrollbar-thumb':
+															{
+																background:
+																	'var(--logo-first-half)',
+																borderRadius:
+																	'4px',
+															},
 													}}
 												>
 													{nft.description}
@@ -1842,6 +1947,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														justifyContent:
 															'space-between',
 														alignItems: 'center',
+														flexGrow: 1,
 													}}
 												>
 													<Box>
@@ -2786,13 +2892,8 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														</Typography>
 														<Slider
 															value={maxSupply}
-															onChange={(
-																_,
-																value,
-															) =>
-																setMaxSupply(
-																	value as number,
-																)
+															onChange={
+																handleMaxSupplyChange
 															}
 															step={50}
 															marks={[
@@ -2834,13 +2935,8 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														</Typography>
 														<Slider
 															value={mintPrice}
-															onChange={(
-																_,
-																value,
-															) =>
-																setMintPrice(
-																	value as number,
-																)
+															onChange={
+																handleMintPriceChange
 															}
 															step={0.05}
 															marks={[
@@ -2920,13 +3016,8 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															value={
 																royaltyPercentage
 															}
-															onChange={(
-																_,
-																value,
-															) =>
-																setRoyaltyPercentage(
-																	value as number,
-																)
+															onChange={
+																handleRoyaltyPercentageChange
 															}
 															step={1}
 															min={1}
@@ -3047,7 +3138,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														label={`Slow: ${currentGasPrices.slow}`}
 														size="small"
 														onClick={() =>
-															setGasOption('slow')
+															handleGasOptionSelect(
+																'slow',
+															)
 														}
 														color={
 															gasOption === 'slow'
@@ -3063,7 +3156,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														label={`Average: ${currentGasPrices.average}`}
 														size="small"
 														onClick={() =>
-															setGasOption(
+															handleGasOptionSelect(
 																'average',
 															)
 														}
@@ -3082,7 +3175,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														label={`Fast: ${currentGasPrices.fast}`}
 														size="small"
 														onClick={() =>
-															setGasOption('fast')
+															handleGasOptionSelect(
+																'fast',
+															)
 														}
 														color={
 															gasOption === 'fast'

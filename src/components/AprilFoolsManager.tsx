@@ -253,7 +253,7 @@ const SmartContractPanel = styled(Box)({
 	border: '1px solid var(--card-border-color)',
 	fontSize: '0.75rem',
 	fontFamily: 'monospace',
-	color: '#10B981',
+	color: 'white',
 	marginTop: '6px',
 });
 
@@ -262,6 +262,7 @@ const StatsItem = styled(Box)({
 	justifyContent: 'space-between',
 	fontSize: '0.75rem',
 	padding: '2px 0',
+	color: 'white',
 });
 
 // April Fools toggle switch component
@@ -316,6 +317,10 @@ function NFTStatusBarComponent({
 	onConnectWallet,
 	contractState,
 	onOpenCasino,
+	onToggleMarketplace,
+	onMint,
+	onApprove,
+	onStake,
 }: {
 	blockchainData: typeof initialBlockchainData;
 	walletConnected: boolean;
@@ -323,6 +328,10 @@ function NFTStatusBarComponent({
 	onConnectWallet: () => void;
 	contractState: SmartContractState;
 	onOpenCasino: () => void;
+	onToggleMarketplace: () => void;
+	onMint: () => void;
+	onApprove: () => void;
+	onStake: () => void;
 }) {
 	const [minimized, setMinimized] = useState<boolean | undefined>(true);
 	const [activeTab, setActiveTab] = useState<
@@ -330,10 +339,13 @@ function NFTStatusBarComponent({
 	>('dashboard');
 
 	const toggleMinimize = () => {
-		setMinimized((prev) => {
-			if (prev === undefined) return true;
-			return !prev;
-		});
+		const newValue = !minimized;
+		setMinimized(newValue);
+
+		// Call the parent's toggle function when expanding
+		if (newValue === false) {
+			onToggleMarketplace();
+		}
 	};
 
 	const pendingCount = pendingTransactions.filter(
@@ -348,7 +360,7 @@ function NFTStatusBarComponent({
 						<Typography
 							variant="subtitle2"
 							fontWeight="bold"
-							sx={{ mb: 0.5, fontSize: '0.8rem' }}
+							sx={{ mb: 0.5, fontSize: '0.8rem', color: 'white' }}
 						>
 							Your NFT Portfolio{' '}
 							{contractState.userNFTs &&
@@ -390,7 +402,15 @@ function NFTStatusBarComponent({
 													overflow: 'hidden',
 												}}
 											>
-												{/* NFT Image would go here */}
+												<img
+													src={nft.image}
+													alt={nft.name}
+													style={{
+														width: '100%',
+														height: '100%',
+														objectFit: 'cover',
+													}}
+												/>
 											</Box>
 											<Box sx={{ flexGrow: 1 }}>
 												<Typography
@@ -399,6 +419,7 @@ function NFTStatusBarComponent({
 														display: 'block',
 														fontWeight: 'bold',
 														lineHeight: 1.2,
+														color: 'white',
 													}}
 												>
 													{nft.name}
@@ -500,30 +521,12 @@ function NFTStatusBarComponent({
 											fontSize: '0.7rem',
 											borderColor:
 												'var(--logo-first-half)',
-											color: 'var(--text-primary)',
+											color: 'white',
 										}}
 										fullWidth
+										onClick={onToggleMarketplace}
 									>
-										View All NFTs
-									</Button>
-									<Button
-										size="small"
-										variant="contained"
-										startIcon={<CasinoIcon />}
-										onClick={(e) => {
-											e.stopPropagation();
-											onOpenCasino();
-										}}
-										sx={{
-											fontSize: '0.7rem',
-											bgcolor: '#D30000',
-											color: 'white',
-											'&:hover': {
-												bgcolor: '#FF0000',
-											},
-										}}
-									>
-										Casino
+										VIEW ALL NFTS
 									</Button>
 								</Box>
 							</>
@@ -550,25 +553,6 @@ function NFTStatusBarComponent({
 										fullWidth
 									>
 										Browse Marketplace
-									</Button>
-									<Button
-										size="small"
-										variant="contained"
-										startIcon={<CasinoIcon />}
-										onClick={(e) => {
-											e.stopPropagation();
-											onOpenCasino();
-										}}
-										sx={{
-											fontSize: '0.7rem',
-											bgcolor: '#D30000',
-											color: 'white',
-											'&:hover': {
-												bgcolor: '#FF0000',
-											},
-										}}
-									>
-										Casino
 									</Button>
 								</Box>
 							</Box>
@@ -605,7 +589,7 @@ function NFTStatusBarComponent({
 									},
 								}}
 							>
-								Play Roulette at VIP Casino!
+								TEST YOUR LUCK AT THE VIP CASINO!
 							</Button>
 						</Box>
 					</Box>
@@ -616,7 +600,7 @@ function NFTStatusBarComponent({
 						<Typography
 							variant="subtitle2"
 							fontWeight="bold"
-							sx={{ mb: 0.5, fontSize: '0.8rem' }}
+							sx={{ mb: 0.5, fontSize: '0.8rem', color: 'white' }}
 						>
 							Smart Contract{' '}
 							<VerifiedIcon
@@ -635,12 +619,19 @@ function NFTStatusBarComponent({
 								sx={{
 									fontFamily: 'monospace',
 									whiteSpace: 'nowrap',
+									color: 'white',
 								}}
 							>
 								0x742d35Cc6634C0532...
 							</Typography>
 
-							<Box sx={{ mt: 0.5, fontSize: '0.7rem' }}>
+							<Box
+								sx={{
+									mt: 0.5,
+									fontSize: '0.7rem',
+									color: 'white',
+								}}
+							>
 								{`contract CMUEatsNFT is ERC721, Ownable {`}
 								<br />
 								{`  uint256 public mintPrice = ${contractState.mintPrice} ether;`}
@@ -657,7 +648,7 @@ function NFTStatusBarComponent({
 							<Typography
 								variant="caption"
 								fontWeight="bold"
-								sx={{ fontSize: '0.75rem' }}
+								sx={{ fontSize: '0.75rem', color: 'white' }}
 							>
 								Contract Functions
 							</Typography>
@@ -671,6 +662,7 @@ function NFTStatusBarComponent({
 										borderColor: 'var(--logo-first-half)',
 										color: 'white',
 									}}
+									onClick={onMint}
 								>
 									mint()
 								</Button>
@@ -683,6 +675,7 @@ function NFTStatusBarComponent({
 										borderColor: 'var(--text-muted)',
 										color: 'white',
 									}}
+									onClick={onApprove}
 								>
 									approve()
 								</Button>
@@ -695,6 +688,7 @@ function NFTStatusBarComponent({
 										borderColor: 'var(--text-muted)',
 										color: 'white',
 									}}
+									onClick={onStake}
 								>
 									stake()
 								</Button>
@@ -704,35 +698,38 @@ function NFTStatusBarComponent({
 						<Divider sx={{ mt: 1, mb: 1 }} />
 
 						<StatsItem>
-							<Typography
-								variant="caption"
-								color="var(--text-muted)"
-							>
+							<Typography variant="caption" color="white">
 								Gas Used:
 							</Typography>
-							<Typography variant="caption" fontWeight="bold">
+							<Typography
+								variant="caption"
+								fontWeight="bold"
+								color="white"
+							>
 								{blockchainData.gasUsed}
 							</Typography>
 						</StatsItem>
 						<StatsItem>
-							<Typography
-								variant="caption"
-								color="var(--text-muted)"
-							>
+							<Typography variant="caption" color="white">
 								Network Fee:
 							</Typography>
-							<Typography variant="caption" fontWeight="bold">
+							<Typography
+								variant="caption"
+								fontWeight="bold"
+								color="white"
+							>
 								{contractState.networkFee} ETH
 							</Typography>
 						</StatsItem>
 						<StatsItem>
-							<Typography
-								variant="caption"
-								color="var(--text-muted)"
-							>
+							<Typography variant="caption" color="white">
 								Royalty:
 							</Typography>
-							<Typography variant="caption" fontWeight="bold">
+							<Typography
+								variant="caption"
+								fontWeight="bold"
+								color="white"
+							>
 								{contractState.royaltyPercentage}%
 							</Typography>
 						</StatsItem>
@@ -809,7 +806,11 @@ function NFTStatusBarComponent({
 								<Box sx={{ mt: 1 }}>
 									<Typography
 										variant="caption"
-										sx={{ display: 'block', mb: 0.5 }}
+										sx={{
+											display: 'block',
+											mb: 0.5,
+											color: 'white',
+										}}
 									>
 										Collection Progress
 									</Typography>
@@ -832,11 +833,11 @@ function NFTStatusBarComponent({
 									/>
 									<Typography
 										variant="caption"
-										color="var(--text-muted)"
 										sx={{
 											display: 'block',
 											mt: 0.5,
 											textAlign: 'right',
+											color: 'white',
 										}}
 									>
 										{contractState.totalMinted}/
@@ -863,7 +864,7 @@ function NFTStatusBarComponent({
 			>
 				<Typography
 					variant="subtitle2"
-					color="var(--text-primary)"
+					color="white"
 					noWrap
 					sx={{
 						display: 'flex',
@@ -1024,21 +1025,21 @@ function AprilFoolsManager() {
 			networkFee: 0.002,
 			userNFTs: [
 				{
-					id: 42,
-					name: 'CMUEats Genesis #42',
-					rarity: 'epic',
-					image: 'https://placeholder.com/400',
+					id: 1,
+					name: 'Espresso Depresso',
+					rarity: 'rare',
+					image: '/images/cards/card1.png',
 					acquiredAt: '2 days ago',
-					lastValue: 0.85,
-					appreciationPercentage: 27.5,
+					lastValue: 0.25,
+					appreciationPercentage: 13.6,
 				},
 				{
-					id: 107,
-					name: 'Campus Collection #107',
+					id: 2,
+					name: "Stack'd Saboteur",
 					rarity: 'rare',
-					image: 'https://placeholder.com/400',
+					image: '/images/cards/card2.png',
 					acquiredAt: '5 days ago',
-					lastValue: 0.32,
+					lastValue: 0.35,
 					appreciationPercentage: -3.8,
 				},
 			],
@@ -1057,6 +1058,9 @@ function AprilFoolsManager() {
 	// Display welcome notification
 	useEffect(() => {
 		if (IS_APRIL_FOOLS) {
+			// Always show NFT Dashboard when in April Fools mode
+			setShowNFTProject(true);
+
 			setNotificationMessage(
 				'Welcome to the exclusive NFT marketplace! 🎉',
 			);
@@ -1207,6 +1211,53 @@ function AprilFoolsManager() {
 
 		setPendingTransactions([newTransaction, ...pendingTransactions]);
 
+		// Map NFT IDs to actual rarities from the marketplace (converted to UserNFT rarity types)
+		const nftRarities: {
+			[key: number]:
+				| 'common'
+				| 'uncommon'
+				| 'rare'
+				| 'epic'
+				| 'legendary';
+		} = {
+			1: 'rare', // Espresso Depresso
+			2: 'rare', // Stack'd Saboteur (ultra-rare -> rare)
+			3: 'legendary', // Wok and Roll Express
+			4: 'uncommon', // Schatz and Awe
+			5: 'rare', // Ramen Revelation (rare-holo -> rare)
+			6: 'common', // Plan Demandium
+		};
+
+		// Map NFT IDs to actual names
+		const nftNames: { [key: number]: string } = {
+			1: 'Espresso Depresso',
+			2: "Stack'd Saboteur",
+			3: 'Wok and Roll Express',
+			4: 'Schatz and Awe',
+			5: 'Ramen Revelation',
+			6: 'Plan Demandium',
+		};
+
+		// Map NFT IDs to prices
+		const nftPrices: { [key: number]: number } = {
+			1: 0.25,
+			2: 0.35,
+			3: 0.4,
+			4: 0.22,
+			5: 0.45,
+			6: 0.15,
+		};
+
+		// Map NFT IDs to images
+		const nftImages: { [key: number]: string } = {
+			1: '/images/cards/card1.png',
+			2: '/images/cards/card2.png',
+			3: '/images/cards/card1.png',
+			4: '/images/cards/card2.png',
+			5: '/images/cards/card1.png',
+			6: '/images/cards/card2.png',
+		};
+
 		// Simulate transaction confirmation after a delay
 		setTimeout(
 			() => {
@@ -1218,20 +1269,50 @@ function AprilFoolsManager() {
 					),
 				);
 
-				// Increment total minted
-				setSmartContractState((prev) => ({
-					...prev,
-					totalMinted: prev.totalMinted + 1,
-				}));
+				// Get the actual rarity and name for this NFT ID, or use fallbacks
+				const rarity = nftRarities[nftId] || 'common';
+				const nftName = nftNames[nftId] || `CMUEats #${nftId}`;
+				const price = nftPrices[nftId] || 0.15;
+				const image = nftImages[nftId] || '/images/cards/card1.png';
+
+				// Add the purchased NFT to user's collection with accurate data
+				setSmartContractState((prevState) => {
+					const updatedNFTs = [
+						...(prevState.userNFTs || []),
+						{
+							id: nftId,
+							name: nftName,
+							rarity,
+							image,
+							acquiredAt: 'Just now',
+							lastValue: price,
+							appreciationPercentage:
+								Math.random() > 0.5
+									? Math.random() * 25
+									: -Math.random() * 15,
+						},
+					];
+
+					return {
+						...prevState,
+						totalMinted: Math.min(
+							prevState.totalMinted + 1,
+							prevState.maxSupply,
+						),
+						userNFTs: updatedNFTs,
+					};
+				});
 
 				// Show confirmation notification
 				setNotificationMessage(
-					`Transaction confirmed: NFT #${nftId} purchased!`,
+					`Transaction confirmed: ${nftName} purchased!`,
 				);
 				setShowNotification(true);
 
-				// Show paywall for payment
-				setShowPaywall(true);
+				// Only show paywall occasionally
+				if (Math.random() > 0.7) {
+					setShowPaywall(true);
+				}
 			},
 			3000 + Math.random() * 4000,
 		); // Random confirmation time
@@ -1285,6 +1366,293 @@ function AprilFoolsManager() {
 	// Handle notification close
 	const handleNotificationClose = () => {
 		setShowNotification(false);
+	};
+
+	// Handle clicking the NFT Status Bar to expand or view full marketplace
+	const handleNFTStatusBarClick = () => {
+		// Toggle between showing the full marketplace and just the status bar
+		setShowNFTProject(!showNFTProject);
+	};
+
+	// Handle mint function
+	const handleMint = () => {
+		if (!walletConnected) {
+			simulateWalletConnection();
+			return;
+		}
+
+		// NFT IDs available in the marketplace (not including ones user already owns)
+		const nftIds = [3, 4, 5, 6];
+		const ownedIds =
+			smartContractState.userNFTs?.map((nft) => nft.id) || [];
+		const availableIds = nftIds.filter((id) => !ownedIds.includes(id));
+
+		// Select a random NFT ID from available ones
+		const randomNftId =
+			availableIds[Math.floor(Math.random() * availableIds.length)] || 3;
+
+		// Create a fake pending transaction for minting
+		const newTransaction: Transaction = {
+			id: Date.now(),
+			type: 'Mint',
+			nftId: randomNftId,
+			status: 'pending',
+			hash: `0x${Math.random().toString(16).substring(2, 14)}...${Math.random().toString(16).substring(2, 6)}`,
+			gasEstimate: (blockchainData.currentGasPrice * 0.000021).toFixed(5),
+			timestamp: new Date().toISOString(),
+		};
+
+		// Show transaction notification
+		setNotificationMessage(`Minting NFT: ${newTransaction.hash}`);
+		setShowNotification(true);
+
+		setPendingTransactions([newTransaction, ...pendingTransactions]);
+
+		// Map NFT IDs to actual properties and data
+		const nftRarities: {
+			[key: number]:
+				| 'common'
+				| 'uncommon'
+				| 'rare'
+				| 'epic'
+				| 'legendary';
+		} = {
+			3: 'legendary', // Wok and Roll Express
+			4: 'uncommon', // Schatz and Awe
+			5: 'rare', // Ramen Revelation
+			6: 'common', // Plan Demandium
+		};
+
+		const nftNames: { [key: number]: string } = {
+			3: 'Wok and Roll Express',
+			4: 'Schatz and Awe',
+			5: 'Ramen Revelation',
+			6: 'Plan Demandium',
+		};
+
+		const nftPrices: { [key: number]: number } = {
+			3: 0.4,
+			4: 0.22,
+			5: 0.45,
+			6: 0.15,
+		};
+
+		const nftImages: { [key: number]: string } = {
+			3: '/images/cards/card1.png',
+			4: '/images/cards/card2.png',
+			5: '/images/cards/card1.png',
+			6: '/images/cards/card2.png',
+		};
+
+		// Simulate transaction confirmation after a delay
+		setTimeout(
+			() => {
+				setPendingTransactions((prev) =>
+					prev.map((tx) =>
+						tx.id === newTransaction.id
+							? { ...tx, status: 'confirmed' }
+							: tx,
+					),
+				);
+
+				// Get the actual rarity and name for this NFT ID, or use fallbacks
+				const rarity = nftRarities[randomNftId] || 'common';
+				const nftName =
+					nftNames[randomNftId] || `CMUEats #${randomNftId}`;
+				const price = nftPrices[randomNftId] || 0.15;
+				const image =
+					nftImages[randomNftId] || '/images/cards/card1.png';
+
+				// Add the minted NFT to user's collection
+				setSmartContractState((prevState) => {
+					const updatedNFTs = [
+						...(prevState.userNFTs || []),
+						{
+							id: randomNftId,
+							name: nftName,
+							rarity,
+							image,
+							acquiredAt: 'Just now',
+							lastValue: price,
+							appreciationPercentage:
+								Math.random() > 0.5
+									? Math.random() * 25
+									: -Math.random() * 15,
+						},
+					];
+
+					return {
+						...prevState,
+						totalMinted: Math.min(
+							prevState.totalMinted + 1,
+							prevState.maxSupply,
+						),
+						userNFTs: updatedNFTs,
+						userBalance: Number(
+							(
+								prevState.userBalance ||
+								0.42 - smartContractState.mintPrice
+							).toFixed(3),
+						),
+					};
+				});
+
+				// Show confirmation notification
+				setNotificationMessage(
+					`Minting successful: ${nftName} added to your collection!`,
+				);
+				setShowNotification(true);
+			},
+			2000 + Math.random() * 3000,
+		);
+	};
+
+	// Handle approve function
+	const handleApprove = () => {
+		if (!walletConnected) {
+			simulateWalletConnection();
+			return;
+		}
+
+		// Create a fake pending transaction for approval
+		const newTransaction: Transaction = {
+			id: Date.now(),
+			type: 'Approve',
+			nftId: 0, // Not specific to an NFT
+			status: 'pending',
+			hash: `0x${Math.random().toString(16).substring(2, 14)}...${Math.random().toString(16).substring(2, 6)}`,
+			gasEstimate: (blockchainData.currentGasPrice * 0.000012).toFixed(5),
+			timestamp: new Date().toISOString(),
+		};
+
+		// Show transaction notification
+		setNotificationMessage(`Approving contract: ${newTransaction.hash}`);
+		setShowNotification(true);
+
+		setPendingTransactions([newTransaction, ...pendingTransactions]);
+
+		// Simulate transaction confirmation after a delay
+		setTimeout(
+			() => {
+				setPendingTransactions((prev) =>
+					prev.map((tx) =>
+						tx.id === newTransaction.id
+							? { ...tx, status: 'confirmed' }
+							: tx,
+					),
+				);
+
+				// Mark the contract as approved
+				setSmartContractState((prev) => ({
+					...prev,
+					whitelistActive: true,
+				}));
+
+				// Show confirmation notification
+				setNotificationMessage(
+					'Contract approval successful! You can now stake NFTs',
+				);
+				setShowNotification(true);
+			},
+			1500 + Math.random() * 2000,
+		);
+	};
+
+	// Handle stake function
+	const handleStake = () => {
+		if (!walletConnected) {
+			simulateWalletConnection();
+			return;
+		}
+
+		if (!smartContractState.whitelistActive) {
+			setNotificationMessage(
+				'You need to approve the contract first! Click approve()',
+			);
+			setShowNotification(true);
+			return;
+		}
+
+		// Check if user has any NFTs to stake
+		if (
+			!smartContractState.userNFTs ||
+			smartContractState.userNFTs.length === 0
+		) {
+			setNotificationMessage(
+				"You don't have any NFTs to stake. Mint or buy an NFT first!",
+			);
+			setShowNotification(true);
+			return;
+		}
+
+		// Find NFTs that aren't already staked (using a different approach)
+		// We'll use a property in the smart contract state to track staked NFTs
+		const stakedNftIds = smartContractState.userNFTs
+			.filter((nft) => nft.name.includes('(Staked)'))
+			.map((nft) => nft.id);
+
+		const availableNFTs = smartContractState.userNFTs.filter(
+			(nft) => !stakedNftIds.includes(nft.id),
+		);
+
+		if (availableNFTs.length === 0) {
+			setNotificationMessage('All your NFTs are already staked!');
+			setShowNotification(true);
+			return;
+		}
+
+		// Pick a random NFT to stake
+		const nftToStake =
+			availableNFTs[Math.floor(Math.random() * availableNFTs.length)];
+
+		// Create a fake pending transaction
+		const newTransaction: Transaction = {
+			id: Date.now(),
+			type: 'Stake',
+			nftId: nftToStake.id,
+			status: 'pending',
+			hash: `0x${Math.random().toString(16).substring(2, 14)}...${Math.random().toString(16).substring(2, 6)}`,
+			gasEstimate: (blockchainData.currentGasPrice * 0.000018).toFixed(5),
+			timestamp: new Date().toISOString(),
+		};
+
+		// Show transaction notification
+		setNotificationMessage(
+			`Staking ${nftToStake.name}: ${newTransaction.hash}`,
+		);
+		setShowNotification(true);
+
+		setPendingTransactions([newTransaction, ...pendingTransactions]);
+
+		// Simulate transaction confirmation after a delay
+		setTimeout(
+			() => {
+				setPendingTransactions((prev) =>
+					prev.map((tx) =>
+						tx.id === newTransaction.id
+							? { ...tx, status: 'confirmed' }
+							: tx,
+					),
+				);
+
+				// Update the NFT name to indicate it's staked
+				setSmartContractState((prev) => ({
+					...prev,
+					userNFTs: prev.userNFTs?.map((nft) =>
+						nft.id === nftToStake.id
+							? { ...nft, name: `${nft.name} (Staked)` }
+							: nft,
+					),
+				}));
+
+				// Show confirmation notification
+				setNotificationMessage(
+					`${nftToStake.name} staked successfully! Earning 0.001 ETH/day`,
+				);
+				setShowNotification(true);
+			},
+			2000 + Math.random() * 3000,
+		);
 	};
 
 	if (!IS_APRIL_FOOLS) return null;
@@ -1345,6 +1713,10 @@ function AprilFoolsManager() {
 						onConnectWallet={simulateWalletConnection}
 						contractState={smartContractState}
 						onOpenCasino={() => setCasinoDialogOpen(true)}
+						onToggleMarketplace={handleNFTStatusBarClick}
+						onMint={handleMint}
+						onApprove={handleApprove}
+						onStake={handleStake}
 					/>
 
 					{/* NFT Marketplace Button */}
