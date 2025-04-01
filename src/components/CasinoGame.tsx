@@ -587,6 +587,22 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 	const [timeRemaining, setTimeRemaining] = useState<number>(60);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+	// Add timer refs to properly handle cleanup
+	const timerRefs = useRef<NodeJS.Timeout[]>([]);
+
+	// Cleanup function for timers
+	useEffect(
+		() => () => timerRefs.current.forEach((timer) => clearTimeout(timer)),
+		[],
+	);
+
+	// Helper function to safely set timeouts
+	const safeSetTimeout = (callback: () => void, delay: number) => {
+		const timer = setTimeout(callback, delay);
+		timerRefs.current.push(timer);
+		return timer;
+	};
+
 	// Place these functions right after all the state declarations
 	// After the line: const [pokerResult, setPokerResult] = useState<string>('');
 
@@ -776,31 +792,32 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 	// Now the poker game functions
 	const handlePokerDeal = () => {
-		// Reset poker state
-		setPokerStage('initial');
-		setSelectedCards([false, false, false, false, false]);
-		setPokerResult('');
 		setIsLoading(true);
+		safeSetTimeout(() => {
+			// Reset poker state
+			setPokerStage('initial');
+			setSelectedCards([false, false, false, false, false]);
+			setPokerResult('');
 
-		// Deal new cards
-		const deck = cardSuits.flatMap((suit) =>
-			cardValues.map((value) => `${value}${suit}`),
-		);
-		const shuffled = [...deck].sort(() => 0.5 - Math.random());
-		const newHand = shuffled.slice(0, 5);
-		setPokerHand(newHand);
+			// Deal new cards
+			const deck = cardSuits.flatMap((suit) =>
+				cardValues.map((value) => `${value}${suit}`),
+			);
+			const shuffled = [...deck].sort(() => 0.5 - Math.random());
+			const newHand = shuffled.slice(0, 5);
+			setPokerHand(newHand);
 
-		// Evaluate hand
-		const result = evaluatePokerHand(newHand);
-		setPokerResult(result.hand);
+			// Evaluate hand
+			const result = evaluatePokerHand(newHand);
+			setPokerResult(result.hand);
 
-		setIsLoading(false);
+			setIsLoading(false);
+		}, 1000);
 	};
 
 	// Handle drawing new cards in poker
 	const handlePokerDraw = () => {
 		setIsLoading(true);
-		setPokerStage('draw');
 
 		// Keep selected cards, replace unselected ones
 		const deck = cardSuits.flatMap((suit) =>
@@ -832,14 +849,14 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setPokerResult(result.hand);
 
 		// Determine if player wins or loses based on hand strength
-		setTimeout(() => {
+		safeSetTimeout(() => {
 			if (result.multiplier > 0) {
 				handleGameResult('win', result.multiplier);
 			} else {
 				handleGameResult('lose');
 			}
 			setIsLoading(false);
-		}, 1500);
+		}, 1000);
 	};
 
 	// Handle card selection for poker
@@ -1137,7 +1154,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setIsLoading(true);
 
 		// Simulate opponent drawing a card with some delay for suspense
-		setTimeout(() => {
+		safeSetTimeout(() => {
 			const playerValue = getCardValue(playerCard!);
 			let opponentValue;
 			let result: 'win' | 'lose';
@@ -1240,7 +1257,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 			handleGameResult(result);
 			setIsLoading(false);
-		}, 1500);
+		}, 1000);
 	};
 
 	const handleCoinFlipChoice = (choice: 'heads' | 'tails') => {
@@ -1248,7 +1265,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		setIsLoading(true);
 
 		// Simulate coin flip with some delay for suspense
-		setTimeout(() => {
+		safeSetTimeout(() => {
 			// Base win chance adjusted by opponent difficulty
 			const winChance = 0.25; // default 25/75
 
@@ -1261,7 +1278,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 
 			handleGameResult(playerWins ? 'win' : 'lose');
 			setIsLoading(false);
-		}, 1500);
+		}, 1000);
 	};
 
 	const handleSlotSpin = () => {
@@ -1289,7 +1306,7 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		}, 100);
 
 		// Stop spinning after duration
-		setTimeout(() => {
+		safeSetTimeout(() => {
 			clearInterval(spinInterval);
 
 			// Determine final result with varied probabilities
@@ -2178,9 +2195,9 @@ function CasinoGame({ open, onClose }: CasinoGameProps) {
 		const handleLeverPull = () => {
 			if (spinning || isLoading) return;
 			setLeverPulled(true);
-			setTimeout(() => {
+			safeSetTimeout(() => {
 				handleSlotSpin();
-				setTimeout(() => setLeverPulled(false), 1000);
+				safeSetTimeout(() => setLeverPulled(false), 1000);
 			}, 300);
 		};
 
