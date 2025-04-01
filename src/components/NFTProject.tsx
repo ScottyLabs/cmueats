@@ -2729,6 +2729,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 									variant="h5"
 									gutterBottom
 									fontWeight="bold"
+									sx={{ color: 'var(--text-primary)' }}
 								>
 									Create Your NFT Smart Contract
 								</Typography>
@@ -2750,6 +2751,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Typography
 												variant="h6"
 												gutterBottom
+												sx={{
+													color: 'var(--text-primary)',
+												}}
 											>
 												Contract Settings
 											</Typography>
@@ -2759,7 +2763,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												sx={{ mb: 2 }}
 											>
 												<InputLabel
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												>
 													Contract Type
 												</InputLabel>
@@ -2770,12 +2776,14 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														handleContractTypeChange as any
 													}
 													sx={{
-														color: 'white',
+														color: 'var(--text-primary)',
 														'& .MuiSelect-icon': {
-															color: 'white',
+															color: 'var(--text-primary)',
 														},
 														'& .MuiInputBase-input':
-															{ color: 'white' },
+															{
+																color: 'var(--text-primary)',
+															},
 													}}
 												>
 													<MenuItem value="erc721">
@@ -2792,7 +2800,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													</MenuItem>
 												</Select>
 												<FormHelperText
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												>
 													Select the type of contract
 													to deploy
@@ -2815,11 +2825,13 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													'marketplace'
 												}
 												InputLabelProps={{
-													sx: { color: 'white' },
+													sx: {
+														color: 'var(--text-primary)',
+													},
 												}}
 												InputProps={{
 													sx: {
-														color: 'white',
+														color: 'var(--text-primary)',
 														'& .MuiOutlinedInput-notchedOutline':
 															{
 																borderColor:
@@ -2852,11 +2864,13 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													margin="normal"
 													variant="outlined"
 													InputLabelProps={{
-														sx: { color: 'white' },
+														sx: {
+															color: 'var(--text-primary)',
+														},
 													}}
 													InputProps={{
 														sx: {
-															color: 'white',
+															color: 'var(--text-primary)',
 															'& .MuiOutlinedInput-notchedOutline':
 																{
 																	borderColor:
@@ -2885,7 +2899,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															variant="body2"
 															gutterBottom
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 														>
 															Maximum Supply
@@ -2914,10 +2928,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															max={10000}
 															valueLabelDisplay="auto"
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 																'& .MuiSlider-markLabel':
 																	{
-																		color: 'white',
+																		color: 'var(--text-primary)',
 																	},
 															}}
 														/>
@@ -2928,7 +2942,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															variant="body2"
 															gutterBottom
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 														>
 															Mint Price (ETH)
@@ -2957,10 +2971,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															max={1}
 															valueLabelDisplay="auto"
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 																'& .MuiSlider-markLabel':
 																	{
-																		color: 'white',
+																		color: 'var(--text-primary)',
 																	},
 															}}
 														/>
@@ -2972,7 +2986,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												<Typography
 													variant="subtitle2"
 													gutterBottom
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												>
 													Advanced Options
 												</Typography>
@@ -2994,7 +3010,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													label={
 														<Typography
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 														>
 															Enable Royalties
@@ -3007,7 +3023,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 														<Typography
 															variant="caption"
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 														>
 															Royalty Percentage
@@ -3026,17 +3042,17 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															size="small"
 															sx={{
 																mt: 1,
-																color: 'white',
+																color: 'var(--text-primary)',
 																'& .MuiSlider-markLabel':
 																	{
-																		color: 'white',
+																		color: 'var(--text-primary)',
 																	},
 															}}
 														/>
 														<Typography
 															variant="caption"
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 														>
 															{royaltyPercentage}%
@@ -3061,7 +3077,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													label={
 														<Typography
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 														>
 															Delayed Reveal
@@ -3090,7 +3106,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													label={
 														<Typography
 															sx={{
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 														>
 															Whitelist Presale
@@ -3112,7 +3128,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Typography
 												variant="h6"
 												gutterBottom
-												sx={{ color: 'white' }}
+												sx={{
+													color: 'var(--text-primary)',
+												}}
 											>
 												Deploy Contract
 											</Typography>
@@ -3120,7 +3138,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Box sx={{ mb: 2 }}>
 												<Typography
 													variant="body2"
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 													gutterBottom
 												>
 													Gas Price:
@@ -3147,7 +3167,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
-														sx={{ color: 'white' }}
+														sx={{
+															color: 'var(--text-primary)',
+														}}
 													/>
 													<Chip
 														icon={
@@ -3166,7 +3188,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
-														sx={{ color: 'white' }}
+														sx={{
+															color: 'var(--text-primary)',
+														}}
 													/>
 													<Chip
 														icon={
@@ -3184,7 +3208,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 																? 'primary'
 																: 'default'
 														}
-														sx={{ color: 'white' }}
+														sx={{
+															color: 'var(--text-primary)',
+														}}
 													/>
 												</Box>
 											</Box>
@@ -3200,7 +3226,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											>
 												<Typography
 													variant="body2"
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												>
 													Estimated Gas:
 												</Typography>
@@ -3210,7 +3238,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													}
 													label={`${calculateDeployGas().gas} gas`}
 													size="small"
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												/>
 											</Box>
 
@@ -3225,7 +3255,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											>
 												<Typography
 													variant="body2"
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												>
 													Estimated Cost:
 												</Typography>
@@ -3235,7 +3267,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													}
 													label={`${calculateDeployGas().cost} ETH`}
 													size="small"
-													sx={{ color: 'white' }}
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												/>
 											</Box>
 
@@ -3249,7 +3283,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 													<Typography
 														variant="body2"
 														gutterBottom
-														sx={{ color: 'white' }}
+														sx={{
+															color: 'var(--text-primary)',
+														}}
 													>
 														{deployStep === 1 &&
 															'Compiling contract...'}
@@ -3266,7 +3302,7 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 															size="small"
 															sx={{
 																mt: 1,
-																color: 'white',
+																color: 'var(--text-primary)',
 															}}
 															icon={
 																<ContentCopyIcon />
@@ -3309,7 +3345,12 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											alignItems: 'center',
 										}}
 									>
-										<Typography variant="h6">
+										<Typography
+											variant="h6"
+											sx={{
+												color: 'var(--text-primary)',
+											}}
+										>
 											<CodeIcon
 												sx={{
 													mr: 1,
@@ -3323,7 +3364,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Tooltip title="Reset to template">
 												<IconButton
 													size="small"
-													sx={{ mr: 1 }}
+													sx={{
+														mr: 1,
+														color: 'var(--text-primary)',
+													}}
 													onClick={resetToTemplate}
 													disabled={!isCodeEdited}
 												>
@@ -3333,7 +3377,10 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 											<Tooltip title="Apply parameter changes">
 												<IconButton
 													size="small"
-													sx={{ mr: 1 }}
+													sx={{
+														mr: 1,
+														color: 'var(--text-primary)',
+													}}
 													onClick={
 														applyParameterChanges
 													}
@@ -3345,6 +3392,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												<span>
 													<IconButton
 														size="small"
+														sx={{
+															color: 'var(--text-primary)',
+														}}
 														onClick={() =>
 															handleCopyToClipboard(
 																editedCode,
@@ -3553,7 +3603,9 @@ function NFTProject({ open, onClose, onBuyClick }: NFTProjectProps) {
 												/>
 												<Typography
 													variant="body2"
-													color="text.secondary"
+													sx={{
+														color: 'var(--text-primary)',
+													}}
 												>
 													Note: Your wallet must be
 													connected, and you must pay
