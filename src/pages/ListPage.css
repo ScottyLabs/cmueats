@@ -206,12 +206,12 @@
 	display: flex;
 	gap: 12px;
 }
-/* the overlay card */
+/* the overlay card. modifiers (in this case --dialog) actually cascade to relevant children */
 .card--dialog {
 	background: var(--dialog-bg);
-}
-.card--dialog__header {
-	background: var(--dialog-header-bg);
+	.card__header {
+		background: var(--dialog-header-bg);
+	}
 }
 
 .card--animated {
