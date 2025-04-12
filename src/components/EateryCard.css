@@ -1,0 +1,25 @@
+.card__header__dot {
+	width: 12px;
+	height: 12px;
+	margin-top: 7px;
+	border-radius: 50%;
+}
+.card__header__dot--blinking {
+	animation: blinking 1s infinite;
+	animation-play-state: paused;
+}
+
+@keyframes blinking {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	75% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

@@ -79,12 +79,9 @@ function ListPage({
 	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
-	// TEST
-	const [locationFilterSearchQuery, setlocationFilterSearchQuery] =
+	const [locationFilterSearchQuery, setLocationFilterSearchQuery] =
 		useState('');
-	// TEST
 
-	// TEST
 	const filteredLocations = useMemo(() => {
 		const searchResults =
 			processedSearchQuery.length === 0
@@ -99,19 +96,15 @@ function ListPage({
 				.map((results) => results.item),
 		);
 
-		let intersection = [];
-
-		if (locationFilterSearchQuery === '') {
-			intersection = searchResults;
-		} else {
-			intersection = [...searchResults].filter((item) =>
-				locationFilterResults.has(item),
-			);
-		}
+		const intersection =
+			locationFilterSearchQuery === ''
+				? searchResults
+				: searchResults.filter((item) =>
+						locationFilterResults.has(item),
+					);
 
 		return intersection;
 	}, [fuse, searchQuery, locationFilterSearchQuery]);
-	// TEST
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -182,7 +175,7 @@ function ListPage({
 					/>
 					<SelectLocation
 						setlocationFilterSearchQuery={
-							setlocationFilterSearchQuery
+							setLocationFilterSearchQuery
 						}
 						locations={locations}
 					/>
@@ -238,8 +231,11 @@ function ListPage({
 							/>
 						);
 					return (
-						<Grid container spacing={2}>
-							{[...filteredLocations]
+						// suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
+						// we can't simply just reset the animation startTime in each card on first render,
+						// because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know.
+						<Grid container spacing={2} key={searchQuery}>
+							{filteredLocations
 								.map((location) => ({
 									...location,
 									...extraLocationData[location.conceptId], // add on our extra data here

@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
-	Card,
 	CardHeader,
 	Typography,
 	Link,
@@ -11,7 +10,6 @@ import {
 	AccordionSummary,
 	AccordionDetails,
 	CardContent,
-	Avatar,
 	Dialog,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -21,6 +19,7 @@ import {
 	IReadOnlyLocation_Combined,
 	LocationState,
 } from '../types/locationTypes';
+import './EateryCard.css';
 
 const textColors: Record<LocationState, string> = {
 	[LocationState.OPEN]: 'var(--location-open-text-color)',
@@ -97,49 +96,51 @@ const ActionButton = styled(Button)({
 	},
 });
 
-const blinkingAnimation = {
-	'@keyframes blinking': {
-		'0%': {
-			opacity: 0,
-		},
-		'50%': {
-			opacity: 1,
-		},
-		'75%': {
-			opacity: 1,
-		},
-		'100%': {
-			opacity: 0,
-		},
-	},
-};
-
-const Dot = styled(Card, {
-	shouldForwardProp: (prop) => prop !== 'changesSoon' && prop !== 'state',
-})(
-	({
-		state,
-		changesSoon,
-	}: {
-		state: LocationState;
-		changesSoon: boolean;
-	}) => ({
-		background: highlightColors[state],
-		width: '100%',
-		height: '100%',
-		borderRadius: '50%',
-		foregroundColor: highlightColors[state],
-		...(changesSoon && blinkingAnimation),
-		animationName: changesSoon ? 'blinking' : undefined,
-		animationDuration: '1s',
-		animationIterationCount: 'infinite',
-	}),
-);
-
 const SpecialsContent = styled(Accordion)({
 	backgroundColor: 'var(--specials-bg)',
 });
+function EateryCardHeader({
+	location,
+}: {
+	location: IReadOnlyLocation_Combined;
+}) {
+	const dotRef = useRef<HTMLDivElement | null>(null);
+	const changesSoon = !location.closedLongTerm && location.changesSoon;
+	useEffect(() => {
+		const dotAnimation = dotRef.current?.getAnimations()[0];
+		if (dotAnimation === undefined) return;
+		dotAnimation.startTime = 0;
+		dotAnimation.play();
+	}, [changesSoon]);
 
+	return (
+		<StyledCardHeader
+			title={
+				<StatusText
+					variant="subtitle1"
+					state={location.locationState}
+					className="card__header__text"
+				>
+					{location.statusMsg}
+				</StatusText>
+			}
+			state={location.locationState}
+			avatar={
+				<div
+					className={`card__header__dot ${
+						changesSoon ? 'card__header__dot--blinking' : ''
+					}`}
+					style={{
+						backgroundColor:
+							highlightColors[location.locationState],
+					}}
+					ref={dotRef}
+				/>
+			}
+			className="card__header"
+		/>
+	);
+}
 function EateryCard({
 	location,
 	index = 0,
@@ -158,10 +159,8 @@ function EateryCard({
 		shortDescription,
 		menu,
 		todaysSpecials = [],
-		statusMsg,
 		todaysSoups = [],
 	} = location;
-	const changesSoon = !location.closedLongTerm && location.changesSoon;
 
 	const [modalOpen, setModalOpen] = useState(false);
 
@@ -172,34 +171,7 @@ function EateryCard({
 					className={`card ${animate ? 'card--animated' : ''} ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
 					style={{ '--card-show-delay': `${index * 50}ms` }}
 				>
-					<StyledCardHeader
-						title={
-							<StatusText
-								variant="subtitle1"
-								state={location.locationState}
-								className="card__header__text"
-							>
-								{statusMsg}
-							</StatusText>
-						}
-						state={location.locationState}
-						avatar={
-							<Avatar
-								sx={{
-									width: 12,
-									height: 12,
-									backgroundColor: 'transparent',
-									marginTop: '6px',
-								}}
-							>
-								<Dot
-									state={location.locationState}
-									changesSoon={changesSoon}
-								/>
-							</Avatar>
-						}
-						className="card__header"
-					/>
+					<EateryCardHeader location={location} />
 					<CardContent className="card__content">
 						<NameText variant="h6">
 							<CustomLink href={url} target="_blank">
@@ -251,34 +223,7 @@ function EateryCard({
 				}}
 			>
 				<div className="card card--dialog">
-					<StyledCardHeader
-						title={
-							<StatusText
-								variant="subtitle1"
-								state={location.locationState}
-								className="card__header__text"
-							>
-								{statusMsg}
-							</StatusText>
-						}
-						avatar={
-							<Avatar
-								sx={{
-									width: 12,
-									height: 12,
-									backgroundColor: 'transparent',
-									marginTop: '8px',
-								}}
-							>
-								<Dot
-									state={location.locationState}
-									changesSoon={changesSoon}
-								/>
-							</Avatar>
-						}
-						state={location.locationState}
-						className="card--dialog__header"
-					/>
+					<EateryCardHeader location={location} />
 					<CardContent className="card__content">
 						<NameText variant="h6">
 							<CustomLink href={url} target="_blank">
