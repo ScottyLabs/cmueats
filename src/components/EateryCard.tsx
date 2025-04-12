@@ -107,14 +107,12 @@ function EateryCardHeader({
 	const dotRef = useRef<HTMLDivElement | null>(null);
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
 	useEffect(() => {
-		if (
-			dotRef.current === null ||
-			dotRef.current.getAnimations().length === 0
-		)
-			return;
-		dotRef.current.getAnimations()[0].startTime = 0;
-		dotRef.current.getAnimations()[0].play();
+		const dotAnimation = dotRef.current?.getAnimations()[0];
+		if (dotAnimation === undefined) return;
+		dotAnimation.startTime = 0;
+		dotAnimation.play();
 	}, [changesSoon]);
+
 	return (
 		<StyledCardHeader
 			title={
