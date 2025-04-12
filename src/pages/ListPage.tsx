@@ -79,7 +79,7 @@ function ListPage({
 	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
 	const processedSearchQuery = searchQuery.trim().toLowerCase();
 
-	const [locationFilterSearchQuery, setlocationFilterSearchQuery] =
+	const [locationFilterSearchQuery, setLocationFilterSearchQuery] =
 		useState('');
 
 	const filteredLocations = useMemo(() => {
@@ -175,7 +175,7 @@ function ListPage({
 					/>
 					<SelectLocation
 						setlocationFilterSearchQuery={
-							setlocationFilterSearchQuery
+							setLocationFilterSearchQuery
 						}
 						locations={locations}
 					/>
