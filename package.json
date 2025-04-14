@@ -45,8 +45,10 @@
     "lint": "bunx eslint src",
     "lint-fix": "bunx eslint --fix src",
     "format": "bunx prettier --write src",
-    "coverage": "bun test --coverage"
+    "coverage": "bun test --coverage",
+    "preinstall": "npx only-allow bun"
   },
+  "packageManager": "bun@1.2.9",
   "eslintConfig": {
     "extends": [
       "react-app",
