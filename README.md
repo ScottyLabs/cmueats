@@ -24,7 +24,7 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 9. If you already have the node_modules folder or package-lock.json from previous versions of the Dining API, please remove them before continuing.
 
-10. Now install the CMUEats dependencies by ['cd'-ing](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/#) into the root of the location where you cloned CMUEats and running `pnpm install`. (If you don’t have pnpm installed, you can install it by running `npm install -g pnpm`.)
+10. Now install the CMUEats dependencies by ['cd'-ing](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/#) into the root of the location where you cloned CMUEats and running `bun install`. If you don’t have Bun installed, you can install it using the instructions [here](https://bun.sh/).
 
 11. Now run the code with `bun start` and it should work! Just click on the link that appears and you’’ll see the web app. You can also use `bun run start` since `bun start` is its shorthand version
 
