@@ -236,17 +236,37 @@ function ListPage({
 						// because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know.
 						<Grid container spacing={2} key={searchQuery}>
 							{filteredLocations
-								.map((location) => ({
-									...location,
-									...extraLocationData[location.conceptId], // add on our extra data here
-								}))
+								.map((location) =>
+									(() => {
+										const mergedLocation = {
+											...location,
+											...extraLocationData[
+												location.conceptId
+											], // add on extra data
+										};
+
+										//Showing capital grains as closed because API is not going to be updated
+										if (mergedLocation.conceptId === 179) {
+											mergedLocation.closedLongTerm =
+												true;
+											mergedLocation.locationState =
+												LocationState.CLOSED_LONG_TERM;
+											mergedLocation.statusMsg =
+												'Closed for the rest of the semester';
+										}
+
+										return mergedLocation;
+									})(),
+								)
 								.sort((location1, location2) => {
 									const state1 = location1.locationState;
 									const state2 = location2.locationState;
+
 									if (state1 !== state2)
 										return state1 - state2;
 									// this if statement is janky but otherwise TS won't
 									// realize that the timeUntil property exists on both l1 and l2
+
 									if (
 										location1.closedLongTerm ||
 										location2.closedLongTerm
