@@ -245,7 +245,6 @@ function ListPage({
 											], // add on extra data
 										};
 
-										//Showing capital grains as closed because API is not going to be updated
 										if (mergedLocation.conceptId === 179) {
 											mergedLocation.closedLongTerm =
 												true;
