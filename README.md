@@ -49,3 +49,6 @@ Note: To add new dependencies, use `bun add dependency-name`. To remove dependen
 ## CSS, the way it was meant to be written™
 
 CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS. Most class names follow the [BEM](https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) (Block, Element, Modifier) convention and strongly limit nested selectors (eg. .block-1 .block-2), but some legacy code may not. (PRs to fix these or remove CSS components are strongly encouraged!)
+
+![image](https://github.com/user-attachments/assets/6292992f-c599-4203-ae0c-9983599d6bde)
+
