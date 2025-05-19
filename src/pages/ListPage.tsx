@@ -303,15 +303,26 @@ function ListPage({
 								style={{ color: 'white' }}
 							>
 								Jaisal
-							</a>{' '}
-							or{' '}
+							</a>
+							{', '}
 							<a
-								href="mailto:jhurewit@andrew.cmu.edu"
+								href="mailto:ericxu@andrew.cmu.edu"
 								style={{ color: 'white' }}
 							>
-								Jack
+								Eric
 							</a>
-							, or fill out our{' '}
+							{', '}
+							or{' '}
+							<a
+								href="mailto:laki@andrew.cmu.edu"
+								style={{ color: 'white' }}
+							>
+								Laasya
+							</a>
+							.
+						</FooterText>
+						<FooterText>
+							Alternatively, fill out our{' '}
 							<a
 								href="https://forms.gle/7JxgdgDhWMznQJdk9"
 								style={{ color: 'white' }}
