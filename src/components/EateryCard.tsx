@@ -20,6 +20,7 @@ import {
 	LocationState,
 } from '../types/locationTypes';
 import './EateryCard.css';
+import { getPinnedIds, setPinnedIds } from '../util/storage';
 
 const textColors: Record<LocationState, string> = {
 	[LocationState.OPEN]: 'var(--location-open-text-color)',
@@ -163,6 +164,25 @@ function EateryCard({
 	} = location;
 
 	const [modalOpen, setModalOpen] = useState(false);
+	const [isPinned, setIsPinned] = useState(() => {
+		const pinned = getPinnedIds();
+		return pinned.includes(location.conceptId.toString());
+	});
+
+	const togglePin = () => {
+		const pinned = getPinnedIds();
+		let updated: string[];
+		if (pinned.includes(location.conceptId.toString())) {
+			updated = pinned.filter(
+				(id) => id !== location.conceptId.toString(),
+			);
+		} else {
+			updated = [location.conceptId.toString(), ...pinned];
+		}
+
+		setPinnedIds(updated);
+		setIsPinned(!isPinned);
+	};
 
 	return (
 		<>
@@ -208,6 +228,22 @@ function EateryCard({
 							)}
 						</div>
 					)}
+					<div className="card__pin-container">
+						<Button
+							onClick={togglePin}
+							className={`card__pin-button ${isPinned ? 'card__pin-button--pinned' : ''}`}
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								height="20px"
+								viewBox="0 -960 960 960"
+								width="20px"
+								fill={isPinned ? '#FFD700' : '#e8eaed'}
+							>
+								<path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 80h252l-46-46v-314H400v314l-46 46Zm126 0Z" />
+							</svg>
+						</Button>
+					</div>
 				</div>
 			</Grid>
 

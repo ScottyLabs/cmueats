@@ -19,6 +19,7 @@ import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
+import { getPinnedIds } from '../util/storage';
 
 const LogoText = styled(Typography)({
 	color: 'var(--logo-first-half)',
@@ -134,6 +135,28 @@ function ListPage({
 		};
 	}, []);
 
+	const compareLocations = (location1: any, location2: any) => {
+		const state1 = location1.locationState;
+		const state2 = location2.locationState;
+
+		if (state1 !== state2) return state1 - state2;
+		// this if statement is janky but otherwise TS won't
+		// realize that the timeUntil property exists on both l1 and l2
+
+		if (location1.closedLongTerm || location2.closedLongTerm) {
+			assert(location1.closedLongTerm && location2.closedLongTerm);
+			return location1.name.localeCompare(location2.name);
+		}
+
+		return (
+			(state1 === LocationState.OPEN ||
+			state1 === LocationState.OPENS_SOON
+				? -1
+				: 1) *
+			(location1.timeUntil - location2.timeUntil)
+		);
+	};
+
 	return (
 		<div className="ListPage">
 			{/*  showAlert &&
@@ -241,32 +264,29 @@ function ListPage({
 									...extraLocationData[location.conceptId], // add on our extra data here
 								}))
 								.sort((location1, location2) => {
-									const state1 = location1.locationState;
-									const state2 = location2.locationState;
-									if (state1 !== state2)
-										return state1 - state2;
-									// this if statement is janky but otherwise TS won't
-									// realize that the timeUntil property exists on both l1 and l2
-									if (
-										location1.closedLongTerm ||
-										location2.closedLongTerm
-									) {
-										assert(
-											location1.closedLongTerm &&
-												location2.closedLongTerm,
-										);
-										return location1.name.localeCompare(
-											location2.name,
+									const pinnedIdsArray = getPinnedIds();
+									const pinnedIdsSet = new Set(
+										pinnedIdsArray,
+									);
+
+									const id1 = location1.conceptId.toString();
+									const id2 = location2.conceptId.toString();
+
+									const isPinned1 = pinnedIdsSet.has(id1);
+									const isPinned2 = pinnedIdsSet.has(id2);
+
+									if (isPinned1 && isPinned2) {
+										return compareLocations(
+											location1,
+											location2,
 										);
 									}
-									// flip sorting order if locations are both open or opening soon
-									return (
-										(state1 === LocationState.OPEN ||
-										state1 === LocationState.OPENS_SOON
-											? -1
-											: 1) *
-										(location1.timeUntil -
-											location2.timeUntil)
+									if (isPinned1) return -1;
+									if (isPinned2) return 1;
+
+									return compareLocations(
+										location1,
+										location2,
 									);
 								})
 								.map((location, i) => (

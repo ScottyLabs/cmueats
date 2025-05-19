@@ -23,3 +23,29 @@
 		opacity: 0;
 	}
 }
+
+.card__pin-container {
+	position: absolute;
+	bottom: 8px;
+	right: 8px;
+	border-radius: 50%;
+	transition: background-color 0.2s ease;
+}
+
+.card__pin-button {
+	padding: 3px;
+	border-radius: 50%;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.2s ease;
+}
+
+.card:hover .card__pin-button {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.card__pin-button--pinned {
+	opacity: 1;
+	pointer-events: auto;
+}
