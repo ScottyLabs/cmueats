@@ -71,10 +71,10 @@ function ListPage({
 	// so we don't end up with some cards (but not others)
 	// re-animating in when filter gets cleared
 	const [searchQuery, setSearchQuery] = useReducer<
-		(_: string, x: string) => string
-	>((_, x) => {
+		(current: string, updated: string) => string
+	>((current, updated) => {
 		shouldAnimateCards.current = false;
-		return x;
+		return updated;
 	}, '');
 
 	const [locationFilterQuery, setLocationFilterQuery] = useReducer<
