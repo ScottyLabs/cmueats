@@ -72,16 +72,16 @@ function ListPage({
 	// re-animating in when filter gets cleared
 	const [searchQuery, setSearchQuery] = useReducer<
 		(_: string, updated: string) => string
-	>((_, updated) => {
+	>((_, newState) => {
 		shouldAnimateCards.current = false;
-		return updated;
+		return newState;
 	}, '');
 
 	const [locationFilterQuery, setLocationFilterQuery] = useReducer<
 		(_: string, x: string) => string
-	>((_, x) => {
+	>((_, newState) => {
 		shouldAnimateCards.current = false;
-		return x;
+		return newState;
 	}, '');
 
 	// const [showAlert, setShowAlert] = useState(true);
