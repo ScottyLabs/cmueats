@@ -222,7 +222,7 @@
 .card--animated {
 	opacity: 0;
 	--card-show-delay: 0s;
-	--card-fade-in-animation: fade-in 30.7s forwards var(--card-show-delay)
+	--card-fade-in-animation: fade-in 0.7s forwards var(--card-show-delay)
 		cubic-bezier(0.08, 0.67, 0.64, 1.01);
 	animation: var(--card-fade-in-animation);
 

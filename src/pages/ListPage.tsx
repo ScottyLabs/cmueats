@@ -179,7 +179,7 @@ function ListPage({
 		 				we can't simply just reset the animation startTime in each card on first render,
 						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
 				<EateryCardGrid
-					key={searchQuery}
+					key={`${searchQuery}-${locationFilterQuery}`}
 					{...{
 						locations: filteredLocations,
 						shouldAnimateCards: shouldAnimateCards.current,
