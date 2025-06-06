@@ -118,6 +118,7 @@ export type IReadOnlyLocation_FromAPI_PreProcessed =
 export type IReadOnlyLocation_FromAPI_PostProcessed =
 	RecursiveReadonly<ILocation_FromAPI_PostProcessed>;
 
+/** Extra data derived from a single location */
 export type IReadOnlyLocation_ExtraData =
 	RecursiveReadonly<ILocation_ExtraData>;
 

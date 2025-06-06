@@ -3,7 +3,7 @@ import { IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes'
 import './SelectLocation.css';
 
 type SelectLocationProps = {
-	setlocationFilterSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+	setLocationFilterQuery: React.Dispatch<string>;
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 };
 
@@ -14,13 +14,14 @@ function getPrimaryLocation(locationString: string) {
 }
 
 function SelectLocation({
-	setlocationFilterSearchQuery,
+	setLocationFilterQuery,
 	locations,
 }: SelectLocationProps) {
 	if (locations === undefined) {
 		return (
 			<select className="select">
-				<option value="" label="Loading..." />
+				{/* Keep label the same as the default option below to reduce loading jank */}
+				<option value="" label="Filter by Building" />
 			</select>
 		);
 	}
@@ -34,7 +35,7 @@ function SelectLocation({
 
 	return (
 		<select
-			onChange={(e) => setlocationFilterSearchQuery(e.target.value)}
+			onChange={(e) => setLocationFilterQuery(e.target.value)}
 			className="select"
 		>
 			<option
