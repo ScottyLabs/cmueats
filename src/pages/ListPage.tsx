@@ -1,17 +1,18 @@
-import { Typography, Grid, Alert, styled } from '@mui/material';
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import Fuse, { IFuseOptions } from 'fuse.js';
-import EateryCard from '../components/EateryCard';
-import EateryCardSkeleton from '../components/EateryCardSkeleton';
-import NoResultsError from '../components/NoResultsError';
+import { Typography, Alert, styled } from '@mui/material';
+import {
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useReducer,
+	useRef,
+	useState,
+} from 'react';
 import { getGreetings } from '../util/greeting';
 import './ListPage.css';
 import {
 	IReadOnlyLocation_ExtraData_Map,
 	IReadOnlyLocation_FromAPI_PostProcessed,
-	LocationState,
 } from '../types/locationTypes';
-import assert from '../util/assert';
 
 import SelectLocation from '../components/SelectLocation';
 import { useTheme } from '../ThemeProvider';
@@ -19,6 +20,8 @@ import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
+import EateryCardGrid from './EateryCardGrid';
+import useFilteredLocations from './useFilteredLocations';
 
 const LogoText = styled(Typography)({
 	color: 'var(--logo-first-half)',
@@ -50,13 +53,6 @@ function getPittsburghTime() {
 	return now.toLocaleString('en-US', options);
 }
 
-const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_FromAPI_PostProcessed> = {
-	// keys to perform the search on
-	keys: ['name', 'location', 'shortDescription', 'description'],
-	ignoreLocation: true,
-	threshold: 0.2,
-};
-
 function ListPage({
 	extraLocationData,
 	locations,
@@ -69,45 +65,33 @@ function ListPage({
 		() => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
 		[],
 	);
+	const shouldAnimateCards = useRef(true);
 
-	const fuse = useMemo(
-		() => new Fuse(locations ?? [], FUSE_OPTIONS),
-		[locations],
-	); // only update fuse when the raw data actually changes (we don't care about the status (like time until close) changing)
+	// permanently cut out animation when user filters cards,
+	// so we don't end up with some cards (but not others)
+	// re-animating in when filter gets cleared
 
-	const [searchQuery, setSearchQuery] = useState('');
-	const [shouldAnimateCards, setShouldAnimateCards] = useState(true);
-	const processedSearchQuery = searchQuery.trim().toLowerCase();
+	const [searchQuery, setSearchQuery] = useReducer<
+		(_: string, x: string) => string
+	>((_, x) => {
+		shouldAnimateCards.current = false;
+		return x;
+	}, '');
 
-	const [locationFilterSearchQuery, setLocationFilterSearchQuery] =
-		useState('');
-
-	const filteredLocations = useMemo(() => {
-		const searchResults =
-			processedSearchQuery.length === 0
-				? (locations ?? [])
-				: fuse
-						.search(processedSearchQuery)
-						.map((result) => result.item);
-
-		const locationFilterResults = new Set(
-			fuse
-				.search(locationFilterSearchQuery)
-				.map((results) => results.item),
-		);
-
-		const intersection =
-			locationFilterSearchQuery === ''
-				? searchResults
-				: searchResults.filter((item) =>
-						locationFilterResults.has(item),
-					);
-
-		return intersection;
-	}, [fuse, searchQuery, locationFilterSearchQuery]);
+	const [locationFilterQuery, setLocationFilterQuery] = useReducer<
+		(_: string, x: string) => string
+	>((_, x) => {
+		shouldAnimateCards.current = false;
+		return x;
+	}, '');
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
+	const filteredLocations = useFilteredLocations({
+		locations,
+		searchQuery,
+		locationFilterQuery,
+	});
 
 	// Load the search query from the URL, if any
 	useLayoutEffect(() => {
@@ -169,14 +153,11 @@ function ListPage({
 						value={searchQuery}
 						onChange={(e) => {
 							setSearchQuery(e.target.value);
-							setShouldAnimateCards(false);
 						}}
 						placeholder="Search"
 					/>
 					<SelectLocation
-						setlocationFilterSearchQuery={
-							setLocationFilterSearchQuery
-						}
+						setLocationFilterQuery={setLocationFilterQuery}
 						locations={locations}
 					/>
 					{IS_MIKU_DAY && (
@@ -196,91 +177,19 @@ function ListPage({
 						</button>
 					)}
 				</header>
-				{(() => {
-					if (
-						locations === undefined ||
-						extraLocationData === undefined
-					) {
-						// Display skeleton cards while loading
-						return (
-							<Grid container spacing={2}>
-								{Array(36)
-									.fill(null)
-									.map((_, index) => (
-										<EateryCardSkeleton
-											// we can make an exception here since this array won't change
-											key={index} // eslint-disable-line react/no-array-index-key
-											index={index}
-										/>
-									))}
-							</Grid>
-						);
+				{/* suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
+		 				we can't simply just reset the animation startTime in each card on first render,
+						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
+				<EateryCardGrid
+					key={searchQuery}
+					locations={filteredLocations}
+					extraLocationData={extraLocationData}
+					setSearchQuery={setSearchQuery}
+					shouldAnimateCards={
+						searchQuery === '' && shouldAnimateCards.current
 					}
-					if (locations.length === 0)
-						return (
-							<p className="locations__error-text">
-								Oops! We received an invalid API response (or no
-								data at all). If this problem persists, please
-								let us know.
-							</p>
-						);
-					if (filteredLocations.length === 0)
-						return (
-							<NoResultsError
-								onClear={() => setSearchQuery('')}
-							/>
-						);
-					return (
-						// suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
-						// we can't simply just reset the animation startTime in each card on first render,
-						// because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know.
-						<Grid container spacing={2} key={searchQuery}>
-							{filteredLocations
-								.map((location) => ({
-									...location,
-									...extraLocationData[location.conceptId], // add on our extra data here
-								}))
-								.sort((location1, location2) => {
-									const state1 = location1.locationState;
-									const state2 = location2.locationState;
-									if (state1 !== state2)
-										return state1 - state2;
-									// this if statement is janky but otherwise TS won't
-									// realize that the timeUntil property exists on both l1 and l2
-									if (
-										location1.closedLongTerm ||
-										location2.closedLongTerm
-									) {
-										assert(
-											location1.closedLongTerm &&
-												location2.closedLongTerm,
-										);
-										return location1.name.localeCompare(
-											location2.name,
-										);
-									}
-									// flip sorting order if locations are both open or opening soon
-									return (
-										(state1 === LocationState.OPEN ||
-										state1 === LocationState.OPENS_SOON
-											? -1
-											: 1) *
-										(location1.timeUntil -
-											location2.timeUntil)
-									);
-								})
-								.map((location, i) => (
-									<EateryCard
-										location={location}
-										key={location.conceptId}
-										index={i}
-										animate={shouldAnimateCards}
-										partOfMainGrid
-									/>
-								))}
-						</Grid>
-					);
-				})()}
+					apiError={locations !== undefined && locations.length === 0}
+				/>
 			</div>
 			<footer className="footer">
 				{theme === 'miku' ? (

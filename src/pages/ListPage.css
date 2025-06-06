@@ -181,6 +181,10 @@
 	flex-direction: column;
 	overflow: hidden;
 	transition: 0.3s all;
+
+	&:hover {
+		animation: glow-animation 1.5s ease 0s infinite;
+	}
 }
 .card__header {
 	background: var(--card-header-bg);
