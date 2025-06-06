@@ -70,7 +70,6 @@ function ListPage({
 	// permanently cut out animation when user filters cards,
 	// so we don't end up with some cards (but not others)
 	// re-animating in when filter gets cleared
-
 	const [searchQuery, setSearchQuery] = useReducer<
 		(_: string, x: string) => string
 	>((_, x) => {
@@ -157,8 +156,7 @@ function ListPage({
 						placeholder="Search"
 					/>
 					<SelectLocation
-						setLocationFilterQuery={setLocationFilterQuery}
-						locations={locations}
+						{...{ setLocationFilterQuery, locations }}
 					/>
 					{IS_MIKU_DAY && (
 						<button
@@ -182,13 +180,14 @@ function ListPage({
 						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
 				<EateryCardGrid
 					key={searchQuery}
-					locations={filteredLocations}
-					extraLocationData={extraLocationData}
-					setSearchQuery={setSearchQuery}
-					shouldAnimateCards={
-						searchQuery === '' && shouldAnimateCards.current
-					}
-					apiError={locations !== undefined && locations.length === 0}
+					{...{
+						locations: filteredLocations,
+						shouldAnimateCards: shouldAnimateCards.current,
+						apiError:
+							locations !== undefined && locations.length === 0,
+						extraLocationData,
+						setSearchQuery,
+					}}
 				/>
 			</div>
 			<footer className="footer">

@@ -14,7 +14,7 @@ function getPrimaryLocation(locationString: string) {
 }
 
 function SelectLocation({
-	setLocationFilterQuery: setlocationFilterSearchQuery,
+	setLocationFilterQuery,
 	locations,
 }: SelectLocationProps) {
 	if (locations === undefined) {
@@ -35,7 +35,7 @@ function SelectLocation({
 
 	return (
 		<select
-			onChange={(e) => setlocationFilterSearchQuery(e.target.value)}
+			onChange={(e) => setLocationFilterQuery(e.target.value)}
 			className="select"
 		>
 			<option
