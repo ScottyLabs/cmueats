@@ -149,25 +149,25 @@ export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 
 export function getTimeSlotsString(times: ITimeSlots) {
 	assert(isValidTimeSlotArray(times));
-	var index = 0;
+	let index = 0;
 	const listByDate = [];
 	assert(index !== 1);
 	for (let date = 0 ; date < 7 ; date += 1){
-		var concatted_string = '';
-		for (let i = index;  i < times.length && date === (times[i]).start.day; i += 1) {
+		let concattedString = '';
+		for (let i = index  ; i < times.length && date === (times[i]).start.day; i += 1) {
 			assert(i < times.length);
 			// times[i].start.day;
 			// assert(!isTimeSlot(times[0]));
-			concatted_string = concatted_string.concat( getTimeSlotString(times[i]), );
-			concatted_string = concatted_string.concat(',');
+			concattedString = concattedString.concat( getTimeSlotString(times[i]),);
+			concattedString = concattedString.concat(',');
 			index += 1;
 		}
-		if (concatted_string.length === 0){
-			concatted_string = 'CLOSED';
+		if (concattedString.length === 0) {
+			concattedString = 'CLOSED';
 		} else {
-			concatted_string = concatted_string.substring( 0 , concatted_string.length - 1, );
+			concattedString = concattedString.substring(0 ,concattedString.length - 1,);
 		}
-		listByDate.push(concatted_string);
+		listByDate.push(concattedString);
 	}
 	return listByDate;
 }

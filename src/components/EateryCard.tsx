@@ -212,7 +212,7 @@ function EateryCard({
 									Specials
 								</ActionButton>
 							)}
-							{true &&(
+							{true && (
 								<ActionButton
 									onClick={() => {
 										setTimeModalOpen(true);
