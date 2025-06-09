@@ -74,6 +74,11 @@ const DescriptionText = styled(Typography)({
 	color: 'var(--card-text-description)',
 });
 
+const LongDescriptionText = styled(Typography)({
+	color: 'white',
+	marginBottom: '5px',
+});
+
 const StatusText = styled(Typography, {
 	shouldForwardProp: (prop) => prop !== 'state',
 })<TextProps>(({ state }) => ({
@@ -157,12 +162,15 @@ function EateryCard({
 		location: locationText,
 		url,
 		shortDescription,
+		description,
 		menu,
 		todaysSpecials = [],
 		todaysSoups = [],
+		timesListDisplay,
 	} = location;
 
 	const [modalOpen, setModalOpen] = useState(false);
+	const [timeModalOpen, setTimeModalOpen] = useState(false);
 
 	return (
 		<>
@@ -183,9 +191,7 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-					{(menu ||
-						todaysSoups.length !== 0 ||
-						todaysSpecials.length !== 0) && (
+					{(true) && (
 						<div className="card__actions">
 							{menu && (
 								<ActionButton
@@ -204,6 +210,15 @@ function EateryCard({
 									}}
 								>
 									Specials
+								</ActionButton>
+							)}
+							{(true)&&(
+								<ActionButton
+									onClick={() => {
+										setTimeModalOpen(true);
+									}}
+								>
+									Info & Times
 								</ActionButton>
 							)}
 						</div>
@@ -232,6 +247,79 @@ function EateryCard({
 						</NameText>
 						<LocationText variant="subtitle2">
 							{locationText}
+						</LocationText>
+					</CardContent>
+					{todaysSpecials.concat(todaysSoups).map((special) => (
+						<SpecialsContent key={special.title}>
+							<AccordionSummary
+								expandIcon={
+									<ExpandMoreIcon
+										style={{
+											color: 'var(--card-text-description)',
+										}}
+									/>
+								}
+								aria-controls="panel1a-content"
+								id="panel1a-header"
+							>
+								<DescriptionText>
+									{special.title}
+								</DescriptionText>
+							</AccordionSummary>
+							<AccordionDetails>
+								<LocationText>
+									{special.description}
+								</LocationText>
+							</AccordionDetails>
+						</SpecialsContent>
+					))}
+				</div>
+			</Dialog>
+			<Dialog
+				open={timeModalOpen}
+				onClose={() => {
+					setTimeModalOpen(false);
+				}}
+				PaperProps={{
+					style: {
+						backgroundColor: 'transparent',
+					},
+				}}
+			>
+				<div className="card card--dialog">
+					<EateryCardHeader location={location} />
+					<CardContent className="card__content">
+						<NameText variant="h6">
+							<CustomLink href={url} target="_blank">
+								{name}
+							</CustomLink>
+						</NameText>
+						<LocationText variant="subtitle2">
+							{locationText}
+						</LocationText>
+						<LongDescriptionText variant="subtitle2">
+							{description}
+						</LongDescriptionText>
+						<LocationText variant="subtitle2">
+							{"Sunday: ".concat(timesListDisplay[0])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Monday: ".concat(timesListDisplay[1])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Tuesday: ".concat(timesListDisplay[2])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Wednesday: ".concat(timesListDisplay[3])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Thursday: ".concat(timesListDisplay[4])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Friday: ".concat(timesListDisplay[5])}
+						</LocationText>
+						<LocationText variant="subtitle2">
+							{"Saturday: ".concat(timesListDisplay[6])}
 						</LocationText>
 					</CardContent>
 					{todaysSpecials.concat(todaysSoups).map((special) => (
