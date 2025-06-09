@@ -151,21 +151,21 @@ export function getTimeSlotsString(times: ITimeSlots) {
 	assert(isValidTimeSlotArray(times));
 	var index = 0;
 	const listByDate = [];
-	assert(index != 1);
-	for (let date = 0; date < 7; date += 1){
-		var concatted_string = "";
-		for (let i = index;  i < times.length && date == (times[i]).start.day; i += 1) {
+	assert(index !== 1);
+	for (let date = 0 ; date < 7 ; date += 1){
+		var concatted_string = '';
+		for (let i = index;  i < times.length && date === (times[i]).start.day; i += 1) {
 			assert(i < times.length);
 			// times[i].start.day;
 			// assert(!isTimeSlot(times[0]));
-			concatted_string = concatted_string.concat(getTimeSlotString(times[i]));
-			concatted_string = concatted_string.concat(",");
+			concatted_string = concatted_string.concat( getTimeSlotString(times[i]), );
+			concatted_string = concatted_string.concat(',');
 			index += 1;
 		}
-		if (concatted_string.length == 0){
-			concatted_string = "CLOSED";
-		}else{
-			concatted_string = concatted_string.substring(0, concatted_string.length - 1);
+		if (concatted_string.length === 0){
+			concatted_string = 'CLOSED';
+		} else {
+			concatted_string = concatted_string.substring( 0 , concatted_string.length - 1, );
 		}
 		listByDate.push(concatted_string);
 	}
