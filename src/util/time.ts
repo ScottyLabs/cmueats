@@ -152,20 +152,20 @@ export function getTimeSlotsString(times: ITimeSlots) {
 	let index = 0;
 	const listByDate = [];
 	assert(index !== 1);
-	for (let date = 0 ; date < 7 ; date += 1){
+	for (let date = 0 ; date < 7 ; date += 1) {
 		let concattedString = '';
-		for (let i = index  ; i < times.length && date === (times[i]).start.day; i += 1) {
+		for (let i = index;i < times.length && date === times[i].start.day;i += 1) {
 			assert(i < times.length);
 			// times[i].start.day;
 			// assert(!isTimeSlot(times[0]));
-			concattedString = concattedString.concat( getTimeSlotString(times[i]),);
+			concattedString = concattedString.concat(getTimeSlotString(times[i]));
 			concattedString = concattedString.concat(',');
 			index += 1;
 		}
 		if (concattedString.length === 0) {
 			concattedString = 'CLOSED';
 		} else {
-			concattedString = concattedString.substring(0 ,concattedString.length - 1,);
+			concattedString = concattedString.substring(0 ,concattedString.length - 1);
 		}
 		listByDate.push(concattedString);
 	}
