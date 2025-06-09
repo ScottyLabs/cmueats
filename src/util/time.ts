@@ -157,12 +157,13 @@ export function getTimeSlotsString(times: ITimeSlots) {
 		for (
 			let i = index;
 			i < times.length && date === times[i].start.day;
-			i += 1
-			) {
+			i += 1) {
 			assert(i < times.length);
 			// times[i].start.day;
 			// assert(!isTimeSlot(times[0]));
-			concattedString = concattedString.concat(getTimeSlotString(times[i]),);
+			concattedString = concattedString.concat(
+				getTimeSlotString(times[i]),
+			);
 			concattedString = concattedString.concat(',');
 			index += 1;
 		}
