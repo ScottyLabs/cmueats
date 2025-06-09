@@ -108,42 +108,9 @@ export function getTimeString(time: ITimeSlotTime) {
  */
 export function getTimeSlotString(time: ITimeSlot) {
 	assert(isTimeSlot(time));
-	const start=getTimeString(time.start);
-	const end=getTimeString(time.end);
+	const start = getTimeString(time.start);
+	const end = getTimeString(time.end);
 	return `${start} - ${end}`;
-}
-
-/**
- * Converts an ITimeSlotTime to a human-readable string (12-hour time)
- * @param times
- * @returns HH:MM (AM/PM) Array
- */
-
-export function getTimeSlotsString(times: ITimeSlots) {
-	assert(isValidTimeSlotArray(times));
-	const listByDate=[];
-	var index=0;
-	var r=index;
-	r=r+1;
-	assert(index!=1);
-	for (let date=0; date<7; date+=1){
-		var concatted_string="";
-		for (let i = index;  i<times.length && date == (times[i]).start.day; i += 1) {
-			assert(i<times.length);
-			// times[i].start.day;
-			// assert(!isTimeSlot(times[0]));
-			concatted_string=concatted_string.concat(getTimeSlotString(times[i]));
-			concatted_string=concatted_string.concat(",");
-			index=index+1;
-		}
-		if (concatted_string.length==0){
-			concatted_string="CLOSED";
-		}else{
-			concatted_string=concatted_string.substring(0, concatted_string.length-1);
-		}
-		listByDate.push(concatted_string);
-	}
-	return listByDate;
 }
 
 /**
@@ -172,6 +139,37 @@ export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 		}
 	}
 	return true;
+}
+
+/**
+ * Converts an ITimeSlotTime to a human-readable string (12-hour time)
+ * @param times
+ * @returns HH:MM (AM/PM) Array
+ */
+
+export function getTimeSlotsString(times: ITimeSlots) {
+	assert(isValidTimeSlotArray(times));
+	var index = 0;
+	const listByDate = [];
+	assert(index != 1);
+	for (let date = 0; date < 7; date += 1){
+		var concatted_string = "";
+		for (let i = index;  i < times.length && date == (times[i]).start.day; i += 1) {
+			assert(i < times.length);
+			// times[i].start.day;
+			// assert(!isTimeSlot(times[0]));
+			concatted_string = concatted_string.concat(getTimeSlotString(times[i]));
+			concatted_string = concatted_string.concat(",");
+			index += 1;
+		}
+		if (concatted_string.length == 0){
+			concatted_string = "CLOSED";
+		}else{
+			concatted_string = concatted_string.substring(0, concatted_string.length - 1);
+		}
+		listByDate.push(concatted_string);
+	}
+	return listByDate;
 }
 
 /**

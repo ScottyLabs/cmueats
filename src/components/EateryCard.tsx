@@ -191,7 +191,7 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-					{(true) && (
+					{true && (
 						<div className="card__actions">
 							{menu && (
 								<ActionButton
@@ -212,7 +212,7 @@ function EateryCard({
 									Specials
 								</ActionButton>
 							)}
-							{(true)&&(
+							{true &&(
 								<ActionButton
 									onClick={() => {
 										setTimeModalOpen(true);
@@ -301,25 +301,25 @@ function EateryCard({
 							{description}
 						</LongDescriptionText>
 						<LocationText variant="subtitle2">
-							{"Sunday: ".concat(timesListDisplay[0])}
+							{'Sunday: '.concat(timesListDisplay[0])}
 						</LocationText>
 						<LocationText variant="subtitle2">
-							{"Monday: ".concat(timesListDisplay[1])}
+							{'Monday: '.concat(timesListDisplay[1])}
 						</LocationText>
 						<LocationText variant="subtitle2">
-							{"Tuesday: ".concat(timesListDisplay[2])}
+							{'Tuesday: '.concat(timesListDisplay[2])}
 						</LocationText>
 						<LocationText variant="subtitle2">
-							{"Wednesday: ".concat(timesListDisplay[3])}
+							{'Wednesday: '.concat(timesListDisplay[3])}
 						</LocationText>
 						<LocationText variant="subtitle2">
-							{"Thursday: ".concat(timesListDisplay[4])}
+							{'Thursday: '.concat(timesListDisplay[4])}
 						</LocationText>
 						<LocationText variant="subtitle2">
-							{"Friday: ".concat(timesListDisplay[5])}
+							{'Friday: '.concat(timesListDisplay[5])}
 						</LocationText>
 						<LocationText variant="subtitle2">
-							{"Saturday: ".concat(timesListDisplay[6])}
+							{'Saturday: '.concat(timesListDisplay[6])}
 						</LocationText>
 					</CardContent>
 					{todaysSpecials.concat(todaysSoups).map((special) => (
