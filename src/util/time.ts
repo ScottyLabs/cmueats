@@ -102,11 +102,11 @@ export function getTimeString(time: ITimeSlotTime) {
 }
 
 /**
- * Converts an ITimeSlotTime to a human-readable string (12-hour time)
+ * Converts an ITimeSlot to a human-readable string (12-hour time)
  * @param time
  * @returns HH:MM (AM/PM)
  */
-export function getTimeSlotString(time: ITimeSlot) {
+export function getTimeSlotAsString(time: ITimeSlot) {
 	assert(isTimeSlot(time));
 	const start = getTimeString(time.start);
 	const end = getTimeString(time.end);
@@ -142,7 +142,7 @@ export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 }
 
 /**
- * Converts an ITimeSlotTime to a human-readable string (12-hour time)
+ * Converts an sorted time slot array to an array of human-readable strings (12-hour time)
  * @param times
  * @returns HH:MM (AM/PM) Array
  */
@@ -153,29 +153,9 @@ export function getTimeSlotsString(times: ITimeSlots) {
 	const listByDate = [];
 	assert(index !== 1);
 	for (let date = 0; date < 7; date += 1) {
-		let concattedString = '';
-		for (
-			let i = index;
-			i < times.length && date === times[i].start.day;
-			i += 1
-		) {
-			assert(i < times.length);
-			// times[i].start.day;
-			// assert(!isTimeSlot(times[0]));
-			concattedString = concattedString.concat(
-				getTimeSlotString(times[i]),
-			);
-			concattedString = concattedString.concat(',');
-			index += 1;
-		}
-		if (concattedString.length === 0) {
-			concattedString = 'CLOSED';
-		} else {
-			concattedString = concattedString.substring(
-				0,
-				concattedString.length - 1,
-			);
-		}
+		let concattedString = times.filter((time) => time.start.day === date)
+    .map(getTimeSlotAsString)
+    .join(',') || 'CLOSED';
 		listByDate.push(concattedString);
 	}
 	return listByDate;

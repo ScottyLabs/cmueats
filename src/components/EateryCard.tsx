@@ -70,6 +70,13 @@ const LocationText = styled(Typography)({
 	fontSize: 14,
 });
 
+const TimesText = styled(Typography)({
+	color: 'var(--card-text-muted)',
+	marginBottom: 5,
+	fontWeight: 500,
+	fontSize: 14,
+});
+
 const DescriptionText = styled(Typography)({
 	color: 'var(--card-text-description)',
 });
@@ -169,6 +176,8 @@ function EateryCard({
 		timesListDisplay,
 	} = location;
 
+	const daysOfTheWeek = ["Sunday", "Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday"];
+
 	const [modalOpen, setModalOpen] = useState(false);
 	const [timeModalOpen, setTimeModalOpen] = useState(false);
 
@@ -191,7 +200,7 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-					{true && (
+					{(
 						<div className="card__actions">
 							{menu && (
 								<ActionButton
@@ -212,13 +221,13 @@ function EateryCard({
 									Specials
 								</ActionButton>
 							)}
-							{true && (
+							{(
 								<ActionButton
 									onClick={() => {
 										setTimeModalOpen(true);
 									}}
 								>
-									Info & Times
+									Details
 								</ActionButton>
 							)}
 						</div>
@@ -300,31 +309,12 @@ function EateryCard({
 						<LongDescriptionText variant="subtitle2">
 							{description}
 						</LongDescriptionText>
-						<LocationText variant="subtitle2">
-							{'Sunday: '.concat(timesListDisplay[0])}
-						</LocationText>
-						<LocationText variant="subtitle2">
-							{'Monday: '.concat(timesListDisplay[1])}
-						</LocationText>
-						<LocationText variant="subtitle2">
-							{'Tuesday: '.concat(timesListDisplay[2])}
-						</LocationText>
-						<LocationText variant="subtitle2">
-							{'Wednesday: '.concat(timesListDisplay[3])}
-						</LocationText>
-						<LocationText variant="subtitle2">
-							{'Thursday: '.concat(timesListDisplay[4])}
-						</LocationText>
-						<LocationText variant="subtitle2">
-							{'Friday: '.concat(timesListDisplay[5])}
-						</LocationText>
-						<LocationText variant="subtitle2">
-							{'Saturday: '.concat(timesListDisplay[6])}
-						</LocationText>
 					</CardContent>
-					{todaysSpecials.concat(todaysSoups).map((special) => (
-						<SpecialsContent key={special.title}>
-							<AccordionSummary
+						<Accordion
+						style={{
+						backgroundColor: 'var(--specials-bg)',
+						}}>
+							<AccordionSummary //daysOfTheWeek
 								expandIcon={
 									<ExpandMoreIcon
 										style={{
@@ -335,17 +325,19 @@ function EateryCard({
 								aria-controls="panel1a-content"
 								id="panel1a-header"
 							>
-								<DescriptionText>
-									{special.title}
+								<DescriptionText variant="h6">
+									{"Times (click to enlarge)"}
 								</DescriptionText>
 							</AccordionSummary>
 							<AccordionDetails>
-								<LocationText>
-									{special.description}
-								</LocationText>
-							</AccordionDetails>
-						</SpecialsContent>
+							{daysOfTheWeek.map((day,i) => (
+						<TimesText>
+							{day}: {timesListDisplay[i]}
+						</TimesText>
 					))}
+					</AccordionDetails>
+					</Accordion>
+					
 				</div>
 			</Dialog>
 		</>
