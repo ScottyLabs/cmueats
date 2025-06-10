@@ -208,7 +208,6 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-					{
 						<div className="card__actions">
 							{menu && (
 								<ActionButton
@@ -228,18 +227,15 @@ function EateryCard({
 								>
 									Specials
 								</ActionButton>
-							)}
-							{
+							)}					
 								<ActionButton
 									onClick={() => {
 										setTimeModalOpen(true);
 									}}
 								>
 									Details
-								</ActionButton>
-							}
+								</ActionButton>				
 						</div>
-					}
 				</div>
 			</Grid>
 
@@ -323,7 +319,7 @@ function EateryCard({
 							backgroundColor: 'var(--specials-bg)',
 						}}
 					>
-						<AccordionSummary //daysOfTheWeek
+						<AccordionSummary 
 							expandIcon={
 								<ExpandMoreIcon
 									style={{
@@ -335,7 +331,7 @@ function EateryCard({
 							id="panel1a-header"
 						>
 							<DescriptionText variant="h6">
-								{'Times (click to enlarge)'}
+								Times (click to enlarge)
 							</DescriptionText>
 						</AccordionSummary>
 						<AccordionDetails>
