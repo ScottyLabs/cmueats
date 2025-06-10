@@ -208,34 +208,34 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-						<div className="card__actions">
-							{menu && (
-								<ActionButton
-									onClick={() => {
-										window.open(menu, '_blank');
-									}}
-								>
-									Menu
-								</ActionButton>
-							)}
-							{(todaysSpecials.length !== 0 ||
-								todaysSoups.length !== 0) && (
-								<ActionButton
-									onClick={() => {
-										setModalOpen(true);
-									}}
-								>
-									Specials
-								</ActionButton>
-							)}					
-								<ActionButton
-									onClick={() => {
-										setTimeModalOpen(true);
-									}}
-								>
-									Details
-								</ActionButton>				
-						</div>
+					<div className="card__actions">
+						{menu && (
+							<ActionButton
+								onClick={() => {
+									window.open(menu, '_blank');
+								}}
+							>
+								Menu
+							</ActionButton>
+						)}
+						{(todaysSpecials.length !== 0 ||
+							todaysSoups.length !== 0) && (
+							<ActionButton
+								onClick={() => {
+									setModalOpen(true);
+								}}
+							>
+								Specials
+							</ActionButton>
+						)}
+						<ActionButton
+							onClick={() => {
+								setTimeModalOpen(true);
+							}}
+						>
+							Details
+						</ActionButton>
+					</div>
 				</div>
 			</Grid>
 
@@ -319,7 +319,7 @@ function EateryCard({
 							backgroundColor: 'var(--specials-bg)',
 						}}
 					>
-						<AccordionSummary 
+						<AccordionSummary
 							expandIcon={
 								<ExpandMoreIcon
 									style={{
@@ -334,6 +334,7 @@ function EateryCard({
 								Times (click to enlarge)
 							</DescriptionText>
 						</AccordionSummary>
+
 						<AccordionDetails>
 							{daysOfTheWeek.map((day, i) => (
 								<TimesText>
