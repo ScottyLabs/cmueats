@@ -149,11 +149,9 @@ export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 
 export function getTimeSlotsString(times: ITimeSlots) {
 	assert(isValidTimeSlotArray(times));
-	let index = 0;
 	const listByDate = [];
-	assert(index !== 1);
 	for (let date = 0; date < 7; date += 1) {
-		let concattedString =
+		const concattedString =
 			times
 				.filter((time) => time.start.day === date)
 				.map(getTimeSlotAsString)
