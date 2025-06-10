@@ -153,9 +153,11 @@ export function getTimeSlotsString(times: ITimeSlots) {
 	const listByDate = [];
 	assert(index !== 1);
 	for (let date = 0; date < 7; date += 1) {
-		let concattedString = times.filter((time) => time.start.day === date)
-    .map(getTimeSlotAsString)
-    .join(',') || 'CLOSED';
+		let concattedString =
+			times
+				.filter((time) => time.start.day === date)
+				.map(getTimeSlotAsString)
+				.join(',') || 'CLOSED';
 		listByDate.push(concattedString);
 	}
 	return listByDate;

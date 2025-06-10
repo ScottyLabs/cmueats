@@ -176,7 +176,15 @@ function EateryCard({
 		timesListDisplay,
 	} = location;
 
-	const daysOfTheWeek = ["Sunday", "Monday", "Tuesday","Wednesday", "Thursday", "Friday", "Saturday"];
+	const daysOfTheWeek = [
+		'Sunday',
+		'Monday',
+		'Tuesday',
+		'Wednesday',
+		'Thursday',
+		'Friday',
+		'Saturday',
+	];
 
 	const [modalOpen, setModalOpen] = useState(false);
 	const [timeModalOpen, setTimeModalOpen] = useState(false);
@@ -200,7 +208,7 @@ function EateryCard({
 						</LocationText>
 						<DescriptionText>{shortDescription}</DescriptionText>
 					</CardContent>
-					{(
+					{
 						<div className="card__actions">
 							{menu && (
 								<ActionButton
@@ -221,7 +229,7 @@ function EateryCard({
 									Specials
 								</ActionButton>
 							)}
-							{(
+							{
 								<ActionButton
 									onClick={() => {
 										setTimeModalOpen(true);
@@ -229,9 +237,9 @@ function EateryCard({
 								>
 									Details
 								</ActionButton>
-							)}
+							}
 						</div>
-					)}
+					}
 				</div>
 			</Grid>
 
@@ -310,34 +318,34 @@ function EateryCard({
 							{description}
 						</LongDescriptionText>
 					</CardContent>
-						<Accordion
+					<Accordion
 						style={{
-						backgroundColor: 'var(--specials-bg)',
-						}}>
-							<AccordionSummary //daysOfTheWeek
-								expandIcon={
-									<ExpandMoreIcon
-										style={{
-											color: 'var(--card-text-description)',
-										}}
-									/>
-								}
-								aria-controls="panel1a-content"
-								id="panel1a-header"
-							>
-								<DescriptionText variant="h6">
-									{"Times (click to enlarge)"}
-								</DescriptionText>
-							</AccordionSummary>
-							<AccordionDetails>
-							{daysOfTheWeek.map((day,i) => (
-						<TimesText>
-							{day}: {timesListDisplay[i]}
-						</TimesText>
-					))}
-					</AccordionDetails>
+							backgroundColor: 'var(--specials-bg)',
+						}}
+					>
+						<AccordionSummary //daysOfTheWeek
+							expandIcon={
+								<ExpandMoreIcon
+									style={{
+										color: 'var(--card-text-description)',
+									}}
+								/>
+							}
+							aria-controls="panel1a-content"
+							id="panel1a-header"
+						>
+							<DescriptionText variant="h6">
+								{'Times (click to enlarge)'}
+							</DescriptionText>
+						</AccordionSummary>
+						<AccordionDetails>
+							{daysOfTheWeek.map((day, i) => (
+								<TimesText>
+									{day}: {timesListDisplay[i]}
+								</TimesText>
+							))}
+						</AccordionDetails>
 					</Accordion>
-					
 				</div>
 			</Dialog>
 		</>
