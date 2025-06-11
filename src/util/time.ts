@@ -155,7 +155,7 @@ export function getTimeSlotsString(times: ITimeSlots) {
 			times
 				.filter((time) => time.start.day === date)
 				.map(getTimeSlotAsString)
-				.join(',') || 'CLOSED';
+				.join(', ') || 'CLOSED';
 		listByDate.push(concattedString);
 	}
 	return listByDate;

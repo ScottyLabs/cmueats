@@ -320,6 +320,9 @@ function EateryCard({
 						}}
 					>
 						<AccordionSummary
+							style={{
+								backgroundColor: 'black',
+							}}
 							expandIcon={
 								<ExpandMoreIcon
 									style={{
@@ -330,7 +333,7 @@ function EateryCard({
 							aria-controls="panel1a-content"
 							id="panel1a-header"
 						>
-							<DescriptionText variant="h6">
+							<DescriptionText variant="h6" style={{ fontWeight: 'bold' }}>
 								Times (click to enlarge)
 							</DescriptionText>
 						</AccordionSummary>
