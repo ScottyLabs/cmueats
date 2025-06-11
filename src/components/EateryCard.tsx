@@ -333,7 +333,7 @@ function EateryCard({
 							aria-controls="panel1a-content"
 							id="panel1a-header"
 						>
-							<DescriptionText variant="h6" style={{ fontWeight: 'bold' }}>
+							<DescriptionText style={{ fontWeight: 'bold' }}>
 								Times (click to enlarge)
 							</DescriptionText>
 						</AccordionSummary>
