@@ -18,6 +18,7 @@ import {
 	isTimeSlotTime,
 	isValidTimeSlotArray,
 	getTimeString,
+	getTimeSlotsString,
 	minutesSinceSundayTimeSlotTime,
 	minutesSinceSundayDateTime,
 	getApproximateTimeStringFromMinutes,
@@ -158,6 +159,7 @@ export async function queryLocations(
 		return validLocations.map((location) => ({
 			...location,
 			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
+			timesListDisplay: getTimeSlotsString(location.times),
 		}));
 	} catch (err: any) {
 		console.error(err);
