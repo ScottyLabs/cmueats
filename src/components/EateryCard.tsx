@@ -172,7 +172,6 @@ function EateryCardHeader({
 			action={
 				showExitButton && (
 					<ExitButton
-						aria-label="X" // Important for accessibility
 						onClick={onExitClick}
 					>
 						X
@@ -336,6 +335,7 @@ function EateryCard({
 							<Accordion
 								style={{
 									backgroundColor: 'var(--specials-bg)',
+									marginTop: '16px',
 								}}
 							>
 								<AccordionSummary
