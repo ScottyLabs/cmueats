@@ -285,7 +285,7 @@ function EateryCard({
 				<div className="card card--dialog">
 					<EateryCardHeader
 						location={location}
-						showExitButton={true}
+						showExitButton
 						onExitClick={closeAllModals}
 					/>
 					<CardContent
