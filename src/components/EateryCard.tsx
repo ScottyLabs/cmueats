@@ -171,11 +171,7 @@ function EateryCardHeader({
 			className="card__header"
 			action={
 				showExitButton && (
-					<ExitButton
-						onClick={onExitClick}
-					>
-						X
-					</ExitButton>
+					<ExitButton onClick={onExitClick}>X</ExitButton>
 				)
 			}
 		/>
