@@ -71,7 +71,7 @@ const LocationText = styled(Typography)({
 });
 
 const TimesText = styled(Typography)({
-	color: 'var(--card-text-muted)',
+	color: 'hsl(206 9% 75% / 1)',
 	marginBottom: 5,
 	fontWeight: 500,
 	fontSize: 14,
@@ -111,16 +111,16 @@ const ActionButton = styled(Button)({
 const ExitButton = styled(Button)({
 	fontFamily: 'var(--text-secondary-font)',
 	color: 'var(--button-text)',
-	backgroundColor: 'red',
+	backgroundColor: 'hsl(0 65.1% 40.2%)',
 	padding: '4px 4px',
 
 	letterSpacing: -0.2,
 	elevation: 30,
 	'&:hover': {
-		backgroundColor: 'var(--button-bg--hover)',
+		backgroundColor: 'hsl(0 65.1% 30.2%)',
 	},
-	position: 'absolute',
-	top: 8,
+	position: 'relative',
+	alignSelf: 'center',
 	right: 8,
 });
 
@@ -216,7 +216,7 @@ function EateryCard({
 		setModalOpen(false);
 		setTimeModalOpen(false);
 	};
-
+	const timeSlots = getTimeSlotsString(location.times);
 	return (
 		<>
 			<Grid item xs={12} md={4} lg={3} xl={3}>
@@ -331,11 +331,13 @@ function EateryCard({
 								style={{
 									backgroundColor: 'var(--specials-bg)',
 									marginTop: '16px',
+									borderRadius: '7px',
+									overflow: 'hidden',
 								}}
 							>
 								<AccordionSummary
 									style={{
-										backgroundColor: 'black',
+										backgroundColor: 'hsl(206 9% 7% / 1)',
 									}}
 									expandIcon={
 										<ExpandMoreIcon
@@ -356,12 +358,12 @@ function EateryCard({
 
 								<AccordionDetails
 									style={{
-										backgroundColor: '#373737',
+										backgroundColor: 'hsl(206 9% 9% / 1)',
 									}}
 								>
 									{daysOfTheWeek.map((day, i) => (
 										<TimesText>
-											{day}: {getTimeSlotsString(location.times)[i]}
+											<b>{day}</b>: {timeSlots[i]}
 										</TimesText>
 									))}
 								</AccordionDetails>
