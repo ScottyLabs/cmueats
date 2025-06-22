@@ -112,7 +112,7 @@ const ExitButton = styled(Button)({
 	fontFamily: 'var(--text-secondary-font)',
 	color: 'var(--button-text)',
 	backgroundColor: 'red',
-	padding: '5px 5px',
+	padding: '4px 4px',
 
 	letterSpacing: -0.2,
 	elevation: 30,
