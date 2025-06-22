@@ -80,7 +80,6 @@ interface ILocation_FromAPI_PreProcessed {
 	times: ITimeSlot[];
 	todaysSpecials?: ISpecial[];
 	todaysSoups?: ISpecial[];
-	timesListDisplay: string[];
 }
 interface ILocation_FromAPI_PostProcessed
 	extends ILocation_FromAPI_PreProcessed {

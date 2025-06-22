@@ -197,7 +197,6 @@ function EateryCard({
 		menu,
 		todaysSpecials = [],
 		todaysSoups = [],
-		timesListDisplay = getTimeSlotsString(location.times),
 	} = location;
 
 	const daysOfTheWeek = [
@@ -362,7 +361,7 @@ function EateryCard({
 								>
 									{daysOfTheWeek.map((day, i) => (
 										<TimesText>
-											{day}: {timesListDisplay[i]}
+											{day}: {getTimeSlotsString(location.times)[i]}
 										</TimesText>
 									))}
 								</AccordionDetails>
