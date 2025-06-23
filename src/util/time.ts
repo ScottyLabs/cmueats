@@ -102,6 +102,18 @@ export function getTimeString(time: ITimeSlotTime) {
 }
 
 /**
+ * Converts an ITimeSlot to a human-readable string (12-hour time)
+ * @param time
+ * @returns HH:MM (AM/PM)
+ */
+export function getTimeSlotAsString(time: ITimeSlot) {
+	assert(isTimeSlot(time));
+	const start = getTimeString(time.start);
+	const end = getTimeString(time.end);
+	return `${start} - ${end}`;
+}
+
+/**
  *
  * @param timeSlots
  * @returns Checks if timeslots are non-overlapping (so [a,b],[b,c] is invalid) and properly sorted.
@@ -127,6 +139,26 @@ export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
 		}
 	}
 	return true;
+}
+
+/**
+ * Converts an sorted time slot array to an array of human-readable strings (12-hour time)
+ * @param times
+ * @returns HH:MM (AM/PM) Array
+ */
+
+export function getTimeSlotsString(times: ITimeSlots) {
+	assert(isValidTimeSlotArray(times));
+	const listByDate = [];
+	for (let date = 0; date < 7; date += 1) {
+		const concattedString =
+			times
+				.filter((time) => time.start.day === date)
+				.map(getTimeSlotAsString)
+				.join(', ') || 'CLOSED';
+		listByDate.push(concattedString);
+	}
+	return listByDate;
 }
 
 /**
