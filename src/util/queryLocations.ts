@@ -157,7 +157,6 @@ export async function queryLocations(
 
 		return validLocations.map((location) => ({
 			...location,
-			locationName: location.location, // more semantic field here
 			name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
 		}));
 	} catch (err: any) {

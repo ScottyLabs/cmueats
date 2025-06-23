@@ -21,8 +21,10 @@
 		"react/prop-types": "off",
 		"react/require-default-props": "off", // we don't use prop-types for prop validation https://stackoverflow.com/a/64041197/13171687
 		"no-console": ["error", { "allow": ["error"] }],
-		"prettier/prettier": ["warn"]
+		"prettier/prettier": ["warn"],
+		"@typescript-eslint/no-use-before-define": ["error", { "functions": false, "classes": false }]
 	},
+
 	"settings": {
 		"react": { "version": "detect" }
 	}

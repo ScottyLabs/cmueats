@@ -15,13 +15,17 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
-import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
+import {
+	IReadOnlyLocation_Combined,
+	LocationState,
+} from '../types/locationTypes';
 import './EateryCard.css';
 
 const textColors: Record<LocationState, string> = {
 	[LocationState.OPEN]: 'var(--location-open-text-color)',
 	[LocationState.CLOSED]: 'var(--location-closed-text-color)',
-	[LocationState.CLOSED_LONG_TERM]: 'var(--location-closed-long-term-text-color)',
+	[LocationState.CLOSED_LONG_TERM]:
+		'var(--location-closed-long-term-text-color)',
 	[LocationState.OPENS_SOON]: 'var(--location-opens-soon-text-color)',
 	[LocationState.CLOSES_SOON]: 'var(--location-closes-soon-text-color)',
 };
@@ -30,17 +34,20 @@ const textColors: Record<LocationState, string> = {
 const highlightColors: Record<LocationState, string> = {
 	[LocationState.OPEN]: 'var(--location-open-highlight)',
 	[LocationState.CLOSED]: 'var(--location-closed-highlight)',
-	[LocationState.CLOSED_LONG_TERM]: 'var(--location-closed-long-term-highlight)',
+	[LocationState.CLOSED_LONG_TERM]:
+		'var(--location-closed-long-term-highlight)',
 	[LocationState.OPENS_SOON]: 'var(--location-opens-soon-highlight)',
 	[LocationState.CLOSES_SOON]: 'var(--location-closes-soon-highlight)',
 };
-const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
-	fontWeight: 500,
-	alignItems: 'flex-start',
-	padding: '13px 16px',
-	borderBottom: '2px solid',
-	borderBottomColor: highlightColors[state],
-}));
+const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(
+	({ state }) => ({
+		fontWeight: 500,
+		alignItems: 'flex-start',
+		padding: '13px 16px',
+		borderBottom: '2px solid',
+		borderBottomColor: highlightColors[state],
+	}),
+);
 
 const CustomLink = styled(Link)({
 	color: 'var(--card-text-title)',
@@ -147,7 +154,9 @@ function EateryCard({
 		todaysSoups = [],
 	} = location;
 
-	const [openedModal, setOpenedModal] = useState<'none' | 'specials' | 'description'>('none');
+	const [openedModal, setOpenedModal] = useState<
+		'none' | 'specials' | 'description'
+	>('none');
 
 	return (
 		<Grid item xs={12} md={4} lg={3} xl={3}>
@@ -162,7 +171,9 @@ function EateryCard({
 							{name}
 						</CustomLink>
 					</NameText>
-					<LocationText variant="subtitle2">{physicalLocation}</LocationText>
+					<LocationText variant="subtitle2">
+						{physicalLocation}
+					</LocationText>
 					<DescriptionText>{shortDescription}</DescriptionText>
 				</CardContent>
 				<div className="card__actions">
@@ -175,7 +186,8 @@ function EateryCard({
 							Menu
 						</ActionButton>
 					)}
-					{(todaysSpecials.length !== 0 || todaysSoups.length !== 0) && (
+					{(todaysSpecials.length !== 0 ||
+						todaysSoups.length !== 0) && (
 						<ActionButton
 							onClick={() => {
 								setOpenedModal('specials');
@@ -208,7 +220,11 @@ function EateryCard({
 		</Grid>
 	);
 }
-function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
+function EateryCardHeader({
+	location,
+}: {
+	location: IReadOnlyLocation_Combined;
+}) {
 	const dotRef = useRef<HTMLDivElement | null>(null);
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
 	useEffect(() => {
@@ -220,7 +236,11 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
 	return (
 		<StyledCardHeader
 			title={
-				<StatusText variant="subtitle1" state={location.locationState} className="card__header__text">
+				<StatusText
+					variant="subtitle1"
+					state={location.locationState}
+					className="card__header__text"
+				>
 					{location.statusMsg}
 				</StatusText>
 			}
@@ -229,7 +249,8 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
 				<div
 					className={`card__header__dot ${changesSoon ? 'card__header__dot--blinking' : ''}`}
 					style={{
-						backgroundColor: highlightColors[location.locationState],
+						backgroundColor:
+							highlightColors[location.locationState],
 					}}
 					ref={dotRef}
 				/>
@@ -249,7 +270,14 @@ function EateryCardDialog({
 	onClose: () => void;
 	location: IReadOnlyLocation_Combined;
 }) {
-	const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location;
+	const {
+		location: physicalLocation,
+		name,
+		url,
+		todaysSoups = [],
+		todaysSpecials = [],
+		description,
+	} = location;
 	const timeSlots = getTimeSlotsString(location.times);
 
 	return (
@@ -266,13 +294,18 @@ function EateryCardDialog({
 		>
 			<div className="card card--dialog">
 				<EateryCardHeader location={location} />
-				<CardContent className="card__content" sx={{ overflowY: 'auto' }}>
+				<CardContent
+					className="card__content"
+					sx={{ overflowY: 'auto' }}
+				>
 					<NameText variant="h6">
 						<CustomLink href={url} target="_blank">
 							{name}
 						</CustomLink>
 					</NameText>
-					<LocationText variant="subtitle2">{physicalLocation}</LocationText>
+					<LocationText variant="subtitle2">
+						{physicalLocation}
+					</LocationText>
 					{type === 'specials' &&
 						todaysSpecials.concat(todaysSoups).map((special) => (
 							<StyledAccordion key={special.title}>
@@ -287,20 +320,35 @@ function EateryCardDialog({
 									aria-controls="panel1a-content"
 									id="panel1a-header"
 								>
-									<DescriptionText>{special.title}</DescriptionText>
+									<DescriptionText>
+										{special.title}
+									</DescriptionText>
 								</StyledAccordionSummary>
 								<StyledAccordionDetails>
-									<LocationText>{special.description}</LocationText>
+									<LocationText>
+										{special.description}
+									</LocationText>
 								</StyledAccordionDetails>
 							</StyledAccordion>
 						))}
 					{type === 'description' && (
 						<>
-							<LongDescriptionText variant="subtitle1">{description}</LongDescriptionText>
-							<StyledAccordion disableGutters style={{ marginTop: 24 }}>
+							<LongDescriptionText variant="subtitle1">
+								{description}
+							</LongDescriptionText>
+							<StyledAccordion
+								disableGutters
+								style={{ marginTop: 24 }}
+							>
 								<StyledAccordionSummary
 									className="accordion__summary"
-									expandIcon={<ExpandMoreIcon style={{ color: 'var(--card-text-description)' }} />}
+									expandIcon={
+										<ExpandMoreIcon
+											style={{
+												color: 'var(--card-text-description)',
+											}}
+										/>
+									}
 									aria-controls="panel1a-content"
 									id="panel1a-header"
 								>
@@ -308,13 +356,22 @@ function EateryCardDialog({
 								</StyledAccordionSummary>
 
 								<StyledAccordionDetails>
-									{['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(
-										(day, i) => (
-											<div style={{ marginBottom: '10px' }}>
-												<span style={{ color: 'white' }}>{day}</span>: {timeSlots[i]}
-											</div>
-										),
-									)}
+									{[
+										'Sunday',
+										'Monday',
+										'Tuesday',
+										'Wednesday',
+										'Thursday',
+										'Friday',
+										'Saturday',
+									].map((day, i) => (
+										<div style={{ marginBottom: '10px' }}>
+											<span style={{ color: 'white' }}>
+												{day}
+											</span>
+											: {timeSlots[i]}
+										</div>
+									))}
 								</StyledAccordionDetails>
 							</StyledAccordion>
 						</>

@@ -1,6 +1,6 @@
 {
     "bracketSpacing": true,
-    "printWidth": 120,
+    "printWidth": 80,
     "proseWrap": "preserve",
     "semi": true,
     "singleQuote": true,
