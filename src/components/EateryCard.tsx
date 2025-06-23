@@ -290,7 +290,6 @@ function EateryCardDialog({
 					margin: 15,
 				},
 			}}
-			style={{}}
 		>
 			<div className="card card--dialog">
 				<EateryCardHeader location={location} />
