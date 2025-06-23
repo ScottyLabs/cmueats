@@ -11,23 +11,18 @@ import {
 	LocationChecker,
 } from './util/queryLocations';
 import './App.css';
-import {
-	IReadOnlyLocation_FromAPI_PostProcessed,
-	IReadOnlyLocation_ExtraData_Map,
-} from './types/locationTypes';
+import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
 
-const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
+// const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
-// const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json';
+const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5010/locations';
 
 function App() {
 	// Load locations
-	const [locations, setLocations] =
-		useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
-	const [extraLocationData, setExtraLocationData] =
-		useState<IReadOnlyLocation_ExtraData_Map>();
+	const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
+	const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
 	useEffect(() => {
 		queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
 			setLocations(parsedLocations);
@@ -38,10 +33,7 @@ function App() {
 
 	// periodically update extra location data
 	useEffect(() => {
-		const intervalId = setInterval(
-			() => setExtraLocationData(getExtraLocationData(locations)),
-			1000,
-		);
+		const intervalId = setInterval(() => setExtraLocationData(getExtraLocationData(locations)), 1000);
 		setExtraLocationData(getExtraLocationData(locations));
 		return () => clearInterval(intervalId);
 	}, [locations]);
@@ -66,7 +58,7 @@ function App() {
 		<React.StrictMode>
 			<BrowserRouter>
 				<div className="App">
-					<div className="AdBanner">
+					{/* <div className="AdBanner">
 						How&apos;s your food? We want your{' '}
 						<a
 							className="AdBannerLink"
@@ -77,27 +69,17 @@ function App() {
 							feedback!
 						</a>{' '}
 						It only takes 30 seconds.
-					</div>
+					</div> */}
 
 					<div className="MainContent">
 						<Routes>
 							<Route
 								path="/"
-								element={
-									<ListPage
-										extraLocationData={extraLocationData}
-										locations={locations}
-									/>
-								}
+								element={<ListPage extraLocationData={extraLocationData} locations={locations} />}
 							/>
 							<Route
 								path="/map"
-								element={
-									<MapPage
-										locations={locations}
-										extraLocationData={extraLocationData}
-									/>
-								}
+								element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
 							/>
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
