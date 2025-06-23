@@ -12,7 +12,10 @@ import {
 	IReadOnlyLocation_FromAPI_PostProcessed,
 	IReadOnlyLocation_ExtraData_Map,
 } from '../types/locationTypes';
-import { textColors } from '../constants/colors';
+import {
+	mapMarkerBackgroundColors,
+	mapMarkerTextColors,
+} from '../constants/colors';
 
 const token = process.env.VITE_MAPKITJS_TOKEN ?? '';
 
@@ -23,6 +26,14 @@ function abbreviate(longName: string) {
 		.map((word) => word.charAt(0))
 		.join('');
 }
+
+/**
+ *
+ * @param varString if input is var(XXX), we get back XXX
+ * @returns
+ */
+const stripVarFromString = (varString: string) =>
+	varString.match(/var\((.+)\)/)?.[1] ?? '';
 
 function MapPage({
 	locations,
@@ -82,19 +93,28 @@ function MapPage({
 					>
 						{extendedLocationData.map((location, locationIndex) => {
 							if (!location.coordinates) return undefined;
-							const extractedColor =
+							const bgColor = derivedRootColors.getPropertyValue(
+								stripVarFromString(
+									mapMarkerBackgroundColors[
+										location.locationState
+									],
+								),
+							); // mapkit doesn't accept css variables, so we'll go ahead and get the actual color value from :root first
+							const textColor =
 								derivedRootColors.getPropertyValue(
-									textColors[location.locationState].match(
-										/var\((.+)\)/,
-									)?.[1] ?? '',
-								); // mapkit doesn't accept css variables, so we'll go ahead and get the actual color value from :root first
+									stripVarFromString(
+										mapMarkerTextColors[
+											location.locationState
+										],
+									),
+								);
 							return (
 								<Marker
 									key={location.conceptId}
 									latitude={location.coordinates.lat}
 									longitude={location.coordinates.lng}
-									color={extractedColor}
-									glyphColor="white"
+									color={bgColor}
+									glyphColor={textColor}
 									glyphText={abbreviate(location.name)}
 									onSelect={() => {
 										setSelectedLocationIndex(locationIndex);

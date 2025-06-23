@@ -52,6 +52,12 @@
 	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
 	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
 
+	--map-open-text-color: white;
+	--map-closed-text-color: white;
+	--map-closed-long-term-text-color: white;
+	--map-opens-soon-text-color: black;
+	--map-closes-soon-text-color: black;
+
 	--map-drawer-bg: #2d2f33;
 
 	--logo-first-half: #dd3c18;
