@@ -12,8 +12,9 @@ import {
 	IReadOnlyLocation_FromAPI_PostProcessed,
 	IReadOnlyLocation_ExtraData_Map,
 } from '../types/locationTypes';
+import { textColors } from '../constants/colors';
 
-const token = process.env.VITE_MAPKITJS_TOKEN;
+const token = process.env.VITE_MAPKITJS_TOKEN ?? '';
 
 function abbreviate(longName: string) {
 	const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
@@ -54,7 +55,7 @@ function MapPage({
 		}),
 		[],
 	);
-
+	const derivedRootColors = window.getComputedStyle(document.body);
 	const extendedLocationData =
 		locations && extraLocationData
 			? locations.map((location) => ({
@@ -67,7 +68,7 @@ function MapPage({
 			{extendedLocationData && (
 				<>
 					<Map
-						token={token as string}
+						token={token}
 						colorScheme={ColorScheme.Dark}
 						initialRegion={initialRegion}
 						excludedPOICategories={[
@@ -81,17 +82,19 @@ function MapPage({
 					>
 						{extendedLocationData.map((location, locationIndex) => {
 							if (!location.coordinates) return undefined;
+							const extractedColor =
+								derivedRootColors.getPropertyValue(
+									textColors[location.locationState].match(
+										/var\((.+)\)/,
+									)?.[1] ?? '',
+								); // mapkit doesn't accept css variables, so we'll go ahead and get the actual color value from :root first
 							return (
 								<Marker
 									key={location.conceptId}
 									latitude={location.coordinates.lat}
 									longitude={location.coordinates.lng}
-									color={
-										!location.closedLongTerm &&
-										location.isOpen
-											? '#69bb36'
-											: '#ff5b40'
-									}
+									color={extractedColor}
+									glyphColor="white"
 									glyphText={abbreviate(location.name)}
 									onSelect={() => {
 										setSelectedLocationIndex(locationIndex);
