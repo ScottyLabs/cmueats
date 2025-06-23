@@ -3,21 +3,21 @@
 /** Note that everything being exported here is readonly */
 
 export type RecursiveReadonly<T> = T extends object
-	? {
-			readonly [P in keyof T]: RecursiveReadonly<T[P]>;
-		}
-	: T;
+    ? {
+          readonly [P in keyof T]: RecursiveReadonly<T[P]>;
+      }
+    : T;
 
 /**
  * Describes either start or end time in any given ITimeSlot
  */
 export interface ITimeSlotTime {
-	/** 0-6 (0 is Sunday, 6 is Saturday) */
-	readonly day: number;
-	/** 0-23 - 0 means 12AM */
-	readonly hour: number;
-	/** 0-59 */
-	readonly minute: number;
+    /** 0-6 (0 is Sunday, 6 is Saturday) */
+    readonly day: number;
+    /** 0-23 - 0 means 12AM */
+    readonly hour: number;
+    /** 0-59 */
+    readonly minute: number;
 }
 
 /**
@@ -33,8 +33,8 @@ export interface ITimeSlotTime {
  * would be constrained to that day and possibly 12AM on the day after.
  */
 export interface ITimeSlot {
-	readonly start: ITimeSlotTime;
-	readonly end: ITimeSlotTime;
+    readonly start: ITimeSlotTime;
+    readonly end: ITimeSlotTime;
 }
 
 /**
@@ -45,17 +45,17 @@ export interface ITimeSlot {
 export type ITimeSlots = ReadonlyArray<ITimeSlot>;
 
 interface ISpecial {
-	title: string;
-	description: string;
+    title: string;
+    description: string;
 }
 
 // Ordered by priority - affects how tiles are displayed in the grid (first to last)
 export enum LocationState {
-	OPEN,
-	CLOSES_SOON,
-	OPENS_SOON,
-	CLOSED,
-	CLOSED_LONG_TERM,
+    OPEN,
+    CLOSES_SOON,
+    OPENS_SOON,
+    CLOSED,
+    CLOSED_LONG_TERM,
 }
 
 /**
@@ -64,69 +64,60 @@ export enum LocationState {
  * update the Joi Schema in joiLocationTypes.ts as well)
  */
 interface ILocation_FromAPI_PreProcessed {
-	conceptId: number;
-	name?: string;
-	shortDescription?: string;
-	description: string;
-	url: string;
-	/** Menu link */
-	menu?: string;
-	location: string;
-	coordinates?: {
-		lat: number;
-		lng: number;
-	};
-	acceptsOnlineOrders: boolean;
-	times: ITimeSlot[];
-	todaysSpecials?: ISpecial[];
-	todaysSoups?: ISpecial[];
+    conceptId: number;
+    name?: string;
+    shortDescription?: string;
+    description: string;
+    url: string;
+    /** Menu link */
+    menu?: string;
+    location: string;
+    coordinates?: {
+        lat: number;
+        lng: number;
+    };
+    acceptsOnlineOrders: boolean;
+    times: ITimeSlot[];
+    todaysSpecials?: ISpecial[];
+    todaysSoups?: ISpecial[];
 }
-interface ILocation_FromAPI_PostProcessed
-	extends ILocation_FromAPI_PreProcessed {
-	name: string; // This field is now guaranteed to be defined
+interface ILocation_FromAPI_PostProcessed extends ILocation_FromAPI_PreProcessed {
+    name: string; // This field is now guaranteed to be defined
 }
 // All of the following are extended from the base API type
 
 // 'closedLongTerm' here refers to closed for the next 7 days (no timeslots available)
 interface ILocation_ExtraData_Base {
-	/** No forseeable opening times after *now* */
-	closedLongTerm: boolean;
-	statusMsg: string;
-	locationState: LocationState;
+    /** No forseeable opening times after *now* */
+    closedLongTerm: boolean;
+    statusMsg: string;
+    locationState: LocationState;
 }
-interface ILocation_ExtraData_NotPermanentlyClosed
-	extends ILocation_ExtraData_Base {
-	closedLongTerm: false;
-	isOpen: boolean;
-	timeUntil: number;
-	changesSoon: boolean;
-	locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
+interface ILocation_ExtraData_NotPermanentlyClosed extends ILocation_ExtraData_Base {
+    closedLongTerm: false;
+    isOpen: boolean;
+    timeUntil: number;
+    changesSoon: boolean;
+    locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
 }
-interface ILocation_ExtraData_PermanentlyClosed
-	extends ILocation_ExtraData_Base {
-	closedLongTerm: true;
-	locationState: LocationState.CLOSED_LONG_TERM;
+interface ILocation_ExtraData_PermanentlyClosed extends ILocation_ExtraData_Base {
+    closedLongTerm: true;
+    locationState: LocationState.CLOSED_LONG_TERM;
 }
-type ILocation_ExtraData =
-	| ILocation_ExtraData_NotPermanentlyClosed
-	| ILocation_ExtraData_PermanentlyClosed;
+type ILocation_ExtraData = ILocation_ExtraData_NotPermanentlyClosed | ILocation_ExtraData_PermanentlyClosed;
 
 /** What we get directly from the API (single location data) */
-export type IReadOnlyLocation_FromAPI_PreProcessed =
-	RecursiveReadonly<ILocation_FromAPI_PreProcessed>;
+export type IReadOnlyLocation_FromAPI_PreProcessed = RecursiveReadonly<ILocation_FromAPI_PreProcessed>;
 
-export type IReadOnlyLocation_FromAPI_PostProcessed =
-	RecursiveReadonly<ILocation_FromAPI_PostProcessed>;
+export type IReadOnlyLocation_FromAPI_PostProcessed = RecursiveReadonly<ILocation_FromAPI_PostProcessed>;
 
 /** Extra data derived from a single location */
-export type IReadOnlyLocation_ExtraData =
-	RecursiveReadonly<ILocation_ExtraData>;
+export type IReadOnlyLocation_ExtraData = RecursiveReadonly<ILocation_ExtraData>;
 
 /** we'll typically pass this into components for efficient look-up of extra data (like time until close) */
 export type IReadOnlyLocation_ExtraData_Map = {
-	[conceptId: number]: IReadOnlyLocation_ExtraData;
+    [conceptId: number]: IReadOnlyLocation_ExtraData;
 };
 
 /** once we combine extraDataMap with our base api data */
-export type IReadOnlyLocation_Combined =
-	IReadOnlyLocation_FromAPI_PostProcessed & IReadOnlyLocation_ExtraData;
+export type IReadOnlyLocation_Combined = IReadOnlyLocation_FromAPI_PostProcessed & IReadOnlyLocation_ExtraData;
