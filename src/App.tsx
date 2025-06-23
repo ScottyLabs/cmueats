@@ -13,9 +13,9 @@ import {
 import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
 
-// const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
+const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
-const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
+// const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5010/locations';
 
