@@ -30,12 +30,11 @@
 
 	--hover-accent-color: rgba(238, 111, 82, 0.7);
 
-	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system,
-		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	--text-secondary-font: 'Inter';
-	--button-bg: #1d1f21;
-	--button-bg--hover: #000000;
+	--button-bg: hsl(210, 6%, 12%);
+	--button-bg--hover: hsl(210, 6%, 9%);
 	--button-text: white;
 
 	--location-open-text-color: #19b875;
@@ -46,9 +45,7 @@
 
 	--location-open-highlight: var(--location-open-text-color);
 	--location-closed-highlight: var(--location-closed-text-color);
-	--location-closed-long-term-highlight: var(
-		--location-closed-long-term-text-color
-	);
+	--location-closed-long-term-highlight: var(--location-closed-long-term-text-color);
 	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
 	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
 
@@ -86,9 +83,8 @@ body.miku {
 	--nav-bg: #1e1e1e;
 	--hover-accent-color: hsl(170, 100%, 67%, 0.3);
 
-	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system,
-		BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--text-primary-font: 'Zilla Slab', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	--text-secondary-font: 'Inter';
 	--button-bg: hsla(190, 99%, 50%, 0.626);
 	--button-bg--hover: hsla(190, 99%, 50%, 0.826);
@@ -102,9 +98,7 @@ body.miku {
 
 	--location-open-highlight: var(--location-open-text-color);
 	--location-closed-highlight: var(--location-closed-text-color);
-	--location-closed-long-term-highlight: var(
-		--location-closed-long-term-text-color
-	);
+	--location-closed-long-term-highlight: var(--location-closed-long-term-text-color);
 	--location-opens-soon-highlight: var(--location-opens-soon-text-color);
 	--location-closes-soon-highlight: var(--location-closes-soon-text-color);
 
@@ -164,11 +158,7 @@ body.miku {
 			position: absolute;
 			inset: 0;
 			height: 200px;
-			background: linear-gradient(
-				to bottom,
-				hsla(180, 70%, 30%, 0.5) 70%,
-				hsla(0, 0%, 0%, 0)
-			);
+			background: linear-gradient(to bottom, hsla(180, 70%, 30%, 0.5) 70%, hsla(0, 0%, 0%, 0));
 		}
 	}
 	.locations__error-text {

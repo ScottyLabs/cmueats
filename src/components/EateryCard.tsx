@@ -70,22 +70,35 @@ const LocationText = styled(Typography)({
 	fontSize: 14,
 });
 
-const TimesText = styled(Typography)({
-	color: 'hsl(206 9% 75% / 1)',
-	marginBottom: 5,
-	fontWeight: 500,
-	fontSize: 14,
-});
-
 const DescriptionText = styled(Typography)({
 	color: 'var(--card-text-description)',
 });
 
 const LongDescriptionText = styled(Typography)({
-	color: 'white',
+	color: 'var(--text-muted)',
 	marginBottom: '5px',
 });
-
+const StyledAccordion = styled(Accordion)({});
+const StyledAccordionSummary = styled(AccordionSummary)({
+	backgroundColor: 'hsl(206 9% 12%)',
+	color: 'var(--card-text-description)',
+	// fontWeight: 'bold',
+	'&:hover': {
+		backgroundColor: 'hsl(206 9% 9%)',
+		'&:active': {
+			backgroundColor: 'hsl(206 9% 8%)',
+		},
+	},
+	'&.Mui-expanded': {
+		backgroundColor: 'hsl(206 9% 8%)',
+	},
+});
+const StyledAccordionDetails = styled(AccordionDetails)({
+	backgroundColor: 'hsl(206 9% 11% / 1)',
+	color: 'hsl(206 9% 75% / 1)',
+	fontSize: 16,
+	paddingTop: 20,
+});
 const StatusText = styled(Typography, {
 	shouldForwardProp: (prop) => prop !== 'state',
 })<TextProps>(({ state }) => ({
@@ -102,7 +115,6 @@ const ActionButton = styled(Button)({
 	padding: '5px 10px',
 
 	letterSpacing: -0.2,
-	elevation: 30,
 	'&:hover': {
 		backgroundColor: 'var(--button-bg--hover)',
 	},
@@ -111,30 +123,107 @@ const ActionButton = styled(Button)({
 const ExitButton = styled(Button)({
 	fontFamily: 'var(--text-secondary-font)',
 	color: 'var(--button-text)',
-	backgroundColor: 'hsl(0 65.1% 40.2%)',
-	padding: '4px 4px',
+	backgroundColor: 'hsl(0 45.1% 30.2%)',
+	padding: '15px 4px',
 
 	letterSpacing: -0.2,
 	elevation: 30,
 	'&:hover': {
 		backgroundColor: 'hsl(0 65.1% 30.2%)',
 	},
-	position: 'relative',
-	alignSelf: 'center',
-	right: 8,
 });
 
-const SpecialsContent = styled(Accordion)({
-	backgroundColor: 'var(--specials-bg)',
-});
-function EateryCardHeader({
+function EateryCard({
 	location,
-	showExitButton = false,
-	onExitClick,
+	index = 0,
+	partOfMainGrid = false,
+	animate = false,
 }: {
 	location: IReadOnlyLocation_Combined;
-	showExitButton?: boolean;
-	onExitClick?: any;
+	index?: number;
+	partOfMainGrid?: boolean;
+	animate?: boolean;
+}) {
+	const {
+		name,
+		location: physicalLocation,
+		url,
+		shortDescription,
+		menu,
+		todaysSpecials = [],
+		todaysSoups = [],
+	} = location;
+
+	const [openedModal, setOpenedModal] = useState<
+		'none' | 'specials' | 'description'
+	>('none');
+
+	return (
+		<Grid item xs={12} md={4} lg={3} xl={3}>
+			<div
+				className={`card ${animate ? 'card--animated' : ''} ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
+				style={{ '--card-show-delay': `${index * 50}ms` }}
+			>
+				<EateryCardHeader location={location} />
+				<CardContent className="card__content">
+					<NameText variant="h6">
+						<CustomLink href={url} target="_blank">
+							{name}
+						</CustomLink>
+					</NameText>
+					<LocationText variant="subtitle2">
+						{physicalLocation}
+					</LocationText>
+					<DescriptionText>{shortDescription}</DescriptionText>
+				</CardContent>
+				<div className="card__actions">
+					{menu && (
+						<ActionButton
+							onClick={() => {
+								window.open(menu, '_blank');
+							}}
+						>
+							Menu
+						</ActionButton>
+					)}
+					{(todaysSpecials.length !== 0 ||
+						todaysSoups.length !== 0) && (
+						<ActionButton
+							onClick={() => {
+								setOpenedModal('specials');
+							}}
+						>
+							Specials
+						</ActionButton>
+					)}
+					<ActionButton
+						onClick={() => {
+							setOpenedModal('description');
+						}}
+					>
+						Details
+					</ActionButton>
+				</div>
+				<EateryCardDialog
+					open={openedModal === 'specials'}
+					onClose={() => setOpenedModal('none')}
+					location={location}
+					type="specials"
+				/>
+				<EateryCardDialog
+					open={openedModal === 'description'}
+					onClose={() => setOpenedModal('none')}
+					location={location}
+					type="description"
+				/>
+			</div>
+		</Grid>
+	);
+}
+function EateryCardHeader({
+	location,
+}: {
+	location: IReadOnlyLocation_Combined;
 }) {
 	const dotRef = useRef<HTMLDivElement | null>(null);
 	const changesSoon = !location.closedLongTerm && location.changesSoon;
@@ -158,9 +247,7 @@ function EateryCardHeader({
 			state={location.locationState}
 			avatar={
 				<div
-					className={`card__header__dot ${
-						changesSoon ? 'card__header__dot--blinking' : ''
-					}`}
+					className={`card__header__dot ${changesSoon ? 'card__header__dot--blinking' : ''}`}
 					style={{
 						backgroundColor:
 							highlightColors[location.locationState],
@@ -169,176 +256,59 @@ function EateryCardHeader({
 				/>
 			}
 			className="card__header"
-			action={
-				showExitButton && (
-					<ExitButton onClick={onExitClick}>X</ExitButton>
-				)
-			}
 		/>
 	);
 }
-function EateryCard({
+function EateryCardDialog({
+	open,
+	type,
+	onClose,
 	location,
-	animate = false,
-	index = 0,
-	partOfMainGrid = false,
 }: {
+	open: boolean;
+	type: 'specials' | 'description';
+	onClose: () => void;
 	location: IReadOnlyLocation_Combined;
-	index?: number;
-	partOfMainGrid?: boolean;
-	animate?: boolean;
 }) {
 	const {
+		location: physicalLocation,
 		name,
-		location: locationText,
 		url,
-		shortDescription,
-		description,
-		menu,
-		todaysSpecials = [],
 		todaysSoups = [],
+		todaysSpecials = [],
+		description,
 	} = location;
-
-	const daysOfTheWeek = [
-		'Sunday',
-		'Monday',
-		'Tuesday',
-		'Wednesday',
-		'Thursday',
-		'Friday',
-		'Saturday',
-	];
-
-	const [modalOpen, setModalOpen] = useState(false);
-	const [timeModalOpen, setTimeModalOpen] = useState(false);
-
-	const closeAllModals = () => {
-		setModalOpen(false);
-		setTimeModalOpen(false);
-	};
 	const timeSlots = getTimeSlotsString(location.times);
-	return (
-		<>
-			<Grid item xs={12} md={4} lg={3} xl={3}>
-				<div
-					className={`card ${animate ? 'card--animated' : ''} ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
-					style={{ '--card-show-delay': `${index * 50}ms` }}
-				>
-					<EateryCardHeader location={location} />
-					<CardContent className="card__content">
-						<NameText variant="h6">
-							<CustomLink href={url} target="_blank">
-								{name}
-							</CustomLink>
-						</NameText>
-						<LocationText variant="subtitle2">
-							{locationText}
-						</LocationText>
-						<DescriptionText>{shortDescription}</DescriptionText>
-					</CardContent>
-					<div className="card__actions">
-						{menu && (
-							<ActionButton
-								onClick={() => {
-									window.open(menu, '_blank');
-								}}
-							>
-								Menu
-							</ActionButton>
-						)}
-						{(todaysSpecials.length !== 0 ||
-							todaysSoups.length !== 0) && (
-							<ActionButton
-								onClick={() => {
-									setModalOpen(true);
-								}}
-							>
-								Specials
-							</ActionButton>
-						)}
-						<ActionButton
-							onClick={() => {
-								setTimeModalOpen(true);
-							}}
-						>
-							Details
-						</ActionButton>
-					</div>
-				</div>
-			</Grid>
 
-			<Dialog
-				open={modalOpen || timeModalOpen}
-				onClose={closeAllModals}
-				PaperProps={{
-					style: {
-						backgroundColor: 'transparent',
-					},
-				}}
-			>
-				<div className="card card--dialog">
-					<EateryCardHeader
-						location={location}
-						showExitButton
-						onExitClick={closeAllModals}
-					/>
-					<CardContent
-						className="card__content"
-						sx={{ overflowY: 'auto' }}
-					>
-						<NameText variant="h6">
-							<CustomLink href={url} target="_blank">
-								{name}
-							</CustomLink>
-						</NameText>
-						<LocationText variant="subtitle2">
-							{locationText}
-						</LocationText>
-						{timeModalOpen && (
-							<LongDescriptionText variant="subtitle2">
-								{description}
-							</LongDescriptionText>
-						)}
-						{modalOpen &&
-							todaysSpecials
-								.concat(todaysSoups)
-								.map((special) => (
-									<SpecialsContent key={special.title}>
-										<AccordionSummary
-											expandIcon={
-												<ExpandMoreIcon
-													style={{
-														color: 'var(--card-text-description)',
-													}}
-												/>
-											}
-											aria-controls="panel1a-content"
-											id="panel1a-header"
-										>
-											<DescriptionText>
-												{special.title}
-											</DescriptionText>
-										</AccordionSummary>
-										<AccordionDetails>
-											<LocationText>
-												{special.description}
-											</LocationText>
-										</AccordionDetails>
-									</SpecialsContent>
-								))}
-						{timeModalOpen && (
-							<Accordion
-								style={{
-									backgroundColor: 'var(--specials-bg)',
-									marginTop: '16px',
-									borderRadius: '7px',
-									overflow: 'hidden',
-								}}
-							>
-								<AccordionSummary
-									style={{
-										backgroundColor: 'hsl(206 9% 7% / 1)',
-									}}
+	return (
+		<Dialog
+			open={open}
+			onClose={onClose}
+			PaperProps={{
+				style: {
+					backgroundColor: 'transparent',
+					margin: 15,
+				},
+			}}
+		>
+			<div className="card card--dialog">
+				<EateryCardHeader location={location} />
+				<CardContent
+					className="card__content"
+					sx={{ overflowY: 'auto' }}
+				>
+					<NameText variant="h6">
+						<CustomLink href={url} target="_blank">
+							{name}
+						</CustomLink>
+					</NameText>
+					<LocationText variant="subtitle2">
+						{physicalLocation}
+					</LocationText>
+					{type === 'specials' &&
+						todaysSpecials.concat(todaysSoups).map((special) => (
+							<StyledAccordion key={special.title}>
+								<StyledAccordionSummary
 									expandIcon={
 										<ExpandMoreIcon
 											style={{
@@ -349,30 +319,66 @@ function EateryCard({
 									aria-controls="panel1a-content"
 									id="panel1a-header"
 								>
-									<DescriptionText
-										style={{ fontWeight: 'bold' }}
-									>
-										Times (click to enlarge)
+									<DescriptionText>
+										{special.title}
 									</DescriptionText>
-								</AccordionSummary>
-
-								<AccordionDetails
-									style={{
-										backgroundColor: 'hsl(206 9% 9% / 1)',
-									}}
+								</StyledAccordionSummary>
+								<StyledAccordionDetails>
+									<LocationText>
+										{special.description}
+									</LocationText>
+								</StyledAccordionDetails>
+							</StyledAccordion>
+						))}
+					{type === 'description' && (
+						<>
+							<LongDescriptionText variant="subtitle1">
+								{description}
+							</LongDescriptionText>
+							<StyledAccordion
+								disableGutters
+								style={{ marginTop: 24 }}
+							>
+								<StyledAccordionSummary
+									className="accordion__summary"
+									expandIcon={
+										<ExpandMoreIcon
+											style={{
+												color: 'var(--card-text-description)',
+											}}
+										/>
+									}
+									aria-controls="panel1a-content"
+									id="panel1a-header"
 								>
-									{daysOfTheWeek.map((day, i) => (
-										<TimesText>
-											<b>{day}</b>: {timeSlots[i]}
-										</TimesText>
+									Show weekly hours
+								</StyledAccordionSummary>
+
+								<StyledAccordionDetails>
+									{[
+										'Sunday',
+										'Monday',
+										'Tuesday',
+										'Wednesday',
+										'Thursday',
+										'Friday',
+										'Saturday',
+									].map((day, i) => (
+										<div style={{ marginBottom: '10px' }}>
+											<span style={{ color: 'white' }}>
+												{day}
+											</span>
+											: {timeSlots[i]}
+										</div>
 									))}
-								</AccordionDetails>
-							</Accordion>
-						)}
-					</CardContent>
-				</div>
-			</Dialog>
-		</>
+								</StyledAccordionDetails>
+							</StyledAccordion>
+						</>
+					)}
+				</CardContent>
+				<ExitButton onClick={onClose}>Close</ExitButton>
+			</div>
+		</Dialog>
 	);
 }
 

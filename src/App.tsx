@@ -18,7 +18,7 @@ import {
 
 const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
-// const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json';
+// const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5010/locations';
 
@@ -66,7 +66,7 @@ function App() {
 		<React.StrictMode>
 			<BrowserRouter>
 				<div className="App">
-					<div className="AdBanner">
+					{/* <div className="AdBanner">
 						How&apos;s your food? We want your{' '}
 						<a
 							className="AdBannerLink"
@@ -77,7 +77,7 @@ function App() {
 							feedback!
 						</a>{' '}
 						It only takes 30 seconds.
-					</div>
+					</div> */}
 
 					<div className="MainContent">
 						<Routes>
