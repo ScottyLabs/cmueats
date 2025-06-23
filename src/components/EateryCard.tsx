@@ -179,9 +179,9 @@ function EateryCardHeader({
 }
 function EateryCard({
 	location,
+	animate = false,
 	index = 0,
 	partOfMainGrid = false,
-	animate = false,
 }: {
 	location: IReadOnlyLocation_Combined;
 	index?: number;
