@@ -66,7 +66,10 @@ function MapPage({
 		}),
 		[],
 	);
-	const derivedRootColors = window.getComputedStyle(document.body);
+	const derivedRootColors = useMemo(
+		() => window.getComputedStyle(document.body),
+		[],
+	);
 	const extendedLocationData =
 		locations && extraLocationData
 			? locations.map((location) => ({
