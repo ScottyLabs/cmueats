@@ -17,23 +17,8 @@ import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
 import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
 import './EateryCard.css';
+import { highlightColors, textColors } from '../constants/colors';
 
-const textColors: Record<LocationState, string> = {
-    [LocationState.OPEN]: 'var(--location-open-text-color)',
-    [LocationState.CLOSED]: 'var(--location-closed-text-color)',
-    [LocationState.CLOSED_LONG_TERM]: 'var(--location-closed-long-term-text-color)',
-    [LocationState.OPENS_SOON]: 'var(--location-opens-soon-text-color)',
-    [LocationState.CLOSES_SOON]: 'var(--location-closes-soon-text-color)',
-};
-
-// highlight is for both the underline and dot color
-const highlightColors: Record<LocationState, string> = {
-    [LocationState.OPEN]: 'var(--location-open-highlight)',
-    [LocationState.CLOSED]: 'var(--location-closed-highlight)',
-    [LocationState.CLOSED_LONG_TERM]: 'var(--location-closed-long-term-highlight)',
-    [LocationState.OPENS_SOON]: 'var(--location-opens-soon-highlight)',
-    [LocationState.CLOSES_SOON]: 'var(--location-closes-soon-highlight)',
-};
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
     fontWeight: 500,
     alignItems: 'flex-start',

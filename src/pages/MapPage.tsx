@@ -4,8 +4,9 @@ import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from '../types/locationTypes';
+import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
 
-const token = process.env.VITE_MAPKITJS_TOKEN;
+const token = process.env.VITE_MAPKITJS_TOKEN ?? '';
 
 function abbreviate(longName: string) {
     const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
@@ -14,6 +15,13 @@ function abbreviate(longName: string) {
         .map((word) => word.charAt(0))
         .join('');
 }
+
+/**
+ *
+ * @param varString if input is var(XXX), we get back XXX
+ * @returns
+ */
+const stripVarFromString = (varString: string) => varString.match(/var\((.+)\)/)?.[1] ?? '';
 
 function MapPage({
     locations,
@@ -45,7 +53,7 @@ function MapPage({
         }),
         [],
     );
-
+    const derivedRootColors = useMemo(() => window.getComputedStyle(document.body), []);
     const extendedLocationData =
         locations && extraLocationData
             ? locations.map((location) => ({
@@ -58,7 +66,7 @@ function MapPage({
             {extendedLocationData && (
                 <>
                     <Map
-                        token={token as string}
+                        token={token}
                         colorScheme={ColorScheme.Dark}
                         initialRegion={initialRegion}
                         excludedPOICategories={[PointOfInterestCategory.Restaurant]}
@@ -70,12 +78,19 @@ function MapPage({
                     >
                         {extendedLocationData.map((location, locationIndex) => {
                             if (!location.coordinates) return undefined;
+                            const bgColor = derivedRootColors.getPropertyValue(
+                                stripVarFromString(mapMarkerBackgroundColors[location.locationState]),
+                            ); // mapkit doesn't accept css variables, so we'll go ahead and get the actual color value from :root first
+                            const textColor = derivedRootColors.getPropertyValue(
+                                stripVarFromString(mapMarkerTextColors[location.locationState]),
+                            );
                             return (
                                 <Marker
                                     key={location.conceptId}
                                     latitude={location.coordinates.lat}
                                     longitude={location.coordinates.lng}
-                                    color={!location.closedLongTerm && location.isOpen ? '#69bb36' : '#ff5b40'}
+                                    color={bgColor}
+                                    glyphColor={textColor}
                                     glyphText={abbreviate(location.name)}
                                     onSelect={() => {
                                         setSelectedLocationIndex(locationIndex);
