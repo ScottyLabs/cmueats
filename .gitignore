@@ -28,5 +28,3 @@ yarn-error.log*
 
 # for testing only
 /public/example-response.json
-
-package-lock.json
