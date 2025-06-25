@@ -357,12 +357,12 @@ function ListPage({
 							>
 								ScottyLabs
 							</a>
-							. (Not The Official{' '}
+							. (Disclaimer: This is not the official{' '}
 							<a
 								href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
 								style={{ color: 'white' }}
 							>
-								Dining Website
+								dining website.
 							</a>
 							)
 						</FooterText>
