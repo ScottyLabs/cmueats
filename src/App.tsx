@@ -66,20 +66,11 @@ function App() {
 		<React.StrictMode>
 			<BrowserRouter>
 				<div className="App">
-					<div className="AdBanner">
-						How&apos;s your food? We want your{' '}
-						<a
-							className="AdBannerLink"
-							href="https://forms.gle/fTnWrS7jkTFRB14DA"
-							target="_blank"
-							rel="noreferrer"
-						>
-							feedback!
-						</a>{' '}
-						It only takes 30 seconds.
-					</div>
-
 					<div className="MainContent">
+						<div className="AdBanner">
+							CMUEats is now up to date with the official dining
+							website! Sorry for the inconvenience. &gt;_&lt;
+						</div>
 						<Routes>
 							<Route
 								path="/"
