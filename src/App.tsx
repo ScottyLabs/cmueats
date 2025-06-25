@@ -66,11 +66,11 @@ function App() {
 		<React.StrictMode>
 			<BrowserRouter>
 				<div className="App">
-					<div className="AdBanner">
-						CMUEats is back to being up to date! Sorry for the inconvenience + happy eating!
-					</div>
-
 					<div className="MainContent">
+						<div className="AdBanner">
+							CMUEats is now up to date with the official dining
+							website! Sorry for the inconvenience. &gt;_&lt;
+						</div>
 						<Routes>
 							<Route
 								path="/"
