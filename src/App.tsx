@@ -67,16 +67,7 @@ function App() {
 			<BrowserRouter>
 				<div className="App">
 					<div className="AdBanner">
-						How&apos;s your food? We want your{' '}
-						<a
-							className="AdBannerLink"
-							href="https://forms.gle/fTnWrS7jkTFRB14DA"
-							target="_blank"
-							rel="noreferrer"
-						>
-							feedback!
-						</a>{' '}
-						It only takes 30 seconds.
+						CMUEats is back to being up to date! Sorry for the inconvenience + happy eating!
 					</div>
 
 					<div className="MainContent">
