@@ -362,7 +362,7 @@ function ListPage({
 								href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
 								style={{ color: 'white' }}
 							>
-								dining website.
+								dining website
 							</a>
 							)
 						</FooterText>
