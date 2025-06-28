@@ -115,7 +115,11 @@ function MapPage({
                     >
                         <div className="MapDrawer" ref={drawerRef}>
                             {selectedLocationIndex !== undefined && (
-                                <EateryCard location={extendedLocationData[selectedLocationIndex]} />
+                                <EateryCard
+                                    location={extendedLocationData[selectedLocationIndex]}
+                                    isPinned={false}
+                                    onTogglePin={() => {}}
+                                />
                             )}
                         </div>
                     </CSSTransition>

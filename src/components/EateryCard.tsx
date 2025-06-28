@@ -123,10 +123,6 @@ function EateryCard({
     index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
-    location: IReadOnlyLocation_Combined;
-    index?: number;
-    partOfMainGrid?: boolean;
-    animate?: boolean;
     isPinned: boolean;
     onTogglePin: () => void;
 }) {

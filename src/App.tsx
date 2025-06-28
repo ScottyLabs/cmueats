@@ -35,11 +35,11 @@ function App() {
         });
     }, []);
 
-    const [pinnedIds, setPinnedIdsState] = useState<string[]>(getPinnedIds());
+    const [pinnedIds, setPinnedIdsState] = useState<Record<string, true>>(getPinnedIds());
 
-    const updatePinnedIds = (newIds: string[]) => {
-        setPinnedIds(newIds);
-        setPinnedIdsState(newIds);
+    const updatePinnedIds = (newObj: Record<string, true>) => {
+        setPinnedIds(newObj);
+        setPinnedIdsState(newObj);
     };
 
     // periodically update extra location data
@@ -81,8 +81,14 @@ function App() {
                                     <ListPage
                                         extraLocationData={extraLocationData}
                                         locations={locations}
-                                        pinnedIds={pinnedIds}
-                                        updatePinnedIds={updatePinnedIds}
+                                        pinnedIds={Object.keys(pinnedIds)}
+                                        updatePinnedIds={(ids: string[]) => {
+                                            const newObj: Record<string, true> = {};
+                                            ids.forEach((id) => {
+                                                newObj[id] = true;
+                                            });
+                                            updatePinnedIds(newObj);
+                                        }}
                                     />
                                 }
                             />

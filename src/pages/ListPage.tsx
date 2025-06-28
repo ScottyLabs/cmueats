@@ -46,9 +46,13 @@ function getPittsburghTime() {
 function ListPage({
     extraLocationData,
     locations,
+    pinnedIds,
+    updatePinnedIds,
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+    pinnedIds: string[];
+    updatePinnedIds: (ids: string[]) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const { mobileGreeting, desktopGreeting } = useMemo(
@@ -164,6 +168,8 @@ function ListPage({
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
+                        pinnedIds,
+                        updatePinnedIds,
                     }}
                 />
             </div>
