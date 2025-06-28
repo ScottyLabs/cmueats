@@ -16,7 +16,10 @@ import {
 	IReadOnlyLocation_ExtraData_Map,
 } from './types/locationTypes';
 
-const CMU_EATS_API_URL = 'https://dining-api-production.up.railway.app/locations';
+// const CMU_EATS_API_URL =
+//     'https://dining-api-production.up.railway.app/locations';
+// emergency fix
+const CMU_EATS_API_URL = '/locations.json';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
