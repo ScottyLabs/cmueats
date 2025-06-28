@@ -38,7 +38,7 @@
     "web-vitals": "^3.5.2"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --host",
     "build": "tsc && vite build",
     "test": "bun test",
     "eject": "vite eject",
