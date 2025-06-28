@@ -108,7 +108,7 @@ function ListPage({
 					);
 
 		return intersection;
-	}, [fuse, searchQuery, locationFilterSearchQuery]);
+	}, [fuse, searchQuery, locationFilterSearchQuery, pinnedIds]);
 
 	// const [showAlert, setShowAlert] = useState(true);
 	const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -260,7 +260,11 @@ function ListPage({
 						// suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
 						// we can't simply just reset the animation startTime in each card on first render,
 						// because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know.
-						<Grid container spacing={2} key={searchQuery}>
+						<Grid
+							container
+							spacing={2}
+							key={`${searchQuery}-${pinnedIds.join(',')}`}
+						>
 							{filteredLocations
 								.map((location) => ({
 									...location,
