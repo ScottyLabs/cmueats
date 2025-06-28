@@ -16,6 +16,9 @@ import {
 	IReadOnlyLocation_ExtraData_Map,
 } from './types/locationTypes';
 
+// const CMU_EATS_API_URL =
+//     'https://dining-api-production.up.railway.app/locations';
+// emergency fix
 const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5173/example-response.json';
@@ -66,20 +69,11 @@ function App() {
 		<React.StrictMode>
 			<BrowserRouter>
 				<div className="App">
-					<div className="AdBanner">
-						How&apos;s your food? We want your{' '}
-						<a
-							className="AdBannerLink"
-							href="https://forms.gle/fTnWrS7jkTFRB14DA"
-							target="_blank"
-							rel="noreferrer"
-						>
-							feedback!
-						</a>{' '}
-						It only takes 30 seconds.
-					</div>
-
 					<div className="MainContent">
+						<div className="AdBanner">
+							CMUEats is now up to date with the official dining
+							website! Sorry for the inconvenience. &gt;_&lt;
+						</div>
 						<Routes>
 							<Route
 								path="/"
