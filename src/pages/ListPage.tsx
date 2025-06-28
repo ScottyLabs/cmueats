@@ -364,7 +364,7 @@ function ListPage({
 							>
 								dining website
 							</a>
-							)
+							.)
 						</FooterText>
 					</>
 				)}
