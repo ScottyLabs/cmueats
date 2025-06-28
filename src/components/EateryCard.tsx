@@ -20,7 +20,6 @@ import {
 	LocationState,
 } from '../types/locationTypes';
 import './EateryCard.css';
-import { getPinnedIds, setPinnedIds } from '../util/storage';
 
 const textColors: Record<LocationState, string> = {
 	[LocationState.OPEN]: 'var(--location-open-text-color)',
@@ -147,11 +146,15 @@ function EateryCard({
 	index = 0,
 	partOfMainGrid = false,
 	animate = false,
+	isPinned,
+	onTogglePin,
 }: {
 	location: IReadOnlyLocation_Combined;
 	index?: number;
 	partOfMainGrid?: boolean;
 	animate?: boolean;
+	isPinned: boolean;
+	onTogglePin: () => void;
 }) {
 	const {
 		name,
@@ -164,25 +167,6 @@ function EateryCard({
 	} = location;
 
 	const [modalOpen, setModalOpen] = useState(false);
-	const [isPinned, setIsPinned] = useState(() => {
-		const pinned = getPinnedIds();
-		return pinned.includes(location.conceptId.toString());
-	});
-
-	const togglePin = () => {
-		const pinned = getPinnedIds();
-		let updated: string[];
-		if (pinned.includes(location.conceptId.toString())) {
-			updated = pinned.filter(
-				(id) => id !== location.conceptId.toString(),
-			);
-		} else {
-			updated = [location.conceptId.toString(), ...pinned];
-		}
-
-		setPinnedIds(updated);
-		setIsPinned(!isPinned);
-	};
 
 	return (
 		<>
@@ -230,7 +214,7 @@ function EateryCard({
 					)}
 					<div className="card__pin-container">
 						<Button
-							onClick={togglePin}
+							onClick={onTogglePin}
 							className={`card__pin-button ${isPinned ? 'card__pin-button--pinned' : ''}`}
 						>
 							<svg

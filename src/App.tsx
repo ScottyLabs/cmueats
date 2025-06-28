@@ -15,6 +15,7 @@ import {
 	IReadOnlyLocation_FromAPI_PostProcessed,
 	IReadOnlyLocation_ExtraData_Map,
 } from './types/locationTypes';
+import { getPinnedIds, setPinnedIds } from './util/storage';
 
 // const CMU_EATS_API_URL =
 //     'https://dining-api-production.up.railway.app/locations';
@@ -38,6 +39,13 @@ function App() {
 			// set extended data in same render to keep the two things in sync
 		});
 	}, []);
+
+	const [pinnedIds, setPinnedIdsState] = useState<string[]>(getPinnedIds());
+
+	const updatePinnedIds = (newIds: string[]) => {
+		setPinnedIds(newIds);
+		setPinnedIdsState(newIds);
+	};
 
 	// periodically update extra location data
 	useEffect(() => {
@@ -81,6 +89,8 @@ function App() {
 									<ListPage
 										extraLocationData={extraLocationData}
 										locations={locations}
+										pinnedIds={pinnedIds}
+										updatePinnedIds={updatePinnedIds}
 									/>
 								}
 							/>

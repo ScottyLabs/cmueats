@@ -19,7 +19,6 @@ import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
-import { getPinnedIds } from '../util/storage';
 
 const LogoText = styled(Typography)({
 	color: 'var(--logo-first-half)',
@@ -61,9 +60,13 @@ const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_FromAPI_PostProcessed> = {
 function ListPage({
 	extraLocationData,
 	locations,
+	pinnedIds,
+	updatePinnedIds,
 }: {
 	extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
 	locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+	pinnedIds: string[];
+	updatePinnedIds: (ids: string[]) => void;
 }) {
 	const { theme, updateTheme } = useTheme();
 	const { mobileGreeting, desktopGreeting } = useMemo(
@@ -264,10 +267,7 @@ function ListPage({
 									...extraLocationData[location.conceptId], // add on our extra data here
 								}))
 								.sort((location1, location2) => {
-									const pinnedIdsArray = getPinnedIds();
-									const pinnedIdsSet = new Set(
-										pinnedIdsArray,
-									);
+									const pinnedIdsSet = new Set(pinnedIds);
 
 									const id1 = location1.conceptId.toString();
 									const id2 = location2.conceptId.toString();
@@ -296,6 +296,20 @@ function ListPage({
 										index={i}
 										animate={shouldAnimateCards}
 										partOfMainGrid
+										isPinned={pinnedIds.includes(
+											location.conceptId.toString(),
+										)}
+										onTogglePin={() => {
+											const id =
+												location.conceptId.toString();
+											const newPinnedIds =
+												pinnedIds.includes(id)
+													? pinnedIds.filter(
+															(pid) => pid !== id,
+														)
+													: [id, ...pinnedIds];
+											updatePinnedIds(newPinnedIds);
+										}}
 									/>
 								))}
 						</Grid>

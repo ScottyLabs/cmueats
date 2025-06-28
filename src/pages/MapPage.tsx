@@ -125,6 +125,9 @@ function MapPage({
 											selectedLocationIndex
 										]
 									}
+									//not showing pinned state in map view
+									isPinned={false}
+									onTogglePin={() => {}}
 								/>
 							)}
 						</div>
