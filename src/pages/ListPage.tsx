@@ -180,9 +180,30 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems,{' '}
+                            If you encounter any problems,If you encounter any problems, please contact{' '}
+							<a
+								href="mailto:jaisal.patel45@gmail.com"
+								style={{ color: 'white' }}
+							>
+								Jaisal
+							</a>
+							{', '}
+							<a
+								href="mailto:ericxu@andrew.cmu.edu"
+								style={{ color: 'white' }}
+							>
+								Eric
+							</a>
+							{', '}
+							<a
+								href="mailto:laki@andrew.cmu.edu"
+								style={{ color: 'white' }}
+							>
+								Laasya
+							</a>
+							&nbsp;or {' '}
                             <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
-                                please contact our team
+                                our team
                             </a>
                             .
                         </FooterText>
