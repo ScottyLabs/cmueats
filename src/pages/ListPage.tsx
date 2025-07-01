@@ -180,9 +180,9 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems, {' '}
+                            If you encounter any problems,{' '}
                             <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
-							please contact our team
+                                please contact our team
                             </a>
                             .
                         </FooterText>
