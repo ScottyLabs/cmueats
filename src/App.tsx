@@ -12,6 +12,7 @@ import {
 } from './util/queryLocations';
 import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
+import { getPinnedIds, setPinnedIds } from './util/storage';
 
 // const CMU_EATS_API_URL =
 //     'https://dining-api-production.up.railway.app/locations';
@@ -33,6 +34,13 @@ function App() {
             // set extended data in same render to keep the two things in sync
         });
     }, []);
+
+    const [pinnedIds, setPinnedIdsState] = useState<Record<string, true>>(getPinnedIds());
+
+    const updatePinnedIds = (newObj: Record<string, true>) => {
+        setPinnedIds(newObj);
+        setPinnedIdsState(newObj);
+    };
 
     // periodically update extra location data
     useEffect(() => {
@@ -61,24 +69,22 @@ function App() {
         <React.StrictMode>
             <BrowserRouter>
                 <div className="App">
-                    {/* <div className="AdBanner">
-						How&apos;s your food? We want your{' '}
-						<a
-							className="AdBannerLink"
-							href="https://forms.gle/fTnWrS7jkTFRB14DA"
-							target="_blank"
-							rel="noreferrer"
-						>
-							feedback!
-						</a>{' '}
-						It only takes 30 seconds.
-					</div> */}
-
                     <div className="MainContent">
+                        {/* <div className="AdBanner">
+                            CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
+                            &gt;_&lt;
+                        </div> */}
                         <Routes>
                             <Route
                                 path="/"
-                                element={<ListPage extraLocationData={extraLocationData} locations={locations} />}
+                                element={
+                                    <ListPage
+                                        extraLocationData={extraLocationData}
+                                        locations={locations}
+                                        pinnedIds={pinnedIds}
+                                        updatePinnedIds={updatePinnedIds}
+                                    />
+                                }
                             />
                             <Route
                                 path="/map"
