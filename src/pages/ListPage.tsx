@@ -181,17 +181,29 @@ function ListPage({
                         </FooterText>
                         <FooterText>
                             If you encounter any problems, please contact{' '}
-                            <a href="mailto:jaisal.patel45@gmail.com" style={{ color: 'white' }}>
-                                Jaisal
-                            </a>
-                            {', '}
-                            <a href="mailto:ericxu@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Eric
-                            </a>
-                            {', '}
-                            or{' '}
-                            <a href="mailto:laki@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Laasya
+							<a
+								href="mailto:jaisal.patel45@gmail.com"
+								style={{ color: 'white' }}
+							>
+								Jaisal
+							</a>
+							{', '}
+							<a
+								href="mailto:ericxu@andrew.cmu.edu"
+								style={{ color: 'white' }}
+							>
+								Eric
+							</a>
+							{', '}
+							<a
+								href="mailto:laki@andrew.cmu.edu"
+								style={{ color: 'white' }}
+							>
+								Laasya
+							</a>
+							&nbsp;or {' '}
+                            <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+                                our team
                             </a>
                             .
                         </FooterText>
@@ -218,7 +230,16 @@ function ListPage({
                             <a href="https://scottylabs.org" style={{ color: 'white' }}>
                                 ScottyLabs
                             </a>
-                            .
+                            &nbsp;(Not the official&nbsp;
+                            <a
+                                href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: 'white' }}
+                            >
+                                Dining Website
+                            </a>
+                            .)
                         </FooterText>
                     </>
                 )}
