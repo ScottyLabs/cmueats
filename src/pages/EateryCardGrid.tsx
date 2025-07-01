@@ -55,6 +55,8 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
+    const animateCardsRef = shouldAnimateCardsRef;
+
     const compareLocations = (location1: any, location2: any) => {
         const state1 = location1.locationState;
         const state2 = location2.locationState;
@@ -105,7 +107,7 @@ export default function EateryCardGrid({
                         partOfMainGrid
                         isPinned={!!pinnedIds[location.conceptId.toString()]}
                         onTogglePin={() => {
-                            shouldAnimateCardsRef.current = false;
+                            animateCardsRef.current = false;
                             const id = location.conceptId.toString();
                             const newPinnedIds = { ...pinnedIds };
                             if (newPinnedIds[id]) {
