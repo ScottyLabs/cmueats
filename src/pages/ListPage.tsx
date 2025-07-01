@@ -180,7 +180,7 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems,If you encounter any problems, please contact{' '}
+                            If you encounter any problems, please contact{' '}
 							<a
 								href="mailto:jaisal.patel45@gmail.com"
 								style={{ color: 'white' }}
