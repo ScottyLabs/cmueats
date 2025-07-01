@@ -180,18 +180,9 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems, please contact{' '}
-                            <a href="mailto:jaisal.patel45@gmail.com" style={{ color: 'white' }}>
-                                Jaisal
-                            </a>
-                            {', '}
-                            <a href="mailto:ericxu@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Eric
-                            </a>
-                            {', '}
-                            or{' '}
-                            <a href="mailto:laki@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Laasya
+                            If you encounter any problems, {' '}
+                            <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+							please contact our team
                             </a>
                             .
                         </FooterText>
@@ -218,7 +209,15 @@ function ListPage({
                             <a href="https://scottylabs.org" style={{ color: 'white' }}>
                                 ScottyLabs
                             </a>
-                            .
+                            &nbsp;(Not the official&nbsp;
+                            <a
+                                href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
+                                target="_blank"
+                                style={{ color: 'white' }}
+                            >
+                                Dining Website
+                            </a>
+                            .)
                         </FooterText>
                     </>
                 )}
