@@ -81,14 +81,8 @@ function App() {
                                     <ListPage
                                         extraLocationData={extraLocationData}
                                         locations={locations}
-                                        pinnedIds={Object.keys(pinnedIds)}
-                                        updatePinnedIds={(ids: string[]) => {
-                                            const newObj: Record<string, true> = {};
-                                            ids.forEach((id) => {
-                                                newObj[id] = true;
-                                            });
-                                            updatePinnedIds(newObj);
-                                        }}
+                                        pinnedIds={pinnedIds}
+                                        updatePinnedIds={updatePinnedIds}
                                     />
                                 }
                             />

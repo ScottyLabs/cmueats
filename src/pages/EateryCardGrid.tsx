@@ -17,14 +17,16 @@ export default function EateryCardGrid({
     apiError,
     pinnedIds,
     updatePinnedIds,
+    shouldAnimateCardsRef,
 }: {
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
-    pinnedIds: string[];
-    updatePinnedIds: (newPinnedIds: string[]) => void;
+    pinnedIds: Record<string, true>;
+    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    shouldAnimateCardsRef: React.MutableRefObject<boolean>;
 }) {
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -80,13 +82,11 @@ export default function EateryCardGrid({
                     ...extraLocationData[location.conceptId], // add on our extra data here
                 }))
                 .sort((location1, location2) => {
-                    const pinnedIdsSet = new Set(pinnedIds);
-
                     const id1 = location1.conceptId.toString();
                     const id2 = location2.conceptId.toString();
 
-                    const isPinned1 = pinnedIdsSet.has(id1);
-                    const isPinned2 = pinnedIdsSet.has(id2);
+                    const isPinned1 = !!pinnedIds[id1];
+                    const isPinned2 = !!pinnedIds[id2];
 
                     if (isPinned1 && isPinned2) {
                         return compareLocations(location1, location2);
@@ -103,12 +103,16 @@ export default function EateryCardGrid({
                         index={i}
                         animate={shouldAnimateCards}
                         partOfMainGrid
-                        isPinned={pinnedIds.includes(location.conceptId.toString())}
+                        isPinned={!!pinnedIds[location.conceptId.toString()]}
                         onTogglePin={() => {
+                            shouldAnimateCardsRef.current = false;
                             const id = location.conceptId.toString();
-                            const newPinnedIds = pinnedIds.includes(id)
-                                ? pinnedIds.filter((pid) => pid !== id)
-                                : [id, ...pinnedIds];
+                            const newPinnedIds = { ...pinnedIds };
+                            if (newPinnedIds[id]) {
+                                delete newPinnedIds[id];
+                            } else {
+                                newPinnedIds[id] = true;
+                            }
                             updatePinnedIds(newPinnedIds);
                         }}
                     />

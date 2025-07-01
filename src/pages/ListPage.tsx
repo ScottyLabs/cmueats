@@ -51,8 +51,8 @@ function ListPage({
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    pinnedIds: string[];
-    updatePinnedIds: (ids: string[]) => void;
+    pinnedIds: Record<string, true>;
+    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const { mobileGreeting, desktopGreeting } = useMemo(
@@ -162,6 +162,7 @@ function ListPage({
 						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
                 <EateryCardGrid
                     key={`${searchQuery}-${locationFilterQuery}`}
+                    shouldAnimateCardsRef={shouldAnimateCards}
                     {...{
                         locations: filteredLocations,
                         shouldAnimateCards: shouldAnimateCards.current,
@@ -187,27 +188,18 @@ function ListPage({
                         </FooterText>
                         <FooterText>
                             If you encounter any problems, please contact{' '}
-							<a
-								href="mailto:jaisal.patel45@gmail.com"
-								style={{ color: 'white' }}
-							>
-								Jaisal
-							</a>
-							{', '}
-							<a
-								href="mailto:ericxu@andrew.cmu.edu"
-								style={{ color: 'white' }}
-							>
-								Eric
-							</a>
-							{', '}
-							<a
-								href="mailto:laki@andrew.cmu.edu"
-								style={{ color: 'white' }}
-							>
-								Laasya
-							</a>
-							&nbsp;or {' '}
+                            <a href="mailto:jaisal.patel45@gmail.com" style={{ color: 'white' }}>
+                                Jaisal
+                            </a>
+                            {', '}
+                            <a href="mailto:ericxu@andrew.cmu.edu" style={{ color: 'white' }}>
+                                Eric
+                            </a>
+                            {', '}
+                            <a href="mailto:laki@andrew.cmu.edu" style={{ color: 'white' }}>
+                                Laasya
+                            </a>
+                            &nbsp;or{' '}
                             <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
                                 our team
                             </a>
