@@ -1,51 +1,60 @@
 .card__header__dot {
-	width: 12px;
-	height: 12px;
-	margin-top: 7px;
-	border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: 7px;
+    border-radius: 50%;
 }
 .card__header__dot--blinking {
-	animation: blinking 1s infinite;
-	animation-play-state: paused;
+    animation: blinking 1s infinite;
+    animation-play-state: paused;
 }
 
 @keyframes blinking {
-	0% {
-		opacity: 0;
-	}
-	50% {
-		opacity: 1;
-	}
-	75% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-	}
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 .card__pin-container {
-	position: absolute;
-	bottom: 8px;
-	right: 8px;
-	border-radius: 50%;
-	transition: background-color 0.2s ease;
+    position: absolute;
+    bottom: 16px;
+    right: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
 }
 
 .card__pin-button {
-	padding: 3px;
-	border-radius: 50%;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 0.2s ease;
+    border-radius: 100%;
+    min-width: 4px;
+    min-height: 36px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.card:hover .card__pin-button {
-	opacity: 1;
-	pointer-events: auto;
+.card__pin-button--pinned svg {
+    stroke: #ffd700;
 }
 
-.card__pin-button--pinned {
-	opacity: 1;
-	pointer-events: auto;
+.card__pin-button:not(.card__pin-button--pinned) svg {
+    stroke: #efeaea;
+}
+
+.card__pin-button:hover {
+    background: rgba(255, 255, 0, 0.08);
+    outline: none;
+    fill: rgba(255, 255, 120, 0.18);
 }
