@@ -70,10 +70,10 @@ function App() {
             <BrowserRouter>
                 <div className="App">
                     <div className="MainContent">
-                        <div className="AdBanner">
+                        {/* <div className="AdBanner">
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;
-                        </div>
+                        </div> */}
                         <Routes>
                             <Route
                                 path="/"
