@@ -13,6 +13,7 @@ export default function EateryCardGrid({
     locations,
     extraLocationData,
     setSearchQuery,
+    shouldAnimateCards,
     apiError,
     pinnedIds,
     updatePinnedIds,
@@ -20,6 +21,7 @@ export default function EateryCardGrid({
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     setSearchQuery: React.Dispatch<string>;
+    shouldAnimateCards: boolean;
     apiError: boolean;
     pinnedIds: Record<string, true>;
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
@@ -97,6 +99,7 @@ export default function EateryCardGrid({
                         location={location}
                         key={location.conceptId}
                         index={i}
+                        animate={shouldAnimateCards}
                         partOfMainGrid
                         isPinned={location.conceptId.toString() in pinnedIds}
                         onTogglePin={() => {

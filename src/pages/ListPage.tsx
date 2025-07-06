@@ -164,6 +164,7 @@ function ListPage({
                     key={`${searchQuery}-${locationFilterQuery}`}
                     {...{
                         locations: filteredLocations,
+                        shouldAnimateCards: shouldAnimateCards.current,
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
@@ -171,9 +172,6 @@ function ListPage({
                         updatePinnedIds: (newPinnedIds: Record<string, true>) => {
                             shouldAnimateCards.current = false;
                             updatePinnedIds(newPinnedIds);
-                            setTimeout(() => {
-                                shouldAnimateCards.current = true;
-                            }, 0);
                         },
                     }}
                 />
