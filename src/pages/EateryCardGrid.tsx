@@ -13,20 +13,16 @@ export default function EateryCardGrid({
     locations,
     extraLocationData,
     setSearchQuery,
-    shouldAnimateCards,
     apiError,
     pinnedIds,
     updatePinnedIds,
-    shouldAnimateCardsRef,
 }: {
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     setSearchQuery: React.Dispatch<string>;
-    shouldAnimateCards: boolean;
     apiError: boolean;
     pinnedIds: Record<string, true>;
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
-    shouldAnimateCardsRef: React.MutableRefObject<boolean>;
 }) {
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -54,8 +50,6 @@ export default function EateryCardGrid({
         );
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
-
-    const animateCardsRef = shouldAnimateCardsRef;
 
     const compareLocations = (location1: any, location2: any) => {
         const state1 = location1.locationState;
@@ -87,8 +81,8 @@ export default function EateryCardGrid({
                     const id1 = location1.conceptId.toString();
                     const id2 = location2.conceptId.toString();
 
-                    const isPinned1 = !!pinnedIds[id1];
-                    const isPinned2 = !!pinnedIds[id2];
+                    const isPinned1 = id1 in pinnedIds;
+                    const isPinned2 = id2 in pinnedIds;
 
                     if (isPinned1 && isPinned2) {
                         return compareLocations(location1, location2);
@@ -103,11 +97,9 @@ export default function EateryCardGrid({
                         location={location}
                         key={location.conceptId}
                         index={i}
-                        animate={shouldAnimateCards}
                         partOfMainGrid
-                        isPinned={!!pinnedIds[location.conceptId.toString()]}
+                        isPinned={location.conceptId.toString() in pinnedIds}
                         onTogglePin={() => {
-                            animateCardsRef.current = false;
                             const id = location.conceptId.toString();
                             const newPinnedIds = { ...pinnedIds };
                             if (newPinnedIds[id]) {

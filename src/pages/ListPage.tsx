@@ -162,15 +162,19 @@ function ListPage({
 						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
                 <EateryCardGrid
                     key={`${searchQuery}-${locationFilterQuery}`}
-                    shouldAnimateCardsRef={shouldAnimateCards}
                     {...{
                         locations: filteredLocations,
-                        shouldAnimateCards: shouldAnimateCards.current,
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
                         pinnedIds,
-                        updatePinnedIds,
+                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                            shouldAnimateCards.current = false;
+                            updatePinnedIds(newPinnedIds);
+                            setTimeout(() => {
+                                shouldAnimateCards.current = true;
+                            }, 0);
+                        },
                     }}
                 />
             </div>
