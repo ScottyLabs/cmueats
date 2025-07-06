@@ -46,9 +46,13 @@ function getPittsburghTime() {
 function ListPage({
     extraLocationData,
     locations,
+    pinnedIds,
+    updatePinnedIds,
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+    pinnedIds: Record<string, true>;
+    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const { mobileGreeting, desktopGreeting } = useMemo(
@@ -164,6 +168,11 @@ function ListPage({
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
+                        pinnedIds,
+                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                            shouldAnimateCards.current = false;
+                            updatePinnedIds(newPinnedIds);
+                        },
                     }}
                 />
             </div>
@@ -189,9 +198,12 @@ function ListPage({
                                 Eric
                             </a>
                             {', '}
-                            or{' '}
                             <a href="mailto:laki@andrew.cmu.edu" style={{ color: 'white' }}>
                                 Laasya
+                            </a>
+                            &nbsp;or{' '}
+                            <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+                                our team
                             </a>
                             .
                         </FooterText>
@@ -218,7 +230,16 @@ function ListPage({
                             <a href="https://scottylabs.org" style={{ color: 'white' }}>
                                 ScottyLabs
                             </a>
-                            .
+                            &nbsp;(Not the official&nbsp;
+                            <a
+                                href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: 'white' }}
+                            >
+                                Dining Website
+                            </a>
+                            .)
                         </FooterText>
                     </>
                 )}
