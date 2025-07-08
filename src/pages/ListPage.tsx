@@ -46,9 +46,13 @@ function getPittsburghTime() {
 function ListPage({
     extraLocationData,
     locations,
+    pinnedIds,
+    updatePinnedIds,
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+    pinnedIds: Record<string, true>;
+    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const { mobileGreeting, desktopGreeting } = useMemo(
@@ -164,6 +168,11 @@ function ListPage({
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
+                        pinnedIds,
+                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                            shouldAnimateCards.current = false;
+                            updatePinnedIds(newPinnedIds);
+                        },
                     }}
                 />
             </div>
@@ -181,27 +190,18 @@ function ListPage({
                         </FooterText>
                         <FooterText>
                             If you encounter any problems, please contact{' '}
-							<a
-								href="mailto:jaisal.patel45@gmail.com"
-								style={{ color: 'white' }}
-							>
-								Jaisal
-							</a>
-							{', '}
-							<a
-								href="mailto:ericxu@andrew.cmu.edu"
-								style={{ color: 'white' }}
-							>
-								Eric
-							</a>
-							{', '}
-							<a
-								href="mailto:laki@andrew.cmu.edu"
-								style={{ color: 'white' }}
-							>
-								Laasya
-							</a>
-							&nbsp;or {' '}
+                            <a href="mailto:jaisal.patel45@gmail.com" style={{ color: 'white' }}>
+                                Jaisal
+                            </a>
+                            {', '}
+                            <a href="mailto:ericxu@andrew.cmu.edu" style={{ color: 'white' }}>
+                                Eric
+                            </a>
+                            {', '}
+                            <a href="mailto:laki@andrew.cmu.edu" style={{ color: 'white' }}>
+                                Laasya
+                            </a>
+                            &nbsp;or{' '}
                             <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
                                 our team
                             </a>
