@@ -58,12 +58,10 @@ function ListPage({
 }) {
     const { theme, updateTheme } = useTheme();
     const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>((_, newState) => {
-        shouldAnimateCards.current = false;
         return newState;
     }, '');
     const [locationFilterQuery, setLocationFilterQuery] = useReducer<(_: string, x: string) => string>(
         (_, newState) => {
-            shouldAnimateCards.current = false;
             return newState;
         },
         '',

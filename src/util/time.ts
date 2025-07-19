@@ -115,10 +115,10 @@ export function getTimeSlotAsString(time: ITimeSlot) {
  * @returns HH:MM (AM/PM)
  */
 export function getTimeSlotString(time: ITimeSlot) {
-	assert(isTimeSlot(time));
-	const start=getTimeString(time.start);
-	const end=getTimeString(time.end);
-	return `${start} - ${end}`;
+    assert(isTimeSlot(time));
+    const start = getTimeString(time.start);
+    const end = getTimeString(time.end);
+    return `${start} - ${end}`;
 }
 
 /**
@@ -126,7 +126,6 @@ export function getTimeSlotString(time: ITimeSlot) {
  * @param times
  * @returns HH:MM (AM/PM) Array
  */
-
 
 /**
  *
