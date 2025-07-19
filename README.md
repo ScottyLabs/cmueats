@@ -74,6 +74,7 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 
 - Set `DATABASE_URL` in your dining-api Railway project's environment variables.
 - Set `VITE_API_BASE` in your frontend deployment to point to the dining-api URL.
+
 - Deploy dining-api to Railway with the start command:
   ```
   bun run start
