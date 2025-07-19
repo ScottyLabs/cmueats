@@ -13,7 +13,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 
-const API_BASE = import.meta.env.DEV ? '' : import.meta.env.VITE_API_BASE || '';
+const API_BASE = import.meta.env.DEV ? 'http://localhost:5010' : import.meta.env.VITE_API_BASE || '';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
