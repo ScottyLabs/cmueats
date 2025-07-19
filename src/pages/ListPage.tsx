@@ -13,6 +13,8 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 
+const API_BASE = import.meta.env.DEV ? '' : import.meta.env.VITE_API_BASE || '';
+
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
     padding: 0,
@@ -51,20 +53,10 @@ function ListPage({
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
 }) {
     const { theme, updateTheme } = useTheme();
-    const { mobileGreeting, desktopGreeting } = useMemo(
-        () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
-        [],
-    );
-    const shouldAnimateCards = useRef(true);
-
-    // permanently cut out animation when user filters cards,
-    // so we don't end up with some cards (but not others)
-    // re-animating in when filter gets cleared
     const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
     }, '');
-
     const [locationFilterQuery, setLocationFilterQuery] = useReducer<(_: string, x: string) => string>(
         (_, newState) => {
             shouldAnimateCards.current = false;
@@ -72,16 +64,37 @@ function ListPage({
         },
         '',
     );
+    const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
 
-    // const [showAlert, setShowAlert] = useState(true);
+    const shouldAnimateCards = useRef(true);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
+
+    const { mobileGreeting, desktopGreeting } = useMemo(
+        () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
+        [],
+    );
+
     const filteredLocations = useFilteredLocations({
         locations,
         searchQuery,
         locationFilterQuery,
     });
 
-    // Load the search query from the URL, if any
+    // Fetch emails on mount
+    useEffect(() => {
+        async function fetchEmails() {
+            try {
+                const res = await fetch(`${API_BASE}/api/emails`);
+                const json = await res.json();
+                setEmails(json);
+            } catch (err) {
+                console.error('❌ Failed to fetch emails:', err);
+            }
+        }
+        fetchEmails();
+    }, []);
+
+    // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');
         if (urlQuery) {
@@ -89,35 +102,25 @@ function ListPage({
         }
     }, []);
 
-    // Monitor for the user being online
+    // Track offline/online
     useEffect(() => {
-        const handleOnlineStatus = () => {
-            setShowOfflineAlert(!navigator.onLine);
-        };
-
-        window.addEventListener('online', handleOnlineStatus);
-        window.addEventListener('offline', handleOnlineStatus);
-
+        const updateStatus = () => setShowOfflineAlert(!navigator.onLine);
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
         return () => {
-            window.removeEventListener('online', handleOnlineStatus);
-            window.removeEventListener('offline', handleOnlineStatus);
+            window.removeEventListener('online', updateStatus);
+            window.removeEventListener('offline', updateStatus);
         };
     }, []);
 
     return (
         <div className="ListPage">
-            {/*  showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description]
-        Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
-
             {showOfflineAlert && (
                 <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
-                    🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
-                    you are offline. We apologize for any inconvenience. 🌐🚫
+                    🚫🌐 You appear to be offline. Some features may not work. 🌐🚫
                 </StyledAlert>
             )}
+
             <div className="ListPage__container">
                 <header className="Locations-header">
                     <div className="Locations-header__greeting-container">
@@ -132,9 +135,7 @@ function ListPage({
                         className="Locations-search"
                         type="search"
                         value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                        }}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search"
                     />
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
@@ -142,7 +143,6 @@ function ListPage({
                         <button
                             onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
                             onTouchEnd={(e) => {
-                                e.stopPropagation();
                                 e.preventDefault();
                                 updateTheme(theme === 'miku' ? 'none' : 'miku');
                             }}
@@ -153,9 +153,7 @@ function ListPage({
                         </button>
                     )}
                 </header>
-                {/* suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
-		 				we can't simply just reset the animation startTime in each card on first render,
-						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
+
                 <EateryCardGrid
                     key={`${searchQuery}-${locationFilterQuery}`}
                     {...{
@@ -167,6 +165,7 @@ function ListPage({
                     }}
                 />
             </div>
+
             <footer className="footer">
                 {theme === 'miku' ? (
                     <FooterText>
@@ -176,35 +175,22 @@ function ListPage({
                     </FooterText>
                 ) : (
                     <>
-                        <FooterText>
-                            All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
-                        </FooterText>
+                        <FooterText>All times are displayed in Pittsburgh local time</FooterText>
                         <FooterText>
                             If you encounter any problems, please contact{' '}
-							<a
-								href="mailto:jaisal.patel45@gmail.com"
-								style={{ color: 'white' }}
-							>
-								Jaisal
-							</a>
-							{', '}
-							<a
-								href="mailto:ericxu@andrew.cmu.edu"
-								style={{ color: 'white' }}
-							>
-								Eric
-							</a>
-							{', '}
-							<a
-								href="mailto:laki@andrew.cmu.edu"
-								style={{ color: 'white' }}
-							>
-								Laasya
-							</a>
-							&nbsp;or {' '}
-                            <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
-                                our team
-                            </a>
+                            {emails.length > 0 ? (
+                                emails.map((person, idx) => (
+                                    <span key={person.email}>
+                                        <a href={`mailto:${person.email}`} style={{ color: 'white' }}>
+                                            {person.name}
+                                        </a>
+                                        {idx < emails.length - 2 ? ', ' : ''}
+                                        {idx === emails.length - 2 ? ' or ' : ''}
+                                    </span>
+                                ))
+                            ) : (
+                                <span>our team</span>
+                            )}
                             .
                         </FooterText>
                         <FooterText>
@@ -229,8 +215,8 @@ function ListPage({
                             Made with ❤️ by{' '}
                             <a href="https://scottylabs.org" style={{ color: 'white' }}>
                                 ScottyLabs
-                            </a>
-                            &nbsp;(Not the official&nbsp;
+                            </a>{' '}
+                            (Not the official{' '}
                             <a
                                 href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
                                 target="_blank"

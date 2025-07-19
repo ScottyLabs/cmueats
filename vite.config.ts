@@ -115,5 +115,10 @@ export default defineConfig(({ command, mode }) => {
         typescript: true,
       }),
     ],
+    server: {
+      proxy: {
+        '/api': 'http://localhost:3000', 
+      },
+    },
   };
 });

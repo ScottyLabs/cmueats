@@ -52,3 +52,21 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 
 ![image](https://github.com/user-attachments/assets/6292992f-c599-4203-ae0c-9983599d6bde)
 
+## Local Development
+
+1. Copy `.env.example` to `.env` and fill in your local `DATABASE_URL`.
+2. Start the backend and frontend:
+   ```
+   bun run dev
+   ```
+   This runs both the backend and Vite dev server.
+
+## Production/Deployment
+
+- Set `DATABASE_URL` in your Railway project’s environment variables.
+- Set `VITE_API_BASE` in your frontend deployment (if needed).
+- On Railway, set the start command to:
+  ```
+  bun database/server.ts
+  ```
+
