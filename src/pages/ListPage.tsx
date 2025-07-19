@@ -57,13 +57,9 @@ function ListPage({
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
-    const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>((_, newState) => {
-        return newState;
-    }, '');
+    const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>((_, newState) => newState, '');
     const [locationFilterQuery, setLocationFilterQuery] = useReducer<(_: string, x: string) => string>(
-        (_, newState) => {
-            return newState;
-        },
+        (_, newState) => newState,
         '',
     );
     const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
