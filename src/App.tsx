@@ -25,7 +25,7 @@ function App() {
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
     useEffect(() => {
-        queryLocations(env.VITE_API_URL).then((parsedLocations) => {
+        queryLocations(`${env.VITE_API_URL}/locations`).then((parsedLocations) => {
             setLocations(parsedLocations);
             setExtraLocationData(getExtraLocationData(parsedLocations));
             // set extended data in same render to keep the two things in sync
