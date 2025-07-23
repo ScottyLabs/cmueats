@@ -209,7 +209,7 @@ function ListPage({
                                             {person.name}
                                         </a>
                                         {idx < emails.length - 2 ? ', ' : ''}
-                                        {/* eslint-disable-next-line no-nested-ternary*/}
+                                        {/* eslint-disable-next-line no-nested-ternary */}
                                         {idx === emails.length - 2 ? (emails.length > 2 ? ', or ' : ' or ') : ''}
                                     </span>
                                 ))
