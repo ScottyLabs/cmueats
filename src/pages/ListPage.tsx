@@ -57,17 +57,25 @@ function ListPage({
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
-    const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>(
-        (_, newState) => newState,
-        '',
-    );
-    const [locationFilterQuery, setLocationFilterQuery] = useReducer<(_: string, x: string) => string>(
-        (_, newState) => newState,
-        '',
-    );
-    const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
 
     const shouldAnimateCards = useRef(true);
+
+    // permanently cut out animation when user filters cards,
+    // so we don't end up with some cards (but not others)
+    // re-animating in when filter gets cleared
+    const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, '');
+
+    const [locationFilterQuery, setLocationFilterQuery] = useReducer<(_: string, x: string) => string>(
+        (_, newState) => {
+            shouldAnimateCards.current = false;
+            return newState;
+        },
+        ''
+    );
+    const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
     const { mobileGreeting, desktopGreeting } = useMemo(
@@ -116,6 +124,11 @@ function ListPage({
 
     return (
         <div className="ListPage">
+            {/*  showAlert &&
+      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
+        🚧 [Issue Description]
+        Please remain patient while we work on a fix. Thank you. 🚧
+      </StyledAlert>  */}
             {showOfflineAlert && (
                 <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
                     🚫🌐 You appear to be offline. Some features may not work. 🌐🚫
