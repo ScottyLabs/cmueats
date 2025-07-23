@@ -97,7 +97,7 @@ function ListPage({
                 const json = await res.json();
                 setEmails(json);
             } catch (err) {
-                console.error('❌ Failed to fetch emails:', err);
+                console.error('Failed to fetch emails:', err);
             }
         }
         fetchEmails();
@@ -111,14 +111,18 @@ function ListPage({
         }
     }, []);
 
-    // Track offline/online
+    // Monitor for the user being online
     useEffect(() => {
-        const updateStatus = () => setShowOfflineAlert(!navigator.onLine);
-        window.addEventListener('online', updateStatus);
-        window.addEventListener('offline', updateStatus);
+        const handleOnlineStatus = () => {
+            setShowOfflineAlert(!navigator.onLine);
+        };
+
+        window.addEventListener('online', handleOnlineStatus);
+        window.addEventListener('offline', handleOnlineStatus);
+
         return () => {
-            window.removeEventListener('online', updateStatus);
-            window.removeEventListener('offline', updateStatus);
+            window.removeEventListener('online', handleOnlineStatus);
+            window.removeEventListener('offline', handleOnlineStatus);
         };
     }, []);
 
@@ -131,7 +135,8 @@ function ListPage({
       </StyledAlert>  */}
             {showOfflineAlert && (
                 <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
-                    🚫🌐 You appear to be offline. Some features may not work. 🌐🚫
+                    🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
+                    you are offline. We apologize for any inconvenience. 🌐🚫
                 </StyledAlert>
             )}
 
@@ -209,7 +214,7 @@ function ListPage({
                                     </span>
                                 ))
                             ) : (
-                                <span>our team</span>
+                                <span><a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>ScottyLabs</a></span>
                             )}
                             .
                         </FooterText>
