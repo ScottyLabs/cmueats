@@ -65,7 +65,7 @@ function MapPage({
             {extendedLocationData && (
                 <>
                     <Map
-                        token={env.VITE_AUTO_GENERATED_VITE_MAPKITJS_TOKEN}
+                        token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
                         colorScheme={ColorScheme.Dark}
                         initialRegion={initialRegion}
                         excludedPOICategories={[PointOfInterestCategory.Restaurant]}

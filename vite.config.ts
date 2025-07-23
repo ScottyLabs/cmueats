@@ -84,9 +84,9 @@ export default defineConfig(({ command, mode }) => {
         console.info({
             title: 'MapKit JS token generated successfully',
             summary: `Origin: ${env.MAPKIT_JS_ORIGIN}, expires in ${env.MAPKIT_JS_TTL} seconds.`,
-            text: `process.env.VITE_AUTO_GENERATED_VITE_MAPKITJS_TOKEN = '${token}';`,
+            text: `process.env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN = '${token}';`,
         });
-        process.env.VITE_AUTO_GENERATED_VITE_MAPKITJS_TOKEN = token;
+        process.env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN = token;
     } catch (error) {
         console.error(error);
         process.exit(1);
