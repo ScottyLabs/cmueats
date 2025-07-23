@@ -209,8 +209,7 @@ function ListPage({
                                             {person.name}
                                         </a>
                                         {idx < emails.length - 2 ? ', ' : ''}
-                                        {emails.length > 2 && idx === emails.length - 2 ? ', or ' : ''}
-                                        {emails.length === 2 && idx === emails.length - 2 ? ' or ' : ''}
+                                        {idx === emails.length - 2 ? (emails.length > 2 ? ', or ' : ' or ') : ''}
                                     </span>
                                 ))
                             ) : (

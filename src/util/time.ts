@@ -111,18 +111,6 @@ export function getTimeSlotAsString(time: ITimeSlot) {
 
 /**
  * Converts an ITimeSlotTime to a human-readable string (12-hour time)
- * @param time
- * @returns HH:MM (AM/PM)
- */
-export function getTimeSlotString(time: ITimeSlot) {
-    assert(isTimeSlot(time));
-    const start = getTimeString(time.start);
-    const end = getTimeString(time.end);
-    return `${start} - ${end}`;
-}
-
-/**
- * Converts an ITimeSlotTime to a human-readable string (12-hour time)
  * @param times
  * @returns HH:MM (AM/PM) Array
  */
