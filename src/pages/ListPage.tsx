@@ -73,7 +73,7 @@ function ListPage({
             shouldAnimateCards.current = false;
             return newState;
         },
-        ''
+        '',
     );
     const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
@@ -213,7 +213,11 @@ function ListPage({
                                     </span>
                                 ))
                             ) : (
-                                <span><a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>ScottyLabs</a></span>
+                                <span>
+                                    <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+                                        ScottyLabs
+                                    </a>
+                                </span>
                             )}
                             .
                         </FooterText>
@@ -236,7 +240,7 @@ function ListPage({
                             .
                         </FooterText>
                         <FooterText>
-                            Made with ❤️ by the {' '}
+                            Made with ❤️ by the{' '}
                             <a href="https://scottylabs.org" style={{ color: 'white' }}>
                                 ScottyLabs
                             </a>{' '}
