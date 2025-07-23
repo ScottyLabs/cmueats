@@ -13,7 +13,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 
-const API_BASE = import.meta.env.DEV ? 'http://localhost:5010' : import.meta.env.VITE_API_BASE || '';
+const API_BASE = 'https://dining.apis.scottylabs.org';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -191,7 +191,8 @@ function ListPage({
                                             {person.name}
                                         </a>
                                         {idx < emails.length - 2 ? ', ' : ''}
-                                        {idx === emails.length - 2 ? ' or ' : ''}
+                                        {emails.length > 2 && idx === emails.length - 2 ? ', or ' : ''}
+                                        {emails.length === 2 && idx === emails.length - 2 ? ' or ' : ''}
                                     </span>
                                 ))
                             ) : (
@@ -218,20 +219,20 @@ function ListPage({
                             .
                         </FooterText>
                         <FooterText>
-                            Made with ❤️ by{' '}
+                            Made with ❤️ by the {' '}
                             <a href="https://scottylabs.org" style={{ color: 'white' }}>
                                 ScottyLabs
                             </a>{' '}
-                            (Not the official{' '}
+                            Tech Committee (not the official{' '}
                             <a
                                 href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
                                 target="_blank"
                                 rel="noreferrer"
                                 style={{ color: 'white' }}
                             >
-                                Dining Website
+                                dining website
                             </a>
-                            .)
+                            ).
                         </FooterText>
                     </>
                 )}
