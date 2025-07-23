@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react-swc';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import jwt from 'jsonwebtoken';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 const preInitEnvSchema = z.object({
     MAPKIT_JS_TEAM_ID: z.string(),
     MAPKIT_JS_KEY_ID: z.string(),
