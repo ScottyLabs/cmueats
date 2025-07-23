@@ -1,4 +1,4 @@
-/** Pure utility functions that process location (restaurant) timeslots
+/** Pure utility functions that process location (restaurant, also called concept) timeslots
  */
 
 import { DateTime } from 'luxon';
@@ -108,12 +108,6 @@ export function getTimeSlotAsString(time: ITimeSlot) {
     const end = getTimeString(time.end);
     return `${start} - ${end}`;
 }
-
-/**
- * Converts an ITimeSlotTime to a human-readable string (12-hour time)
- * @param times
- * @returns HH:MM (AM/PM) Array
- */
 
 /**
  *
