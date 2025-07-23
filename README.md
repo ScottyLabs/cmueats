@@ -1,6 +1,7 @@
 # CMUEats
 
 Visit the site [here](http://cmueats.com/).
+Visit the staging website [here](http://staging.cmueats.com/).
 
 Keep track of the statuses of the various dining locations across Carnegie Mellon University. Quickly access the menus and specials at each location without having to go through the arduous process of visiting the CMU Dining Website. The following are some instructions and (hopefully useful) hints on the CMUEats development process. Don't be afraid to ask questions if you are stuck!
 
@@ -12,7 +13,7 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 3. To start developing, you'll need to download [Bun.js](https://bun.sh/docs/installation), [Git](https://git-scm.com/download/win), and an IDE (I recommend [VSCode](https://code.visualstudio.com)). You should also download [Github Desktop](https://desktop.github.com) to make development easier at the beginning. I recommend checking out [Learn Git Branching](https://learngitbranching.js.org) later.
 
-4. If you followed my IDE recommendation, also download the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esben.prettier-vscode).
+4. If you followed my IDE recommendation, also download the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 
 5. Any of the following steps where you type something (i.e. git clone…, bun install, etc.) should be done in your IDE's terminal.
 
@@ -73,7 +74,6 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 ## Production/Deployment
 
 - Set `DATABASE_URL` in your dining-api Railway project's environment variables.
-- Set `VITE_API_BASE` in your frontend deployment to point to the dining-api URL.
 
 - Deploy dining-api to Railway with the start command:
   ```
