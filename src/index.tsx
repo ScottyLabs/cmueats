@@ -6,8 +6,9 @@ import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import App from './App';
 import { ThemeProvider } from './ThemeProvider';
+import env from './env';
 
-posthog.init(process.env.REACT_APP_PUBLIC_POSTHOG_KEY || '', {
+posthog.init(env.VITE_POSTHOG_KEY || '', {
     person_profiles: 'identified_only',
 });
 
