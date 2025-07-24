@@ -45,7 +45,7 @@ Note that GitHub will automatically run checks (workflows) on your PR. This incl
 
 ![Example checks](/public/checks_example.png)
 
-17. To run unit tests locally, type `bun test`.
+17. To run unit tests locally, type `bun run test`.
 
 Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
 
@@ -58,25 +58,26 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 ## Local Development
 
 1. Start the dining-api backend:
-   ```
-   cd ../dining-api
-   bun install
-   bun run dev
-   ```
-   This runs the dining-api server on port 5010.
+
+    ```
+    cd ../dining-api
+    bun install
+    bun run dev
+    ```
+
+    This runs the dining-api server on port 5010.
 
 2. Start the frontend:
-   ```
-   bun run dev
-   ```
-   This runs the Vite dev server on port 5173.
+    ```
+    bun run dev
+    ```
+    This runs the Vite dev server on port 5173.
 
 ## Production/Deployment
 
 - Set `DATABASE_URL` in your dining-api Railway project's environment variables.
 
 - Deploy dining-api to Railway with the start command:
-  ```
-  bun run start
-  ```
-
+    ```
+    bun run start
+    ```
