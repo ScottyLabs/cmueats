@@ -25,6 +25,7 @@ import {
 import toTitleCase from './string';
 import assert from './assert';
 import { IAPIResponseJoiSchema, ILocationAPIJoiSchema } from '../types/joiLocationTypes';
+import notifySlack from './slack';
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 /**
@@ -104,6 +105,7 @@ export function getLocationStatus(timeSlots: ITimeSlots, now: DateTime): IReadOn
         locationState,
     };
 }
+
 export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLocation_FromAPI_PostProcessed[]> {
     try {
         // Query locations
@@ -120,9 +122,8 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
                 console.error('Validation error!', error.details);
                 // eslint-disable-next-line no-underscore-dangle
                 console.error('original obj', error._original);
-                // eslint-disable-next-line no-alert
-                alert(
-                    `${location.name} has invalid data! Ignoring location and continuing validation. Please notify the CMUEats team.`,
+                notifySlack(
+                    `<!channel> ${location.name} has invalid data! Ignoring location and continuing validation. ${error}`,
                 );
             }
             return error === undefined;
@@ -139,11 +140,11 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
 }
 
 export function getExtendedLocationData(
-    locations?: IReadOnlyLocation_FromAPI_PostProcessed[],
+    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined,
+    now: DateTime,
 ): IReadOnlyLocation_ExtraData_Map | undefined {
     // Remove .setZone('America/New_York') and change time in computer settings when testing
     // Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
-    const now = DateTime.now().setZone('America/New_York');
     return locations?.reduce(
         (acc, location) => ({
             ...acc,
