@@ -13,11 +13,8 @@ import {
 import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
 import { getPinnedIds, setPinnedIds } from './util/storage';
+import env from './env';
 
-// const CMU_EATS_API_URL =
-//     'https://dining-api-production.up.railway.app/locations';
-// emergency fix
-const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
@@ -28,7 +25,7 @@ function App() {
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
     useEffect(() => {
-        queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
+        queryLocations(`${env.VITE_API_URL}/locations`).then((parsedLocations) => {
             setLocations(parsedLocations);
             setExtraLocationData(getExtraLocationData(parsedLocations));
             // set extended data in same render to keep the two things in sync

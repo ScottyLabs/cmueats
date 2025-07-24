@@ -5,8 +5,7 @@ import EateryCard from '../components/EateryCard';
 import './MapPage.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
-
-const token = process.env.VITE_MAPKITJS_TOKEN ?? '';
+import env from '../env';
 
 function abbreviate(longName: string) {
     const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
@@ -66,7 +65,7 @@ function MapPage({
             {extendedLocationData && (
                 <>
                     <Map
-                        token={token}
+                        token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
                         colorScheme={ColorScheme.Dark}
                         initialRegion={initialRegion}
                         excludedPOICategories={[PointOfInterestCategory.Restaurant]}
