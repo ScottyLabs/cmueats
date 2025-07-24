@@ -11,7 +11,6 @@ const preInitEnvSchema = z.object({
     MAPKIT_JS_KEY_ID: z.string(),
     MAPKIT_JS_AUTH_KEY: z.string(),
     MAPKIT_JS_TTL: z.coerce.number().default(31_536_000), // 1 year
-    MAPKIT_JS_ORIGIN: z.string().optional(),
 });
 const manifestForPlugin: Partial<VitePWAOptions> = {
     registerType: 'prompt',
@@ -69,7 +68,7 @@ export default defineConfig(({ command, mode }) => {
         iat,
         exp: iat + env.MAPKIT_JS_TTL,
         iss: env.MAPKIT_JS_TEAM_ID,
-        origin: env.MAPKIT_JS_ORIGIN,
+        origin: process.env.VERCEL_URL,
     };
 
     const header = {
@@ -83,7 +82,7 @@ export default defineConfig(({ command, mode }) => {
         // eslint-disable-next-line no-console
         console.info({
             title: 'MapKit JS token generated successfully',
-            summary: `Origin: ${env.MAPKIT_JS_ORIGIN}, expires in ${env.MAPKIT_JS_TTL} seconds.`,
+            summary: `Origin: ${process.env.VERCEL_URL}, expires in ${env.MAPKIT_JS_TTL} seconds.`,
             text: `process.env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN = '${token}';`,
         });
         process.env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN = token;
