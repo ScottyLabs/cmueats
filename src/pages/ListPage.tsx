@@ -13,6 +13,8 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 
+const API_BASE = 'https://dining.apis.scottylabs.org';
+
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
     padding: 0,
@@ -55,10 +57,7 @@ function ListPage({
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
-    const { mobileGreeting, desktopGreeting } = useMemo(
-        () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
-        [],
-    );
+
     const shouldAnimateCards = useRef(true);
 
     // permanently cut out animation when user filters cards,
@@ -76,16 +75,35 @@ function ListPage({
         },
         '',
     );
-
-    // const [showAlert, setShowAlert] = useState(true);
+    const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
+
+    const { mobileGreeting, desktopGreeting } = useMemo(
+        () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
+        [],
+    );
+
     const filteredLocations = useFilteredLocations({
         locations,
         searchQuery,
         locationFilterQuery,
     });
 
-    // Load the search query from the URL, if any
+    // Fetch emails on mount
+    useEffect(() => {
+        async function fetchEmails() {
+            try {
+                const res = await fetch(`${API_BASE}/api/emails`);
+                const json = await res.json();
+                setEmails(json);
+            } catch (err) {
+                console.error('Failed to fetch emails:', err);
+            }
+        }
+        fetchEmails();
+    }, []);
+
+    // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');
         if (urlQuery) {
@@ -115,13 +133,13 @@ function ListPage({
         🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
       </StyledAlert>  */}
-
             {showOfflineAlert && (
                 <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
                     🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
                     you are offline. We apologize for any inconvenience. 🌐🚫
                 </StyledAlert>
             )}
+
             <div className="ListPage__container">
                 <header className="Locations-header">
                     <div className="Locations-header__greeting-container">
@@ -136,9 +154,7 @@ function ListPage({
                         className="Locations-search"
                         type="search"
                         value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                        }}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search"
                     />
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
@@ -146,7 +162,6 @@ function ListPage({
                         <button
                             onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
                             onTouchEnd={(e) => {
-                                e.stopPropagation();
                                 e.preventDefault();
                                 updateTheme(theme === 'miku' ? 'none' : 'miku');
                             }}
@@ -157,9 +172,7 @@ function ListPage({
                         </button>
                     )}
                 </header>
-                {/* suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
-		 				we can't simply just reset the animation startTime in each card on first render,
-						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
+
                 <EateryCardGrid
                     key={`${searchQuery}-${locationFilterQuery}`}
                     {...{
@@ -176,6 +189,7 @@ function ListPage({
                     }}
                 />
             </div>
+
             <footer className="footer">
                 {theme === 'miku' ? (
                     <FooterText>
@@ -185,26 +199,27 @@ function ListPage({
                     </FooterText>
                 ) : (
                     <>
-                        <FooterText>
-                            All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
-                        </FooterText>
+                        <FooterText>All times are displayed in Pittsburgh local time</FooterText>
                         <FooterText>
                             If you encounter any problems, please contact{' '}
-                            <a href="mailto:jaisal.patel45@gmail.com" style={{ color: 'white' }}>
-                                Jaisal
-                            </a>
-                            {', '}
-                            <a href="mailto:ericxu@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Eric
-                            </a>
-                            {', '}
-                            <a href="mailto:laki@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Laasya
-                            </a>
-                            &nbsp;or{' '}
-                            <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
-                                our team
-                            </a>
+                            {emails.length > 0 ? (
+                                emails.map((person, idx) => (
+                                    <span key={person.email}>
+                                        <a href={`mailto:${person.email}`} style={{ color: 'white' }}>
+                                            {person.name}
+                                        </a>
+                                        {idx < emails.length - 2 ? ', ' : ''}
+                                        {/* eslint-disable-next-line no-nested-ternary */}
+                                        {idx === emails.length - 2 ? (emails.length > 2 ? ', or ' : ' or ') : ''}
+                                    </span>
+                                ))
+                            ) : (
+                                <span>
+                                    <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+                                        ScottyLabs
+                                    </a>
+                                </span>
+                            )}
                             .
                         </FooterText>
                         <FooterText>
@@ -226,20 +241,20 @@ function ListPage({
                             .
                         </FooterText>
                         <FooterText>
-                            Made with ❤️ by{' '}
+                            Made with ❤️ by the{' '}
                             <a href="https://scottylabs.org" style={{ color: 'white' }}>
                                 ScottyLabs
-                            </a>
-                            &nbsp;(Not the official&nbsp;
+                            </a>{' '}
+                            Tech Committee (not the official{' '}
                             <a
                                 href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
                                 target="_blank"
                                 rel="noreferrer"
                                 style={{ color: 'white' }}
                             >
-                                Dining Website
+                                dining website
                             </a>
-                            .)
+                            ).
                         </FooterText>
                     </>
                 )}

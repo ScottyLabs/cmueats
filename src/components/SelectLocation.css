@@ -1,42 +1,41 @@
 .select {
-	appearance: none;
-	cursor: pointer;
-	display: block;
-	min-width: 500px;
-	width: fit-content;
+    appearance: none;
+    cursor: pointer;
+    display: block;
+    min-width: 500px;
+    width: fit-content;
 
-	padding: 0.8rem 0.9rem;
-	border-radius: 1rem;
-	background: var(--input-bg) url(../assets/select.svg) no-repeat
-		calc(100% - 10px) 50%;
-	outline: none;
-	border: 1px solid transparent;
-	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
-	transition: all 0.2s;
-	font-family: inherit;
-	font-size: 1rem;
-	color: var(--input-text);
-	font-weight: 500;
-	animation: slide-in 1.2s forwards;
-	animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
-	/* we add a delay so it doesn't look jittery on page load */
-	animation-delay: 0.1s;
-	opacity: 0;
+    padding: 0.8rem 0.9rem;
+    border-radius: 1rem;
+    background: var(--input-bg) url(../assets/select.svg) no-repeat calc(100% - 10px) 50%;
+    outline: none;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--input-text);
+    font-weight: 500;
+    animation: slide-in 1.2s forwards;
+    animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
+    /* we add a delay so it doesn't look jittery on page load */
+    animation-delay: 0.1s;
+    opacity: 0;
 }
 
 .select:hover {
-	transition: all 0.5s;
-	box-shadow: 0 0 40px var(--hover-accent-color);
-	border-color: var(--hover-accent-color);
-	outline: none;
+    transition: all 0.5s;
+    box-shadow: 0 0 40px var(--hover-accent-color);
+    border-color: var(--hover-accent-color);
+    outline: none;
 }
 
 @media screen and (max-width: 900px) {
-	/* don't animate in the select component on mobile */
-	.select {
-		opacity: 1;
-		animation: none;
-		width: 100%;
-		min-width: 0;
-	}
+    /* don't animate in the select component on mobile */
+    .select {
+        opacity: 1;
+        animation: none;
+        width: 100%;
+        min-width: 0;
+    }
 }
