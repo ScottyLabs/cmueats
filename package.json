@@ -19,6 +19,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.8",
     "css-loader": "^6.10.0",
+
     "fuse.js": "^7.0.0",
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
@@ -26,6 +27,7 @@
     "mapkit-react": "^1.14.1",
     "million": "latest",
     "netlify-plugin-mapkitjs-token": "^1.2.0",
+
     "posthog-js": "^1.181.0",
     "prettier-eslint": "^16.3.0",
     "prettier-eslint-cli": "^8.0.1",
@@ -39,6 +41,7 @@
   },
   "scripts": {
     "start": "vite --host",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "test": "bun test",
     "eject": "vite eject",

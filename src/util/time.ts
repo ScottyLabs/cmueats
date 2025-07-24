@@ -1,4 +1,4 @@
-/** Pure utility functions that process location (restaurant) timeslots
+/** Pure utility functions that process location (restaurant, also called concept) timeslots
  */
 
 import { DateTime } from 'luxon';
