@@ -13,4 +13,4 @@ jobs:
             bun-version: latest
       - run: bun install 
       - name: Run bun test
-        run: bun test
+        run: bun run test
