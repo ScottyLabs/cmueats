@@ -2,7 +2,7 @@
     --navbar-height: 70px;
     --navbar-height: calc(56px + max(env(safe-area-inset-bottom), 14px));
 
-    --main-bg: hsl(214, 7%, 19%);
+    --main-bg: hsl(96, 47%, 42%);
     --main-bg-accent: #23272a;
     --text-primary: white;
     --text-greeting: white;
@@ -30,9 +30,8 @@
 
     --hover-accent-color: rgba(238, 111, 82, 0.7);
 
-    --text-primary-font:
-        'Zilla Slab', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    --text-primary-font: 'Zilla Slab', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     --text-secondary-font: 'Inter';
     --button-bg: hsl(210, 6%, 12%);
     --button-bg--hover: hsl(210, 6%, 9%);
@@ -90,9 +89,8 @@ body.miku {
     --nav-bg: #1e1e1e;
     --hover-accent-color: hsl(170, 100%, 67%, 0.3);
 
-    --text-primary-font:
-        'Zilla Slab', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    --text-primary-font: 'Zilla Slab', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     --text-secondary-font: 'Inter';
     --button-bg: hsla(190, 99%, 50%, 0.626);
     --button-bg--hover: hsla(190, 99%, 50%, 0.826);
