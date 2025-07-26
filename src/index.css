@@ -2,7 +2,7 @@
     --navbar-height: 70px;
     --navbar-height: calc(56px + max(env(safe-area-inset-bottom), 14px));
 
-    --main-bg: hsl(196, 47%, 42%);
+    --main-bg: hsl(96, 47%, 42%);
     --main-bg-accent: #23272a;
     --text-primary: white;
     --text-greeting: white;
