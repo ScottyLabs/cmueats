@@ -110,6 +110,7 @@ export default defineConfig(({ command, mode }) => {
                     cleanupOutdatedCaches: true,
                     skipWaiting: true,
                 },
+                selfDestroying: true, // remove previously-registered service worker (if it exists)
             }),
             checker({
                 typescript: true,
