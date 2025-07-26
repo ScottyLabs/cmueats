@@ -102,17 +102,17 @@ export default defineConfig(({ command, mode }) => {
             react(),
             viteTsconfigPaths(),
             svgrPlugin(),
-            VitePWA({
-                // WARNING! Removing this library means that all clients with the VitePWA service worker installed *will never have it uninstalled*. (see https://github.com/ScottyLabs/cmueats/pull/642 for more details)
-                manifest: manifestForPlugin,
-                registerType: 'autoUpdate',
-                // Enables autoupdate (uses new version after user quits and reloads app)
-                workbox: {
-                    cleanupOutdatedCaches: true,
-                    skipWaiting: true,
-                },
-                // selfDestroying: true, // remove previously-registered service worker (if it exists)
-            }),
+            // VitePWA({
+            //     // WARNING! Removing this library means that all clients with the VitePWA service worker installed *will never have it uninstalled*. (see https://github.com/ScottyLabs/cmueats/pull/642 for more details)
+            //     manifest: manifestForPlugin,
+            //     registerType: 'autoUpdate',
+            //     // Enables autoupdate (uses new version after user quits and reloads app)
+            //     workbox: {
+            //         cleanupOutdatedCaches: true,
+            //         skipWaiting: true,
+            //     },
+            //     // selfDestroying: true, // remove previously-registered service worker (if it exists)
+            // }),
             checker({
                 typescript: true,
             }),
