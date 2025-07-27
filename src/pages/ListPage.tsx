@@ -109,148 +109,164 @@ function ListPage({
     }, []);
 
     return (
-        <div className="ListPage">
-            {/*  showAlert &&
+      <div className="ListPage">
+        {/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
       </StyledAlert>  */}
 
-            {showOfflineAlert && (
-                <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
-                    🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
-                    you are offline. We apologize for any inconvenience. 🌐🚫
-                </StyledAlert>
+        {showOfflineAlert && (
+          <StyledAlert
+            severity="info"
+            className="announcement"
+            onClose={() => setShowOfflineAlert(false)}
+          >
+            🚫🌐 We are temporarily unable to provide the latest available
+            dining information or the map while you are offline. We apologize
+            for any inconvenience. 🌐🚫
+          </StyledAlert>
+        )}
+        <div className="ListPage__container">
+          <header className="Locations-header">
+            <div className="Locations-header__greeting-container">
+              <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
+                {desktopGreeting}
+              </h3>
+              <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
+                {mobileGreeting}
+              </h3>
+            </div>
+            <input
+              className="Locations-search"
+              type="search"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+              placeholder="Search"
+            />
+            <SelectLocation {...{ setLocationFilterQuery, locations }} />
+            {IS_MIKU_DAY && (
+              <button
+                onClick={() => updateTheme(theme === "miku" ? "none" : "miku")}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  updateTheme(theme === "miku" ? "none" : "miku");
+                }}
+                type="button"
+                className="Locations-header__miku-toggle"
+              >
+                <img src={mikuKeychainUrl} alt="click me!" />
+              </button>
             )}
-            <div className="ListPage__container">
-                <header className="Locations-header">
-                    <div className="Locations-header__greeting-container">
-                        <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
-                            {desktopGreeting}
-                        </h3>
-                        <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
-                            {mobileGreeting}
-                        </h3>
-                    </div>
-                    <input
-                        className="Locations-search"
-                        type="search"
-                        value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                        }}
-                        placeholder="Search"
-                    />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
-                    {IS_MIKU_DAY && (
-                        <button
-                            onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
-                            onTouchEnd={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                updateTheme(theme === 'miku' ? 'none' : 'miku');
-                            }}
-                            type="button"
-                            className="Locations-header__miku-toggle"
-                        >
-                            <img src={mikuKeychainUrl} alt="click me!" />
-                        </button>
-                    )}
-                </header>
-                {/* suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
+          </header>
+          {/* suboptimal rendering (with extra `key` prop) so that the card blinking animations stay in sync.
 		 				we can't simply just reset the animation startTime in each card on first render,
 						because sometimes the cards will get re-ordered, which doesn't trigger a re-render but does reset the CSS animation. Annoying, I know. */}
-                <EateryCardGrid
-                    key={`${searchQuery}-${locationFilterQuery}`}
-                    {...{
-                        locations: filteredLocations,
-                        shouldAnimateCards: shouldAnimateCards.current,
-                        apiError: locations !== undefined && locations.length === 0,
-                        extraLocationData,
-                        setSearchQuery,
-                        pinnedIds,
-                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
-                            shouldAnimateCards.current = false;
-                            updatePinnedIds(newPinnedIds);
-                        },
-                    }}
-                />
-            </div>
-            <footer className="footer">
-                {theme === 'miku' ? (
-                    <FooterText>
-                        Blue hair, blue tie, hiding in your wifi
-                        <br />
-                        All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
-                    </FooterText>
-                ) : (
-                    <>
-                        <FooterText>
-                            All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
-                        </FooterText>
-                        <FooterText>
-                            If you encounter any problems, please contact{' '}
-                            <a href="mailto:jaisal.patel45@gmail.com" style={{ color: 'white' }}>
-                                Jaisal
-                            </a>
-                            {', '}
-                            <a href="mailto:ericxu@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Eric
-                            </a>
-                            {', '}
-                            <a href="mailto:laki@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Laasya
-                            </a>
-                            &nbsp;or{' '}
-                            <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
-                                our team
-                            </a>
-                            .
-                        </FooterText>
-                        <FooterText>
-                            Alternatively, fill out our{' '}
-                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
-                                feedback form
-                            </a>
-                            .
-                        </FooterText>
-                        <FooterText>
-                            To provide feedback on your dining experience, please contact{' '}
-                            <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Dining Services
-                            </a>{' '}
-                            or take the{' '}
-                            <a href="https://forms.gle/fTnWrS7jkTFRB14DA" style={{ color: 'white' }}>
-                                dining survey
-                            </a>
-                            .
-                        </FooterText>
-                        <FooterText>
-                            Made with ❤️ by{' '}
-                            <a href="https://scottylabs.org" style={{ color: 'white' }}>
-                                ScottyLabs
-                            </a>
-                            &nbsp;(Not the official&nbsp;
-                            <a
-                                href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ color: 'white' }}
-                            >
-                                Dining Website
-                            </a>
-                            .)
-                        </FooterText>
-                    </>
-                )}
-                <LogoText variant="h4">
-                    cmu
-                    <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
-                </LogoText>
-                {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
-            </footer>
-            <link rel="prefetch" href={mikuBgUrl} />
+          <EateryCardGrid
+            key={`${searchQuery}-${locationFilterQuery}`}
+            {...{
+              locations: filteredLocations,
+              shouldAnimateCards: shouldAnimateCards.current,
+              apiError: locations !== undefined && locations.length === 0,
+              extraLocationData,
+              setSearchQuery,
+              pinnedIds,
+              updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                shouldAnimateCards.current = false;
+                updatePinnedIds(newPinnedIds);
+              },
+            }}
+          />
         </div>
+        <footer className="footer">
+          {theme === "miku" ? (
+            <FooterText>
+              Blue hair, blue tie, hiding in your wifi
+              <br />
+              All times are displayed in Pittsburgh local time (
+              {getPittsburghTime()}).
+            </FooterText>
+          ) : (
+            <>
+              <FooterText>
+                All times are displayed in Pittsburgh local time (
+                {getPittsburghTime()}).
+              </FooterText>
+              <FooterText>
+                If you encounter any problems, please contact{" "}
+                <a
+                  href="mailto:jaisal.patel45@gmail.com"
+                  style={{ color: "white" }}
+                >
+                  Dwight D. Eisenhower
+                </a>
+                {" and "}
+                <a
+                  href="mailto:jaisal.patel45@gmail.com"
+                  style={{ color: "white" }}
+                >
+                  John F. Kennedy
+                </a>
+                .
+              </FooterText>
+              <FooterText>
+                Alternatively, fill out our{" "}
+                <a
+                  href="https://forms.gle/7JxgdgDhWMznQJdk9"
+                  style={{ color: "white" }}
+                >
+                  feedback form
+                </a>
+                .
+              </FooterText>
+              <FooterText>
+                To provide feedback on your dining experience, please contact{" "}
+                <a
+                  href="mailto:dining@andrew.cmu.edu"
+                  style={{ color: "white" }}
+                >
+                  Dining Services
+                </a>{" "}
+                or take the{" "}
+                <a
+                  href="https://forms.gle/fTnWrS7jkTFRB14DA"
+                  style={{ color: "white" }}
+                >
+                  dining survey
+                </a>
+                .
+              </FooterText>
+              <FooterText>
+                Made with ❤️ by{" "}
+                <a href="https://scottylabs.org" style={{ color: "white" }}>
+                  ScottyLabs
+                </a>
+                &nbsp;(Not the official&nbsp;
+                <a
+                  href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: "white" }}
+                >
+                  Dining Website
+                </a>
+                .)
+              </FooterText>
+            </>
+          )}
+          <LogoText variant="h4">
+            cmu
+            <span style={{ color: "var(--logo-second-half)" }}>:eats</span>
+          </LogoText>
+          {theme === "miku" && (
+            <img src={footerMikuUrl} alt="miku!" className="footer__miku" />
+          )}
+        </footer>
+        <link rel="prefetch" href={mikuBgUrl} />
+      </div>
     );
 }
 
