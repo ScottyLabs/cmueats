@@ -245,11 +245,14 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
-        if (!statusChangesSoon || dotAnimation === undefined) {
+        if (!statusChangesSoon) {
             dotAnimation?.cancel(); // delete any dot blinking animation (if it exists)
         } else {
-            dotAnimation.startTime = 0;
-            dotAnimation.play();
+            // eslint-disable-next-line no-lonely-if
+            if (dotAnimation !== undefined) {
+                dotAnimation.startTime = 0;
+                dotAnimation.play();
+            }
         }
     }, [statusChangesSoon]);
     return (
