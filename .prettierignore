@@ -4,6 +4,5 @@ dist
 coverage
 
 *.json
-*.config.ts
 *.node.json
 .github

@@ -242,13 +242,19 @@ function EateryCard({
 }
 function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
-    const changesSoon = !location.closedLongTerm && location.changesSoon;
+    const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
-        if (dotAnimation === undefined) return;
-        dotAnimation.startTime = 0;
-        dotAnimation.play();
-    }, [changesSoon]);
+        if (!statusChangesSoon) {
+            dotAnimation?.cancel(); // delete any dot blinking animation (if it exists)
+        } else {
+            // eslint-disable-next-line no-lonely-if
+            if (dotAnimation !== undefined) {
+                dotAnimation.startTime = 0;
+                dotAnimation.play();
+            }
+        }
+    }, [statusChangesSoon]);
     return (
         <StyledCardHeader
             title={
@@ -259,7 +265,7 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
             state={location.locationState}
             avatar={
                 <div
-                    className={`card__header__dot ${changesSoon ? 'card__header__dot--blinking' : ''}`}
+                    className={`card__header__dot ${statusChangesSoon ? 'card__header__dot--blinking' : ''}`}
                     style={{
                         backgroundColor: highlightColors[location.locationState],
                     }}

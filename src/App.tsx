@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import { DateTime } from 'luxon';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
@@ -13,24 +14,20 @@ import {
 import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
 import { getPinnedIds, setPinnedIds } from './util/storage';
+import env from './env';
 
-// const CMU_EATS_API_URL =
-//     'https://dining-api-production.up.railway.app/locations';
-// emergency fix
-const CMU_EATS_API_URL = 'https://dining.apis.scottylabs.org/locations';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
 // for debugging purposes (note that you need an example-response.json file in the /public folder)
 // const CMU_EATS_API_URL = 'http://localhost:5010/locations';
-
 function App() {
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
     useEffect(() => {
-        queryLocations(CMU_EATS_API_URL).then((parsedLocations) => {
+        queryLocations(`${env.VITE_API_URL}/locations`).then((parsedLocations) => {
             setLocations(parsedLocations);
-            setExtraLocationData(getExtraLocationData(parsedLocations));
+            setExtraLocationData(getExtraLocationData(parsedLocations, DateTime.now().setZone('America/New_York')));
             // set extended data in same render to keep the two things in sync
         });
     }, []);
@@ -44,8 +41,10 @@ function App() {
 
     // periodically update extra location data
     useEffect(() => {
-        const intervalId = setInterval(() => setExtraLocationData(getExtraLocationData(locations)), 1000);
-        setExtraLocationData(getExtraLocationData(locations));
+        const intervalId = setInterval(
+            () => setExtraLocationData(getExtraLocationData(locations, DateTime.now().setZone('America/New_York'))),
+            1000,
+        );
         return () => clearInterval(intervalId);
     }, [locations]);
 
