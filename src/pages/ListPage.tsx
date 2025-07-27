@@ -12,8 +12,7 @@ import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
-
-const API_BASE = 'https://dining.apis.scottylabs.org';
+import env from '../env';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -93,7 +92,7 @@ function ListPage({
     useEffect(() => {
         async function fetchEmails() {
             try {
-                const res = await fetch(`${API_BASE}/api/emails`);
+                const res = await fetch(`${env.VITE_API_URL}/api/emails`);
                 const json = await res.json();
                 setEmails(json);
             } catch (err) {
