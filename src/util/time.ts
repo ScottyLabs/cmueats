@@ -30,6 +30,7 @@ export function minutesSinceSundayDateTime(now: DateTime) {
  */
 export function isTimeSlotTime(timeSlotTime: ITimeSlotTime) {
     const { day, hour, minute } = timeSlotTime;
+
     return (
         Number.isInteger(day) &&
         Number.isInteger(minute) &&
@@ -103,7 +104,7 @@ export function getTimeString(time: ITimeSlotTime) {
  * @returns HH:MM (AM/PM)
  */
 export function getTimeSlotAsString(time: ITimeSlot) {
-    assert(isTimeSlot(time));
+    assert(isTimeSlot(time, true));
     const start = getTimeString(time.start);
     const end = getTimeString(time.end);
     return `${start} - ${end}`;

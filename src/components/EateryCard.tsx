@@ -353,7 +353,7 @@ function EateryCardDialog({
                                 <StyledAccordionDetails>
                                     {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(
                                         (day, i) => (
-                                            <div style={{ marginBottom: '10px' }}>
+                                            <div style={{ marginBottom: '10px' }} key={day}>
                                                 <span style={{ color: 'white' }}>{day}</span>: {timeSlots[i]}
                                             </div>
                                         ),
