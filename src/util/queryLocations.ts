@@ -18,7 +18,7 @@ import {
     isTimeSlotTime,
     isValidTimeSlotArray,
     getTimeString,
-    minutesSinceSundayTimeSlotTime,
+    minutesSinceSundayMidnightTimeSlot,
     minutesSinceSundayDateTime,
     getApproximateTimeStringFromMinutes,
 } from './time';
@@ -41,7 +41,7 @@ export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlotTime, now: 
     const weekdayDiff =
         nextTime.day -
         (now.weekday % 7) + // now.weekday returns 1-7 [mon-sun] instead of 0-6 [sun-sat]
-        (minutesSinceSundayTimeSlotTime(nextTime) < minutesSinceSundayDateTime(now) ? 7 : 0); // nextTime wraps around to next week? Add 7 days to nextTime.day
+        (minutesSinceSundayMidnightTimeSlot(nextTime) < minutesSinceSundayDateTime(now) ? 7 : 0); // nextTime wraps around to next week? Add 7 days to nextTime.day
 
     const time = getTimeString(nextTime);
 

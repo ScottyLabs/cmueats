@@ -15,14 +15,18 @@ const WEEK_MINUTES = 7 * 24 * 60;
  * @param minute The number of minutes since the start of the hour (0-59)
  * @returns Raw minutes since Sun 12am
  */
-export function minutesSinceSunday(day: number, hour: number, minute: number) {
+export function minutesSinceSundayMidnight(day: number, hour: number, minute: number) {
     assert(bounded(day, 0, 7) && bounded(hour, 0, 24) && bounded(minute, 0, 60), 'Invalid minutesSinceSunday input!');
     return day * 60 * 24 + hour * 60 + minute;
 }
 export function minutesSinceSundayDateTime(now: DateTime) {
-    return minutesSinceSunday(now.weekday % 7, now.hour, now.minute);
+    return minutesSinceSundayMidnight(now.weekday % 7, now.hour, now.minute);
 }
 
+export function minutesSinceSundayMidnightTimeSlot(timeSlot: ITimeSlotTime) {
+    assert(isTimeSlotTime(timeSlot));
+    return minutesSinceSundayMidnight(timeSlot.day, timeSlot.hour, timeSlot.minute);
+}
 /**
  *
  * @param timeSlotTime
@@ -40,23 +44,20 @@ export function isTimeSlotTime(timeSlotTime: ITimeSlotTime) {
         bounded(minute, 0, 60)
     );
 }
-
-export function minutesSinceSundayTimeSlotTime(timeSlot: ITimeSlotTime) {
-    assert(isTimeSlotTime(timeSlot));
-    return minutesSinceSunday(timeSlot.day, timeSlot.hour, timeSlot.minute);
+function isWrapAroundTimeSlot(timeSlot: ITimeSlot) {
+    return minutesSinceSundayMidnightTimeSlot(timeSlot.start) > minutesSinceSundayMidnightTimeSlot(timeSlot.end);
 }
 /**
  *
  * @param timeSlot
- * @param allowWrapAround if true, ending time can be <= start time (aka we've gone to the next week), but doesn't have to be
+ * @param allowWrapAround if true, ending time can be < start time (aka we've gone to the next week), but doesn't have to be
  * @returns true/false
  */
-export function isTimeSlot(timeSlot: ITimeSlot, allowWrapAround?: boolean) {
+export function isTimeSlot(timeSlot: ITimeSlot, allowWrapAround: boolean = false) {
     return (
         isTimeSlotTime(timeSlot.start) &&
         isTimeSlotTime(timeSlot.end) &&
-        (allowWrapAround ||
-            minutesSinceSundayTimeSlotTime(timeSlot.start) <= minutesSinceSundayTimeSlotTime(timeSlot.end))
+        (!isWrapAroundTimeSlot(timeSlot) || allowWrapAround)
     );
 }
 
@@ -99,18 +100,6 @@ export function getTimeString(time: ITimeSlotTime) {
 }
 
 /**
- * Converts an ITimeSlot to a human-readable string (12-hour time)
- * @param time
- * @returns HH:MM (AM/PM)
- */
-export function getTimeSlotAsString(time: ITimeSlot) {
-    assert(isTimeSlot(time, true));
-    const start = getTimeString(time.start);
-    const end = getTimeString(time.end);
-    return `${start} - ${end}`;
-}
-
-/**
  *
  * @param timeSlots
  * @returns Checks if timeslots are non-overlapping (so [a,b],[b,c] is invalid) and properly sorted.
@@ -128,26 +117,93 @@ export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
         if (i > 0) {
             const { start } = timeSlots[i];
             const prevEnd = timeSlots[i - 1].end;
-            if (minutesSinceSundayTimeSlotTime(prevEnd) >= minutesSinceSundayTimeSlotTime(start)) return false;
+            if (minutesSinceSundayMidnightTimeSlot(prevEnd) >= minutesSinceSundayMidnightTimeSlot(start)) return false;
+        }
+        if (i === timeSlots.length - 1 && isWrapAroundTimeSlot(timeSlots[i])) {
+            // last time is a wrap-around time, need to check for overlap against first time
+            if (
+                minutesSinceSundayMidnightTimeSlot(timeSlots[i].end) >=
+                minutesSinceSundayMidnightTimeSlot(timeSlots[0].start)
+            )
+                return false;
         }
     }
     return true;
 }
+/**
+ *
+ * @param timeSlot
+ * @returns Duration of time slot in minutes. If end is before start, this represents the number of
+ * minutes to get from the start time of this week to the end time of next week
+ */
+function durationOfTimeSlot(timeSlot: ITimeSlot) {
+    assert(isTimeSlot(timeSlot, true));
+    const MINUTES_IN_A_WEEK = 60 * 24 * 7;
+    const startSecondsOffset = minutesSinceSundayMidnightTimeSlot(timeSlot.start);
+    const endSecondsOffset = minutesSinceSundayMidnightTimeSlot(timeSlot.end);
+    return (((endSecondsOffset - startSecondsOffset) % MINUTES_IN_A_WEEK) + MINUTES_IN_A_WEEK) % MINUTES_IN_A_WEEK;
+}
+function splitTimeSlotIfTooLong(timeSlot: ITimeSlot) {
+    const MINUTES_IN_A_DAY = 24 * 60;
+    const brokenUpTimeSlots: ITimeSlot[] = [];
+    const curStart = { ...timeSlot.start };
+    const curEnd = { ...timeSlot.end };
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        // repeatedly shave off intervals included in timeSlot until we get through all of them
+        // durationOfTimeSlot deals with wrapped times
+        if (durationOfTimeSlot({ start: curStart, end: curEnd }) < MINUTES_IN_A_DAY) {
+            // under 24 hours, can keep interval as-is (ex. 8PM - 2AM the next day)
+            brokenUpTimeSlots.push({ start: { ...curStart }, end: { ...curEnd } });
+            break;
+        } else {
+            // it's important that we make a copy of curStart since we'll be modifying curStart
+            brokenUpTimeSlots.push({ start: { ...curStart }, end: { day: curStart.day, hour: 23, minute: 59 } });
+            curStart.day = (curStart.day + 1) % 7;
+            curStart.hour = 0;
+            curStart.minute = 0;
+        }
+    }
+    return brokenUpTimeSlots;
+}
+/**
+ * Converts an ITimeSlot to a human-readable string (12-hour time)
+ * @param time
+ * @returns HH:MM (AM/PM)
+ */
+export function getTimeSlotAsString(time: ITimeSlot) {
+    const MINUTES_IN_A_DAY = 60 * 60;
 
+    assert(isTimeSlot(time, true));
+
+    assert(durationOfTimeSlot(time) < MINUTES_IN_A_DAY); // since we're stripping off day info, any time slot >= 24hrs in duration cannot be represented in this format
+    const start = getTimeString(time.start);
+    const end = getTimeString(time.end);
+    if (start === end) return null; // this is a degenerate time slot (ex. 12:00 AM - 12:00 AM) (most likely generated by splitTimeSlotIfTooLong)
+    // we can opt to keep the degenerate time slots in, but they offer no benefit to the end-user so might as well get rid of them /shrug
+    const resultString = `${start} - ${end}`;
+    return resultString === '12:00 AM - 11:59 PM' ? 'ALL DAY' : resultString; // just some friendly human conversion
+}
 /**
  * Converts an sorted time slot array to an array of human-readable strings (12-hour time)
  * @param times
  * @returns HH:MM (AM/PM) Array
  */
-
 export function getTimeSlotsString(times: ITimeSlots) {
     assert(isValidTimeSlotArray(times));
+    const brokenDownTimes = times
+        .flatMap(splitTimeSlotIfTooLong)
+        .sort((a, b) => minutesSinceSundayMidnightTimeSlot(a.start) - minutesSinceSundayMidnightTimeSlot(b.start)); // re-sort time slots
+
+    assert(isValidTimeSlotArray(brokenDownTimes));
+
     const listByDate = [];
     for (let date = 0; date < 7; date += 1) {
         const concattedString =
-            times
+            brokenDownTimes
                 .filter((time) => time.start.day === date)
                 .map(getTimeSlotAsString)
+                .filter((str) => str !== null)
                 .join(', ') || 'CLOSED';
         listByDate.push(concattedString);
     }
@@ -163,7 +219,8 @@ export function getTimeSlotsString(times: ITimeSlots) {
 export function diffInMinutes(timeSlotTime: ITimeSlotTime, now: DateTime) {
     assert(isTimeSlotTime(timeSlotTime));
     const diff =
-        (minutesSinceSundayTimeSlotTime(timeSlotTime) - minutesSinceSundayDateTime(now) + WEEK_MINUTES) % WEEK_MINUTES;
+        (minutesSinceSundayMidnightTimeSlot(timeSlotTime) - minutesSinceSundayDateTime(now) + WEEK_MINUTES) %
+        WEEK_MINUTES;
     assert(diff >= 0);
     return diff;
 }
@@ -176,9 +233,9 @@ export function diffInMinutes(timeSlotTime: ITimeSlotTime, now: DateTime) {
  */
 export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
     assert(isTimeSlot(timeSlot, true));
-    const start = minutesSinceSundayTimeSlotTime(timeSlot.start);
+    const start = minutesSinceSundayMidnightTimeSlot(timeSlot.start);
     const nowMinutes = minutesSinceSundayDateTime(now);
-    const end = minutesSinceSundayTimeSlotTime(timeSlot.end);
+    const end = minutesSinceSundayMidnightTimeSlot(timeSlot.end);
     if (end < start) {
         return start <= nowMinutes || nowMinutes <= end; // we're more flexible with the bounds because time is wrapping around
     }
@@ -197,7 +254,7 @@ export function getNextTimeSlot(times: ITimeSlots, now: DateTime) {
     const nowMinutes = minutesSinceSundayDateTime(now);
     // Find the first time slot that opens after now
     const nextTimeSlot = times.find(
-        (time) => currentlyOpen(time, now) || minutesSinceSundayTimeSlotTime(time.start) > nowMinutes,
+        (time) => currentlyOpen(time, now) || minutesSinceSundayMidnightTimeSlot(time.start) > nowMinutes,
     );
 
     if (nextTimeSlot === undefined) {
