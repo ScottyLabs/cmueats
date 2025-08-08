@@ -75,6 +75,7 @@ export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlot, now: Date
  */
 export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IReadOnlyLocation_ExtraData {
     assert(isValidTimeSlotArray(timeSlots), `${JSON.stringify(timeSlots)} is invalid!`);
+    const MINUTES_IN_A_WEEK = 60 * 24 * 7;
     const nextTimeSlot = getNextTimeSlot(timeSlots, now);
     if (nextTimeSlot === null)
         return {
@@ -82,6 +83,20 @@ export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IRe
             closedLongTerm: true,
             locationState: LocationState.CLOSED_LONG_TERM,
         };
+    if (
+        minutesSinceSundayMidnightTimeSlot(nextTimeSlot.start) === 0 &&
+        minutesSinceSundayMidnightTimeSlot(nextTimeSlot.end) === MINUTES_IN_A_WEEK - 1
+    ) {
+        // the very special case where the time interval represents the entire week
+        return {
+            statusMsg: 'Open forever',
+            closedLongTerm: false,
+            changesSoon: false,
+            timeUntil: 0,
+            locationState: LocationState.OPEN,
+            isOpen: true,
+        };
+    }
     const isOpen = currentlyOpen(nextTimeSlot, now);
     const relevantTime = isOpen ? nextTimeSlot.end : nextTimeSlot.start; // when will the next closing/opening event happen?
     const timeUntil = diffInMinutes(relevantTime, now);

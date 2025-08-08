@@ -111,6 +111,19 @@ describe('queryLocations.ts', () => {
                 statusMsg: 'Opens in 2 days (Tuesday at 12:00 AM)',
                 timeUntil: 47 * 60,
             });
+            expect(
+                getLocationStatus(
+                    [{ start: { day: 0, hour: 0, minute: 0 }, end: { day: 6, hour: 23, minute: 59 } }],
+                    makeDateTime(0, 1, 0),
+                ),
+            ).toEqual({
+                changesSoon: false,
+                closedLongTerm: false,
+                isOpen: true,
+                locationState: LocationState.OPEN,
+                statusMsg: 'Open forever',
+                timeUntil: 0,
+            });
         });
     });
 
