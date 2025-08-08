@@ -198,7 +198,9 @@ function ListPage({
                     </FooterText>
                 ) : (
                     <>
-                        <FooterText>All times are displayed in Pittsburgh local time ({getPittsburghTime()}).</FooterText>
+                        <FooterText>
+                            All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
+                        </FooterText>
                         <FooterText>
                             If you encounter any problems, please contact{' '}
                             {emails.length > 0 ? (

@@ -42,7 +42,7 @@
     "start": "vite --host",
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "test": "VITE_API_URL=/ VITE_AUTO_GENERATED_MAPKITJS_TOKEN=NA bun test",
+    "test": "VITE_API_URL=https://fake-url.com VITE_AUTO_GENERATED_MAPKITJS_TOKEN=NA bun test",
     "eject": "vite eject",
     "lint": "bunx eslint src",
     "lint-fix": "bunx eslint --fix src",

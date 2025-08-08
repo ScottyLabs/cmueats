@@ -13,6 +13,8 @@ import {
     Dialog,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { DateTime } from 'luxon';
+
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
 import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
@@ -289,7 +291,8 @@ function EateryCardDialog({
 }) {
     const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location;
     const timeSlots = getTimeSlotsString(location.times);
-
+    const dayOffsetFromSunday = DateTime.now().weekday % 7; // literally will be refreshed every second because location status is. This is fine
+    const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return (
         <Dialog
             open={open}
@@ -351,13 +354,26 @@ function EateryCardDialog({
                                 </StyledAccordionSummary>
 
                                 <StyledAccordionDetails>
-                                    {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(
-                                        (day, i) => (
-                                            <div style={{ marginBottom: '10px' }}>
-                                                <span style={{ color: 'white' }}>{day}</span>: {timeSlots[i]}
-                                            </div>
-                                        ),
-                                    )}
+                                    {Array(7)
+                                        .fill(true)
+                                        .map((_, i) => {
+                                            const realI = (i + dayOffsetFromSunday) % 7;
+                                            return (
+                                                <div
+                                                    style={{
+                                                        marginBottom: '10px',
+                                                        fontWeight: realI === dayOffsetFromSunday ? 'bold' : 'normal',
+                                                        color: realI === dayOffsetFromSunday ? 'white' : '',
+                                                    }}
+                                                    key={daysStartingFromSunday[realI]}
+                                                >
+                                                    <span style={{ color: 'white' }}>
+                                                        {daysStartingFromSunday[realI]}
+                                                    </span>
+                                                    : {timeSlots[realI]}
+                                                </div>
+                                            );
+                                        })}
                                 </StyledAccordionDetails>
                             </StyledAccordion>
                         </>

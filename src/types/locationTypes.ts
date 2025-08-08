@@ -11,7 +11,7 @@ export type RecursiveReadonly<T> = T extends object
 /**
  * Describes either start or end time in any given ITimeSlot
  */
-export interface ITimeSlotTime {
+export interface ITimeSlot {
     /** 0-6 (0 is Sunday, 6 is Saturday) */
     readonly day: number;
     /** 0-23 - 0 means 12AM */
@@ -32,9 +32,9 @@ export interface ITimeSlotTime {
  * of 0 while Saturday has a day value of 6, so this is a wrap around) Any other time
  * would be constrained to that day and possibly 12AM on the day after.
  */
-export interface ITimeSlot {
-    readonly start: ITimeSlotTime;
-    readonly end: ITimeSlotTime;
+export interface ITimeRange {
+    readonly start: ITimeSlot;
+    readonly end: ITimeSlot;
 }
 
 /**
@@ -42,7 +42,7 @@ export interface ITimeSlot {
  * and not wrapping (aka end time found in minutesFromSunday is less than
  * start time) except for possibly the last entry
  */
-export type ITimeSlots = ReadonlyArray<ITimeSlot>;
+export type ITimeRangeList = ReadonlyArray<ITimeRange>;
 
 interface ISpecial {
     title: string;
@@ -77,7 +77,7 @@ interface ILocation_FromAPI_PreProcessed {
         lng: number;
     };
     acceptsOnlineOrders: boolean;
-    times: ITimeSlot[];
+    times: ITimeRange[];
     todaysSpecials?: ISpecial[];
     todaysSoups?: ISpecial[];
 }

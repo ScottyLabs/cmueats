@@ -1,12 +1,12 @@
 import { test, expect, describe } from 'bun:test';
 import { getLocationStatus, getStatusMessage } from '../../src/util/queryLocations';
-import { ITimeSlotTime, LocationState } from '../../src/types/locationTypes';
+import { ITimeSlot, LocationState } from '../../src/types/locationTypes';
 import makeDateTime from './helper';
 
 interface IGetStatusMessageTest {
     isOpen: boolean;
-    nextTime: ITimeSlotTime;
-    now: ITimeSlotTime;
+    nextTime: ITimeSlot;
+    now: ITimeSlot;
     expectedString: string;
 }
 
@@ -110,6 +110,19 @@ describe('queryLocations.ts', () => {
                 locationState: LocationState.CLOSED,
                 statusMsg: 'Opens in 2 days (Tuesday at 12:00 AM)',
                 timeUntil: 47 * 60,
+            });
+            expect(
+                getLocationStatus(
+                    [{ start: { day: 0, hour: 0, minute: 0 }, end: { day: 6, hour: 23, minute: 59 } }],
+                    makeDateTime(0, 1, 0),
+                ),
+            ).toEqual({
+                changesSoon: false,
+                closedLongTerm: false,
+                isOpen: true,
+                locationState: LocationState.OPEN,
+                statusMsg: 'Open forever',
+                timeUntil: 0,
             });
         });
     });
