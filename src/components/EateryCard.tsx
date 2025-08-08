@@ -13,12 +13,13 @@ import {
     Dialog,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { DateTime } from 'luxon';
+
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
 import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
 import './EateryCard.css';
 import { highlightColors, textColors } from '../constants/colors';
-import { DateTime } from 'luxon';
 
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
     fontWeight: 500,
