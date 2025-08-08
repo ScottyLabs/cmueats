@@ -343,7 +343,7 @@ test('getTimeSlotsString', () => {
                 },
             ],
             // semantically, Wednesday should have 12AM - 12AM, but that doesn't make too much sense
-            expected: ['ALL DAY', 'ALL DAY', 'ALL DAY', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'],
+            expected: ['Open 24 hours', 'Open 24 hours', 'Open 24 hours', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'],
         },
         {
             input: [
@@ -360,7 +360,7 @@ test('getTimeSlotsString', () => {
                     },
                 },
             ],
-            expected: ['ALL DAY', 'ALL DAY', 'ALL DAY', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'],
+            expected: ['Open 24 hours', 'Open 24 hours', 'Open 24 hours', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'],
         },
         {
             // splitting with uneven edges
@@ -378,7 +378,15 @@ test('getTimeSlotsString', () => {
                     },
                 },
             ],
-            expected: ['7:00 AM - 11:59 PM', 'ALL DAY', 'ALL DAY', '12:00 AM - 7:00 AM', 'CLOSED', 'CLOSED', 'CLOSED'],
+            expected: [
+                '7:00 AM - 11:59 PM',
+                'Open 24 hours',
+                'Open 24 hours',
+                '12:00 AM - 7:00 AM',
+                'CLOSED',
+                'CLOSED',
+                'CLOSED',
+            ],
         },
         {
             // don't split if interval duration is under 24 hours
@@ -468,7 +476,15 @@ test('getTimeSlotsString', () => {
                     },
                 },
             ],
-            expected: ['ALL DAY', '12:00 AM - 9:00 AM', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', '7:00 AM - 11:59 PM'],
+            expected: [
+                'Open 24 hours',
+                '12:00 AM - 9:00 AM',
+                'CLOSED',
+                'CLOSED',
+                'CLOSED',
+                'CLOSED',
+                '7:00 AM - 11:59 PM',
+            ],
         },
         {
             // wrap-around breaking (over 48 hrs)
@@ -504,7 +520,7 @@ test('getTimeSlotsString', () => {
                     },
                 },
             ],
-            expected: ['CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'ALL DAY'],
+            expected: ['CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'Open 24 hours'],
         }, // auto-coalescing to all-day
         {
             // wrap-around breaking (over 48 hrs)
@@ -522,7 +538,15 @@ test('getTimeSlotsString', () => {
                     },
                 },
             ],
-            expected: ['ALL DAY', 'ALL DAY', 'ALL DAY', 'ALL DAY', 'ALL DAY', 'ALL DAY', 'ALL DAY'],
+            expected: [
+                'Open 24 hours',
+                'Open 24 hours',
+                'Open 24 hours',
+                'Open 24 hours',
+                'Open 24 hours',
+                'Open 24 hours',
+                'Open 24 hours',
+            ],
         }, // all day babyyy
         {
             // stress-test
@@ -565,7 +589,7 @@ test('getTimeSlotsString', () => {
                 },
             ],
             expected: [
-                'ALL DAY',
+                'Open 24 hours',
                 '12:00 AM - 9:00 AM, 10:02 AM - 8:00 AM',
                 '9:02 AM - 12:00 PM',
                 'CLOSED',
