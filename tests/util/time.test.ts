@@ -574,6 +574,153 @@ test('getTimeSlotsString', () => {
                 '7:00 AM - 11:59 PM',
             ],
         },
+        {
+            // normal test
+            input: [
+                {
+                    start: {
+                        day: 1,
+                        hour: 8,
+                        minute: 0,
+                    },
+                    end: {
+                        day: 1,
+                        hour: 16,
+                        minute: 0,
+                    },
+                },
+                {
+                    start: {
+                        day: 2,
+                        hour: 8,
+                        minute: 0,
+                    },
+                    end: {
+                        day: 2,
+                        hour: 16,
+                        minute: 0,
+                    },
+                },
+                {
+                    start: {
+                        day: 3,
+                        hour: 8,
+                        minute: 0,
+                    },
+                    end: {
+                        day: 3,
+                        hour: 16,
+                        minute: 0,
+                    },
+                },
+                {
+                    start: {
+                        day: 4,
+                        hour: 8,
+                        minute: 0,
+                    },
+                    end: {
+                        day: 4,
+                        hour: 16,
+                        minute: 0,
+                    },
+                },
+                {
+                    start: {
+                        day: 5,
+                        hour: 8,
+                        minute: 0,
+                    },
+                    end: {
+                        day: 5,
+                        hour: 16,
+                        minute: 0,
+                    },
+                },
+            ],
+            expected: [
+                'CLOSED',
+                '8:00 AM - 4:00 PM',
+                '8:00 AM - 4:00 PM',
+                '8:00 AM - 4:00 PM',
+                '8:00 AM - 4:00 PM',
+                '8:00 AM - 4:00 PM',
+                'CLOSED',
+            ],
+        },
+        {
+            input: [
+                {
+                    start: {
+                        day: 1,
+                        hour: 11,
+                        minute: 30,
+                    },
+                    end: {
+                        day: 1,
+                        hour: 13,
+                        minute: 30,
+                    },
+                },
+                {
+                    start: {
+                        day: 2,
+                        hour: 11,
+                        minute: 30,
+                    },
+                    end: {
+                        day: 2,
+                        hour: 13,
+                        minute: 30,
+                    },
+                },
+                {
+                    start: {
+                        day: 3,
+                        hour: 11,
+                        minute: 30,
+                    },
+                    end: {
+                        day: 3,
+                        hour: 13,
+                        minute: 30,
+                    },
+                },
+                {
+                    start: {
+                        day: 4,
+                        hour: 11,
+                        minute: 30,
+                    },
+                    end: {
+                        day: 4,
+                        hour: 13,
+                        minute: 30,
+                    },
+                },
+                {
+                    start: {
+                        day: 5,
+                        hour: 11,
+                        minute: 30,
+                    },
+                    end: {
+                        day: 5,
+                        hour: 13,
+                        minute: 30,
+                    },
+                },
+            ],
+            expected: [
+                'CLOSED',
+                '11:30 AM - 1:30 PM',
+                '11:30 AM - 1:30 PM',
+                '11:30 AM - 1:30 PM',
+                '11:30 AM - 1:30 PM',
+                '11:30 AM - 1:30 PM',
+                'CLOSED',
+            ],
+        },
     ];
     for (const testCase of testCases) {
         expect(getTimeSlotsString(testCase.input)).toEqual(testCase.expected);

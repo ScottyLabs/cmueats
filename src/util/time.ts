@@ -167,12 +167,12 @@ function splitTimeSlotIfTooLong(timeSlot: ITimeSlot) {
     return brokenUpTimeSlots;
 }
 /**
- * Converts an ITimeSlot to a human-readable string (12-hour time)
+ * Converts an ITimeSlot to a truncated human-readable string (12-hour time)
  * @param time
- * @returns HH:MM (AM/PM)
+ * @returns HH:MM (AM/PM), or null if the time slot is degenerate
  */
 export function getTimeSlotAsString(time: ITimeSlot) {
-    const MINUTES_IN_A_DAY = 60 * 60;
+    const MINUTES_IN_A_DAY = 24 * 60;
 
     assert(isTimeSlot(time, true));
 
