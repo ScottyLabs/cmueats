@@ -15,7 +15,7 @@ import {
     diffInMinutes,
     currentlyOpen,
     getNextTimeSlot,
-    isTimeSlotTime,
+    isTimeSlot,
     isValidTimeSlotArray,
     getTimeString,
     minutesSinceSundayMidnightTimeSlot,
@@ -36,7 +36,7 @@ const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
  * @returns {string} The status message for the location
  */
 export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlot, now: DateTime): string {
-    assert(isTimeSlotTime(nextTime));
+    assert(isTimeSlot(nextTime));
     const diff = diffInMinutes(nextTime, now);
     const weekdayDiff =
         nextTime.day -

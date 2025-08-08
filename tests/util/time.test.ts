@@ -1,9 +1,9 @@
 import { ITimeRangeList } from '../../src/types/locationTypes';
 import {
     currentlyOpen,
-    isTimeSlotTime,
-    minutesSinceSundayDateTime,
     isTimeSlot,
+    minutesSinceSundayDateTime,
+    isTimeRange,
     getTimeString,
     isValidTimeSlotArray,
     getNextTimeSlot,
@@ -130,34 +130,34 @@ describe('currentlyOpen', () => {
 });
 
 test('isTimeSlotTime', () => {
-    expect(isTimeSlotTime({ minute: 59, hour: 23, day: 6 })).toEqual(true);
-    expect(isTimeSlotTime({ minute: 0, hour: 0, day: 0 })).toEqual(true);
-    expect(isTimeSlotTime({ minute: 60, hour: 0, day: 0 })).toEqual(false);
-    expect(isTimeSlotTime({ minute: 0, hour: 24, day: 0 })).toEqual(false);
-    expect(isTimeSlotTime({ minute: 0, hour: 0, day: 7 })).toEqual(false);
-    expect(isTimeSlotTime({ minute: 0, hour: 0, day: -2 })).toEqual(false);
-    expect(isTimeSlotTime({ minute: 0, hour: 0, day: 1.2 })).toEqual(false);
-    expect(isTimeSlotTime({ minute: 0, hour: 1.1, day: 1 })).toEqual(false);
-    expect(isTimeSlotTime({ minute: 0.0, hour: 1, day: 1 })).toEqual(true);
+    expect(isTimeSlot({ minute: 59, hour: 23, day: 6 })).toEqual(true);
+    expect(isTimeSlot({ minute: 0, hour: 0, day: 0 })).toEqual(true);
+    expect(isTimeSlot({ minute: 60, hour: 0, day: 0 })).toEqual(false);
+    expect(isTimeSlot({ minute: 0, hour: 24, day: 0 })).toEqual(false);
+    expect(isTimeSlot({ minute: 0, hour: 0, day: 7 })).toEqual(false);
+    expect(isTimeSlot({ minute: 0, hour: 0, day: -2 })).toEqual(false);
+    expect(isTimeSlot({ minute: 0, hour: 0, day: 1.2 })).toEqual(false);
+    expect(isTimeSlot({ minute: 0, hour: 1.1, day: 1 })).toEqual(false);
+    expect(isTimeSlot({ minute: 0.0, hour: 1, day: 1 })).toEqual(true);
 });
 test('minutesSinceSundayDateTime', () => {
     expect(minutesSinceSundayDateTime(makeDateTime(1, 1, 1))).toEqual(60 * 24 + 60 + 1);
 });
 test('isTimeSlot', () => {
     expect(
-        isTimeSlot({
+        isTimeRange({
             start: { minute: 1, hour: 1, day: 1 },
             end: { minute: 1, hour: 1, day: 1 },
         }),
     ).toEqual(true); // this doesn't count as wrap-around, so it's fine
     expect(
-        isTimeSlot({
+        isTimeRange({
             start: { minute: 1, hour: 1, day: 1 },
             end: { minute: 0, hour: 1, day: 1 },
         }),
     ).toEqual(false);
     expect(
-        isTimeSlot(
+        isTimeRange(
             {
                 start: { minute: 1, hour: 1, day: 1 },
                 end: { minute: 0, hour: 1, day: 1 },
@@ -166,13 +166,13 @@ test('isTimeSlot', () => {
         ),
     ).toEqual(true);
     expect(
-        isTimeSlot({
+        isTimeRange({
             start: { minute: 1, hour: 1, day: 1 },
             end: { minute: 1, hour: 1, day: 2 },
         }),
     ).toEqual(true);
     expect(
-        isTimeSlot({
+        isTimeRange({
             start: { minute: 1, hour: 1, day: 1 },
             end: { minute: 1, hour: 1, day: 7 },
         }),

@@ -24,7 +24,7 @@ export function minutesSinceSundayDateTime(now: DateTime) {
 }
 
 export function minutesSinceSundayMidnightTimeSlot(timeSlot: ITimeSlot) {
-    assert(isTimeSlotTime(timeSlot));
+    assert(isTimeSlot(timeSlot));
     return minutesSinceSundayMidnight(timeSlot.day, timeSlot.hour, timeSlot.minute);
 }
 /**
@@ -32,7 +32,7 @@ export function minutesSinceSundayMidnightTimeSlot(timeSlot: ITimeSlot) {
  * @param timeSlotTime
  * @returns Whether or not the timeslot has valid/expected values (all property values must be integers)
  */
-export function isTimeSlotTime(timeSlotTime: ITimeSlot) {
+export function isTimeSlot(timeSlotTime: ITimeSlot) {
     const { day, hour, minute } = timeSlotTime;
 
     return (
@@ -53,11 +53,9 @@ function isWrapAroundTimeSlot(timeSlot: ITimeRange) {
  * @param allowWrapAround if true, ending time can be < start time (aka we've gone to the next week), but doesn't have to be
  * @returns true/false
  */
-export function isTimeSlot(timeSlot: ITimeRange, allowWrapAround: boolean = false) {
+export function isTimeRange(timeSlot: ITimeRange, allowWrapAround: boolean = false) {
     return (
-        isTimeSlotTime(timeSlot.start) &&
-        isTimeSlotTime(timeSlot.end) &&
-        (!isWrapAroundTimeSlot(timeSlot) || allowWrapAround)
+        isTimeSlot(timeSlot.start) && isTimeSlot(timeSlot.end) && (!isWrapAroundTimeSlot(timeSlot) || allowWrapAround)
     );
 }
 
@@ -91,7 +89,7 @@ export function getApproximateTimeStringFromMinutes(minutes: number) {
  * @returns HH:MM (AM/PM)
  */
 export function getTimeString(time: ITimeSlot) {
-    assert(isTimeSlotTime(time));
+    assert(isTimeSlot(time));
     const { hour, minute } = time;
     const hour12H = hour % 12 === 0 ? 12 : hour % 12;
     const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -113,7 +111,7 @@ export function getTimeString(time: ITimeSlot) {
 export function isValidTimeSlotArray(timeSlots: ITimeRangeList) {
     for (let i = 0; i < timeSlots.length; i += 1) {
         const allowWrapAround = i === timeSlots.length - 1;
-        if (!isTimeSlot(timeSlots[i], allowWrapAround)) return false;
+        if (!isTimeRange(timeSlots[i], allowWrapAround)) return false;
         if (i > 0) {
             const { start } = timeSlots[i];
             const prevEnd = timeSlots[i - 1].end;
@@ -137,7 +135,7 @@ export function isValidTimeSlotArray(timeSlots: ITimeRangeList) {
  * minutes to get from the start time of this week to the end time of next week
  */
 function durationOfTimeSlot(timeSlot: ITimeRange) {
-    assert(isTimeSlot(timeSlot, true));
+    assert(isTimeRange(timeSlot, true));
     const MINUTES_IN_A_WEEK = 60 * 24 * 7;
     const startSecondsOffset = minutesSinceSundayMidnightTimeSlot(timeSlot.start);
     const endSecondsOffset = minutesSinceSundayMidnightTimeSlot(timeSlot.end);
@@ -174,7 +172,7 @@ function splitTimeSlotIfTooLong(timeSlot: ITimeRange) {
 export function getTimeSlotAsString(time: ITimeRange) {
     const MINUTES_IN_A_DAY = 24 * 60;
 
-    assert(isTimeSlot(time, true));
+    assert(isTimeRange(time, true));
 
     assert(durationOfTimeSlot(time) < MINUTES_IN_A_DAY); // since we're stripping off day info, any time slot >= 24hrs in duration cannot be represented in this format
     const start = getTimeString(time.start);
@@ -217,7 +215,7 @@ export function getTimeSlotsString(times: ITimeRangeList) {
  * @returns (smallest non-negative) time in minutes to get from now to timeSlot
  */
 export function diffInMinutes(timeSlotTime: ITimeSlot, now: DateTime) {
-    assert(isTimeSlotTime(timeSlotTime));
+    assert(isTimeSlot(timeSlotTime));
     const diff =
         (minutesSinceSundayMidnightTimeSlot(timeSlotTime) - minutesSinceSundayDateTime(now) + WEEK_MINUTES) %
         WEEK_MINUTES;
@@ -232,7 +230,7 @@ export function diffInMinutes(timeSlotTime: ITimeSlot, now: DateTime) {
  * @returns true if the location is open, false otherwise
  */
 export function currentlyOpen(timeSlot: ITimeRange, now: DateTime) {
-    assert(isTimeSlot(timeSlot, true));
+    assert(isTimeRange(timeSlot, true));
     const start = minutesSinceSundayMidnightTimeSlot(timeSlot.start);
     const end = minutesSinceSundayMidnightTimeSlot(timeSlot.end);
     const nowMinutes = minutesSinceSundayDateTime(now);
