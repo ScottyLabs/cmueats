@@ -1,12 +1,12 @@
 import { test, expect, describe } from 'bun:test';
 import { getLocationStatus, getStatusMessage } from '../../src/util/queryLocations';
-import { ITimeSlotTime, LocationState } from '../../src/types/locationTypes';
+import { ITimeSlot, LocationState } from '../../src/types/locationTypes';
 import makeDateTime from './helper';
 
 interface IGetStatusMessageTest {
     isOpen: boolean;
-    nextTime: ITimeSlotTime;
-    now: ITimeSlotTime;
+    nextTime: ITimeSlot;
+    now: ITimeSlot;
     expectedString: string;
 }
 

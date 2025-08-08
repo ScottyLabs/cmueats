@@ -4,10 +4,10 @@ import { DateTime } from 'luxon';
 
 import {
     LocationState,
-    ITimeSlotTime,
+    ITimeSlot,
     IReadOnlyLocation_FromAPI_PostProcessed,
     IReadOnlyLocation_ExtraData,
-    ITimeSlots,
+    ITimeRangeList,
     IReadOnlyLocation_FromAPI_PreProcessed,
     IReadOnlyLocation_ExtraData_Map,
 } from '../types/locationTypes';
@@ -35,7 +35,7 @@ const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
  * @param nextTime Time data entry of next closing/opening time
  * @returns {string} The status message for the location
  */
-export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlotTime, now: DateTime): string {
+export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlot, now: DateTime): string {
     assert(isTimeSlotTime(nextTime));
     const diff = diffInMinutes(nextTime, now);
     const weekdayDiff =
@@ -73,7 +73,7 @@ export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlotTime, now: 
  * @param now
  * @returns
  */
-export function getLocationStatus(timeSlots: ITimeSlots, now: DateTime): IReadOnlyLocation_ExtraData {
+export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IReadOnlyLocation_ExtraData {
     assert(isValidTimeSlotArray(timeSlots), `${JSON.stringify(timeSlots)} is invalid!`);
     const nextTimeSlot = getNextTimeSlot(timeSlots, now);
     if (nextTimeSlot === null)

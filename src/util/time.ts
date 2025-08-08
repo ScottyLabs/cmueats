@@ -2,7 +2,7 @@
  */
 
 import { DateTime } from 'luxon';
-import { ITimeSlotTime, ITimeSlot, ITimeSlots } from '../types/locationTypes';
+import { ITimeSlot, ITimeRange, ITimeRangeList } from '../types/locationTypes';
 
 import assert from './assert';
 import bounded from './misc';
@@ -23,7 +23,7 @@ export function minutesSinceSundayDateTime(now: DateTime) {
     return minutesSinceSundayMidnight(now.weekday % 7, now.hour, now.minute);
 }
 
-export function minutesSinceSundayMidnightTimeSlot(timeSlot: ITimeSlotTime) {
+export function minutesSinceSundayMidnightTimeSlot(timeSlot: ITimeSlot) {
     assert(isTimeSlotTime(timeSlot));
     return minutesSinceSundayMidnight(timeSlot.day, timeSlot.hour, timeSlot.minute);
 }
@@ -32,7 +32,7 @@ export function minutesSinceSundayMidnightTimeSlot(timeSlot: ITimeSlotTime) {
  * @param timeSlotTime
  * @returns Whether or not the timeslot has valid/expected values (all property values must be integers)
  */
-export function isTimeSlotTime(timeSlotTime: ITimeSlotTime) {
+export function isTimeSlotTime(timeSlotTime: ITimeSlot) {
     const { day, hour, minute } = timeSlotTime;
 
     return (
@@ -44,7 +44,7 @@ export function isTimeSlotTime(timeSlotTime: ITimeSlotTime) {
         bounded(minute, 0, 60)
     );
 }
-function isWrapAroundTimeSlot(timeSlot: ITimeSlot) {
+function isWrapAroundTimeSlot(timeSlot: ITimeRange) {
     return minutesSinceSundayMidnightTimeSlot(timeSlot.start) > minutesSinceSundayMidnightTimeSlot(timeSlot.end);
 }
 /**
@@ -53,7 +53,7 @@ function isWrapAroundTimeSlot(timeSlot: ITimeSlot) {
  * @param allowWrapAround if true, ending time can be < start time (aka we've gone to the next week), but doesn't have to be
  * @returns true/false
  */
-export function isTimeSlot(timeSlot: ITimeSlot, allowWrapAround: boolean = false) {
+export function isTimeSlot(timeSlot: ITimeRange, allowWrapAround: boolean = false) {
     return (
         isTimeSlotTime(timeSlot.start) &&
         isTimeSlotTime(timeSlot.end) &&
@@ -90,7 +90,7 @@ export function getApproximateTimeStringFromMinutes(minutes: number) {
  * @param time
  * @returns HH:MM (AM/PM)
  */
-export function getTimeString(time: ITimeSlotTime) {
+export function getTimeString(time: ITimeSlot) {
     assert(isTimeSlotTime(time));
     const { hour, minute } = time;
     const hour12H = hour % 12 === 0 ? 12 : hour % 12;
@@ -110,7 +110,7 @@ export function getTimeString(time: ITimeSlotTime) {
  * is good only if most location opening times operate in weekly predictable cycles, but we shouldn't
  * rely on that assumption. Oh well. It's legacy code, am I right?
  */
-export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
+export function isValidTimeSlotArray(timeSlots: ITimeRangeList) {
     for (let i = 0; i < timeSlots.length; i += 1) {
         const allowWrapAround = i === timeSlots.length - 1;
         if (!isTimeSlot(timeSlots[i], allowWrapAround)) return false;
@@ -136,16 +136,16 @@ export function isValidTimeSlotArray(timeSlots: ITimeSlots) {
  * @returns Duration of time slot in minutes. If end is before start, this represents the number of
  * minutes to get from the start time of this week to the end time of next week
  */
-function durationOfTimeSlot(timeSlot: ITimeSlot) {
+function durationOfTimeSlot(timeSlot: ITimeRange) {
     assert(isTimeSlot(timeSlot, true));
     const MINUTES_IN_A_WEEK = 60 * 24 * 7;
     const startSecondsOffset = minutesSinceSundayMidnightTimeSlot(timeSlot.start);
     const endSecondsOffset = minutesSinceSundayMidnightTimeSlot(timeSlot.end);
     return (((endSecondsOffset - startSecondsOffset) % MINUTES_IN_A_WEEK) + MINUTES_IN_A_WEEK) % MINUTES_IN_A_WEEK;
 }
-function splitTimeSlotIfTooLong(timeSlot: ITimeSlot) {
+function splitTimeSlotIfTooLong(timeSlot: ITimeRange) {
     const MINUTES_IN_A_DAY = 24 * 60;
-    const brokenUpTimeSlots: ITimeSlot[] = [];
+    const brokenUpTimeSlots: ITimeRange[] = [];
     const curStart = { ...timeSlot.start };
     const curEnd = { ...timeSlot.end };
     // eslint-disable-next-line no-constant-condition
@@ -171,7 +171,7 @@ function splitTimeSlotIfTooLong(timeSlot: ITimeSlot) {
  * @param time
  * @returns HH:MM (AM/PM), or null if the time slot is degenerate
  */
-export function getTimeSlotAsString(time: ITimeSlot) {
+export function getTimeSlotAsString(time: ITimeRange) {
     const MINUTES_IN_A_DAY = 24 * 60;
 
     assert(isTimeSlot(time, true));
@@ -189,7 +189,7 @@ export function getTimeSlotAsString(time: ITimeSlot) {
  * @param times
  * @returns HH:MM (AM/PM) Array
  */
-export function getTimeSlotsString(times: ITimeSlots) {
+export function getTimeSlotsString(times: ITimeRangeList) {
     assert(isValidTimeSlotArray(times));
     const brokenDownTimes = times
         .flatMap(splitTimeSlotIfTooLong)
@@ -216,7 +216,7 @@ export function getTimeSlotsString(times: ITimeSlots) {
  * @param now Whatever time you want to start from
  * @returns (smallest non-negative) time in minutes to get from now to timeSlot
  */
-export function diffInMinutes(timeSlotTime: ITimeSlotTime, now: DateTime) {
+export function diffInMinutes(timeSlotTime: ITimeSlot, now: DateTime) {
     assert(isTimeSlotTime(timeSlotTime));
     const diff =
         (minutesSinceSundayMidnightTimeSlot(timeSlotTime) - minutesSinceSundayDateTime(now) + WEEK_MINUTES) %
@@ -231,7 +231,7 @@ export function diffInMinutes(timeSlotTime: ITimeSlotTime, now: DateTime) {
  * @param now "Current" time
  * @returns true if the location is open, false otherwise
  */
-export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
+export function currentlyOpen(timeSlot: ITimeRange, now: DateTime) {
     assert(isTimeSlot(timeSlot, true));
     const start = minutesSinceSundayMidnightTimeSlot(timeSlot.start);
     const nowMinutes = minutesSinceSundayDateTime(now);
@@ -244,11 +244,11 @@ export function currentlyOpen(timeSlot: ITimeSlot, now: DateTime) {
 
 /**
  * Gets the next available time slot for a given location
- * @param {ITimeSlots} times List of time slots for a location
+ * @param {ITimeRangeList} times List of time ranges for a location
  * @returns The next time slot when the location opens (if currently open,
  * then it returns that slot). If there are no available slots, it returns null
  */
-export function getNextTimeSlot(times: ITimeSlots, now: DateTime) {
+export function getNextTimeSlot(times: ITimeRangeList, now: DateTime) {
     assert(isValidTimeSlotArray(times));
     if (times.length === 0) return null;
     const nowMinutes = minutesSinceSundayDateTime(now);

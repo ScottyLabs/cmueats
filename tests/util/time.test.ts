@@ -1,4 +1,4 @@
-import { ITimeSlots } from '../../src/types/locationTypes';
+import { ITimeRangeList } from '../../src/types/locationTypes';
 import {
     currentlyOpen,
     isTimeSlotTime,
@@ -326,7 +326,7 @@ test('getNextTimeSlot', () => {
     expect(() => getNextTimeSlot([B, A], makeDateTime(3, 3, 3))).toThrow(); // [B,A] is improperly sorted
 });
 test('getTimeSlotsString', () => {
-    const testCases: { input: ITimeSlots; expected: string[] }[] = [
+    const testCases: { input: ITimeRangeList; expected: string[] }[] = [
         {
             input: [
                 {
