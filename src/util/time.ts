@@ -234,8 +234,8 @@ export function diffInMinutes(timeSlotTime: ITimeSlot, now: DateTime) {
 export function currentlyOpen(timeSlot: ITimeRange, now: DateTime) {
     assert(isTimeSlot(timeSlot, true));
     const start = minutesSinceSundayMidnightTimeSlot(timeSlot.start);
-    const nowMinutes = minutesSinceSundayDateTime(now);
     const end = minutesSinceSundayMidnightTimeSlot(timeSlot.end);
+    const nowMinutes = minutesSinceSundayDateTime(now);
     if (end < start) {
         return start <= nowMinutes || nowMinutes <= end; // we're more flexible with the bounds because time is wrapping around
     }
