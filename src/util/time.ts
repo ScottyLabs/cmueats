@@ -148,7 +148,7 @@ function splitTimeSlotIfTooLong(timeSlot: ITimeRange) {
     const curEnd = { ...timeSlot.end };
     // eslint-disable-next-line no-constant-condition
     while (true) {
-        // repeatedly shave off intervals included in timeSlot until we get through all of them
+        // repeatedly shave off intervals (of less than 24 hours) included in timeSlot until we get through all of them
         // durationOfTimeSlot deals with wrapped times
         if (durationOfTimeSlot({ start: curStart, end: curEnd }) < MINUTES_IN_A_DAY) {
             // under 24 hours, can keep interval as-is (ex. 8PM - 2AM the next day)
@@ -196,10 +196,10 @@ export function getTimeSlotsString(times: ITimeRangeList) {
     assert(isValidTimeSlotArray(brokenDownTimes));
 
     const listByDate = [];
-    for (let date = 0; date < 7; date += 1) {
+    for (let day = 0; day < 7; day += 1) {
         const concattedString =
             brokenDownTimes
-                .filter((time) => time.start.day === date)
+                .filter((time) => time.start.day === day)
                 .map(getTimeSlotAsString)
                 .filter((str) => str !== null)
                 .join(', ') || 'CLOSED';
