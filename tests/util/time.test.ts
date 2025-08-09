@@ -2,7 +2,7 @@ import { ITimeRangeList } from '../../src/types/locationTypes';
 import {
     currentlyOpen,
     isTimeSlot,
-    minutesSinceSundayDateTime,
+    minutesSinceStartOfSundayDateTime,
     isTimeRange,
     getTimeString,
     isValidTimeSlotArray,
@@ -141,7 +141,7 @@ test('isTimeSlotTime', () => {
     expect(isTimeSlot({ minute: 0.0, hour: 1, day: 1 })).toEqual(true);
 });
 test('minutesSinceSundayDateTime', () => {
-    expect(minutesSinceSundayDateTime(makeDateTime(1, 1, 1))).toEqual(60 * 24 + 60 + 1);
+    expect(minutesSinceStartOfSundayDateTime(makeDateTime(1, 1, 1))).toEqual(60 * 24 + 60 + 1);
 });
 test('isTimeSlot', () => {
     expect(

@@ -18,8 +18,8 @@ import {
     isTimeSlot,
     isValidTimeSlotArray,
     getTimeString,
-    minutesSinceSundayMidnightTimeSlot,
-    minutesSinceSundayDateTime,
+    minutesSinceStartOfSundayTimeSlot,
+    minutesSinceStartOfSundayDateTime,
     getApproximateTimeStringFromMinutes,
 } from './time';
 import toTitleCase from './string';
@@ -41,7 +41,7 @@ export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlot, now: Date
     const weekdayDiff =
         nextTime.day -
         (now.weekday % 7) + // now.weekday returns 1-7 [mon-sun] instead of 0-6 [sun-sat]
-        (minutesSinceSundayMidnightTimeSlot(nextTime) < minutesSinceSundayDateTime(now) ? 7 : 0); // nextTime wraps around to next week? Add 7 days to nextTime.day
+        (minutesSinceStartOfSundayTimeSlot(nextTime) < minutesSinceStartOfSundayDateTime(now) ? 7 : 0); // nextTime wraps around to next week? Add 7 days to nextTime.day
 
     const time = getTimeString(nextTime);
 
@@ -84,8 +84,8 @@ export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IRe
             locationState: LocationState.CLOSED_LONG_TERM,
         };
     if (
-        minutesSinceSundayMidnightTimeSlot(nextTimeSlot.start) === 0 &&
-        minutesSinceSundayMidnightTimeSlot(nextTimeSlot.end) === MINUTES_IN_A_WEEK - 1
+        minutesSinceStartOfSundayTimeSlot(nextTimeSlot.start) === 0 &&
+        minutesSinceStartOfSundayTimeSlot(nextTimeSlot.end) === MINUTES_IN_A_WEEK - 1
     ) {
         // the very special case where the time interval represents the entire week
         return {
