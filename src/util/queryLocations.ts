@@ -89,7 +89,7 @@ export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IRe
     ) {
         // the very special case where the time interval represents the entire week
         return {
-            statusMsg: 'Open forever',
+            statusMsg: 'Open 24/7',
             closedLongTerm: false,
             changesSoon: false,
             timeUntil: 0,

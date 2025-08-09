@@ -121,7 +121,7 @@ describe('queryLocations.ts', () => {
                 closedLongTerm: false,
                 isOpen: true,
                 locationState: LocationState.OPEN,
-                statusMsg: 'Open forever',
+                statusMsg: 'Open 24/7',
                 timeUntil: 0,
             });
             expect(
