@@ -323,6 +323,36 @@ test('getNextTimeSlot', () => {
     expect(getNextTimeSlot([A, B], makeDateTime(0, 0, 0))).toEqual(A);
     expect(getNextTimeSlot([], makeDateTime(0, 0, 0))).toEqual(null);
     expect(getNextTimeSlot([A], makeDateTime(6, 0, 0))).toEqual(A);
+    expect(
+        getNextTimeSlot(
+            [
+                {
+                    start: {
+                        day: 6,
+                        hour: 0,
+                        minute: 0,
+                    },
+                    end: {
+                        day: 1,
+                        hour: 23,
+                        minute: 59,
+                    },
+                },
+            ],
+            makeDateTime(6, 0, 0),
+        ),
+    ).toEqual({
+        start: {
+            day: 6,
+            hour: 0,
+            minute: 0,
+        },
+        end: {
+            day: 1,
+            hour: 23,
+            minute: 59,
+        },
+    });
     expect(() => getNextTimeSlot([B, A], makeDateTime(3, 3, 3))).toThrow(); // [B,A] is improperly sorted
 });
 test('getTimeSlotsString', () => {
@@ -744,6 +774,23 @@ test('getTimeSlotsString', () => {
                 '11:30 AM - 1:30 PM',
                 'CLOSED',
             ],
+        },
+        {
+            input: [
+                {
+                    start: {
+                        day: 6,
+                        hour: 0,
+                        minute: 0,
+                    },
+                    end: {
+                        day: 1,
+                        hour: 23,
+                        minute: 59,
+                    },
+                },
+            ],
+            expected: ['Open 24 hours', 'Open 24 hours', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'Open 24 hours'],
         },
     ];
     for (const testCase of testCases) {

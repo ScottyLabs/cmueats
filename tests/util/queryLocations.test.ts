@@ -124,6 +124,32 @@ describe('queryLocations.ts', () => {
                 statusMsg: 'Open forever',
                 timeUntil: 0,
             });
+            expect(
+                getLocationStatus(
+                    [
+                        {
+                            start: {
+                                day: 6,
+                                hour: 0,
+                                minute: 0,
+                            },
+                            end: {
+                                day: 1,
+                                hour: 23,
+                                minute: 59,
+                            },
+                        },
+                    ],
+                    makeDateTime(6, 0, 0),
+                ),
+            ).toEqual({
+                changesSoon: false,
+                closedLongTerm: false,
+                isOpen: true,
+                locationState: LocationState.OPEN,
+                statusMsg: 'Closes in 3 days (Monday at 11:59 PM)',
+                timeUntil: 60 * 24 * 3 - 1,
+            });
         });
     });
 
