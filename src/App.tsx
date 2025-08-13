@@ -16,12 +16,14 @@ import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Ma
 import { getPinnedIds, setPinnedIds } from './util/storage';
 import env from './env';
 
+const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
+
 function App() {
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
     useEffect(() => {
-        queryLocations(`${env.VITE_API_URL}/locations`).then((parsedLocations) => {
+        queryLocations(BACKEND_LOCATIONS_URL).then((parsedLocations) => {
             setLocations(parsedLocations);
             setExtraLocationData(getExtraLocationData(parsedLocations, DateTime.now().setZone('America/New_York')));
             // set extended data in same render to keep the two things in sync

@@ -49,6 +49,12 @@ Note that GitHub will automatically run checks (workflows) on your PR. This incl
 
 Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
 
+## Mocking out the backend
+
+For displaying custom api data without starting up the backend, you can change `BACKEND_LOCATIONS_URL` in `App.tsx` to point to `http://localhost:5173/example-response.json`, which contents should match that returned by the real `/locations` endpoint (note that you need an `example-response.json` file in the /public folder) You can also just modify what's returned by `queryLocations` if that feels more convenient.
+
+(If you're testing this on mobile, be sure to replace `localhost` with your device IP instead.)
+
 ## CSS, the way it was meant to be written™
 
 CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS. Most class names follow the [BEM](https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) (Block, Element, Modifier) convention and strongly limit nested selectors (eg. .block-1 .block-2), but some legacy code may not. (PRs to fix these or remove CSS components are strongly encouraged!)
