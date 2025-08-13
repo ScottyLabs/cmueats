@@ -51,9 +51,14 @@ Note: To add new dependencies, use `bun add dependency-name`. To remove dependen
 
 ## Mocking out the backend
 
-For displaying custom api data without starting up the backend, you can change `BACKEND_LOCATIONS_URL` in `App.tsx` to point to `http://localhost:5173/example-response.json`, which contents should match that returned by the real `/locations` endpoint (note that you need an `example-response.json` file in the /public folder) You can also just modify what's returned by `queryLocations` if that feels more convenient.
+For displaying custom api data without starting up the backend, you can change `BACKEND_LOCATIONS_URL` in `App.tsx` to point to `http://localhost:5173/example-response.json`, which contents should match that returned by the real `/locations` endpoint. Feel free to use live or historical data (see below) for reference. (note that you need an `example-response.json` file in the /public folder) You can also just modify what's returned by `queryLocations` if that feels more convenient.
 
 (If you're testing this on mobile, be sure to replace `localhost` with your device IP instead.)
+
+## Accessing historical API data
+
+https://web.archive.org/web/20250000000000*/https://dining.apis.scottylabs.org/locations
+(Thanks @GhostOf0days)
 
 ## CSS, the way it was meant to be written™
 
