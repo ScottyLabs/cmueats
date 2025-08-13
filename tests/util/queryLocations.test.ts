@@ -122,7 +122,7 @@ describe('queryLocations.ts', () => {
                 isOpen: true,
                 locationState: LocationState.OPEN,
                 statusMsg: 'Open 24/7',
-                timeUntil: 0,
+                timeUntil: Infinity,
             });
             expect(
                 getLocationStatus(

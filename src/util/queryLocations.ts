@@ -92,7 +92,7 @@ export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IRe
             statusMsg: 'Open 24/7',
             closedLongTerm: false,
             changesSoon: false,
-            timeUntil: 0,
+            timeUntil: Infinity,
             locationState: LocationState.OPEN,
             isOpen: true,
         };
