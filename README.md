@@ -60,6 +60,9 @@ For displaying custom api data without starting up the backend, you can change `
 https://web.archive.org/web/20250000000000*/https://dining.apis.scottylabs.org/locations
 (Thanks @GhostOf0days)
 
+Archives of the official dining site can be found on https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/.
+Individual concept pages are also scraped (ex. https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/113), although accuracy may vary since the dining site sometimes glitches and returns a CLOSED status for a day that has opening times.
+
 ## CSS, the way it was meant to be written™
 
 CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS. Most class names follow the [BEM](https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/) (Block, Element, Modifier) convention and strongly limit nested selectors (eg. .block-1 .block-2), but some legacy code may not. (PRs to fix these or remove CSS components are strongly encouraged!)
