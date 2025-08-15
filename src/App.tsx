@@ -16,16 +16,14 @@ import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Ma
 import { getPinnedIds, setPinnedIds } from './util/storage';
 import env from './env';
 
-// for debugging purposes (note that you need an example-response.json file in the /public folder)
-// const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
-// for debugging purposes (note that you need an example-response.json file in the /public folder)
-// const CMU_EATS_API_URL = 'http://localhost:5010/locations';
+const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
+
 function App() {
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
     useEffect(() => {
-        queryLocations(`${env.VITE_API_URL}/locations`).then((parsedLocations) => {
+        queryLocations(BACKEND_LOCATIONS_URL).then((parsedLocations) => {
             setLocations(parsedLocations);
             setExtraLocationData(getExtraLocationData(parsedLocations, DateTime.now().setZone('America/New_York')));
             // set extended data in same render to keep the two things in sync
