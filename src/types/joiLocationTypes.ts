@@ -4,14 +4,14 @@ import { IReadOnlyLocation_FromAPI_PreProcessed } from './locationTypes';
 import assert from '../util/assert';
 
 const { string, number, boolean } = Joi.types();
-const ITimeSlotTimeJoiSchema = Joi.object({
+const ITimeSlotJoiSchema = Joi.object({
     day: number.min(0).max(6).required(),
     hour: number.min(0).max(23).required(),
     minute: number.min(0).max(59).required(),
 });
-const ITimeSlotJoiSchema = Joi.object({
-    start: ITimeSlotTimeJoiSchema.required(),
-    end: ITimeSlotTimeJoiSchema.required(),
+const ITimeRangeJoiSchema = Joi.object({
+    start: ITimeSlotJoiSchema.required(),
+    end: ITimeSlotJoiSchema.required(),
 });
 const ISpecialJoiSchema = Joi.object({
     title: string.required(),
@@ -33,7 +33,7 @@ export const ILocationAPIJoiSchema = Joi.object<IReadOnlyLocation_FromAPI_PrePro
     },
     acceptsOnlineOrders: boolean.required(),
     times: Joi.array()
-        .items(ITimeSlotJoiSchema)
+        .items(ITimeRangeJoiSchema)
         .required()
         .custom((val) => {
             assert(isValidTimeSlotArray(val));
