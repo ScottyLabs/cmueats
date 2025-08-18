@@ -7,7 +7,7 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 ## Developers
 
-1. Join CMUEats' Slack channel (`#tech-cmueats`) in the ScottyLabs Slack. Feel free to also put questions in there.
+1. Join CMUEats' Slack channel (`#tech-22-cmueats`) in the ScottyLabs Slack. Feel free to also put questions in there.
 
 2. Create an account on [Github](https://github.com). Later, you should also apply to get access to the [Github Student Developer Pack](https://education.github.com/pack).
 
