@@ -143,13 +143,13 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
             }
             return error === undefined;
         }) as IReadOnlyLocation_FromAPI_PreProcessed[];
-
         return validLocations.map((location) => ({
             ...location,
             name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
         }));
     } catch (err: any) {
         console.error(err);
+        notifySlack(`<!channel> queryLocations failed with error ${err}`);
         return [];
     }
 }

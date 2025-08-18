@@ -113,3 +113,29 @@ body {
 .AdBannerLink {
     color: white;
 }
+.outer-error-container {
+    font-size: 40px;
+    font-family: var(--text-primary-font);
+    padding: 30px;
+    margin: auto;
+    text-align: center;
+    & > img {
+        display: block;
+        margin: 20px auto;
+        max-width: 100%;
+        max-height: 400px;
+    }
+    & > .outer-error-container__small-text,
+    & a {
+        font-size: 30px;
+        color: hsl(206, 9%, 55%);
+        line-break: anywhere;
+        @media screen and (max-width: 900px) {
+            font-size: 16px;
+        }
+    }
+    @media screen and (max-width: 900px) {
+        font-size: 20px;
+        text-align: left;
+    }
+}
