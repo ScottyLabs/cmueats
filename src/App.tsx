@@ -26,7 +26,7 @@ function ErrorBoundaryFallback() {
             <img src={bocchiError} alt="" />
             the error has been automatically reported to the cmueats team
             <div className="outer-error-container__small-text">
-                Please visit{' '}
+                Please check dining hours on GrubHub or{' '}
                 <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
                     https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
                 </a>{' '}

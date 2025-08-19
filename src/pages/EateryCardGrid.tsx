@@ -47,7 +47,8 @@ export default function EateryCardGrid({
     if (apiError)
         return (
             <p className="locations__error-text">
-                Oops! We received an invalid API response (or no data at all). If this problem persists, please visit{' '}
+                Oops! We received an invalid API response (or no data at all). If this problem persists, please visit
+                GrubHub or{' '}
                 <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
                     https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
                 </a>{' '}

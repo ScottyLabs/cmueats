@@ -129,7 +129,7 @@ body {
     & a {
         font-size: 30px;
         color: hsl(206, 9%, 55%);
-        line-break: anywhere;
+        word-break: break-word;
         @media screen and (max-width: 900px) {
             font-size: 16px;
         }
