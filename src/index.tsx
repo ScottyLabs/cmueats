@@ -15,11 +15,13 @@ posthog.init(env.VITE_POSTHOG_KEY || '', {
 // error handling
 // catches synchronous errors
 window.addEventListener('error', (event) => {
-    notifySlack(`<!channel> ${event.error.message}\n${event.error.stack}`);
+    notifySlack(`<!channel> ${event.error.message}\n${event.error.stack}`).catch(console.error); // ignore failure to prevent infinite loop
 });
 
 // catches errors raised in try-catch blocks
-window.addEventListener('unhandledrejection', (er) => notifySlack(`<!channel> ${er.reason}\n${er.reason.stack}`));
+window.addEventListener('unhandledrejection', (er) =>
+    notifySlack(`<!channel> ${er.reason}\n${er.reason.stack}`).catch(console.error),
+); // ignore failure to prevent infinite loop
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
