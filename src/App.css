@@ -26,11 +26,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
+    background: var(--main-bg);
 }
 
 .App {
     text-align: left;
-    background: var(--main-bg);
     display: flex;
     flex-direction: column;
 }
