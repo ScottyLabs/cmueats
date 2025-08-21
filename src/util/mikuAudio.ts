@@ -1,17 +1,29 @@
-// Simple base64 encoded beep sound for Miku interactions
-// This is a placeholder - in a real app you'd have actual Miku audio files
-export const MIKU_BEEP_SOUND = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEcAyyL2fXEdiUFKIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiP2O/BdiUFJoXO8tmIOQkVYrjm6aJVFAlKn+LxUhHkTsONxP7GhT1OWATWIy5jbPZhQGAJgZDLdcN2ZTpH';
+// Simple Miku audio interactions
+// In a real app, you'd use actual Miku audio files
 
 export const playMikuSound = () => {
-    if (typeof window !== 'undefined' && window.Audio) {
+    if (typeof window !== 'undefined') {
         try {
-            const audio = new Audio(MIKU_BEEP_SOUND);
-            audio.volume = 0.3; // Keep it subtle
-            audio.play().catch(() => {
-                // Ignore if audio playback fails (user hasn't interacted with page yet)
-            });
+            // Create a simple beep using Web Audio API
+            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Miku-inspired frequency (higher pitch like her voice)
+            oscillator.frequency.setValueAtTime(880, audioContext.currentTime); // A5 note
+            oscillator.type = 'sine';
+            
+            // Short, gentle beep
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
         } catch (error) {
-            // Ignore audio errors
+            // Ignore audio errors - not all browsers support Web Audio API
         }
     }
 };
