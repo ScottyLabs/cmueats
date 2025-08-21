@@ -1,6 +1,7 @@
 import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { getGreetings } from '../util/greeting';
+import { getGreetings, getRandomMikuGreeting } from '../util/greeting';
+import { playMikuSound } from '../util/mikuAudio';
 import './ListPage.css';
 import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
 
@@ -10,6 +11,9 @@ import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
+import mikuChibiUrl from '../assets/miku/miku-chibi.svg';
+import mikuNoteUrl from '../assets/miku/miku-note.svg';
+import mikuDancingUrl from '../assets/miku/miku-dancing.svg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
@@ -77,6 +81,10 @@ function ListPage({
     const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
+    // Miku propaganda state
+    const [mikuPropaganda, setMikuPropaganda] = useState('');
+    const [showMikuPropaganda, setShowMikuPropaganda] = useState(IS_MIKU_DAY);
+
     const { mobileGreeting, desktopGreeting } = useMemo(
         () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
         [],
@@ -125,6 +133,33 @@ function ListPage({
         };
     }, []);
 
+    // Miku propaganda rotation
+    useEffect(() => {
+        if (!IS_MIKU_DAY) return;
+
+        const showPropaganda = () => {
+            if (Math.random() < 0.3) {
+                // 30% chance
+                setMikuPropaganda(getRandomMikuGreeting());
+                setShowMikuPropaganda(true);
+                playMikuSound(); // Play Miku sound when propaganda appears
+
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    setShowMikuPropaganda(false);
+                }, 5000);
+            }
+        };
+
+        // Show immediately
+        showPropaganda();
+
+        // Show every 20-40 seconds randomly
+        const interval = setInterval(showPropaganda, 20000 + Math.random() * 20000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div className="ListPage">
             {/*  showAlert &&
@@ -139,6 +174,55 @@ function ListPage({
                 </StyledAlert>
             )}
 
+            {/* Miku Propaganda Alert */}
+            {IS_MIKU_DAY && showMikuPropaganda && (
+                <div
+                    role="button"
+                    tabIndex={0}
+                    style={{
+                        position: 'fixed',
+                        top: '20px',
+                        right: '20px',
+                        background: 'linear-gradient(45deg, #39c5bb, #ff6b9d)',
+                        color: 'white',
+                        padding: '10px 15px',
+                        borderRadius: '10px',
+                        zIndex: 1000,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        boxShadow: '0 4px 20px rgba(57, 197, 187, 0.3)',
+                        animation: 'mikuFloat 3s ease-in-out infinite',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => setShowMikuPropaganda(false)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            setShowMikuPropaganda(false);
+                        }
+                    }}
+                >
+                    <img src={mikuChibiUrl} alt="Miku!" style={{ width: '30px', height: '30px' }} />
+                    <span style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>{mikuPropaganda}</span>
+                    <button
+                        type="button"
+                        style={{
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'white',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMikuPropaganda(false);
+                        }}
+                    >
+                        ×
+                    </button>
+                </div>
+            )}
+
             <div className="ListPage__container">
                 <header className="Locations-header">
                     <div className="Locations-header__greeting-container">
@@ -149,20 +233,43 @@ function ListPage({
                             {mobileGreeting}
                         </h3>
                     </div>
-                    <input
-                        className="Locations-search"
-                        type="search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search"
-                    />
+                    <div style={{ position: 'relative' }}>
+                        <input
+                            className="Locations-search"
+                            type="search"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder={IS_MIKU_DAY ? '🎵 Search with Miku! 🎵' : 'Search'}
+                        />
+                        {IS_MIKU_DAY && (
+                            <img
+                                src={mikuNoteUrl}
+                                alt="Miku Note"
+                                style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    width: '16px',
+                                    height: '16px',
+                                    opacity: 0.7,
+                                    pointerEvents: 'none',
+                                }}
+                                className="miku-pulse"
+                            />
+                        )}
+                    </div>
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
                     {IS_MIKU_DAY && (
                         <button
-                            onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
+                            onClick={() => {
+                                updateTheme(theme === 'miku' ? 'none' : 'miku');
+                                playMikuSound(); // Play sound when toggling Miku theme
+                            }}
                             onTouchEnd={(e) => {
                                 e.preventDefault();
                                 updateTheme(theme === 'miku' ? 'none' : 'miku');
+                                playMikuSound(); // Play sound when toggling Miku theme
                             }}
                             type="button"
                             className="Locations-header__miku-toggle"
@@ -257,13 +364,62 @@ function ListPage({
                             </a>
                             ).
                         </FooterText>
+                        {IS_MIKU_DAY && (
+                            <FooterText style={{ fontStyle: 'italic', fontSize: '0.9rem', opacity: 0.8 }}>
+                                🎤 &quot;Technology and music unite to serve your hunger!&quot; - Hatsune Miku 🎤
+                            </FooterText>
+                        )}
                     </>
                 )}
-                <LogoText variant="h4">
-                    cmu
-                    <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
-                </LogoText>
+                <div style={{ position: 'relative' }}>
+                    <LogoText variant="h4">
+                        cmu
+                        <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
+                        {IS_MIKU_DAY && (
+                            <span style={{ fontSize: '0.6rem', verticalAlign: 'super', marginLeft: '5px' }}>
+                                <img
+                                    src={mikuNoteUrl}
+                                    alt="Miku Note"
+                                    style={{ width: '12px', height: '12px' }}
+                                    className="miku-bounce"
+                                />
+                            </span>
+                        )}
+                    </LogoText>
+                    {/* Additional random floating Miku elements */}
+                    {IS_MIKU_DAY && Math.random() < 0.7 && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: '-10px',
+                                left: '-30px',
+                                opacity: 0.6,
+                                animation: 'mikuFloat 4s ease-in-out infinite',
+                            }}
+                        >
+                            <img src={mikuChibiUrl} alt="Miku!" style={{ width: '25px', height: '25px' }} />
+                        </div>
+                    )}
+                </div>
                 {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
+                {/* Extra Miku propaganda when IS_MIKU_DAY but theme isn't miku */}
+                {IS_MIKU_DAY && theme !== 'miku' && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            bottom: '20px',
+                            left: '20px',
+                            opacity: 0.4,
+                            animation: 'mikuFloat 3s ease-in-out infinite',
+                        }}
+                    >
+                        <img
+                            src={mikuDancingUrl}
+                            alt="Miku is always here!"
+                            style={{ width: '80px', height: '80px' }}
+                        />
+                    </div>
+                )}
             </footer>
             <link rel="prefetch" href={mikuBgUrl} />
         </div>

@@ -1,0 +1,9 @@
+<!-- Miku chibi placeholder -->
+<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="30" cy="25" r="15" fill="#fdbcb4"/>
+  <rect x="20" y="10" width="20" height="20" rx="10" fill="#39c5bb"/>
+  <circle cx="25" cy="22" r="1" fill="#000"/>
+  <circle cx="35" cy="22" r="1" fill="#000"/>
+  <path d="M 26 28 Q 30 30 34 28" stroke="#000" fill="none" stroke-width="0.5"/>
+  <rect x="25" y="40" width="10" height="15" fill="#2c3e50"/>
+</svg>

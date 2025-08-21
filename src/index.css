@@ -225,3 +225,86 @@ body {
         background-color: var(--button-bg--hover);
     }
 }
+
+/* Miku Propaganda Styles */
+.miku-element {
+    transition: transform 0.3s ease;
+}
+
+.miku-element:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.miku-bounce {
+    animation: mikuBounce 2s ease-in-out infinite;
+}
+
+@keyframes mikuBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.miku-pulse {
+    animation: mikuPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes mikuPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+.miku-float {
+    animation: mikuFloat 3s ease-in-out infinite;
+}
+
+@keyframes mikuFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* Miku note animation for musical elements */
+.miku-notes {
+    position: relative;
+    overflow: hidden;
+}
+
+.miku-notes::after {
+    content: '🎵 🎶 🎤 🎵';
+    position: absolute;
+    top: -20px;
+    left: -100%;
+    font-size: 12px;
+    animation: mikuNotesFloat 8s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes mikuNotesFloat {
+    0% {
+        left: -100%;
+        opacity: 0;
+    }
+    10%, 90% {
+        opacity: 0.6;
+    }
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}

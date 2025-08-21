@@ -1,4 +1,6 @@
 import { Card, CardHeader, styled, Grid, CardContent, Avatar, Skeleton } from '@mui/material';
+import IS_MIKU_DAY from '../util/constants';
+import mikuDancingUrl from '../assets/miku/miku-dancing.svg';
 
 const StyledCard = styled(Card)({
     backgroundColor: 'var(--card-bg)',
@@ -30,15 +32,31 @@ function EateryCardSkeleton({ index }: { index: number }) {
                 <StyledCardHeader
                     title={<Skeleton variant="text" sx={{ fontSize: '1rem' }} animation={false} />}
                     avatar={
-                        <Avatar
-                            sx={{
-                                width: 12,
-                                height: 12,
-                                backgroundColor: 'var(--card-header-bg)',
-                            }}
-                        >
-                            <Skeleton variant="circular" width={40} height={40} animation={false} />
-                        </Avatar>
+                        IS_MIKU_DAY ? (
+                            <Avatar
+                                sx={{
+                                    width: 40,
+                                    height: 40,
+                                    backgroundColor: 'transparent',
+                                }}
+                            >
+                                <img
+                                    src={mikuDancingUrl}
+                                    alt="Loading Miku!"
+                                    style={{ width: '30px', height: '30px' }}
+                                />
+                            </Avatar>
+                        ) : (
+                            <Avatar
+                                sx={{
+                                    width: 12,
+                                    height: 12,
+                                    backgroundColor: 'var(--card-header-bg)',
+                                }}
+                            >
+                                <Skeleton variant="circular" width={40} height={40} animation={false} />
+                            </Avatar>
+                        )
                     }
                 />
                 <CardContent>

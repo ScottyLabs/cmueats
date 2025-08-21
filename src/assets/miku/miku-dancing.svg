@@ -1,0 +1,15 @@
+<!-- Simple animated Miku GIF placeholder - this would be replaced with actual Miku GIF -->
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .miku-hair { fill: #39c5bb; animation: sway 2s ease-in-out infinite; }
+      @keyframes sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+    </style>
+  </defs>
+  <circle cx="50" cy="40" r="25" fill="#fdbcb4"/>
+  <rect x="35" y="15" width="30" height="35" rx="15" class="miku-hair"/>
+  <circle cx="42" cy="35" r="2" fill="#000"/>
+  <circle cx="58" cy="35" r="2" fill="#000"/>
+  <path d="M 45 45 Q 50 50 55 45" stroke="#000" fill="none" stroke-width="1"/>
+  <rect x="40" y="65" width="20" height="30" fill="#2c3e50"/>
+</svg>
