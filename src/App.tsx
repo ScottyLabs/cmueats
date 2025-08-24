@@ -18,6 +18,7 @@ import { getPinnedIds, setPinnedIds } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
+import useLocalStorage from './util/localStorage';
 
 const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
 
@@ -101,9 +102,17 @@ function App() {
     );
 }
 function Banner() {
-    const [isOpen, setIsOpen] = useState(true);
+    const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
+    const closeBanner = () => {
+        setIsClosed('true');
+    };
+
     return (
-        <motion.div className="welcome-banner-container" animate={{ height: isOpen ? 'auto' : 0 }}>
+        <motion.div
+            className="welcome-banner-container"
+            animate={{ height: closed === null ? 'auto' : 0 }}
+            initial={{ height: closed === null ? 'auto' : 0 }}
+        >
             <div className="welcome-banner">
                 <div className="welcome-banner__text">
                     <span className="welcome-banner__text--long">
@@ -126,17 +135,12 @@ function Banner() {
                             Scottylabs
                         </a>
                         !{' '}
-                        <button className="welcome-banner__close-mobile" onClick={() => setIsOpen(false)} type="button">
+                        <button className="welcome-banner__close-mobile" onClick={closeBanner} type="button">
                             close
                         </button>
                     </span>
                 </div>
-                <button
-                    className="welcome-banner__close"
-                    type="button"
-                    aria-label="close-banner"
-                    onClick={() => setIsOpen(false)}
-                >
+                <button className="welcome-banner__close" type="button" aria-label="close-banner" onClick={closeBanner}>
                     <img src={closeButton} alt="" />
                 </button>
             </div>
