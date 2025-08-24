@@ -13,6 +13,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
+import SponsorCarousel from '../components/SponsorCarousel';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -198,7 +199,9 @@ function ListPage({
                     </FooterText>
                 ) : (
                     <>
-                        <FooterText>All times are displayed in Pittsburgh local time ({getPittsburghTime()}).</FooterText>
+                        <FooterText>
+                            All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
+                        </FooterText>
                         <FooterText>
                             If you encounter any problems, please contact{' '}
                             {emails.length > 0 ? (
@@ -255,6 +258,7 @@ function ListPage({
                             </a>
                             ).
                         </FooterText>
+                        <SponsorCarousel />
                     </>
                 )}
                 <LogoText variant="h4">

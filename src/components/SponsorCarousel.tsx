@@ -30,7 +30,7 @@ const getDeviceType = (width: number): DeviceType => {
     return 'mobile';
 };
 
-const MyCarousel = () => {
+const SponsorCarousel = () => {
     const [deviceType, setDeviceType] = useState<DeviceType>('desktop');
 
     useEffect(() => {
@@ -87,4 +87,4 @@ const MyCarousel = () => {
     );
 };
 
-export default MyCarousel;
+export default SponsorCarousel;
