@@ -108,10 +108,24 @@ function Banner() {
                 <div className="welcome-banner__text">
                     <span className="welcome-banner__text--long">
                         <img src={scottyDog} alt="" />
-                        Interested in Tech/Design or want to help build the future of CMU Eats? Join Scottylabs!
+                        <span>
+                            Interested in Tech/Design or want to help build the future of CMU Eats? Join{' '}
+                            <a
+                                href="https://tartanconnect.cmu.edu/scottylabs/club_signup"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Scottylabs
+                            </a>
+                            !
+                        </span>
                     </span>
                     <span className="welcome-banner__text--short">
-                        Interested in Tech/Design? Join Scottylabs!{' '}
+                        Interested in Tech/Design? Join{' '}
+                        <a href="https://tartanconnect.cmu.edu/scottylabs/club_signup" target="_blank" rel="noreferrer">
+                            Scottylabs
+                        </a>
+                        !{' '}
                         <button className="welcome-banner__close-mobile" onClick={() => setIsOpen(false)} type="button">
                             close
                         </button>
