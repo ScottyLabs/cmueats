@@ -87,10 +87,10 @@ function App() {
         <React.StrictMode>
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                 <BrowserRouter>
-                    <Banner />
-                    {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
-                            &gt;_&lt;</div> */}
                     <div className="App">
+                        <Banner />
+                        {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
+                            &gt;_&lt;</div> */}
                         <div className="MainContent">
                             <Routes>
                                 <Route
