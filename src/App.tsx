@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
 import { motion } from 'motion/react';
+import { ErrorBoundary } from 'react-error-boundary';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
@@ -19,9 +20,25 @@ import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
+import bocchiError from './assets/bocchi-error.webp';
 
 const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
-
+function ErrorBoundaryFallback() {
+    return (
+        <div className="outer-error-container">
+            oh... uhhh... well this is awkward. we have encountered an issue while rendering this page{' '}
+            <img src={bocchiError} alt="" />
+            the error has been automatically reported to the cmueats team
+            <div className="outer-error-container__small-text">
+                Please check dining hours on GrubHub or{' '}
+                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
+                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
+                </a>{' '}
+                for now
+            </div>
+        </div>
+    );
+}
 function App() {
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
@@ -68,36 +85,36 @@ function App() {
 
     return (
         <React.StrictMode>
-            <BrowserRouter>
-                <div className="App">
-                    <div className="MainContent">
-                        <Banner />
-                        {/* <div className="AdBanner">
-                            CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
-                            &gt;_&lt;
-                        </div> */}
-                        <Routes>
-                            <Route
-                                path="/"
-                                element={
-                                    <ListPage
-                                        extraLocationData={extraLocationData}
-                                        locations={locations}
-                                        pinnedIds={pinnedIds}
-                                        updatePinnedIds={updatePinnedIds}
-                                    />
-                                }
-                            />
-                            <Route
-                                path="/map"
-                                element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
-                            />
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
+            <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
+                <BrowserRouter>
+                    <Banner />
+                    {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
+                            &gt;_&lt;</div> */}
+                    <div className="App">
+                        <div className="MainContent">
+                            <Routes>
+                                <Route
+                                    path="/"
+                                    element={
+                                        <ListPage
+                                            extraLocationData={extraLocationData}
+                                            locations={locations}
+                                            pinnedIds={pinnedIds}
+                                            updatePinnedIds={updatePinnedIds}
+                                        />
+                                    }
+                                />
+                                <Route
+                                    path="/map"
+                                    element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
+                                />
+                                <Route path="*" element={<NotFoundPage />} />
+                            </Routes>
+                        </div>
+                        <Navbar />
                     </div>
-                    <Navbar />
-                </div>
-            </BrowserRouter>
+                </BrowserRouter>
+            </ErrorBoundary>
         </React.StrictMode>
     );
 }

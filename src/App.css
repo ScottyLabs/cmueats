@@ -26,11 +26,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
+    background: var(--main-bg);
 }
 
 .App {
     text-align: left;
-    background: var(--main-bg);
     display: flex;
     flex-direction: column;
 }
@@ -113,6 +113,7 @@ body {
 .AdBannerLink {
     color: white;
 }
+
 .welcome-banner-container {
     overflow: hidden;
     position: sticky;
@@ -227,5 +228,31 @@ body {
     }
     .welcome-banner__close-mobile {
         display: inline;
+    }
+}
+.outer-error-container {
+    font-size: 40px;
+    font-family: var(--text-primary-font);
+    padding: 30px;
+    margin: auto;
+    text-align: center;
+    & > img {
+        display: block;
+        margin: 20px auto;
+        max-width: 100%;
+        max-height: 400px;
+    }
+    & > .outer-error-container__small-text,
+    & a {
+        font-size: 30px;
+        color: hsl(206, 9%, 55%);
+        word-break: break-word;
+        @media screen and (max-width: 900px) {
+            font-size: 16px;
+        }
+    }
+    @media screen and (max-width: 900px) {
+        font-size: 20px;
+        text-align: left;
     }
 }
