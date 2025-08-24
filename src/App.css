@@ -113,3 +113,119 @@ body {
 .AdBannerLink {
     color: white;
 }
+.welcome-banner-container {
+    overflow: hidden;
+    position: sticky;
+    top: 0%;
+    z-index: 727;
+}
+.welcome-banner {
+    font-family: var(--text-primary-font);
+    font-size: 28px;
+    font-weight: 200;
+    height: 72px;
+    background-image: url('./assets/banner/bg-wave.svg?inline');
+    background-position: top center;
+    background-color: #1c1d20;
+    border-bottom: 2px solid hsl(180, 3%, 8%);
+
+    background-size: max(100vw, 1400px) 100%;
+    background-repeat: no-repeat;
+
+    & > .welcome-banner__text {
+        isolation: isolate;
+        margin: auto;
+        position: relative;
+        font-size: 1.25rem;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        padding: 0 15px;
+
+        /* for a fade-out illusion, we create a second copy of the lines with the color the same as the bg with dimensions equal to the text */
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background-image: url('./assets/banner/fg-wave.svg?inline');
+            background-position: top center;
+            background-size: max(100vw, 1400px) 100%;
+            background-repeat: no-repeat;
+
+            mask-image: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(0, 0, 0, 0.68) 10%,
+                rgba(0, 0, 0, 0.68) 90%,
+                transparent 100%
+            );
+        }
+
+        & > .welcome-banner__text--long {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            & img {
+                height: 1.3em;
+            }
+        }
+        & > .welcome-banner__text--long {
+            display: flex;
+        }
+        & > .welcome-banner__text--short {
+            display: none;
+        }
+        @media (max-width: 1000px) {
+            & > .welcome-banner__text--long {
+                display: none;
+            }
+            & > .welcome-banner__text--short {
+                display: inline;
+            }
+        }
+        & .welcome-banner__close-mobile {
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            color: #95a4b0;
+            padding: 0;
+        }
+    }
+
+    & > .welcome-banner__close {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translate(0, -50%);
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        & img {
+            transition: 0.2s all ease-in-out;
+            &:hover {
+                filter: brightness(150%);
+                rotate: 90deg;
+                &:active {
+                    filter: brightness(120%);
+                }
+            }
+        }
+    }
+}
+
+.welcome-banner__close {
+    display: block;
+}
+.welcome-banner__close-mobile {
+    display: none;
+}
+@media (max-width: 600px) {
+    .welcome-banner__close {
+        display: none;
+    }
+    .welcome-banner__close-mobile {
+        display: inline;
+    }
+}
