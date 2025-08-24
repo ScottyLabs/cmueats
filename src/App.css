@@ -123,7 +123,6 @@ body {
     font-family: var(--text-primary-font);
     font-size: 28px;
     font-weight: 200;
-    height: 72px;
     background-image: url('./assets/banner/bg-wave.svg?inline');
     background-position: top center;
     background-color: #1c1d20;
@@ -140,8 +139,7 @@ body {
         width: fit-content;
         display: flex;
         align-items: center;
-        height: 100%;
-        padding: 0 15px;
+        padding: 25px 15px;
 
         /* for a fade-out illusion, we create a second copy of the lines with the color the same as the bg with dimensions equal to the text */
         &::before {
@@ -157,8 +155,8 @@ body {
             mask-image: linear-gradient(
                 to right,
                 transparent 0%,
-                rgba(0, 0, 0, 0.68) 10%,
-                rgba(0, 0, 0, 0.68) 90%,
+                rgba(0, 0, 0, 0.88) 10%,
+                rgba(0, 0, 0, 0.88) 90%,
                 transparent 100%
             );
         }
@@ -178,6 +176,8 @@ body {
             display: none;
         }
         @media (max-width: 1000px) {
+            padding: 20px 15px;
+
             & > .welcome-banner__text--long {
                 display: none;
             }
