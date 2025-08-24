@@ -141,7 +141,7 @@ body {
         align-items: center;
         padding: 25px 15px;
 
-        /* for a fade-out illusion, we create a second copy of the lines with the color the same as the bg with dimensions equal to the text */
+        /* for a fade-out illusion, we create a second copy of the lines with the color the same as the bg but with dimensions equal to the text */
         &::before {
             content: '';
             position: absolute;
