@@ -30,7 +30,7 @@ function ErrorBoundaryFallback() {
             <img src={bocchiError} alt="" />
             the error has been automatically reported to the cmueats team
             <div className="outer-error-container__small-text">
-                Please check dining hours on GrubHub or{' '}
+                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
                 <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
                     https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
                 </a>{' '}

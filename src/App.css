@@ -231,7 +231,7 @@ body {
     }
 }
 .outer-error-container {
-    font-size: 40px;
+    font-size: 20px;
     font-family: var(--text-primary-font);
     padding: 30px;
     margin: auto;
@@ -240,11 +240,12 @@ body {
         display: block;
         margin: 20px auto;
         max-width: 100%;
-        max-height: 400px;
+        max-height: 300px;
+        border-radius: 10px;
     }
-    & > .outer-error-container__small-text,
-    & a {
-        font-size: 30px;
+    & > .outer-error-container__small-text {
+        margin-top: 5px;
+        font-size: 16px;
         color: hsl(206, 9%, 55%);
         word-break: break-word;
         @media screen and (max-width: 900px) {
@@ -252,7 +253,7 @@ body {
         }
     }
     @media screen and (max-width: 900px) {
-        font-size: 20px;
+        font-size: 16px;
         text-align: left;
     }
 }
