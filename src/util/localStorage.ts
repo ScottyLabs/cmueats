@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import notifySlack from './slack';
 
 export default function useLocalStorage(key: string) {
     const [value, setValue] = useState(() => localStorage.getItem(key));
@@ -13,7 +14,11 @@ export default function useLocalStorage(key: string) {
     return [
         value,
         (newVal: string) => {
-            localStorage.setItem(key, newVal);
+            try {
+                localStorage.setItem(key, newVal);
+            } catch (e) {
+                notifySlack(String(e));
+            }
             setValue(newVal);
         },
     ] as const;
