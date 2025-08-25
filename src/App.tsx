@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
+import { motion } from 'motion/react';
 import { ErrorBoundary } from 'react-error-boundary';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
@@ -16,6 +17,9 @@ import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
 import { getPinnedIds, setPinnedIds } from './util/storage';
 import env from './env';
+import scottyDog from './assets/banner/scotty-dog.svg';
+import closeButton from './assets/banner/close-button.svg';
+import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
 
 const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
@@ -26,7 +30,7 @@ function ErrorBoundaryFallback() {
             <img src={bocchiError} alt="" />
             the error has been automatically reported to the cmueats team
             <div className="outer-error-container__small-text">
-                Please check dining hours on GrubHub or{' '}
+                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
                 <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
                     https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
                 </a>{' '}
@@ -84,11 +88,10 @@ function App() {
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                 <BrowserRouter>
                     <div className="App">
+                        <Banner />
+                        {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
+                            &gt;_&lt;</div> */}
                         <div className="MainContent">
-                            {/* <div className="AdBanner">
-                            CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
-                            &gt;_&lt;
-                        </div> */}
                             <Routes>
                                 <Route
                                     path="/"
@@ -115,5 +118,50 @@ function App() {
         </React.StrictMode>
     );
 }
+function Banner() {
+    const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
+    const closeBanner = () => {
+        setIsClosed('true');
+    };
 
+    return (
+        <motion.div
+            className="welcome-banner-container"
+            animate={{ height: closed === null ? 'auto' : 0 }}
+            initial={{ height: closed === null ? 'auto' : 0 }}
+        >
+            <div className="welcome-banner">
+                <div className="welcome-banner__spacer" />
+                <div className="welcome-banner__text welcome-banner-padding">
+                    <span className="welcome-banner__text--long">
+                        <img src={scottyDog} alt="" />
+                        <span>
+                            Interested in Tech/Design or want to help build the future of CMUEats? Join{' '}
+                            <a
+                                href="https://tartanconnect.cmu.edu/scottylabs/club_signup"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                ScottyLabs
+                            </a>
+                            !
+                        </span>
+                    </span>
+                    <span className="welcome-banner__text--short">
+                        Interested in Tech/Design? Join{' '}
+                        <a href="https://tartanconnect.cmu.edu/scottylabs/club_signup" target="_blank" rel="noreferrer">
+                            ScottyLabs
+                        </a>
+                        !{' '}
+                    </span>
+                </div>
+                <div className="welcome-banner__close welcome-banner-padding welcome-banner-padding--button">
+                    <button type="button" aria-label="close-banner" onClick={closeBanner}>
+                        <img src={closeButton} alt="" />
+                    </button>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
 export default App;
