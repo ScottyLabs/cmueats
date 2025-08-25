@@ -150,7 +150,7 @@ function Banner() {
                     <span className="welcome-banner__text--short">
                         Interested in Tech/Design? Join{' '}
                         <a href="https://tartanconnect.cmu.edu/scottylabs/club_signup" target="_blank" rel="noreferrer">
-                            Scottylabs
+                            ScottyLabs
                         </a>
                         !{' '}
                     </span>
