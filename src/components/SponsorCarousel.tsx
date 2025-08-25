@@ -45,20 +45,20 @@ const SponsorCarousel = () => {
     }, []);
 
     const logos = [
-        { src: 'assets/logos/accenture-logo-darkmode.png', alt: 'Accenture Logo' },
-        { src: 'assets/logos/agentuity-logo.png', alt: 'Agentuity Logo' },
-        { src: 'assets/logos/balyasny-logo-darkmode.png', alt: 'Balyasny Logo' },
-        { src: 'assets/logos/citadel-logo.png', alt: 'Citadel Logo' },
-        { src: 'assets/logos/coderabbit-logo-darkmode.png', alt: 'CodeRabbit Logo' },
-        { src: 'assets/logos/commvault-logo-darkmode.png', alt: 'Commvault Logo' },
-        { src: 'assets/logos/deshaw-logo.png', alt: 'D.E. Shaw Logo' },
-        { src: 'assets/logos/fly-io-logo.png', alt: 'Fly.io Logo' },
-        { src: 'assets/logos/hrt-logo.png', alt: 'HRT Logo' },
-        { src: 'assets/logos/jane-street-logo-darkmode.png', alt: 'Jane Street Logo' },
-        { src: 'assets/logos/modal-logo.png', alt: 'Modal Logo' },
-        { src: 'assets/logos/optiver-logo-darkmode.png', alt: 'Optiver Logo' },
-        { src: 'assets/logos/sandia-logo-darkmode.png', alt: 'Sandia Logo' },
-        { src: 'assets/logos/scale-logo-color.png', alt: 'Scale AI Logo' },
+        { src: './src/assets/logos/accenture-logo-darkmode.png', alt: 'Accenture Logo' },
+        { src: './src/assets/logos/agentuity-logo.png', alt: 'Agentuity Logo' },
+        { src: './src/assets/logos/balyasny-logo-darkmode.png', alt: 'Balyasny Logo' },
+        { src: './src/assets/logos/citadel-logo.png', alt: 'Citadel Logo' },
+        { src: './src/assets/logos/coderabbit-logo-darkmode.png', alt: 'CodeRabbit Logo' },
+        { src: './src/assets/logos/commvault-logo-darkmode.png', alt: 'Commvault Logo' },
+        { src: './src/assets/logos/deshaw-logo.png', alt: 'D.E. Shaw Logo' },
+        { src: './src/assets/logos/fly-io-logo.png', alt: 'Fly.io Logo' },
+        { src: './src/assets/logos/hrt-logo.png', alt: 'HRT Logo' },
+        { src: './src/assets/logos/jane-street-logo-darkmode.png', alt: 'Jane Street Logo' },
+        { src: './src/assets/logos/modal-logo.png', alt: 'Modal Logo' },
+        { src: './src/assets/logos/optiver-logo-darkmode.png', alt: 'Optiver Logo' },
+        { src: './src/assets/logos/sandia-logo-darkmode.png', alt: 'Sandia Logo' },
+        { src: './src/assets/logos/scale-logo-color.png', alt: 'Scale AI Logo' },
     ];
 
     return (
