@@ -136,7 +136,7 @@ function Banner() {
                     <span className="welcome-banner__text--long">
                         <img src={scottyDog} alt="" />
                         <span>
-                            Interested in Tech/Design or want to help build the future of CMU Eats? Join{' '}
+                            Interested in Tech/Design or want to help build the future of CMUEats? Join{' '}
                             <a
                                 href="https://tartanconnect.cmu.edu/scottylabs/club_signup"
                                 target="_blank"
