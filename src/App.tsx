@@ -131,7 +131,8 @@ function Banner() {
             initial={{ height: closed === null ? 'auto' : 0 }}
         >
             <div className="welcome-banner">
-                <div className="welcome-banner__text">
+                <div className="welcome-banner__spacer" />
+                <div className="welcome-banner__text welcome-banner-padding">
                     <span className="welcome-banner__text--long">
                         <img src={scottyDog} alt="" />
                         <span>
@@ -152,14 +153,13 @@ function Banner() {
                             Scottylabs
                         </a>
                         !{' '}
-                        <button className="welcome-banner__close-mobile" onClick={closeBanner} type="button">
-                            close
-                        </button>
                     </span>
                 </div>
-                <button className="welcome-banner__close" type="button" aria-label="close-banner" onClick={closeBanner}>
-                    <img src={closeButton} alt="" />
-                </button>
+                <div className="welcome-banner__close welcome-banner-padding welcome-banner-padding--button">
+                    <button type="button" aria-label="close-banner" onClick={closeBanner}>
+                        <img src={closeButton} alt="" />
+                    </button>
+                </div>
             </div>
         </motion.div>
     );

@@ -120,7 +120,17 @@ body {
     top: 0%;
     z-index: 727;
 }
+.welcome-banner-padding {
+    padding: 20px 15px;
+    &.welcome-banner-padding--button {
+        padding-left: 0;
+        padding-right: 0;
+        /* so it grows the same amt as spacer on left */
+    }
+}
 .welcome-banner {
+    display: flex;
+    align-items: start;
     font-family: var(--text-primary-font);
     font-size: 28px;
     font-weight: 200;
@@ -132,15 +142,17 @@ body {
     background-size: max(100vw, 1400px) 100%;
     background-repeat: no-repeat;
 
+    & > .welcome-banner__spacer {
+        flex-grow: 1;
+    }
     & > .welcome-banner__text {
         isolation: isolate;
-        margin: auto;
+        align-self: stretch;
         position: relative;
         font-size: 1.25rem;
         width: fit-content;
         display: flex;
         align-items: center;
-        padding: 25px 15px;
 
         /* for a fade-out illusion, we create a second copy of the lines with the color the same as the bg but with dimensions equal to the text */
         &::before {
@@ -160,6 +172,10 @@ body {
                 rgba(0, 0, 0, 0.88) 90%,
                 transparent 100%
             );
+            @media (max-width: 538px) {
+                /* at around this point the container is no longer centered and thus can't act as a opacity filter */
+                content: none;
+            }
         }
 
         & > .welcome-banner__text--long {
@@ -169,6 +185,10 @@ body {
             & img {
                 height: 1.3em;
             }
+            & span {
+                /* firefox support something something */
+                text-wrap: nowrap;
+            }
         }
         & > .welcome-banner__text--long {
             display: flex;
@@ -177,8 +197,6 @@ body {
             display: none;
         }
         @media (max-width: 1000px) {
-            padding: 20px 15px;
-
             & > .welcome-banner__text--long {
                 display: none;
             }
@@ -186,50 +204,38 @@ body {
                 display: inline;
             }
         }
-        & .welcome-banner__close-mobile {
-            background: transparent;
-            border: none;
-            font-size: 1rem;
-            color: #95a4b0;
-            padding: 0;
-        }
     }
 
     & > .welcome-banner__close {
-        position: absolute;
-        right: 50px;
-        top: 50%;
-        transform: translate(0, -50%);
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        & img {
-            transition: 0.2s all ease-in-out;
-            &:hover {
-                filter: brightness(150%);
-                rotate: 90deg;
-                &:active {
-                    filter: brightness(120%);
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 0; /* so it grows the same amt as the spacer on the other side (instead of like slightly more) */
+        align-self: center;
+        & > button {
+            display: block;
+            margin-left: auto;
+            margin-right: 60px;
+            @media (max-width: 900px) {
+                margin-right: 10px;
+            }
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            & img {
+                transition: 0.2s all ease-in-out;
+                height: 20px;
+                &:hover {
+                    filter: brightness(150%);
+                    rotate: 90deg;
+                    &:active {
+                        filter: brightness(120%);
+                    }
                 }
             }
         }
     }
 }
 
-.welcome-banner__close {
-    display: block;
-}
-.welcome-banner__close-mobile {
-    display: none;
-}
-@media (max-width: 600px) {
-    .welcome-banner__close {
-        display: none;
-    }
-    .welcome-banner__close-mobile {
-        display: inline;
-    }
-}
 .outer-error-container {
     font-size: 20px;
     font-family: var(--text-primary-font);
