@@ -196,7 +196,7 @@ body {
         & > .welcome-banner__text--short {
             display: none;
         }
-        @media (max-width: 1000px) {
+        @media (max-width: 1073px) {
             & > .welcome-banner__text--long {
                 display: none;
             }
