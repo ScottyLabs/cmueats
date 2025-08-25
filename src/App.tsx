@@ -142,7 +142,7 @@ function Banner() {
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                Scottylabs
+                                ScottyLabs
                             </a>
                             !
                         </span>
