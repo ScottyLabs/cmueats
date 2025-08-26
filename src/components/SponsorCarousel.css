@@ -1,5 +1,18 @@
 .carousel__image {
-    max-width: 100%;
-    height: auto;
-    size: 10px;
+    filter: brightness(0) invert(1);
+    height: 60px;
+    width: auto;
+    margin: 0 8px 12px 8px;
+    object-fit: contain;
+    display: block;
+    align-self: center;
+    padding-bottom: 40px;
+}
+
+.carousel-item-padding-40-px {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    height: 100%;
 }

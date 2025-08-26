@@ -8,11 +8,11 @@ type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'monitor';
 const responsive = {
     monitor: {
         breakpoint: { max: 4000, min: 3000 },
-        items: 2,
+        items: 1,
     },
     desktop: {
         breakpoint: { max: 3000, min: 1024 },
-        items: 2,
+        items: 1,
     },
     tablet: {
         breakpoint: { max: 1024, min: 464 },
@@ -54,11 +54,11 @@ const SponsorCarousel = () => {
         { src: './src/assets/logos/commvault.svg', alt: 'Commvault logo' },
         { src: './src/assets/logos/deshawlogo.svg', alt: 'DE Shaw logo' },
         { src: './src/assets/logos/flyiologo.svg', alt: 'Fly.io logo' },
-        { src: './src/assets/logos/Hrtlogo.svg', alt: 'Hudson River Trading logo' },
-        { src: './src/assets/logos/janestreet.svg', alt: 'Jane Street logo' },
+        { src: './src/assets/logos/hrt.svg', alt: 'Hudson River Trading logo' },
+        { src: './src/assets/logos/jane.svg', alt: 'Jane Street logo' },
         { src: './src/assets/logos/modallogo.svg', alt: 'Modal logo' },
         { src: './src/assets/logos/optiverlogo.svg', alt: 'Optiver logo' },
-        { src: './src/assets/logos/Sandia_National_Laboratories_logo.svg', alt: 'Sandia National Laboratories logo' },
+        { src: './src/assets/logos/sandia.svg', alt: 'Sandia National Laboratories logo' },
         { src: './src/assets/logos/ScaleAIlogo.svg', alt: 'Scale AI logo' },
     ];
 
@@ -72,10 +72,10 @@ const SponsorCarousel = () => {
             ssr={true} // renders carousel on server-side
             infinite={true}
             autoPlay={true}
-            autoPlaySpeed={1000}
+            autoPlaySpeed={2000}
             keyBoardControl={true}
             containerClass="carousel-container"
-            removeArrowOnDeviceType={['tablet', 'mobile', 'desktop', 'monitor']}
+            removeArrowOnDeviceType={['tablet', 'mobile', 'desktop']}
             dotListClass="custom-dot-list-style"
             itemClass="carousel-item-padding-40-px"
         >

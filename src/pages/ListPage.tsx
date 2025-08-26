@@ -261,15 +261,23 @@ function ListPage({
                             </FooterText>
                         </>
                     )}
-                    <LogoText variant="h4">
-                        cmu
-                        <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
-                    </LogoText>
-                    {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
+                    <div className="footer__logo-desktop">
+                        <LogoText variant="h4">
+                            cmu
+                            <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
+                        </LogoText>
+                    </div>
                 </div>
                 <div className="footer__carousel">
                     <SponsorCarousel />
                 </div>
+                <div className="footer__logo-mobile">
+                    <LogoText variant="h4">
+                        cmu
+                        <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
+                    </LogoText>
+                </div>
+                {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
             </footer>
             <link rel="prefetch" href={mikuBgUrl} />
         </div>

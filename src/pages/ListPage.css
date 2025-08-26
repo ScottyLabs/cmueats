@@ -297,8 +297,37 @@
 }
 
 .footer__carousel {
-    min-width: 350px;
+    max-width: 50%;
+    height: 60%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-center;
     align-items: center;
+}
+.footer__logo-mobile {
+    display: none;
+}
+
+.footer__logo-desktop {
+    display: block;
+}
+
+@media screen and (max-width: 600px) {
+    .footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .footer__carousel {
+        max-width: 100%;
+        width: 100%;
+        margin-top: 16px;
+        justify-content: center;
+    }
+    .footer__logo-mobile {
+        display: block;
+        margin-top: 12px;
+        text-align: center;
+    }
+    .footer__logo-desktop {
+        display: none;
+    }
 }
