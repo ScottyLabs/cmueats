@@ -96,7 +96,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^24.0.0",
     "prettier": "^3.2.5",
-    "react-multi-carousel": "^2.8.6",
     "typescript": "^5.7.2",
     "vite": "^5.4.19",
     "vite-plugin-checker": "^0.6.4",
