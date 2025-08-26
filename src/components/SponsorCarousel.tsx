@@ -31,7 +31,7 @@ const getDeviceType = (width: number): DeviceType => {
     return 'mobile';
 };
 
-const SponsorCarousel = () => {
+function SponsorCarousel() {
     const [deviceType, setDeviceType] = useState<DeviceType>('desktop');
 
     useEffect(() => {
@@ -68,24 +68,24 @@ const SponsorCarousel = () => {
             deviceType={deviceType}
             swipeable={false}
             draggable={false}
-            showDots={true}
-            ssr={true} // renders carousel on server-side
-            infinite={true}
-            autoPlay={true}
+            showDots
+            ssr // renders carousel on server-side
+            infinite
+            autoPlay
             autoPlaySpeed={2000}
-            keyBoardControl={true}
+            keyBoardControl
             containerClass="carousel-container"
             removeArrowOnDeviceType={['tablet', 'mobile', 'desktop']}
             dotListClass="custom-dot-list-style"
             itemClass="carousel-item-padding-40-px"
         >
-            {logos.map((logo, index) => (
-                <div key={index}>
+            {logos.map((logo) => (
+                <div key={logo.alt}>
                     <img src={logo.src} alt={logo.alt} className="carousel__image" />
                 </div>
             ))}
         </Carousel>
     );
-};
+}
 
 export default SponsorCarousel;
