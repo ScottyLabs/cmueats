@@ -8,15 +8,15 @@ type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'monitor';
 const responsive = {
     monitor: {
         breakpoint: { max: 4000, min: 3000 },
-        items: 5,
+        items: 2,
     },
     desktop: {
         breakpoint: { max: 3000, min: 1024 },
-        items: 3,
+        items: 2,
     },
     tablet: {
         breakpoint: { max: 1024, min: 464 },
-        items: 2,
+        items: 1,
     },
     mobile: {
         breakpoint: { max: 464, min: 0 },
@@ -46,20 +46,20 @@ const SponsorCarousel = () => {
     }, []);
 
     const logos = [
-        { src: './src/assets/logos/accenture-logo-darkmode.png', alt: 'Accenture Logo' },
-        { src: './src/assets/logos/agentuity-logo.png', alt: 'Agentuity Logo' },
-        { src: './src/assets/logos/balyasny-logo-darkmode.png', alt: 'Balyasny Logo' },
-        { src: './src/assets/logos/citadel-logo.png', alt: 'Citadel Logo' },
-        { src: './src/assets/logos/coderabbit-logo-darkmode.png', alt: 'CodeRabbit Logo' },
-        { src: './src/assets/logos/commvault-logo-darkmode.png', alt: 'Commvault Logo' },
-        { src: './src/assets/logos/deshaw-logo.png', alt: 'D.E. Shaw Logo' },
-        { src: './src/assets/logos/fly-io-logo.png', alt: 'Fly.io Logo' },
-        { src: './src/assets/logos/hrt-logo.png', alt: 'HRT Logo' },
-        { src: './src/assets/logos/jane-street-logo-darkmode.png', alt: 'Jane Street Logo' },
-        { src: './src/assets/logos/modal-logo.png', alt: 'Modal Logo' },
-        { src: './src/assets/logos/optiver-logo-darkmode.png', alt: 'Optiver Logo' },
-        { src: './src/assets/logos/sandia-logo-darkmode.png', alt: 'Sandia Logo' },
-        { src: './src/assets/logos/scale-logo-color.png', alt: 'Scale AI Logo' },
+        { src: './src/assets/logos/accenturelogo.svg', alt: 'Accenture logo' },
+        { src: './src/assets/logos/agentuity.svg', alt: 'Agentuity logo' },
+        { src: './src/assets/logos/Balyasny_Logo_White.svg', alt: 'Balyasny logo' },
+        { src: './src/assets/logos/Citadel_LLC_Logo.svg', alt: 'Citadel LLC logo' },
+        { src: './src/assets/logos/Coderabbit_dark_6440dcbc3a.svg', alt: 'Coderabbit logo' },
+        { src: './src/assets/logos/commvault.svg', alt: 'Commvault logo' },
+        { src: './src/assets/logos/deshawlogo.svg', alt: 'DE Shaw logo' },
+        { src: './src/assets/logos/flyiologo.svg', alt: 'Fly.io logo' },
+        { src: './src/assets/logos/Hrtlogo.svg', alt: 'Hudson River Trading logo' },
+        { src: './src/assets/logos/janestreet.svg', alt: 'Jane Street logo' },
+        { src: './src/assets/logos/modallogo.svg', alt: 'Modal logo' },
+        { src: './src/assets/logos/optiverlogo.svg', alt: 'Optiver logo' },
+        { src: './src/assets/logos/Sandia_National_Laboratories_logo.svg', alt: 'Sandia National Laboratories logo' },
+        { src: './src/assets/logos/ScaleAIlogo.svg', alt: 'Scale AI logo' },
     ];
 
     return (

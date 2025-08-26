@@ -284,3 +284,21 @@
         fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
         oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
 }
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer__text {
+    flex: 1;
+}
+
+.footer__carousel {
+    min-width: 350px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

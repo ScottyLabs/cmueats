@@ -191,81 +191,85 @@ function ListPage({
             </div>
 
             <footer className="footer">
-                {theme === 'miku' ? (
-                    <FooterText>
-                        Blue hair, blue tie, hiding in your wifi
-                        <br />
-                        All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
-                    </FooterText>
-                ) : (
-                    <>
+                <div className="footer__text">
+                    {theme === 'miku' ? (
                         <FooterText>
+                            Blue hair, blue tie, hiding in your wifi
+                            <br />
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
-                        <FooterText>
-                            If you encounter any problems, please contact{' '}
-                            {emails.length > 0 ? (
-                                emails.map((person, idx) => (
-                                    <span key={person.email}>
-                                        <a href={`mailto:${person.email}`} style={{ color: 'white' }}>
-                                            {person.name}
+                    ) : (
+                        <>
+                            <FooterText>
+                                All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
+                            </FooterText>
+                            <FooterText>
+                                If you encounter any problems, please contact{' '}
+                                {emails.length > 0 ? (
+                                    emails.map((person, idx) => (
+                                        <span key={person.email}>
+                                            <a href={`mailto:${person.email}`} style={{ color: 'white' }}>
+                                                {person.name}
+                                            </a>
+                                            {idx < emails.length - 2 ? ', ' : ''}
+                                            {/* eslint-disable-next-line no-nested-ternary */}
+                                            {idx === emails.length - 2 ? (emails.length > 2 ? ', or ' : ' or ') : ''}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span>
+                                        <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+                                            ScottyLabs
                                         </a>
-                                        {idx < emails.length - 2 ? ', ' : ''}
-                                        {/* eslint-disable-next-line no-nested-ternary */}
-                                        {idx === emails.length - 2 ? (emails.length > 2 ? ', or ' : ' or ') : ''}
                                     </span>
-                                ))
-                            ) : (
-                                <span>
-                                    <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
-                                        ScottyLabs
-                                    </a>
-                                </span>
-                            )}
-                            .
-                        </FooterText>
-                        <FooterText>
-                            Alternatively, fill out our{' '}
-                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
-                                feedback form
-                            </a>
-                            .
-                        </FooterText>
-                        <FooterText>
-                            To provide feedback on your dining experience, please contact{' '}
-                            <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Dining Services
-                            </a>{' '}
-                            or take the{' '}
-                            <a href="https://forms.gle/fTnWrS7jkTFRB14DA" style={{ color: 'white' }}>
-                                dining survey
-                            </a>
-                            .
-                        </FooterText>
-                        <FooterText>
-                            Made with ❤️ by the{' '}
-                            <a href="https://scottylabs.org" style={{ color: 'white' }}>
-                                ScottyLabs
-                            </a>{' '}
-                            Tech Committee (not the official{' '}
-                            <a
-                                href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ color: 'white' }}
-                            >
-                                dining website
-                            </a>
-                            ).
-                        </FooterText>
-                        <SponsorCarousel />
-                    </>
-                )}
-                <LogoText variant="h4">
-                    cmu
-                    <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
-                </LogoText>
-                {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
+                                )}
+                                .
+                            </FooterText>
+                            <FooterText>
+                                Alternatively, fill out our{' '}
+                                <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
+                                    feedback form
+                                </a>
+                                .
+                            </FooterText>
+                            <FooterText>
+                                To provide feedback on your dining experience, please contact{' '}
+                                <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
+                                    Dining Services
+                                </a>{' '}
+                                or take the{' '}
+                                <a href="https://forms.gle/fTnWrS7jkTFRB14DA" style={{ color: 'white' }}>
+                                    dining survey
+                                </a>
+                                .
+                            </FooterText>
+                            <FooterText>
+                                Made with ❤️ by the{' '}
+                                <a href="https://scottylabs.org" style={{ color: 'white' }}>
+                                    ScottyLabs
+                                </a>{' '}
+                                Tech Committee (not the official{' '}
+                                <a
+                                    href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    style={{ color: 'white' }}
+                                >
+                                    dining website
+                                </a>
+                                ).
+                            </FooterText>
+                        </>
+                    )}
+                    <LogoText variant="h4">
+                        cmu
+                        <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
+                    </LogoText>
+                    {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
+                </div>
+                <div className="footer__carousel">
+                    <SponsorCarousel />
+                </div>
             </footer>
             <link rel="prefetch" href={mikuBgUrl} />
         </div>
