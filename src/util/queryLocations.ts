@@ -4,10 +4,10 @@ import { DateTime } from 'luxon';
 
 import {
     LocationState,
-    ITimeSlotTime,
+    ITimeSlot,
     IReadOnlyLocation_FromAPI_PostProcessed,
     IReadOnlyLocation_ExtraData,
-    ITimeSlots,
+    ITimeRangeList,
     IReadOnlyLocation_FromAPI_PreProcessed,
     IReadOnlyLocation_ExtraData_Map,
 } from '../types/locationTypes';
@@ -15,11 +15,11 @@ import {
     diffInMinutes,
     currentlyOpen,
     getNextTimeSlot,
-    isTimeSlotTime,
+    isTimeSlot,
     isValidTimeSlotArray,
     getTimeString,
-    minutesSinceSundayTimeSlotTime,
-    minutesSinceSundayDateTime,
+    minutesSinceStartOfSundayTimeSlot,
+    minutesSinceStartOfSundayDateTime,
     getApproximateTimeStringFromMinutes,
 } from './time';
 import toTitleCase from './string';
@@ -35,13 +35,13 @@ const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
  * @param nextTime Time data entry of next closing/opening time
  * @returns {string} The status message for the location
  */
-export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlotTime, now: DateTime): string {
-    assert(isTimeSlotTime(nextTime));
+export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlot, now: DateTime): string {
+    assert(isTimeSlot(nextTime));
     const diff = diffInMinutes(nextTime, now);
     const weekdayDiff =
         nextTime.day -
         (now.weekday % 7) + // now.weekday returns 1-7 [mon-sun] instead of 0-6 [sun-sat]
-        (minutesSinceSundayTimeSlotTime(nextTime) < minutesSinceSundayDateTime(now) ? 7 : 0); // nextTime wraps around to next week? Add 7 days to nextTime.day
+        (minutesSinceStartOfSundayTimeSlot(nextTime) < minutesSinceStartOfSundayDateTime(now) ? 7 : 0); // nextTime wraps around to next week? Add 7 days to nextTime.day
 
     const time = getTimeString(nextTime);
 
@@ -73,8 +73,9 @@ export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlotTime, now: 
  * @param now
  * @returns
  */
-export function getLocationStatus(timeSlots: ITimeSlots, now: DateTime): IReadOnlyLocation_ExtraData {
+export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IReadOnlyLocation_ExtraData {
     assert(isValidTimeSlotArray(timeSlots), `${JSON.stringify(timeSlots)} is invalid!`);
+    const MINUTES_IN_A_WEEK = 60 * 24 * 7;
     const nextTimeSlot = getNextTimeSlot(timeSlots, now);
     if (nextTimeSlot === null)
         return {
@@ -82,6 +83,20 @@ export function getLocationStatus(timeSlots: ITimeSlots, now: DateTime): IReadOn
             closedLongTerm: true,
             locationState: LocationState.CLOSED_LONG_TERM,
         };
+    if (
+        minutesSinceStartOfSundayTimeSlot(nextTimeSlot.start) === 0 &&
+        minutesSinceStartOfSundayTimeSlot(nextTimeSlot.end) === MINUTES_IN_A_WEEK - 1
+    ) {
+        // the very special case where the time interval represents the entire week
+        return {
+            statusMsg: 'Open 24/7',
+            closedLongTerm: false,
+            changesSoon: false,
+            timeUntil: Infinity,
+            locationState: LocationState.OPEN,
+            isOpen: true,
+        };
+    }
     const isOpen = currentlyOpen(nextTimeSlot, now);
     const relevantTime = isOpen ? nextTimeSlot.end : nextTimeSlot.start; // when will the next closing/opening event happen?
     const timeUntil = diffInMinutes(relevantTime, now);
@@ -128,13 +143,13 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
             }
             return error === undefined;
         }) as IReadOnlyLocation_FromAPI_PreProcessed[];
-
         return validLocations.map((location) => ({
             ...location,
             name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
         }));
     } catch (err: any) {
         console.error(err);
+        notifySlack(`<!channel> queryLocations failed with error ${err}`);
         return [];
     }
 }

@@ -7,7 +7,7 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 ## Developers
 
-1. Join CMUEats' Slack channel (`#tech-cmueats`) in the ScottyLabs Slack. Feel free to also put questions in there.
+1. Join CMUEats' Slack channel (`#tech-22-cmueats`) in the ScottyLabs Slack. Feel free to also put questions in there.
 
 2. Create an account on [Github](https://github.com). Later, you should also apply to get access to the [Github Student Developer Pack](https://education.github.com/pack).
 
@@ -48,6 +48,20 @@ Note that GitHub will automatically run checks (workflows) on your PR. This incl
 17. To run unit tests locally, type `bun run test`.
 
 Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
+
+## Mocking out the backend
+
+For displaying custom api data without starting up the backend, you can change `BACKEND_LOCATIONS_URL` in `App.tsx` to point to `http://localhost:5173/example-response.json`, which contents should match that returned by the real `/locations` endpoint. Feel free to use live or historical data (see below) for reference. (note that you need an `example-response.json` file in the /public folder) You can also just modify what's returned by `queryLocations` if that feels more convenient.
+
+(If you're testing this on mobile, be sure to replace `localhost` with your device IP instead.)
+
+## Accessing historical API data
+
+https://web.archive.org/web/20250000000000*/https://dining.apis.scottylabs.org/locations
+(Thanks @GhostOf0days)
+
+Archives of the official dining site can be found on https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/.
+Individual concept pages are also scraped (ex. https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/113), although accuracy may vary since the dining site sometimes glitches and returns a CLOSED status for a day that has opening times.
 
 ## CSS, the way it was meant to be written™
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
+import { motion } from 'motion/react';
+import { ErrorBoundary } from 'react-error-boundary';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
@@ -15,17 +17,34 @@ import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
 import { getPinnedIds, setPinnedIds } from './util/storage';
 import env from './env';
+import scottyDog from './assets/banner/scotty-dog.svg';
+import closeButton from './assets/banner/close-button.svg';
+import useLocalStorage from './util/localStorage';
+import bocchiError from './assets/bocchi-error.webp';
 
-// for debugging purposes (note that you need an example-response.json file in the /public folder)
-// const CMU_EATS_API_URL = 'http://192.168.1.64:5173/example-response.json';
-// for debugging purposes (note that you need an example-response.json file in the /public folder)
-// const CMU_EATS_API_URL = 'http://localhost:5010/locations';
+const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
+function ErrorBoundaryFallback() {
+    return (
+        <div className="outer-error-container">
+            oh... uhhh... well this is awkward. we have encountered an issue while rendering this page{' '}
+            <img src={bocchiError} alt="" />
+            the error has been automatically reported to the cmueats team
+            <div className="outer-error-container__small-text">
+                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
+                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
+                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
+                </a>{' '}
+                for now
+            </div>
+        </div>
+    );
+}
 function App() {
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
     useEffect(() => {
-        queryLocations(`${env.VITE_API_URL}/locations`).then((parsedLocations) => {
+        queryLocations(BACKEND_LOCATIONS_URL).then((parsedLocations) => {
             setLocations(parsedLocations);
             setExtraLocationData(getExtraLocationData(parsedLocations, DateTime.now().setZone('America/New_York')));
             // set extended data in same render to keep the two things in sync
@@ -66,37 +85,83 @@ function App() {
 
     return (
         <React.StrictMode>
-            <BrowserRouter>
-                <div className="App">
-                    <div className="MainContent">
-                        {/* <div className="AdBanner">
-                            CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
-                            &gt;_&lt;
-                        </div> */}
-                        <Routes>
-                            <Route
-                                path="/"
-                                element={
-                                    <ListPage
-                                        extraLocationData={extraLocationData}
-                                        locations={locations}
-                                        pinnedIds={pinnedIds}
-                                        updatePinnedIds={updatePinnedIds}
-                                    />
-                                }
-                            />
-                            <Route
-                                path="/map"
-                                element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
-                            />
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
+            <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
+                <BrowserRouter>
+                    <div className="App">
+                        <Banner />
+                        {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
+                            &gt;_&lt;</div> */}
+                        <div className="MainContent">
+                            <Routes>
+                                <Route
+                                    path="/"
+                                    element={
+                                        <ListPage
+                                            extraLocationData={extraLocationData}
+                                            locations={locations}
+                                            pinnedIds={pinnedIds}
+                                            updatePinnedIds={updatePinnedIds}
+                                        />
+                                    }
+                                />
+                                <Route
+                                    path="/map"
+                                    element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
+                                />
+                                <Route path="*" element={<NotFoundPage />} />
+                            </Routes>
+                        </div>
+                        <Navbar />
                     </div>
-                    <Navbar />
-                </div>
-            </BrowserRouter>
+                </BrowserRouter>
+            </ErrorBoundary>
         </React.StrictMode>
     );
 }
+function Banner() {
+    const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
+    const closeBanner = () => {
+        setIsClosed('true');
+    };
 
+    return (
+        <motion.div
+            className="welcome-banner-container"
+            animate={{ height: closed === null ? 'auto' : 0 }}
+            initial={{ height: closed === null ? 'auto' : 0 }}
+        >
+            <div className="welcome-banner">
+                <div className="welcome-banner__spacer" />
+                <div className="welcome-banner__text welcome-banner-padding">
+                    <span className="welcome-banner__text--long">
+                        <img src={scottyDog} alt="" />
+                        <span>
+                            Interested in Tech/Design or want to help build the future of CMUEats? Join{' '}
+                            <a
+                                href="https://tartanconnect.cmu.edu/scottylabs/club_signup"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                ScottyLabs
+                            </a>
+                            !
+                        </span>
+                    </span>
+                    <span className="welcome-banner__text--short">
+                        Interested in Tech/Design? Join{' '}
+                        <a href="https://tartanconnect.cmu.edu/scottylabs/club_signup" target="_blank" rel="noreferrer">
+                            ScottyLabs
+                        </a>
+                        !{' '}
+                    </span>
+                </div>
+                <div className="welcome-banner__close welcome-banner-padding welcome-banner-padding--button">
+                    <button type="button" aria-label="close-banner" onClick={closeBanner}>
+                        <img src={closeButton} alt="" />
+                    </button>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
 export default App;

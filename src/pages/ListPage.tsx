@@ -57,7 +57,6 @@ function ListPage({
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
-
     const shouldAnimateCards = useRef(true);
 
     // permanently cut out animation when user filters cards,
