@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import './SponsorCarousel.css';
 
 type DeviceType = 'mobile' | 'tablet' | 'desktop' | 'monitor';
 
@@ -74,13 +75,13 @@ const SponsorCarousel = () => {
             autoPlaySpeed={1000}
             keyBoardControl={true}
             containerClass="carousel-container"
-            removeArrowOnDeviceType={['tablet', 'mobile']}
+            removeArrowOnDeviceType={['tablet', 'mobile', 'desktop', 'monitor']}
             dotListClass="custom-dot-list-style"
             itemClass="carousel-item-padding-40-px"
         >
             {logos.map((logo, index) => (
                 <div key={index}>
-                    <img src={logo.src} alt={logo.alt} />
+                    <img src={logo.src} alt={logo.alt} className="carousel__image" />
                 </div>
             ))}
         </Carousel>
