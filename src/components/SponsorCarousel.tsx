@@ -46,20 +46,20 @@ function SponsorCarousel() {
     }, []);
 
     const logos = [
-        { src: './logos/accenturelogo.svg', alt: 'Accenture logo' },
-        { src: './logos/agentuity.svg', alt: 'Agentuity logo' },
-        { src: './logos/Balyasny_Logo_White.svg', alt: 'Balyasny logo' },
-        { src: './logos/Citadel_LLC_Logo.svg', alt: 'Citadel LLC logo' },
-        { src: './logos/Coderabbit_dark_6440dcbc3a.svg', alt: 'Coderabbit logo' },
-        { src: './logos/commvault.svg', alt: 'Commvault logo' },
-        { src: './logos/deshawlogo.svg', alt: 'DE Shaw logo' },
-        { src: './logos/flyiologo.svg', alt: 'Fly.io logo' },
-        { src: './logos/hrt.svg', alt: 'Hudson River Trading logo' },
-        { src: './logos/jane.svg', alt: 'Jane Street logo' },
-        { src: './logos/modallogo.svg', alt: 'Modal logo' },
-        { src: './logos/optiverlogo.svg', alt: 'Optiver logo' },
-        { src: './logos/sandia.svg', alt: 'Sandia National Laboratories logo' },
-        { src: './logos/ScaleAIlogo.svg', alt: 'Scale AI logo' },
+        { src: './src/assets/logos/accenturelogo.svg', alt: 'Accenture logo' },
+        { src: './src/assets/logos/agentuity.svg', alt: 'Agentuity logo' },
+        { src: './src/assets/logos/Balyasny_Logo_White.svg', alt: 'Balyasny logo' },
+        { src: './src/assets/logos/Citadel_LLC_Logo.svg', alt: 'Citadel LLC logo' },
+        { src: './src/assets/logos/Coderabbit_dark_6440dcbc3a.svg', alt: 'Coderabbit logo' },
+        { src: './src/assets/logos/commvault.svg', alt: 'Commvault logo' },
+        { src: './src/assets/logos/deshawlogo.svg', alt: 'DE Shaw logo' },
+        { src: './src/assets/logos/flyiologo.svg', alt: 'Fly.io logo' },
+        { src: './src/assets/logos/hrt.svg', alt: 'Hudson River Trading logo' },
+        { src: './src/assets/logos/jane.svg', alt: 'Jane Street logo' },
+        { src: './src/assets/logos/modallogo.svg', alt: 'Modal logo' },
+        { src: './src/assets/logos/optiverlogo.svg', alt: 'Optiver logo' },
+        { src: './src/assets/logos/sandia.svg', alt: 'Sandia National Laboratories logo' },
+        { src: './src/assets/logos/ScaleAIlogo.svg', alt: 'Scale AI logo' },
     ];
 
     return (
