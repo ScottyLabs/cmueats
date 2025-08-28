@@ -52,7 +52,7 @@ function SponsorCarousel() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }) as Record<string, any>,
     ).map((data) => ({
-        src: '.' + data.default,
+        src: `.${data.default}`,
         alt: data.default.substring(data.default.lastIndexOf('/') + 1),
     }));
 
