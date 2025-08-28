@@ -45,22 +45,16 @@ function SponsorCarousel() {
         return () => window.removeEventListener('resize', updateDeviceType);
     }, []);
 
-    const logos = [
-        { src: './src/assets/logos/accenturelogo.svg', alt: 'Accenture logo' },
-        { src: './src/assets/logos/agentuity.svg', alt: 'Agentuity logo' },
-        { src: './src/assets/logos/Balyasny_Logo_White.svg', alt: 'Balyasny logo' },
-        { src: './src/assets/logos/Citadel_LLC_Logo.svg', alt: 'Citadel LLC logo' },
-        { src: './src/assets/logos/Coderabbit_dark_6440dcbc3a.svg', alt: 'Coderabbit logo' },
-        { src: './src/assets/logos/commvault.svg', alt: 'Commvault logo' },
-        { src: './src/assets/logos/deshawlogo.svg', alt: 'DE Shaw logo' },
-        { src: './src/assets/logos/flyiologo.svg', alt: 'Fly.io logo' },
-        { src: './src/assets/logos/hrt.svg', alt: 'Hudson River Trading logo' },
-        { src: './src/assets/logos/jane.svg', alt: 'Jane Street logo' },
-        { src: './src/assets/logos/modallogo.svg', alt: 'Modal logo' },
-        { src: './src/assets/logos/optiverlogo.svg', alt: 'Optiver logo' },
-        { src: './src/assets/logos/sandia.svg', alt: 'Sandia National Laboratories logo' },
-        { src: './src/assets/logos/ScaleAIlogo.svg', alt: 'Scale AI logo' },
-    ];
+    const logos = Object.values(
+        import.meta.glob('../assets/logos/*', {
+            eager: true,
+            query: 'url',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        }) as Record<string, any>,
+    ).map((data) => ({
+        src: '.' + data.default,
+        alt: data.default.substring(data.default.lastIndexOf('/') + 1),
+    }));
 
     return (
         <Carousel
