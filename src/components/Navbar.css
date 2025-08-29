@@ -63,3 +63,7 @@
         0 0 10px var(--hover-accent-color),
         0 0 15px var(--hover-accent-color);
 }
+
+.Navbar-links-feedback {
+    text-align: center;
+}
