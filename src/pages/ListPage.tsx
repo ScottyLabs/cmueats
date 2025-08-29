@@ -205,7 +205,7 @@ function ListPage({
                             <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
                                 feedback form
                             </a>
-                            . (the fastest way to reach us!)
+                            . (The fastest way to reach us!)
                         </FooterText>
                         <FooterText>
                             Otherwise, reach out to{' '}
@@ -229,7 +229,6 @@ function ListPage({
                             )}
                             .
                         </FooterText>
-
                         <FooterText>
                             To provide feedback on your dining experience, please contact{' '}
                             <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
