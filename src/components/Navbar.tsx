@@ -76,7 +76,7 @@ function Navbar() {
 				 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
                         />
                     </svg>
-                    Feedback & Issues
+                    Feedback
                 </a>
                 <div className={`Navbar-active ${activeClass} Navbar-active_glow`} />
             </div>

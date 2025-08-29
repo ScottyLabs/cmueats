@@ -201,14 +201,7 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems, fill out our{' '}
-                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
-                                feedback form
-                            </a>
-                            . (the fastest way to reach us!)
-                        </FooterText>
-                        <FooterText>
-                            Otherwise, reach out to{' '}
+                            If you encounter any problems, please contact{' '}
                             {emails.length > 0 ? (
                                 emails.map((person, idx) => (
                                     <span key={person.email}>
@@ -229,7 +222,13 @@ function ListPage({
                             )}
                             .
                         </FooterText>
-
+                        <FooterText>
+                            Alternatively, fill out our{' '}
+                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
+                                feedback form
+                            </a>
+                            .
+                        </FooterText>
                         <FooterText>
                             To provide feedback on your dining experience, please contact{' '}
                             <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
