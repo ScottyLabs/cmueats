@@ -201,7 +201,7 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems, fill out our{' '}
+                            If you encounter any problems, please fill out our{' '}
                             <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
                                 feedback form
                             </a>
