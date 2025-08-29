@@ -16,3 +16,17 @@
     padding: 0;
     height: 100%;
 }
+
+.custom-dot-list-style .react-multi-carousel-dot--active button {
+    background: white;
+    box-shadow: 0 0 2px white;
+}
+
+.carousel__image-tablet {
+    height: 40px;
+}
+
+.carousel__image-mobile {
+    padding-top: 12px;
+    height: 32px;
+}

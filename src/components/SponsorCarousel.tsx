@@ -75,7 +75,7 @@ function SponsorCarousel() {
         >
             {logos.map((logo) => (
                 <div key={logo.alt}>
-                    <img src={logo.src} alt={logo.alt} className="carousel__image" />
+                    <img src={logo.src} alt={logo.alt} className={`carousel__image carousel__image-${deviceType}`} />
                 </div>
             ))}
         </Carousel>
