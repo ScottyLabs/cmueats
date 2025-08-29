@@ -54,6 +54,7 @@ function Navbar() {
                     Map
                 </Link>
                 <a
+                    className="Navbar-links-feedback"
                     href="https://forms.gle/7JxgdgDhWMznQJdk9"
                     target="_blank"
                     rel="noopener noreferrer" // ??
