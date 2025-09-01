@@ -49,12 +49,14 @@ function SponsorCarousel() {
         import.meta.glob('../assets/logos/*', {
             eager: true,
             query: 'url',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        }) as Record<string, any>,
-    ).map((data) => ({
-        src: `.${data.default}`,
-        alt: data.default.substring(data.default.lastIndexOf('/') + 1),
-    }));
+        }) as Record<string, { default: string }>,
+    ).map(({ default: logoUrl }) => {
+        const filename = logoUrl.split('/').pop() || '';
+        return {
+            src: logoUrl,
+            alt: filename,
+        };
+    });
 
     return (
         <Carousel
