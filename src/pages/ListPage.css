@@ -278,6 +278,7 @@
     font-family: var(--text-primary-font);
     font-size: 1.5rem;
     width: fit-content;
+    word-break: break-word;
 }
 
 .skeleton-card--animated {
