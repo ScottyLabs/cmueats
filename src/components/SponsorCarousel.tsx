@@ -31,6 +31,10 @@ const getDeviceType = (width: number): DeviceType => {
     return 'mobile';
 };
 
+const showDots = (deviceType: DeviceType) => {
+    return deviceType === 'desktop' || deviceType === 'monitor';
+};
+
 function SponsorCarousel() {
     const [deviceType, setDeviceType] = useState<DeviceType>('desktop');
 
@@ -64,7 +68,7 @@ function SponsorCarousel() {
             deviceType={deviceType}
             swipeable={false}
             draggable={false}
-            showDots
+            showDots={showDots(deviceType)}
             ssr // renders carousel on server-side
             infinite
             autoPlay
