@@ -31,8 +31,8 @@ const getDeviceType = (width: number): DeviceType => {
     return 'mobile';
 };
 
-const showDots = (deviceType: DeviceType) => {
-    return deviceType === 'desktop' || deviceType === 'monitor';
+const showDots = (deviceType: DeviceType): boolean => {
+    return deviceType == 'desktop' || deviceType == 'monitor';
 };
 
 function SponsorCarousel() {
