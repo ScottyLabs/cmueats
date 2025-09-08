@@ -1,8 +1,8 @@
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
-import { CSSTransition } from 'react-transition-group';
+import { AnimatePresence, motion } from 'motion/react';
 import EateryCard from '../components/EateryCard';
-import './MapPage.css';
+import css from './MapPage.module.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
 import env from '../env';
@@ -25,13 +25,15 @@ const stripVarFromString = (varString: string) => varString.match(/var\((.+)\)/)
 function MapPage({
     locations,
     extraLocationData,
+    pinnedIds,
+    updatePinnedIds,
 }: {
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
+    pinnedIds: Record<string, true>;
+    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
 }) {
     const [selectedLocationIndex, setSelectedLocationIndex] = useState<number>();
-    const [isDrawerVisible, setDrawerVisible] = useState(false);
-    const drawerRef = useRef(null);
 
     const cameraBoundary = useMemo(
         () => ({
@@ -61,7 +63,7 @@ function MapPage({
               }))
             : undefined;
     return (
-        <div className="MapPage">
+        <div className={css['map-page']}>
             {extendedLocationData && (
                 <>
                     <Map
@@ -88,41 +90,47 @@ function MapPage({
                                     key={location.conceptId}
                                     latitude={location.coordinates.lat}
                                     longitude={location.coordinates.lng}
-                                    color={bgColor}
+                                    color={pinnedIds[location.conceptId] ? '#007ffd' : bgColor}
                                     glyphColor={textColor}
                                     glyphText={abbreviate(location.name)}
                                     onSelect={() => {
                                         setSelectedLocationIndex(locationIndex);
-                                        setDrawerVisible(true);
                                     }}
                                     onDeselect={() => {
-                                        if (selectedLocationIndex === locationIndex) {
-                                            setDrawerVisible(false);
-                                        }
+                                        setSelectedLocationIndex(undefined);
                                     }}
                                 />
                             );
                         })}
                     </Map>
-                    <CSSTransition
-                        classNames="DrawerTransition"
-                        timeout={300}
-                        in={isDrawerVisible}
-                        mountOnEnter
-                        unmountOnExit
-                        nodeRef={drawerRef}
-                    >
-                        <div className="MapDrawer" ref={drawerRef}>
-                            {selectedLocationIndex !== undefined && (
-                                <EateryCard
-                                    location={extendedLocationData[selectedLocationIndex]}
-                                    isPinned={false}
-                                    onTogglePin={() => {}}
-                                    showPinButton={false}
-                                />
-                            )}
-                        </div>
-                    </CSSTransition>
+                    <AnimatePresence>
+                        {selectedLocationIndex !== undefined && (
+                            <motion.div
+                                className={css['map-drawer-container']}
+                                initial={{ height: 0 }}
+                                animate={{ height: 'auto' }}
+                                exit={{ height: 0 }}
+                                transition={{ duration: 0.2, type: 'tween' }}
+                            >
+                                <div className={css['map-drawer']}>
+                                    <EateryCard
+                                        location={extendedLocationData[selectedLocationIndex]}
+                                        isPinned={pinnedIds[extendedLocationData[selectedLocationIndex].conceptId]}
+                                        onTogglePin={() => {
+                                            const id = extendedLocationData[selectedLocationIndex].conceptId.toString();
+                                            const newPinnedIds = { ...pinnedIds };
+                                            if (newPinnedIds[id]) {
+                                                delete newPinnedIds[id];
+                                            } else {
+                                                newPinnedIds[id] = true;
+                                            }
+                                            updatePinnedIds(newPinnedIds);
+                                        }}
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </>
             )}
         </div>

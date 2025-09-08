@@ -1,0 +1,14 @@
+.map-page {
+    background-color: var(--main-bg);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    height: 100%;
+}
+
+.map-drawer-container {
+    background: var(--map-drawer-bg);
+    overflow: hidden;
+    .map-drawer {
+        padding: 14px;
+    }
+}
