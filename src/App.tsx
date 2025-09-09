@@ -15,12 +15,11 @@ import {
 } from './util/queryLocations';
 import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
-import { getPinnedIds, setPinnedIds } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
-import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
+import useLocalStorage from './util/localStorage';
 
 const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
 function ErrorBoundaryFallback() {
@@ -51,12 +50,18 @@ function App() {
         });
     }, []);
 
-    const [pinnedIds, setPinnedIdsState] = useState<Record<string, true>>(getPinnedIds());
-
-    const updatePinnedIds = (newObj: Record<string, true>) => {
-        setPinnedIds(newObj);
-        setPinnedIdsState(newObj);
-    };
+    const [pinnedIds, setPinnedIds] = useLocalStorage<Record<string, true>>(
+        'pinnedEateries',
+        (val) => {
+            try {
+                const arr = JSON.parse(val ?? '[]');
+                return Object.fromEntries((arr as string[]).map((id) => [id, true]));
+            } catch {
+                return {};
+            }
+        },
+        (val) => JSON.stringify(Object.keys(val)),
+    );
 
     // periodically update extra location data
     useEffect(() => {
@@ -100,13 +105,20 @@ function App() {
                                             extraLocationData={extraLocationData}
                                             locations={locations}
                                             pinnedIds={pinnedIds}
-                                            updatePinnedIds={updatePinnedIds}
+                                            updatePinnedIds={setPinnedIds}
                                         />
                                     }
                                 />
                                 <Route
                                     path="/map"
-                                    element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
+                                    element={
+                                        <MapPage
+                                            locations={locations}
+                                            extraLocationData={extraLocationData}
+                                            pinnedIds={pinnedIds}
+                                            updatePinnedIds={setPinnedIds}
+                                        />
+                                    }
                                 />
                                 <Route path="*" element={<NotFoundPage />} />
                             </Routes>
