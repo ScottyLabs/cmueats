@@ -12,3 +12,78 @@
         padding: 14px;
     }
 }
+.filter-container {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    z-index: 727;
+    border: 2px solid var(--black-950);
+    background-color: var(--black-1000);
+    border-radius: 5px;
+}
+
+.map-filter-button {
+    padding: 10px 27px;
+    font-size: 1.25rem;
+    cursor: pointer;
+    font-family: var(--text-primary-font);
+    display: flex;
+    width: 270px;
+    justify-content: space-between;
+    &:hover {
+        background-color: var(--black-1050);
+    }
+    background-color: transparent;
+    border: none;
+}
+.all-filters {
+    overflow: hidden;
+}
+.filter-section {
+    padding: 10px 27px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    &:first-child {
+        border-top: 2px solid var(--black-950);
+    }
+    &:not(:first-child) {
+        border-top: 2px dashed var(--black-950);
+    }
+    .filter-button {
+        display: flex;
+        align-items: center;
+        input {
+            position: relative;
+            visibility: hidden;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        input::after {
+            content: '';
+            visibility: visible;
+            position: absolute;
+            inset: 0;
+
+            background-color: transparent;
+            border: 2px solid var(--black-400);
+            border-radius: 5px;
+            transition: 0.1s all;
+        }
+        input:checked::after {
+            background-color: var(--black-400);
+        }
+        input:hover:not(:checked):not(:active)::after {
+            background-color: var(--black-800);
+        }
+
+        input:hover:checked:not(:active)::after {
+            background-color: var(--black-300);
+        }
+        label {
+            padding-left: 7px;
+            cursor: pointer;
+        }
+    }
+}
