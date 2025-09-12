@@ -1,0 +1,53 @@
+.navbar {
+    background-color: var(--nav-bg);
+    padding: 13px 0;
+    border-top: 2px solid var(--nav-border-top);
+    @media (max-width: 800px) {
+        padding: 10px;
+        padding-bottom: max(env(safe-area-inset-bottom), 14px);
+    }
+    overflow-x: auto;
+}
+
+.navbar-links {
+    position: relative;
+    display: flex;
+    margin: auto;
+    max-width: 500px;
+    justify-content: space-between;
+}
+
+.navbar-link {
+    height: 40px;
+    padding: 0 10px;
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    isolation: isolate;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--text-primary-font);
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 1rem;
+    text-decoration: none;
+    svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.4em;
+        flex-shrink: 0;
+    }
+    span {
+        text-wrap: nowrap;
+    }
+}
+.navbar-link__active-backdrop {
+    position: absolute;
+    z-index: -10;
+    inset: 0;
+    background-color: var(--selected-tab-bg);
+    box-shadow:
+        0 0 5px var(--hover-accent-color),
+        0 0 10px var(--hover-accent-color),
+        0 0 15px var(--hover-accent-color);
+}
