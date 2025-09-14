@@ -50,10 +50,10 @@
 
 .navbar-link:hover {
     background-color: hsl(213, 6%, 28%);
-    border-radius: 20px;
+    border-radius: 20%;
     &:active {
         background-color: hsl(213, 6%, 28%);
-        border-radius: 20px;
+        border-radius: 20%;
     }
 }
 
