@@ -204,8 +204,8 @@ function ListPage({
                             If you encounter any problems, please fill out our{' '}
                             <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
                                 feedback form
-                            </a>
-                            . (The fastest way to reach us!)
+                            </a>{' '}
+                            (the fastest way to reach us!).
                         </FooterText>
                         <FooterText>
                             Otherwise, reach out to{' '}
