@@ -69,7 +69,7 @@ const tabs = [
                 />
             </svg>
         ),
-        text: 'Feedback and issues',
+        text: 'Feedback and Issues',
         link: 'https://forms.gle/7JxgdgDhWMznQJdk9',
         external: true,
     },
