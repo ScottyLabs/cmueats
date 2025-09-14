@@ -41,13 +41,19 @@
         text-wrap: nowrap;
     }
 }
+
+.navbar-link:hover {
+    background-color: var(--button-bg--hover);
+    border-radius: 10px;
+}
+
 .navbar-link__active-backdrop {
     position: absolute;
     z-index: -10;
-    inset: 0;
-    background-color: var(--selected-tab-bg);
+    inset: 0 !important;
+    background-color: var(--selected-tab-bg) !important;
     box-shadow:
         0 0 5px var(--hover-accent-color),
         0 0 10px var(--hover-accent-color),
-        0 0 15px var(--hover-accent-color);
+        0 0 15px var(--hover-accent-color) !important;
 }
