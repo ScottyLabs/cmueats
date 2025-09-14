@@ -49,9 +49,11 @@
 }
 
 .navbar-link:hover {
-    outline: 2px solid hsl(216, 6%, 44%);
+    background-color: hsl(213, 6%, 28%);
+    border-radius: 20px;
     &:active {
-        outline: 2px solid hsl(216, 6%, 28%);
+        background-color: hsl(213, 6%, 28%);
+        border-radius: 20px;
     }
 }
 
