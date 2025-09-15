@@ -1,0 +1,32 @@
+.carousel__image {
+    filter: brightness(0) invert(1);
+    height: 60px;
+    width: auto;
+    margin: 0 8px 12px 8px;
+    object-fit: contain;
+    display: block;
+    align-self: center;
+    padding-bottom: 40px;
+}
+
+.carousel-item-padding-40-px {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    height: 100%;
+}
+
+.custom-dot-list-style .react-multi-carousel-dot--active button {
+    background: white;
+    box-shadow: 0 0 2px white;
+}
+
+.carousel__image-tablet {
+    height: 40px;
+}
+
+.carousel__image-mobile {
+    padding-top: 12px;
+    height: 32px;
+}
