@@ -49,7 +49,6 @@ const evening = [
     'Have a good evening!',
     'Grab a bite to eat!',
     'Hungry night owl?',
-    "Midnight munchies? We've got you!",
 ];
 const eveningShort = ['Have a good evening!', 'Grab a bite to eat!', 'Hungry night owl?'];
 interface Special {
