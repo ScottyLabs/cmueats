@@ -51,7 +51,6 @@
 
 .navbar-link:hover {
     z-index: -1;
-    inset: 0px;
     background-color: var(--selected-tab-bg);
     border-radius: 10px;
     transition: 0.2s ease-in-out;
