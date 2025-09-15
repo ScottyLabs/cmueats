@@ -118,6 +118,7 @@ function App() {
         </React.StrictMode>
     );
 }
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
 function Banner() {
     const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
