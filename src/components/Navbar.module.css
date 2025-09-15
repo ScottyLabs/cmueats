@@ -15,6 +15,7 @@
     margin: auto;
     max-width: 550px;
     justify-content: space-between;
+    gap: 7px;
 }
 
 .navbar-link {
@@ -49,12 +50,11 @@
 }
 
 .navbar-link:hover {
-    background-color: hsl(213, 6%, 28%);
+    z-index: -1;
+    inset: 0px;
+    background-color: var(--selected-tab-bg);
     border-radius: 10px;
-    &:active {
-        background-color: hsl(213, 6%, 28%);
-        border-radius: 10px;
-    }
+    transition: 0.2s ease-in-out;
 }
 
 .navbar-link__active-backdrop {
