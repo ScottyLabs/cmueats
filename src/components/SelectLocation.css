@@ -39,3 +39,9 @@
         min-width: 0;
     }
 }
+
+@media (max-width: 600px) {
+    .hide-mobile{
+        display: none
+    }
+}

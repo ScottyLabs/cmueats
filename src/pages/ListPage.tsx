@@ -14,6 +14,8 @@ import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
 
+import InfoIcon from "../assets/info.svg";
+
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
     padding: 0,
@@ -169,6 +171,11 @@ function ListPage({
                             <img src={mikuKeychainUrl} alt="click me!" />
                         </button>
                     )}
+                    <div className="info-container mobile">
+                        <img src={InfoIcon}></img>
+                        <span className = "info-text">Tap on a card for more details!</span>
+                    </div>
+                    
                 </header>
 
                 <EateryCardGrid
