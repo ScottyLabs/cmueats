@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import * as motion from 'motion/react-client';
 import clsx from 'clsx';
 import css from './Navbar.module.css';
