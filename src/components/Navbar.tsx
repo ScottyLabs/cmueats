@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import * as motion from 'motion/react-client';
-import css from './Navbar.module.css';
 import clsx from 'clsx';
+import css from './Navbar.module.css';
 
 const tabs = [
     {
