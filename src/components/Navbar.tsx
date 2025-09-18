@@ -97,9 +97,9 @@ function Navbar() {
                             rel="noopener noreferrer"
                             key={link}
                             className={clsx(css['navbar-link'], isActive && css['navbar-link--active'])}
-                            style={{ zIndex: isActive ? 0 : 1 }}
-                            onClick={handleNavigate}
-                            onTouchStart={handleNavigate}
+                            // style={{ zIndex: isActive ? 0 : 1 }}
+                            // onClick={handleNavigate}
+                            // onTouchStart={handleNavigate}
                             // so the bg active indicator slides underneath the old link
                         >
                             {icon}
