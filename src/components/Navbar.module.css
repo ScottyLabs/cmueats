@@ -16,6 +16,7 @@
     max-width: 550px;
     justify-content: space-between;
     gap: 7px;
+    isolation: isolate;
 }
 
 .navbar-link {
@@ -25,7 +26,6 @@
     flex-grow: 1;
     flex-basis: 0;
     position: relative;
-    isolation: isolate;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
@@ -49,8 +49,7 @@
     }
 }
 
-.navbar-link:hover {
-    z-index: -1;
+.navbar-link:not(.navbar-link--active):hover {
     background-color: var(--selected-tab-bg);
     border-radius: 10px;
     transition: 0.2s ease-in-out;
