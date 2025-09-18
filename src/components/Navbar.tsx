@@ -77,7 +77,7 @@ const tabs = [
 ];
 function Navbar() {
     const location = useLocation();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     return (
         <nav className={css.navbar}>
