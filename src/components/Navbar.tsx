@@ -77,19 +77,19 @@ const tabs = [
 ];
 function Navbar() {
     const location = useLocation();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     return (
         <nav className={css.navbar}>
             <div className={css['navbar-links']}>
                 {tabs.map(({ icon, text, link, external }) => {
                     const isActive = location.pathname === link;
-                    const handleNavigate = (e: { preventDefault: () => void }) => {
-                        if (!external) {
-                            e.preventDefault();
-                            navigate(link);
-                        }
-                    };
+                    // const handleNavigate = (e: { preventDefault: () => void }) => {
+                    //     if (!external) {
+                    //         e.preventDefault();
+                    //         navigate(link);
+                    //     }
+                    // };
                     return (
                         <Link
                             to={link}
@@ -98,8 +98,8 @@ function Navbar() {
                             key={link}
                             className={clsx(css['navbar-link'], isActive && css['navbar-link--active'])}
                             style={{ zIndex: isActive ? 0 : 1 }}
-                            onClick={handleNavigate}
-                            onTouchStart={handleNavigate}
+                            // onClick={handleNavigate}
+                            // onTouchStart={handleNavigate}
                             // so the bg active indicator slides underneath the old link
                         >
                             {icon}
@@ -108,7 +108,7 @@ function Navbar() {
                                 <motion.div
                                     layoutId="active-tab-bg"
                                     className={css['navbar-link__active-backdrop']}
-                                    transition={{ type: 'spring', damping: 10, mass: 0.6 }}
+                                    transition={{ type: 'spring', damping: 10, mass: 0.6, delay: 0.05 }}
                                     style={{ borderRadius: 10 }}
                                     // we need to specify border radius here so framer motion doesn't distort it while transitioning
                                     // https://motion.dev/docs/react-layout-animations#scale-correction
