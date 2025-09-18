@@ -84,12 +84,12 @@ function Navbar() {
             <div className={css['navbar-links']}>
                 {tabs.map(({ icon, text, link, external }) => {
                     const isActive = location.pathname === link;
-                    const handleNavigate = (e: { preventDefault: () => void }) => {
-                        if (!external) {
-                            e.preventDefault();
-                            navigate(link);
-                        }
-                    };
+                    // const handleNavigate = (e: { preventDefault: () => void }) => {
+                    //     if (!external) {
+                    //         e.preventDefault();
+                    //         navigate(link);
+                    //     }
+                    // };
                     return (
                         <Link
                             to={link}
