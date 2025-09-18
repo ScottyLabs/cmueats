@@ -149,7 +149,7 @@ function ListPage({
                             {mobileGreeting}
                         </h3>
                     </div>
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
                     {IS_MIKU_DAY && (
                         <button
