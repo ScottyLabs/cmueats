@@ -49,10 +49,12 @@
     }
 }
 
-.navbar-link:not(.navbar-link--active):hover {
-    background-color: var(--selected-tab-bg);
-    border-radius: 10px;
-    transition: 0.2s ease-in-out;
+@media screen and (min-width: 800px) {
+    .navbar-link:not(.navbar-link--active):hover {
+        background-color: var(--selected-tab-bg);
+        border-radius: 10px;
+        transition: 0.2s ease-in-out;
+    }
 }
 
 .navbar-link__active-backdrop {
