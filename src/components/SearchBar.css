@@ -59,6 +59,7 @@
     font-size: 0.8rem;
 }
 
-.locations-search:focus + .locations-search-hint {
+.locations-search:focus + .locations-search-hint,
+.locations-search:not(:placeholder-shown) + .locations-search-hint {
     opacity: 0;
 }
