@@ -33,7 +33,7 @@ const getDeviceType = (width: number): DeviceType => {
 
 const showDots = (deviceType: DeviceType): boolean => deviceType === 'desktop' || deviceType === 'monitor';
 
-function SponsorCarousel() {
+function SponsorCarousel({ darkMode }: { darkMode: Boolean }) {
     const [deviceType, setDeviceType] = useState<DeviceType>('desktop');
 
     useEffect(() => {
@@ -79,7 +79,11 @@ function SponsorCarousel() {
         >
             {logos.map((logo) => (
                 <div key={logo.alt}>
-                    <img src={logo.src} alt={logo.alt} className={`carousel__image carousel__image-${deviceType}`} />
+                    <img
+                        src={logo.src}
+                        alt={logo.alt}
+                        className={`carousel__image carousel__image-${deviceType} ${darkMode ? 'carousel__image-darkmode' : 'carousel__image-lightmode'}`}
+                    />
                 </div>
             ))}
         </Carousel>

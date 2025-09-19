@@ -300,11 +300,19 @@
     flex: 1;
 }
 
-.footer__carousel {
-    max-width: 50%;
-    height: 60%;
+.footer__sponsors {
     display: flex;
-    justify-content: flex-center;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    max-width: 50%;
+}
+
+.footer__sponsors-carousel {
+    max-width: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
@@ -321,11 +329,10 @@
         flex-direction: column;
         align-items: stretch;
     }
-    .footer__carousel {
+    .footer__sponsors {
         max-width: 100%;
         width: 100%;
         margin-top: 16px;
-        justify-content: center;
     }
     .footer__logo-mobile {
         display: block;

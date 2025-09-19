@@ -1,5 +1,4 @@
 .carousel__image {
-    filter: brightness(0) invert(1);
     height: 60px;
     width: auto;
     margin: 0 8px 12px 8px;
@@ -7,6 +6,14 @@
     display: block;
     align-self: center;
     padding-bottom: 40px;
+}
+
+.carousel__image-darkmode {
+    filter: brightness(0) invert(1);
+}
+
+.carousel__image-lightmode {
+    filter: brightness(0) invert(0);
 }
 
 .carousel-item-padding-40-px {

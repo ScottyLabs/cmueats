@@ -267,9 +267,11 @@ function ListPage({
                         </LogoText>
                     </div>
                 </div>
-                <FooterText>ScottyLabs is sponsored by</FooterText>
-                <div className="footer__carousel">
-                    <SponsorCarousel />
+                <div className="footer__sponsors">
+                    <FooterText>ScottyLabs is sponsored by</FooterText>
+                    <div className="footer__sponsors-carousel">
+                        <SponsorCarousel darkMode />
+                    </div>
                 </div>
                 <div className="footer__logo-mobile">
                     <LogoText variant="h4">
