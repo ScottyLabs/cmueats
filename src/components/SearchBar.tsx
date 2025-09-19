@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import './SearchBar.css';
+import css from './SearchBar.module.css';
 
 function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSearchQuery: React.Dispatch<string> }) {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -24,16 +24,16 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
     }, []);
 
     return (
-        <div className="locations-search-wrapper">
+        <div className={css['locations-search-wrapper']}>
             <input
                 ref={inputRef}
-                className="locations-search"
+                className={css['locations-search']}
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder=""
             />
-            <div className="locations-search-hint">
+            <div className={css['locations-search-hint']}>
                 Type <kbd>/</kbd> to search
             </div>
         </div>
