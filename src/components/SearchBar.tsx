@@ -14,6 +14,17 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
                 inputRef.current?.focus();
             }
 
+            if (
+                // `ctrl + meta + k` might be someone's shortcut
+                event.metaKey !== event.ctrlKey &&
+                event.key === 'k' &&
+                document.activeElement !== inputRef.current &&
+                !isTyping
+            ) {
+                event.preventDefault();
+                inputRef.current?.focus();
+            }
+
             if (event.key === 'Escape' && document.activeElement === inputRef.current) {
                 inputRef.current?.blur();
             }
