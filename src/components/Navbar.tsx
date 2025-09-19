@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import * as motion from 'motion/react-client';
 import clsx from 'clsx';
 import css from './Navbar.module.css';
@@ -77,19 +77,12 @@ const tabs = [
 ];
 function Navbar() {
     const location = useLocation();
-    // const navigate = useNavigate();
 
     return (
         <nav className={css.navbar}>
             <div className={css['navbar-links']}>
                 {tabs.map(({ icon, text, link, external }) => {
                     const isActive = location.pathname === link;
-                    // const handleNavigate = (e: { preventDefault: () => void }) => {
-                    //     if (!external) {
-                    //         e.preventDefault();
-                    //         navigate(link);
-                    //     }
-                    // };
                     return (
                         <Link
                             to={link}
@@ -98,8 +91,6 @@ function Navbar() {
                             key={link}
                             className={clsx(css['navbar-link'], isActive && css['navbar-link--active'])}
                             // style={{ zIndex: isActive ? 0 : 1 }}
-                            // onClick={handleNavigate}
-                            // onTouchStart={handleNavigate}
                             // so the bg active indicator slides underneath the old link
                         >
                             {icon}
