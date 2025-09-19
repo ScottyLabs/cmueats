@@ -40,23 +40,23 @@
 }
 
 .locations-search-hint {
-    display: block;
+    display: flex;
     position: absolute;
-    left: 3rem;
-    bottom: 0.8rem;
-    transform: translate(1px, -1px);
+    inset: 0;
+    left: calc(3rem + 1px);
+    align-items: center;
     color: var(--input-text-placeholder);
     pointer-events: none;
     opacity: 1;
     transition: opacity 0.3s ease-in;
-}
 
-.locations-search-hint kbd {
-    border: 1px solid;
-    border-radius: 5px;
-    padding: 1px 3px;
-    font-family: monospace;
-    font-size: 0.8rem;
+    kbd {
+        border: 1px solid;
+        border-radius: 5px;
+        padding: 1px 3px;
+        font-family: monospace;
+        font-size: 0.8rem;
+    }
 }
 
 .locations-search:focus + .locations-search-hint,
