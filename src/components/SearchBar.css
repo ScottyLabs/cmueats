@@ -1,9 +1,9 @@
-.Locations-search-wrapper {
+.locations-search-wrapper {
     display: block;
     position: relative;
 }
 
-.Locations-search {
+.locations-search {
     display: block;
     width: 100%;
     /* stays at the top when greeting text wraps */
@@ -39,7 +39,7 @@
     }
 }
 
-.Locations-search-hint {
+.locations-search-hint {
     display: block;
     position: absolute;
     left: 3rem;
@@ -51,7 +51,7 @@
     transition: opacity 0.3s ease-in;
 }
 
-.Locations-search-hint kbd {
+.locations-search-hint kbd {
     border: 1px solid;
     border-radius: 5px;
     padding: 1px 3px;
@@ -59,6 +59,6 @@
     font-size: 0.8rem;
 }
 
-.Locations-search:focus + .Locations-search-hint {
+.locations-search:focus + .locations-search-hint {
     opacity: 0;
 }
