@@ -64,7 +64,7 @@ function MapPage({
         <div className="MapPage">
             {extendedLocationData && (
                 <>
-                    {/* <Map
+                    <Map
                         token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
                         colorScheme={ColorScheme.Dark}
                         initialRegion={initialRegion}
@@ -103,7 +103,7 @@ function MapPage({
                                 />
                             );
                         })}
-                    </Map> */}
+                    </Map>
                     <CSSTransition
                         classNames="DrawerTransition"
                         timeout={300}
