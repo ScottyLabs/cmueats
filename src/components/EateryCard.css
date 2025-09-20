@@ -59,7 +59,7 @@
     fill: rgba(255, 255, 120, 0.18);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 599px) {
     .card__header__dot {
         width: 8px;
         height: 8px;
