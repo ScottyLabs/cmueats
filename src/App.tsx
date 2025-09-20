@@ -88,7 +88,7 @@ function App() {
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                 <BrowserRouter>
                     <div className="App">
-                        <Banner />
+                        {/* <Banner /> */}
                         {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;</div> */}
                         <div className="MainContent">
@@ -118,6 +118,8 @@ function App() {
         </React.StrictMode>
     );
 }
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @ts-ignore
 function Banner() {
     const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
     const closeBanner = () => {

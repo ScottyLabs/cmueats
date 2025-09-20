@@ -70,7 +70,7 @@ function MapPage({
                         initialRegion={initialRegion}
                         excludedPOICategories={[PointOfInterestCategory.Restaurant]}
                         cameraBoundary={cameraBoundary}
-                        minCameraDistance={100}
+                        minCameraDistance={10}
                         maxCameraDistance={1000}
                         showsUserLocationControl
                         allowWheelToZoom
