@@ -68,6 +68,7 @@ interface ILocation_FromAPI_PreProcessed {
     name?: string;
     shortDescription?: string;
     description: string;
+    grubhubUrl: string,
     url: string;
     /** Menu link */
     menu?: string;

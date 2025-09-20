@@ -134,6 +134,7 @@ function EateryCard({
         name,
         location: physicalLocation,
         url,
+        grubhubUrl,
         shortDescription,
         menu,
         todaysSpecials = [],
@@ -184,6 +185,16 @@ function EateryCard({
                     >
                         Details
                     </ActionButton>
+                    {grubhubUrl !== undefined && (
+                        <ActionButton
+                            onClick={() => {
+                                console.log("clicked link and redirecting to " + grubhubUrl);
+                                window.open(grubhubUrl, '_blank');
+                            }}
+                        >
+                            Order in GrubHub
+                        </ActionButton>
+                    )}
                     <div className="card__pin-container">
                         {showPinButton && (
                             <Button

@@ -24,6 +24,7 @@ export const ILocationAPIJoiSchema = Joi.object<IReadOnlyLocation_FromAPI_PrePro
     name: string,
     shortDescription: string,
     description: string.required(),
+    grubhubUrl: string,
     url: string.required(),
     menu: string,
     location: string.required(),
