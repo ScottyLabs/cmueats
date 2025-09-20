@@ -21,38 +21,61 @@ import { IReadOnlyLocation_Combined, LocationState } from '../types/locationType
 import './EateryCard.css';
 import { highlightColors, textColors } from '../constants/colors';
 
-const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
+const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ theme, state }) => ({
     fontWeight: 500,
-    alignItems: 'flex-start',
     padding: '13px 16px',
+    alignItems: 'flex-start',
     borderBottom: '2px solid',
     borderBottomColor: highlightColors[state],
+
+    [theme.breakpoints.down("sm")]: {
+        padding: "10px 12px",
+        "& .MuiCardHeader-avatar": {
+            marginRight: 6,   
+        },
+    }
 }));
 
-const CustomLink = styled(Link)({
+const CustomLink = styled(Link)(({ theme }) => ({
     color: 'var(--card-text-title)',
     textDecoration: 'underline',
     textUnderlineOffset: '2px',
-});
 
-const NameText = styled(Typography)({
+    [theme.breakpoints.down('sm')]: {
+        textDecoration: 'none', 
+    },
+}));
+
+const NameText = styled(Typography)(({ theme }) => ({
     padding: 0,
     marginBottom: 5,
     fontFamily: 'var(--text-primary-font)',
     textTransform: 'capitalize',
     lineHeight: 1.2,
-});
 
-const LocationText = styled(Typography)({
+    [theme.breakpoints.down('sm')]: {
+        marginBottom:7
+    }
+}));
+
+const LocationText = styled(Typography)(({ theme }) => ({
     color: 'var(--card-text-muted)',
     marginBottom: 16,
     fontWeight: 500,
     fontSize: 14,
-});
 
-const DescriptionText = styled(Typography)({
+    [theme.breakpoints.down('sm')]: {
+        marginBottom: 0,
+    }
+}));
+
+const DescriptionText = styled(Typography)(({ theme }) => ({
     color: 'var(--card-text-description)',
-});
+
+    [theme.breakpoints.down('sm')]: {
+        display: 'none'
+    }
+}));
 
 const LongDescriptionText = styled(Typography)({
     color: 'var(--text-muted)',
@@ -81,14 +104,18 @@ const StyledAccordionDetails = styled(AccordionDetails)({
 });
 const StatusText = styled(Typography, {
     shouldForwardProp: (prop) => prop !== 'state',
-})<TextProps>(({ state }) => ({
+})<TextProps>(({ theme, state }) => ({
     color: textColors[state],
     fontSize: '1rem',
     fontWeight: 500,
     fontFamily: 'var(--text-secondary-font)',
+
+    [theme.breakpoints.down("sm")]: {
+      fontSize: '14px',
+    }
 }));
 
-const ActionButton = styled(Button)({
+const ActionButton = styled(Button)(({ theme }) => ({
     fontFamily: 'var(--text-secondary-font)',
     color: 'var(--button-text)',
     backgroundColor: 'var(--button-bg)',
@@ -98,7 +125,11 @@ const ActionButton = styled(Button)({
     '&:hover': {
         backgroundColor: 'var(--button-bg--hover)',
     },
-});
+
+    [theme.breakpoints.down('sm')]: {
+        display: 'none'
+    }
+}));
 
 const ExitButton = styled(Button)({
     fontFamily: 'var(--text-secondary-font)',
@@ -275,6 +306,7 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
                 />
             }
             className="card__header"
+            sx={{ height: { xs: 'clamp(10px, 30%, 50px)' } }}
         />
     );
 }
@@ -306,7 +338,7 @@ function EateryCardDialog({
         >
             <div className="card card--dialog">
                 <EateryCardHeader location={location} />
-                <CardContent className="card__content" sx={{ overflowY: 'auto' }}>
+                <CardContent className="card__content" sx={{overflowY: 'auto'}}>
                     <NameText variant="h6">
                         <CustomLink href={url} target="_blank">
                             {name}
@@ -378,6 +410,7 @@ function EateryCardDialog({
                             </StyledAccordion>
                         </>
                     )}
+                    
                 </CardContent>
                 <ExitButton onClick={onClose}>Close</ExitButton>
             </div>

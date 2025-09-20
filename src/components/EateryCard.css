@@ -58,3 +58,20 @@
     outline: none;
     fill: rgba(255, 255, 120, 0.18);
 }
+
+@media (max-width: 600px) {
+    .card__header__dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .desktop {
+        display: none
+    }
+
+    .card__pin-container {
+        position: absolute;
+        top: 5px;
+        right: -10px;
+    }
+}

@@ -185,7 +185,7 @@
     text-align: left;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: none;
 
     &:hover {
         animation: var(--card-glow-animation);
@@ -195,6 +195,7 @@
 }
 .card__header {
     background: var(--card-header-bg);
+    padding: 0px;
 }
 /* additional .card__header needed to override MUI styles. We can discard when we finish migration */
 .card__header .card__header__text {
@@ -325,6 +326,14 @@
 
     .ListPage__container {
         padding: 1.5rem 
+    }
+
+    .card {
+        height: 8rem;
+    }
+
+    .card .card__content {
+        padding: 13px 19px;
     }
 
 }
