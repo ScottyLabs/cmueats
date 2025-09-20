@@ -53,9 +53,8 @@
     kbd {
         border: 1px solid;
         border-radius: 5px;
-        padding: 1px 3px;
+        padding: 0px 3px;
         font-family: monospace;
-        font-size: 0.8rem;
     }
 }
 

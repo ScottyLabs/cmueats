@@ -3,21 +3,21 @@ import css from './SearchBar.module.css';
 
 function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSearchQuery: React.Dispatch<string> }) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const isDesktop = window.innerWidth >= 900;
+    const isMac = navigator.platform.includes('Mac');
 
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
             const target = event.target as HTMLElement;
-
             const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
-            if (event.key === '/' && document.activeElement !== inputRef.current && !isTyping) {
-                event.preventDefault();
-                inputRef.current?.focus();
-            }
 
             if (
-                // `ctrl + meta + k` might be someone's shortcut
-                event.metaKey !== event.ctrlKey &&
-                event.key === 'k' &&
+                // `cmd/ctrl` + `k`
+                ((((isMac && event.metaKey) || (!isMac && event.ctrlKey)) && event.key === 'k') ||
+                    // only `/`
+                    (!event.metaKey && !event.ctrlKey && event.key === '/') ||
+                    // only 's`
+                    (!event.metaKey && !event.ctrlKey && event.key === 's')) &&
                 document.activeElement !== inputRef.current &&
                 !isTyping
             ) {
@@ -45,7 +45,23 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
                 placeholder=""
             />
             <div className={css['locations-search-hint']}>
-                Type <kbd>/</kbd> to search
+                {isDesktop ? (
+                    <span>
+                        Type <kbd>/</kbd> or{' '}
+                        {isMac ? (
+                            <span>
+                                <kbd>⌘k</kbd>
+                            </span>
+                        ) : (
+                            <span>
+                                <kbd>^k</kbd>
+                            </span>
+                        )}{' '}
+                        to search
+                    </span>
+                ) : (
+                    <span>Search...</span>
+                )}
             </div>
         </div>
     );
