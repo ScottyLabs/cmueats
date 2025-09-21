@@ -29,7 +29,7 @@
         display: none;
     }
     &:focus {
-        transition: all 0.5s;
+        transition: all 0.2s;
         box-shadow: 0 0 40px var(--hover-accent-color);
         border-color: var(--hover-accent-color);
         outline: none;
@@ -48,7 +48,7 @@
     color: var(--input-text-placeholder);
     pointer-events: none;
     opacity: 1;
-    transition: opacity 0.3s ease-in;
+    transition: opacity 0.2s ease-in;
 
     kbd {
         border: 1px solid;
