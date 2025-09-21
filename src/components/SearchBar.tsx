@@ -51,7 +51,11 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
                         Type <kbd>/</kbd> or{' '}
                         {isMac ? (
                             <span>
-                                <kbd>⌘</kbd> <kbd>K</kbd>
+                                <kbd>
+                                    <span>⌘</span>
+                                    <span className={css['line']}></span>
+                                    <span>K</span>
+                                </kbd>
                             </span>
                         ) : (
                             <span>
