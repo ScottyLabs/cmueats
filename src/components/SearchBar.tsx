@@ -42,20 +42,25 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder=""
+                placeholder=" "
+                // this needs to be nonempty for the :placeholder-shown css to work
             />
             <div className={css['locations-search-hint']}>
                 {isDesktop ? (
                     <span>
                         Type <kbd>/</kbd> or{' '}
                         {isMac ? (
-                            <span>
-                                <kbd>⌘k</kbd>
-                            </span>
+                            <kbd>
+                                <span>⌘</span>
+                                <span className={css.line} />
+                                <span>K</span>
+                            </kbd>
                         ) : (
-                            <span>
-                                <kbd>^k</kbd>
-                            </span>
+                            <kbd>
+                                <span>^</span>
+                                <span className={css.line} />
+                                <span>K</span>
+                            </kbd>
                         )}{' '}
                         to search
                     </span>
