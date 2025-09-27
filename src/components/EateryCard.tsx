@@ -11,9 +11,12 @@ import {
     AccordionDetails,
     CardContent,
     Dialog,
+    // TextField,
+    IconButton,
     Tooltip,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
 import { DateTime } from 'luxon';
 
 import { getTimeSlotsString } from '../util/time';
@@ -140,6 +143,10 @@ function UnpinIcon() {
     );
 }
 
+const ReportIconButton = styled(IconButton)({
+    color: 'var(--button-text)',
+});
+
 function EateryCard({
     location,
     index = 0,
@@ -167,7 +174,7 @@ function EateryCard({
         todaysSoups = [],
     } = location;
 
-    const [openedModal, setOpenedModal] = useState<'none' | 'specials' | 'description'>('none');
+    const [openedModal, setOpenedModal] = useState<'none' | 'specials' | 'description' | 'report'>('none');
 
     return (
         <Grid item xs={12} md={4} lg={3} xl={3}>
@@ -231,17 +238,25 @@ function EateryCard({
                     onClose={() => setOpenedModal('none')}
                     location={location}
                     type="specials"
+                    setOpenedModal={setOpenedModal}
                 />
                 <EateryCardDialog
                     open={openedModal === 'description'}
                     onClose={() => setOpenedModal('none')}
                     location={location}
                     type="description"
+                    setOpenedModal={setOpenedModal}
+                />
+                <EateryCardReportDialog
+                    open={openedModal === 'report'}
+                    onClose={() => setOpenedModal('none')}
+                    location={location}
                 />
             </div>
         </Grid>
     );
 }
+
 function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
@@ -278,16 +293,19 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
         />
     );
 }
+
 function EateryCardDialog({
     open,
     type,
     onClose,
     location,
+    setOpenedModal,
 }: {
     open: boolean;
     type: 'specials' | 'description';
     onClose: () => void;
     location: IReadOnlyLocation_Combined;
+    setOpenedModal: any;
 }) {
     const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location;
     const timeSlots = getTimeSlotsString(location.times);
@@ -307,11 +325,23 @@ function EateryCardDialog({
             <div className="card card--dialog">
                 <EateryCardHeader location={location} />
                 <CardContent className="card__content" sx={{ overflowY: 'auto' }}>
-                    <NameText variant="h6">
-                        <CustomLink href={url} target="_blank">
-                            {name}
-                        </CustomLink>
-                    </NameText>
+                    <div className="card__title">
+                        <NameText variant="h6">
+                            <CustomLink href={url} target="_blank">
+                                {name}
+                            </CustomLink>
+                        </NameText>
+                        <Tooltip title="Report Issue">
+                            <ReportIconButton
+                                aria-label="Report issue"
+                                size="small"
+                                onClick={() => setOpenedModal('report')}
+                                className="card__report-icon"
+                            >
+                                <FeedbackOutlinedIcon fontSize="small" />
+                            </ReportIconButton>
+                        </Tooltip>
+                    </div>
                     <LocationText variant="subtitle2">{physicalLocation}</LocationText>
                     {type === 'specials' &&
                         todaysSpecials.concat(todaysSoups).map((special) => (
@@ -378,6 +408,47 @@ function EateryCardDialog({
                             </StyledAccordion>
                         </>
                     )}
+                </CardContent>
+                <ExitButton onClick={onClose}>Close</ExitButton>
+            </div>
+        </Dialog>
+    );
+}
+
+function EateryCardReportDialog({
+    open,
+    onClose,
+    location,
+}: {
+    open: boolean;
+    onClose: () => void;
+    location: IReadOnlyLocation_Combined;
+}) {
+    const { location: physicalLocation, name, url } = location;
+    return (
+        <Dialog
+            open={open}
+            onClose={onClose}
+            PaperProps={{
+                style: {
+                    backgroundColor: 'transparent',
+                    margin: 15,
+                },
+            }}
+        >
+            <div className="card card--dialog">
+                <EateryCardHeader location={location} />
+                <CardContent className="card__content" sx={{ overflowY: 'auto' }}>
+                    <NameText variant="h6">
+                        <CustomLink href={url} target="_blank">
+                            {name}
+                        </CustomLink>
+                    </NameText>
+                    <LocationText variant="subtitle2">{physicalLocation}</LocationText>
+                    <p>
+                        Incididunt pariatur ullamco fugiat deserunt deserunt excepteur aliqua enim commodo occaecat quis
+                        anim do ipsum quis. Consequat aliqua aute culpa ut occaecat ad.
+                    </p>
                 </CardContent>
                 <ExitButton onClick={onClose}>Close</ExitButton>
             </div>
