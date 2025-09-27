@@ -158,6 +158,9 @@
 }
 .card__header {
     background: var(--card-header-bg);
+    /* @media not screen and (max-width: 900px) {
+        height: 3em;
+    } */
 }
 /* additional .card__header needed to override MUI styles. We can discard when we finish migration */
 .card__header .card__header__text {
