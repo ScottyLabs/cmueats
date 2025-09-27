@@ -11,7 +11,7 @@ import {
     AccordionDetails,
     CardContent,
     Dialog,
-    // TextField,
+    TextField,
     IconButton,
     Tooltip,
 } from '@mui/material';
@@ -142,6 +142,35 @@ function UnpinIcon() {
         </svg>
     );
 }
+
+const StyledTextField = styled(TextField)({
+    '& label.Mui-focused': {
+        color: '#A0AAB4',
+    },
+    '& .MuiInputBase-input': {
+        color: 'var(--text-primary)',
+    },
+    '& .MuiInputLabel-root': {
+        color: 'var(--text-primary)',
+    },
+    '&:hover .MuiInputLabel-root': {
+        color: 'var(--hover-accent-color)',
+    },
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'white',
+        },
+        '&:hover fieldset': {
+            borderColor: 'var(--hover-accent-color)',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'var(--hover-accent-color)',
+        },
+    },
+    '& .MuiInputBase-input::placeholder': {
+        color: 'var(--input-text-placeholder)',
+    },
+});
 
 const ReportIconButton = styled(IconButton)({
     color: 'var(--button-text)',
@@ -429,6 +458,7 @@ function EateryCardReportDialog({
         <Dialog
             open={open}
             onClose={onClose}
+            fullWidth
             PaperProps={{
                 style: {
                     backgroundColor: 'transparent',
@@ -445,10 +475,15 @@ function EateryCardReportDialog({
                         </CustomLink>
                     </NameText>
                     <LocationText variant="subtitle2">{physicalLocation}</LocationText>
-                    <p>
-                        Incididunt pariatur ullamco fugiat deserunt deserunt excepteur aliqua enim commodo occaecat quis
-                        anim do ipsum quis. Consequat aliqua aute culpa ut occaecat ad.
-                    </p>
+                    <StyledTextField
+                        placeholder="Describe the wrong information (e.g., open hours, location, menu)..."
+                        className="card__input"
+                        fullWidth
+                        multiline
+                        minRows={3}
+                        label="What seems incorrect?"
+                        variant="outlined"
+                    />
                 </CardContent>
                 <ExitButton onClick={onClose}>Close</ExitButton>
             </div>
