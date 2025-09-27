@@ -17,10 +17,10 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
-import PinIcon from '../assets/pin.svg';
-import UnpinIcon from '../assets/unpin.svg';
 import { DateTime } from 'luxon';
 
+import PinIcon from '../assets/pin.svg';
+import UnpinIcon from '../assets/unpin.svg';
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
 import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
