@@ -112,6 +112,7 @@ const StatusText = styled(Typography, {
 
     [theme.breakpoints.down("sm")]: {
       fontSize: '14px',
+      padding: '0px 20px 0px 0px'
     }
 }));
 

@@ -298,9 +298,9 @@
 
 @media (max-width: 599px) {
     .info-text {
-        color: #B4BBC0;
-        padding: none;
-        font-size: 15px;
+        color: var(--black-400, #B4BBC0);
+        font-size: 14px;
+        line-height: 130%;
     }
 
     .info-container {
@@ -311,12 +311,13 @@
     }
 
     .Locations-search {
-        height:3rem;
-        background: #1C1F22;
+        height: 44px;
+        background: var(--black-1050, #1C1F22);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='rgba(255, 255, 255, .6)' class='w-5 h-5'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd'/%3E%3C/svg%3E");
         background-size: 20px;
         background-repeat: no-repeat;
         background-position: 1rem center;
+        border-radius: 16px;
     }
 
     .Locations-header {
@@ -328,12 +329,17 @@
         padding: 1.5rem 
     }
 
-    .card {
-        height: 8rem;
-    }
-
     .card .card__content {
         padding: 13px 19px;
+    }
+
+    .card__actions {
+        margin-top: none;
+        padding: 0;
+        margin-left: -none;
+        display: flex;
+        gap: none;
+        height: none;
     }
 
 }
