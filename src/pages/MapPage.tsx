@@ -56,9 +56,9 @@ function MapPage({
     const extendedLocationData =
         locations && extraLocationData
             ? locations.map((location) => ({
-                  ...location,
-                  ...extraLocationData[location.conceptId],
-              }))
+                ...location,
+                ...extraLocationData[location.conceptId],
+            }))
             : undefined;
     return (
         <div className="MapPage">
@@ -117,8 +117,8 @@ function MapPage({
                                 <EateryCard
                                     location={extendedLocationData[selectedLocationIndex]}
                                     currentStatus={CardStatus.NORMAL}
-                                    updateStatus={() => {}}
-                                    showPinButton={false}
+                                    updateStatus={() => { }}
+                                    showControlButtons={false}
                                 />
                             )}
                         </div>

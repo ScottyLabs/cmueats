@@ -4,6 +4,7 @@
     margin-top: 7px;
     border-radius: 50%;
 }
+
 .card__header__dot--blinking {
     animation: blinking 1s infinite;
     animation-play-state: paused;
@@ -13,12 +14,15 @@
     0% {
         opacity: 0;
     }
+
     50% {
         opacity: 1;
     }
+
     75% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
     }
