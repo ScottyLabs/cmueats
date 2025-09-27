@@ -2,7 +2,7 @@ import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
 import './ListPage.css';
-import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
+import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed, LocationStateMap } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -48,13 +48,13 @@ function getPittsburghTime() {
 function ListPage({
     extraLocationData,
     locations,
-    pinnedIds,
-    updatePinnedIds,
+    stateMap,
+    updateStateMap,
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    pinnedIds: Record<string, true>;
-    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    stateMap: LocationStateMap;
+    updateStateMap: (newStateMap: LocationStateMap) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -174,10 +174,10 @@ function ListPage({
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
-                        pinnedIds,
-                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                        stateMap: stateMap,
+                        updateStateMap: (newStateMap: LocationStateMap) => {
                             shouldAnimateCards.current = false;
-                            updatePinnedIds(newPinnedIds);
+                            updateStateMap(newStateMap);
                         },
                     }}
                 />

@@ -1,13 +1,17 @@
-export function getPinnedIds(): Record<string, true> {
+import { CardStatus } from "../components/EateryCard";
+import { LocationStateMap } from "../types/locationTypes";
+
+export function getStateMap(): LocationStateMap {
     try {
-        const arr = JSON.parse(localStorage.getItem('pinnedEateries') ?? '[]');
-        return Object.fromEntries((arr as string[]).map((id) => [id, true]));
+        const arr = JSON.parse(localStorage.getItem('eateryStates') ?? '[]');
+        // return new Map(arr.map(obj => [obj.key, obj.value]));
+        return new Map<string, CardStatus>();
     } catch {
-        return {};
+        return new Map<string, CardStatus>();
     }
 }
 
-export function setPinnedIds(obj: Record<string, true>) {
-    const arr = Object.keys(obj);
+export function setLocationStateMap(obj: LocationStateMap) {
+    const arr = Object.fromEntries(obj);
     localStorage.setItem('pinnedEateries', JSON.stringify(arr));
 }

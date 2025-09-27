@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import EateryCard from '../components/EateryCard';
+import EateryCard, { CardStatus } from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import {
@@ -7,6 +7,7 @@ import {
     IReadOnlyLocation_ExtraData_Map,
     LocationState,
     IReadOnlyLocation_Combined,
+    LocationStateMap,
 } from '../types/locationTypes';
 import assert from '../util/assert';
 
@@ -16,16 +17,16 @@ export default function EateryCardGrid({
     setSearchQuery,
     shouldAnimateCards,
     apiError,
-    pinnedIds,
-    updatePinnedIds,
+    stateMap,
+    updateStateMap: updatePinnedIds,
 }: {
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
-    pinnedIds: Record<string, true>;
-    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    stateMap: LocationStateMap;
+    updateStateMap: (newPinnedIds: LocationStateMap) => void;
 }) {
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -83,21 +84,21 @@ export default function EateryCardGrid({
                     ...location,
                     ...extraLocationData[location.conceptId], // add on our extra data here
                 }))
-                .sort((location1, location2) => {
-                    const id1 = location1.conceptId.toString();
-                    const id2 = location2.conceptId.toString();
+                // .sort((location1, location2) => {
+                //     const id1 = location1.conceptId.toString();
+                //     const id2 = location2.conceptId.toString();
 
-                    const isPinned1 = id1 in pinnedIds;
-                    const isPinned2 = id2 in pinnedIds;
+                //     const isPinned1 = id1 in pinnedIds;
+                //     const isPinned2 = id2 in pinnedIds;
 
-                    if (isPinned1 && isPinned2) {
-                        return compareLocations(location1, location2);
-                    }
-                    if (isPinned1) return -1;
-                    if (isPinned2) return 1;
+                //     if (isPinned1 && isPinned2) {
+                //         return compareLocations(location1, location2);
+                //     }
+                //     if (isPinned1) return -1;
+                //     if (isPinned2) return 1;
 
-                    return compareLocations(location1, location2);
-                })
+                //     return compareLocations(location1, location2);
+                // })
                 .map((location, i) => (
                     <EateryCard
                         location={location}
@@ -105,16 +106,14 @@ export default function EateryCardGrid({
                         index={i}
                         animate={shouldAnimateCards}
                         partOfMainGrid
-                        isPinned={location.conceptId.toString() in pinnedIds}
-                        onTogglePin={() => {
+                        currentStatus={stateMap.get(location.conceptId.toString()) ?? CardStatus.NORMAL}
+                        updateStatus={(newStatus: CardStatus) => {
                             const id = location.conceptId.toString();
-                            const newPinnedIds = { ...pinnedIds };
-                            if (newPinnedIds[id]) {
-                                delete newPinnedIds[id];
-                            } else {
-                                newPinnedIds[id] = true;
-                            }
-                            updatePinnedIds(newPinnedIds);
+
+                            // TODO: investigate clone performance
+                            const clone = new Map(stateMap);
+                            clone.set(id, newStatus);
+                            updatePinnedIds(clone);
                         }}
                     />
                 ))}

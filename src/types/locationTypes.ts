@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import { CardStatus } from "../components/EateryCard";
+
 /** Note that everything being exported here is readonly */
 
 export type RecursiveReadonly<T> = T extends object
     ? {
-          readonly [P in keyof T]: RecursiveReadonly<T[P]>;
-      }
+        readonly [P in keyof T]: RecursiveReadonly<T[P]>;
+    }
     : T;
 
 /**
@@ -121,3 +123,5 @@ export type IReadOnlyLocation_ExtraData_Map = {
 
 /** once we combine extraDataMap with our base api data */
 export type IReadOnlyLocation_Combined = IReadOnlyLocation_FromAPI_PostProcessed & IReadOnlyLocation_ExtraData;
+
+export type LocationStateMap = Map<string, CardStatus>

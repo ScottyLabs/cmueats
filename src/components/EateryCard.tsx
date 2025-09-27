@@ -21,6 +21,12 @@ import { IReadOnlyLocation_Combined, LocationState } from '../types/locationType
 import './EateryCard.css';
 import { highlightColors, textColors } from '../constants/colors';
 
+export enum CardStatus {
+    PINNED,
+    HIDDEN,
+    NORMAL
+}
+
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
     fontWeight: 500,
     alignItems: 'flex-start',
@@ -118,16 +124,16 @@ function EateryCard({
     index = 0,
     partOfMainGrid = false,
     animate = false,
-    isPinned,
-    onTogglePin,
+    currentStatus,
+    updateStatus,
     showPinButton = true,
 }: {
     location: IReadOnlyLocation_Combined;
     index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
-    isPinned: boolean;
-    onTogglePin: () => void;
+    currentStatus: CardStatus;
+    updateStatus: (newStatus: CardStatus) => void;
     showPinButton?: boolean;
 }) {
     const {
@@ -187,11 +193,11 @@ function EateryCard({
                     <div className="card__pin-container">
                         {showPinButton && (
                             <Button
-                                onClick={onTogglePin}
-                                className={`card__pin-button ${isPinned ? 'card__pin-button--pinned' : ''}`}
+                                onClick={() => { updateStatus(currentStatus == CardStatus.NORMAL ? CardStatus.PINNED : CardStatus.NORMAL) }}
+                                className={`card__pin-button ${currentStatus == CardStatus.PINNED ? 'card__pin-button--pinned' : ''}`}
                                 size="small"
                             >
-                                {isPinned ? (
+                                {currentStatus == CardStatus.PINNED ? (
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="14"
