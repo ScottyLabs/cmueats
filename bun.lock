@@ -18,6 +18,7 @@
         "@types/react": "^18.2.68",
         "@types/react-router-dom": "^5.3.3",
         "axios": "^1.6.8",
+        "clsx": "^2.1.1",
         "css-loader": "^6.10.0",
         "fuse.js": "^7.0.0",
         "joi": "^17.12.2",
@@ -33,7 +34,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-error-boundary": "^6.0.0",
-        "react-router-dom": "^6.22.3",
+        "react-router-dom": "^6.30.1",
         "react-transition-group": "^4.4.5",
         "serve": "^14.2.1",
         "vitest": "^1.4.0",
@@ -1725,9 +1726,9 @@
 
     "react-refresh": ["react-refresh@0.14.2", "", {}, "sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA=="],
 
-    "react-router": ["react-router@6.30.0", "", { "dependencies": { "@remix-run/router": "1.23.0" }, "peerDependencies": { "react": ">=16.8" } }, "sha512-D3X8FyH9nBcTSHGdEKurK7r8OYE1kKFn3d/CF+CoxbSHkxU7o37+Uh7eAHRXr6k2tSExXYO++07PeXJtA/dEhQ=="],
+    "react-router": ["react-router@6.30.1", "", { "dependencies": { "@remix-run/router": "1.23.0" }, "peerDependencies": { "react": ">=16.8" } }, "sha512-X1m21aEmxGXqENEPG3T6u0Th7g0aS4ZmoNynhbs+Cn+q+QGTLt+d5IQ2bHAXKzKcxGJjxACpVbnYQSCRcfxHlQ=="],
 
-    "react-router-dom": ["react-router-dom@6.30.0", "", { "dependencies": { "@remix-run/router": "1.23.0", "react-router": "6.30.0" }, "peerDependencies": { "react": ">=16.8", "react-dom": ">=16.8" } }, "sha512-x30B78HV5tFk8ex0ITwzC9TTZMua4jGyA9IUlH1JLQYQTFyxr/ZxwOJq7evg1JX1qGVUcvhsmQSKdPncQrjTgA=="],
+    "react-router-dom": ["react-router-dom@6.30.1", "", { "dependencies": { "@remix-run/router": "1.23.0", "react-router": "6.30.1" }, "peerDependencies": { "react": ">=16.8", "react-dom": ">=16.8" } }, "sha512-llKsgOkZdbPU1Eg3zK8lCn+sjD9wMRZZPuzmdWWX5SUs8OFkN5HnFVC0u5KMeMaC9aoancFI/KoLuKPqN+hxHw=="],
 
     "react-scan": ["react-scan@0.0.31", "", { "dependencies": { "@clack/core": "^0.3.5", "@clack/prompts": "^0.8.2", "kleur": "^4.1.5", "mri": "^1.2.0", "playwright": "^1.49.0" }, "bin": { "react-scan": "bin/cli.js" } }, "sha512-reHgQnASWVXwHe0Ibk/EbsEPZhKrmNRf8EUNDmjMi1lzXec+Cj9litKxD0TG2ghAwg5V4sT0wzhiOgZSIefeVg=="],
 

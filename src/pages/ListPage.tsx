@@ -196,7 +196,14 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems, please contact{' '}
+                            If you encounter any problems, please fill out our{' '}
+                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
+                                feedback form
+                            </a>{' '}
+                            (the fastest way to reach us!).
+                        </FooterText>
+                        <FooterText>
+                            Otherwise, reach out to{' '}
                             {emails.length > 0 ? (
                                 emails.map((person, idx) => (
                                     <span key={person.email}>
@@ -215,13 +222,6 @@ function ListPage({
                                     </a>
                                 </span>
                             )}
-                            .
-                        </FooterText>
-                        <FooterText>
-                            Alternatively, fill out our{' '}
-                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
-                                feedback form
-                            </a>
                             .
                         </FooterText>
                         <FooterText>
