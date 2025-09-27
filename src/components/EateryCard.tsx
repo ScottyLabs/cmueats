@@ -22,6 +22,7 @@ import './EateryCard.css';
 import { highlightColors, textColors } from '../constants/colors';
 
 import LocationIcon from "../assets/location.svg";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ theme, state }) => ({
     fontWeight: 500,
@@ -177,6 +178,9 @@ function EateryCard({
 
     const [openedModal, setOpenedModal] = useState<'none' | 'specials' | 'description'>('none');
 
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
     return (
         <Grid item xs={12} md={4} lg={3} xl={3}>
             <div
@@ -184,11 +188,17 @@ function EateryCard({
                 style={{ '--card-show-delay': `${index * 50}ms` }}
             >
                 <EateryCardHeader location={location} />
-                <CardContent className="card__content">
+                <CardContent 
+                    className="card__content"
+                    
+                    {...(isMobile && {
+                        onClick: () => {
+                            setOpenedModal('description');
+                        },
+                    })}
+                >
                     <NameText variant="h6">
-                        <CustomLink href={url} target="_blank">
-                            {name}
-                        </CustomLink>
+                        {isMobile ? name : <CustomLink href={url} target="_blank">{name}</CustomLink>}
                     </NameText>
                     <div className = "mobile"> 
                         <LocationText variant="subtitle2"><img src={LocationIcon}></img> {physicalLocation}</LocationText>
@@ -266,18 +276,37 @@ function EateryCard({
                         )}
                     </div>
                 </div>
-                <EateryCardDialog
-                    open={openedModal === 'specials'}
-                    onClose={() => setOpenedModal('none')}
-                    location={location}
-                    type="specials"
-                />
-                <EateryCardDialog
-                    open={openedModal === 'description'}
-                    onClose={() => setOpenedModal('none')}
-                    location={location}
-                    type="description"
-                />
+                {isMobile ? (
+                    <>
+                        <MobileEateryCardDialog
+                            open={openedModal === 'specials'}
+                            onClose={() => setOpenedModal('none')}
+                            location={location}
+                            type="specials"
+                        />
+                        <MobileEateryCardDialog
+                            open={openedModal === 'description'}
+                            onClose={() => setOpenedModal('none')}
+                            location={location}
+                            type="description"
+                        />
+                    </>
+                    ) : (
+                    <>
+                        <EateryCardDialog
+                            open={openedModal === 'specials'}
+                            onClose={() => setOpenedModal('none')}
+                            location={location}
+                            type="specials"
+                        />
+                        <EateryCardDialog
+                            open={openedModal === 'description'}
+                            onClose={() => setOpenedModal('none')}
+                            location={location}
+                            type="description"
+                        />
+                    </>
+                )}
             </div>
         </Grid>
     );
@@ -319,7 +348,116 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
         />
     );
 }
+
 function EateryCardDialog({
+    open,
+    type,
+    onClose,
+    location,
+}: {
+    open: boolean;
+    type: 'specials' | 'description';
+    onClose: () => void;
+    location: IReadOnlyLocation_Combined;
+}) {
+    const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location;
+    const timeSlots = getTimeSlotsString(location.times);
+    const dayOffsetFromSunday = DateTime.now().weekday % 7; // literally will be refreshed every second because location status is. This is fine
+    const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return (
+        <Dialog
+            open={open}
+            onClose={onClose}
+            PaperProps={{
+                style: {
+                    backgroundColor: 'transparent',
+                    margin: 15,
+                },
+            }}
+        >
+            <div className="card card--dialog">
+                <EateryCardHeader location={location} />
+                <CardContent className="card__content" sx={{overflowY: 'auto'}}>
+                    <NameText variant="h6">
+                        <CustomLink href={url} target="_blank">
+                            {name}
+                        </CustomLink>
+                    </NameText>
+                    <LocationText variant="subtitle2">{physicalLocation}</LocationText>
+                    {type === 'specials' &&
+                        todaysSpecials.concat(todaysSoups).map((special) => (
+                            <StyledAccordion key={special.title}>
+                                <StyledAccordionSummary
+                                    expandIcon={
+                                        <ExpandMoreIcon
+                                            style={{
+                                                color: 'var(--card-text-description)',
+                                            }}
+                                        />
+                                    }
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <DescriptionText>{special.title}</DescriptionText>
+                                </StyledAccordionSummary>
+                                <StyledAccordionDetails>
+                                    <LocationText>{special.description}</LocationText>
+                                </StyledAccordionDetails>
+                            </StyledAccordion>
+                        ))}
+                    {type === 'description' && (
+                        <>
+                            <LongDescriptionText variant="subtitle1">{description}</LongDescriptionText>
+                            <StyledAccordion disableGutters style={{ marginTop: 24 }}>
+                                <StyledAccordionSummary
+                                    className="accordion__summary"
+                                    expandIcon={
+                                        <ExpandMoreIcon
+                                            style={{
+                                                color: 'var(--card-text-description)',
+                                            }}
+                                        />
+                                    }
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    Show weekly hours
+                                </StyledAccordionSummary>
+
+                                <StyledAccordionDetails>
+                                    {Array(7)
+                                        .fill(true)
+                                        .map((_, i) => {
+                                            const realI = (i + dayOffsetFromSunday) % 7;
+                                            return (
+                                                <div
+                                                    style={{
+                                                        marginBottom: '10px',
+                                                        fontWeight: realI === dayOffsetFromSunday ? 'bold' : 'normal',
+                                                        color: realI === dayOffsetFromSunday ? 'white' : '',
+                                                    }}
+                                                    key={daysStartingFromSunday[realI]}
+                                                >
+                                                    <span style={{ color: 'white' }}>
+                                                        {daysStartingFromSunday[realI]}
+                                                    </span>
+                                                    : {timeSlots[realI]}
+                                                </div>
+                                            );
+                                        })}
+                                </StyledAccordionDetails>
+                            </StyledAccordion>
+                        </>
+                    )}
+                    
+                </CardContent>
+                <ExitButton onClick={onClose}>Close</ExitButton>
+            </div>
+        </Dialog>
+    );
+}
+
+function MobileEateryCardDialog({
     open,
     type,
     onClose,
