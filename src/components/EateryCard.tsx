@@ -470,9 +470,14 @@ function EateryCardReportDialog({
                 <EateryCardHeader location={location} />
                 <CardContent className="card__content" sx={{ overflowY: 'auto' }}>
                     <NameText variant="h6">
-                        <CustomLink href={url} target="_blank">
-                            {name}
-                        </CustomLink>
+                        <div style={{ color: 'var(--text-primary)' }}>
+                            Report an issue for{' '}
+                            <span>
+                                <CustomLink href={url} target="_blank">
+                                    {name}
+                                </CustomLink>
+                            </span>
+                        </div>
                     </NameText>
                     <LocationText variant="subtitle2">{physicalLocation}</LocationText>
                     <StyledTextField
