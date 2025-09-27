@@ -21,11 +21,11 @@ import { IReadOnlyLocation_Combined, LocationState } from '../types/locationType
 import './EateryCard.css';
 import { highlightColors, textColors } from '../constants/colors';
 
-import eyeIcon from "../assets/control_button/eye.svg"
-import eyeIconOff from "../assets/control_button/eye-off.svg"
+import eyeIcon from '../assets/control_button/eye.svg';
+import eyeIconOff from '../assets/control_button/eye-off.svg';
 
-import pinIcon from "../assets/control_button/pinned.svg"
-import pinIconOff from "../assets/control_button/unpinned.svg"
+import pinIcon from '../assets/control_button/pinned.svg';
+import pinIconOff from '../assets/control_button/unpinned.svg';
 
 export enum CardStatus {
     PINNED,
@@ -159,21 +159,20 @@ function EateryCard({
     const pinButton = () => {
         switch (currentStatus) {
             case CardStatus.PINNED:
-                return <img src={pinIcon}></img>
+                return <img src={pinIcon} alt="Pinned" />;
             default:
-                return <img src={pinIconOff}></img>
+                return <img src={pinIconOff} alt="Unpinned" />;
         }
-
-    }
+    };
 
     const hideButton = () => {
         switch (currentStatus) {
             case CardStatus.HIDDEN:
-                return <img src={eyeIconOff}></img>
+                return <img src={eyeIconOff} alt="Hidden" />;
             default:
-                return <img src={eyeIcon}></img>
+                return <img src={eyeIcon} alt="Visible" />;
         }
-    }
+    };
 
     return (
         <Grid item xs={12} md={4} lg={3} xl={3}>
