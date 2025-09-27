@@ -21,6 +21,8 @@ import { IReadOnlyLocation_Combined, LocationState } from '../types/locationType
 import './EateryCard.css';
 import { highlightColors, textColors } from '../constants/colors';
 
+import LocationIcon from "../assets/location.svg";
+
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ theme, state }) => ({
     fontWeight: 500,
     padding: '13px 16px',
@@ -66,6 +68,7 @@ const LocationText = styled(Typography)(({ theme }) => ({
 
     [theme.breakpoints.down('sm')]: {
         marginBottom: 0,
+        color: "#CBCFD3"
     }
 }));
 
@@ -187,7 +190,12 @@ function EateryCard({
                             {name}
                         </CustomLink>
                     </NameText>
-                    <LocationText variant="subtitle2">{physicalLocation}</LocationText>
+                    <div className = "mobile"> 
+                        <LocationText variant="subtitle2"><img src={LocationIcon}></img> {physicalLocation}</LocationText>
+                    </div>
+                    <div className = "desktop">
+                        <LocationText variant="subtitle2">{physicalLocation}</LocationText>
+                    </div>
                     <DescriptionText>{shortDescription}</DescriptionText>
                 </CardContent>
                 <div className="card__actions">

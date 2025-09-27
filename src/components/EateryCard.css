@@ -75,3 +75,20 @@
         right: -10px;
     }
 }
+
+@media (min-width: 600px) {
+    .card__header__dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .mobile {
+        display: none
+    }
+
+    .card__pin-container {
+        position: absolute;
+        top: 5px;
+        right: -10px;
+    }
+}
