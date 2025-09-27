@@ -58,3 +58,10 @@
     outline: none;
     fill: rgba(255, 255, 120, 0.18);
 }
+
+.card__title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+}
