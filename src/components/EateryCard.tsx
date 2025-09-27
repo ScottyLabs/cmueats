@@ -23,9 +23,11 @@ import { highlightColors, textColors } from '../constants/colors';
 
 export enum CardStatus {
     PINNED,
+    NORMAL,
     HIDDEN,
-    NORMAL
 }
+
+export type CardStateMap = Map<string, CardStatus>;
 
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
     fontWeight: 500,
@@ -193,11 +195,15 @@ function EateryCard({
                     <div className="card__pin-container">
                         {showPinButton && (
                             <Button
-                                onClick={() => { updateStatus(currentStatus == CardStatus.NORMAL ? CardStatus.PINNED : CardStatus.NORMAL) }}
-                                className={`card__pin-button ${currentStatus == CardStatus.PINNED ? 'card__pin-button--pinned' : ''}`}
+                                onClick={() => {
+                                    updateStatus(
+                                        currentStatus === CardStatus.NORMAL ? CardStatus.PINNED : CardStatus.NORMAL,
+                                    );
+                                }}
+                                className={`card__pin-button ${currentStatus === CardStatus.PINNED ? 'card__pin-button--pinned' : ''}`}
                                 size="small"
                             >
-                                {currentStatus == CardStatus.PINNED ? (
+                                {currentStatus === CardStatus.PINNED ? (
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="14"

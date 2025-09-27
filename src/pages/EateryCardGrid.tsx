@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import EateryCard, { CardStatus } from '../components/EateryCard';
+import EateryCard, { CardStateMap, CardStatus } from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import {
@@ -7,7 +7,6 @@ import {
     IReadOnlyLocation_ExtraData_Map,
     LocationState,
     IReadOnlyLocation_Combined,
-    LocationStateMap,
 } from '../types/locationTypes';
 import assert from '../util/assert';
 
@@ -25,8 +24,8 @@ export default function EateryCardGrid({
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
-    stateMap: LocationStateMap;
-    updateStateMap: (newPinnedIds: LocationStateMap) => void;
+    stateMap: CardStateMap;
+    updateStateMap: (newPinnedIds: CardStateMap) => void;
 }) {
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -84,21 +83,16 @@ export default function EateryCardGrid({
                     ...location,
                     ...extraLocationData[location.conceptId], // add on our extra data here
                 }))
-                // .sort((location1, location2) => {
-                //     const id1 = location1.conceptId.toString();
-                //     const id2 = location2.conceptId.toString();
+                .sort((location1, location2) => {
+                    const state1 = stateMap.get(location1.conceptId.toString()) ?? CardStatus.NORMAL;
+                    const state2 = stateMap.get(location2.conceptId.toString()) ?? CardStatus.NORMAL;
 
-                //     const isPinned1 = id1 in pinnedIds;
-                //     const isPinned2 = id2 in pinnedIds;
+                    const delta = state1 - state2;
 
-                //     if (isPinned1 && isPinned2) {
-                //         return compareLocations(location1, location2);
-                //     }
-                //     if (isPinned1) return -1;
-                //     if (isPinned2) return 1;
+                    if (delta !== 0) return delta;
 
-                //     return compareLocations(location1, location2);
-                // })
+                    return compareLocations(location1, location2);
+                })
                 .map((location, i) => (
                     <EateryCard
                         location={location}

@@ -2,7 +2,7 @@ import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
 import './ListPage.css';
-import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed, LocationStateMap } from '../types/locationTypes';
+import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -14,6 +14,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
+import { CardStateMap } from '../components/EateryCard';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -53,8 +54,8 @@ function ListPage({
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    stateMap: LocationStateMap;
-    updateStateMap: (newStateMap: LocationStateMap) => void;
+    stateMap: CardStateMap;
+    updateStateMap: (newStateMap: CardStateMap) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -174,8 +175,8 @@ function ListPage({
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
-                        stateMap: stateMap,
-                        updateStateMap: (newStateMap: LocationStateMap) => {
+                        stateMap,
+                        updateStateMap: (newStateMap: CardStateMap) => {
                             shouldAnimateCards.current = false;
                             updateStateMap(newStateMap);
                         },

@@ -1,17 +1,17 @@
-import { CardStatus } from "../components/EateryCard";
-import { LocationStateMap } from "../types/locationTypes";
+import { CardStateMap, CardStatus } from '../components/EateryCard';
 
-export function getStateMap(): LocationStateMap {
+export function getStateMap(): CardStateMap {
     try {
-        const arr = JSON.parse(localStorage.getItem('eateryStates') ?? '[]');
+        const arr: Object = JSON.parse(localStorage.getItem('eateryStates') ?? '{}');
         // return new Map(arr.map(obj => [obj.key, obj.value]));
-        return new Map<string, CardStatus>();
+        // console.log(new Map(arr))
+        return new Map(Object.entries(arr));
     } catch {
         return new Map<string, CardStatus>();
     }
 }
 
-export function setLocationStateMap(obj: LocationStateMap) {
+export function setLocationStateMap(obj: CardStateMap) {
     const arr = Object.fromEntries(obj);
-    localStorage.setItem('pinnedEateries', JSON.stringify(arr));
+    localStorage.setItem('eateryStates', JSON.stringify(arr));
 }

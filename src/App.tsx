@@ -14,14 +14,14 @@ import {
     LocationChecker,
 } from './util/queryLocations';
 import './App.css';
-import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map, LocationStateMap } from './types/locationTypes';
+import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
 import { getStateMap, setLocationStateMap } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
-import { CardStatus } from './components/EateryCard';
+import { CardStateMap } from './components/EateryCard';
 
 const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
 function ErrorBoundaryFallback() {
@@ -52,9 +52,9 @@ function App() {
         });
     }, []);
 
-    const [pinnedIds, setLocationStateMapState] = useState<LocationStateMap>(getStateMap());
+    const [pinnedIds, setLocationStateMapState] = useState<CardStateMap>(getStateMap());
 
-    const updateStateMap = (newObj: LocationStateMap) => {
+    const updateStateMap = (newObj: CardStateMap) => {
         setLocationStateMapState(newObj);
         setLocationStateMap(newObj);
     };
