@@ -11,6 +11,7 @@ import {
     AccordionDetails,
     CardContent,
     Dialog,
+    Slide
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTime } from 'luxon';
@@ -472,6 +473,7 @@ function MobileEateryCardDialog({
     const timeSlots = getTimeSlotsString(location.times);
     const dayOffsetFromSunday = DateTime.now().weekday % 7; // literally will be refreshed every second because location status is. This is fine
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
     return (
         <Dialog
             open={open}
@@ -482,6 +484,8 @@ function MobileEateryCardDialog({
                     margin: 15,
                 },
             }}
+            TransitionComponent = {Slide}
+            TransitionProps={{ direction: 'up' } as any}
         >
             <div className="card card--dialog">
                 <EateryCardHeader location={location} />
