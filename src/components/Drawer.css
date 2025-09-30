@@ -1,0 +1,13 @@
+.drawer-box {
+    flex: 1;
+    background: green;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.drawer-in {
+    height: 10em;
+    background: pink;
+    position: sticky;
+    bottom: 0;
+}

@@ -1,9 +1,40 @@
-.ListPage {
+.list-page-container {
     display: flex;
-    flex-direction: column;
-    min-height: 100%; /* So the contact info footer actually stays at the bottom */
+    gap: 1em;
+    overflow-y: scroll;
+    height: 100%;
 }
-.ListPage__container {
+
+.list-box {
+    /* display: flex;
+    flex-direction: column; */
+    /* min-height: 100%; */ /* So the contact info footer actually stays at the bottom */
+    flex: 1;
+    overflow-y: scroll;
+}
+
+.list-header {
+    display: grid;
+    padding: 72px 48px 48px;
+    grid-gap: 1rem;
+    position: relative;
+    @media screen and (max-width: 900px) {
+        & {
+            padding: 50px 15px;
+        }
+    }
+}
+
+.eatery-card-grid-container {
+    padding: 72px 48px;
+    @media screen and (max-width: 900px) {
+        & {
+            padding: 50px 15px;
+        }
+    }
+}
+
+/* .list-box {
     padding: 72px 48px 0;
     flex-grow: 1;
     @media screen and (max-width: 900px) {
@@ -11,7 +42,7 @@
             padding: 50px 15px;
         }
     }
-}
+} */
 .badge-accent {
     color: #105c03;
     background: #19b875;
@@ -19,12 +50,13 @@
     border-radius: 30;
 }
 
-.Locations-header {
+/* .Locations-header {
     display: grid;
     grid-gap: 1rem;
     padding-bottom: 48px;
     position: relative;
-}
+} */
+
 .Locations-header__miku-toggle {
     position: absolute;
     top: -290px;
