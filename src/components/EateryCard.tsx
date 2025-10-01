@@ -1,32 +1,15 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
-import {
-    CardHeader,
-    Typography,
-    Link,
-    styled,
-    Grid,
-    Button,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    CardContent,
-    Dialog,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { DateTime } from 'luxon';
+import { useContext } from 'react';
+import { Grid } from '@mui/material';
 
-import { getTimeSlotsString } from '../util/time';
-import TextProps from '../types/interfaces';
-import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCard.css';
-import { highlightColors, textColors } from '../constants/colors';
 import { DrawerContext } from '../pages/ListPage';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 
 function EateryCard({
     location,
-    index = 0,
+    index: _index = 0,
     partOfMainGrid = false,
     animate = false,
     isPinned,
@@ -46,11 +29,13 @@ function EateryCard({
     const isDouble = drawerContext.isDrawerActive ? 2 : 1;
     return (
         <Grid item xs={12} md={4 * isDouble} lg={3 * isDouble} xl={2 * isDouble}>
-            <div
-                className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}
-                style={{ '--card-show-delay': `${index * 50}ms` }}
-            >
-                <EateryCardHeader location={location} />
+            <div className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}>
+                <EateryCardHeader
+                    location={location}
+                    isPinned={isPinned}
+                    onTogglePin={onTogglePin}
+                    showPinButton={showPinButton}
+                />
                 <EateryCardContent location={location} />
             </div>
         </Grid>

@@ -1,96 +1,15 @@
 .card {
-    --card-glow-animation: glow-animation 1.5s ease 0s infinite;
-
     box-sizing: border-box;
-    height: 100%;
-
-    background-color: var(--card-bg);
-    border: var(--card-border-width) solid var(--card-border-color);
-    border-radius: 7px;
-
-    text-align: left;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    border-radius: 18px;
     overflow: hidden;
-
-    &:hover {
-        animation: var(--card-glow-animation);
-    }
-
-    position: relative;
+    background-color: var(--card-bg, #1f2227);
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    box-shadow: 0 8px 28px -22px rgba(0, 0, 0, 0.9);
 }
 
 .card-animated {
-    opacity: 0;
-    --card-show-delay: 0s;
-    --card-fade-in-animation: fade-in 0.7s cubic-bezier(0.08, 0.67, 0.64, 1.01) var(--card-show-delay) forwards;
-    animation: var(--card-fade-in-animation);
-
-    &:hover {
-        animation: var(--card-fade-in-animation), var(--card-glow-animation);
-    }
-}
-
-.card__pin-container {
-    position: absolute;
-    bottom: 16px;
-    right: 5px;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-}
-
-.card__pin-button {
-    border-radius: 100%;
-    min-width: 4px;
-    min-height: 36px;
-    background: transparent;
-    box-shadow: none;
-    border: none;
-    outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.card__pin-button--pinned svg {
-    stroke: #ffd700;
-}
-
-.card__pin-button:not(.card__pin-button--pinned) svg {
-    stroke: #efeaea;
-}
-
-.card__pin-button:hover {
-    background: rgba(255, 255, 0, 0.08);
-    outline: none;
-    fill: rgba(255, 255, 120, 0.18);
-}
-
-@keyframes fade-in {
-    0% {
-        opacity: 0;
-        transform: translate(-10px, 0);
-        filter: blur(3px);
-    }
-    55% {
-        filter: blur(0);
-    }
-
-    100% {
-        transform: translate(0, 0);
-        opacity: 1;
-        filter: blur(0);
-    }
-}
-
-@keyframes glow-animation {
-    0% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
-    50% {
-        box-shadow: 0 0 20px var(--hover-accent-color);
-    }
-    100% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
+    opacity: 1;
 }

@@ -1,3 +1,109 @@
-.physical-location-text {
-    color: gray;
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.1rem;
+    padding: 1.3rem;
+    color: var(--card-text-description);
+}
+
+.card-body__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.card-body__title {
+    margin: 0;
+    font-family: var(--text-primary-font);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--card-text-title);
+}
+
+.card-body__title-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.card-body__title-link:hover,
+.card-body__title-link:focus-visible {
+    text-decoration: underline;
+    outline: none;
+}
+
+.card-body__location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.96rem;
+}
+
+.card-body__location svg {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.card-body__description {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.card-body__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.card-body__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.card-body__rating-score {
+    color: #f4c15d;
+    font-weight: 600;
+}
+
+.card-body__stars {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.card-body__star {
+    color: rgba(255, 255, 255, 0.35);
+    fill: transparent;
+}
+
+.card-body__star--filled {
+    color: #facc15;
+    fill: currentColor;
+}
+
+.card-body__rating-count {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.card-body__details {
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.72);
+    font-family: var(--text-secondary-font);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.card-body__details:hover,
+.card-body__details:focus-visible {
+    color: rgba(255, 255, 255, 0.95);
+    outline: none;
 }
