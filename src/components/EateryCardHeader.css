@@ -5,6 +5,7 @@
     padding: 0.9rem 1.3rem;
     background-color: var(--card-bg, #1f2227);
     border-bottom: 3px solid var(--status-color);
+    position: relative;
 }
 
 .card-header-status {
@@ -12,13 +13,19 @@
     align-items: center;
     gap: 0.65rem;
     min-width: 0;
+    position: relative;
+    padding-left: 20px;
 }
 
 .card-header-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+    position: absolute;
+    left: -3px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
     background-color: var(--status-color);
+    transform: translateY(-50%);
 }
 
 .card-header-relative-time-text {
