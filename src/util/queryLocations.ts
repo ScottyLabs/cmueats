@@ -26,6 +26,7 @@ import toTitleCase from './string';
 import assert from './assert';
 import { IAPIResponseJoiSchema, ILocationAPIJoiSchema } from '../types/joiLocationTypes';
 import notifySlack from './slack';
+import { logError, logWarn } from './logger';
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 /**
@@ -134,9 +135,9 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
         const validLocations = rawLocations.filter((location) => {
             const { error } = ILocationAPIJoiSchema.validate(location);
             if (error !== undefined) {
-                console.error('Validation error!', error.details);
+                logError('Validation error!', error.details);
                 // eslint-disable-next-line no-underscore-dangle
-                console.error('original obj', error._original);
+                logError('original obj', error._original);
                 notifySlack(
                     `<!channel> ${location.name} has invalid data! Ignoring location and continuing validation. ${error}`,
                 );
@@ -148,7 +149,7 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
             name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
         }));
     } catch (err: any) {
-        console.error(err);
+        logError('queryLocations failed', err);
         notifySlack(`<!channel> queryLocations failed with error ${err}`);
         return [];
     }
@@ -180,7 +181,7 @@ export class LocationChecker {
     assertExtraDataInSync(extraData?: IReadOnlyLocation_ExtraData_Map) {
         this.locations?.forEach((location) => {
             if (!extraData || !(location.conceptId in extraData)) {
-                console.error(location.conceptId, 'missing from extraData!');
+                logWarn(location.conceptId, 'missing from extraData!');
             }
         });
     }

@@ -3,8 +3,10 @@ import { MapPin, MoreHorizontal, Star } from 'lucide-react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCardContent.css';
 
+const STAR_SLOTS = [0, 1, 2, 3, 4] as const;
+
 function buildFallbackRating(conceptId: number) {
-    const base = 2.6 + (((conceptId * 23) % 20) / 10);
+    const base = 2.6 + ((conceptId * 23) % 20) / 10;
     return Number(base.toFixed(1));
 }
 
@@ -31,7 +33,9 @@ function EateryCardContent({ location, isPinned, onTogglePin, isHidden, onToggle
     const menuRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (!isMenuOpen) return;
+        if (!isMenuOpen) {
+            return undefined;
+        }
 
         const handleClickOutside = (event: MouseEvent) => {
             if (!menuRef.current) return;
@@ -59,11 +63,7 @@ function EateryCardContent({ location, isPinned, onTogglePin, isHidden, onToggle
         <div className="card-body">
             <div className="card-body__content">
                 <h3 className="card-body__title">
-                    <a
-                        className="card-body__title-link"
-                        href={url}
-                        onClick={(event) => event.stopPropagation()}
-                    >
+                    <a className="card-body__title-link" href={url} onClick={(event) => event.stopPropagation()}>
                         {displayName}
                     </a>
                 </h3>
@@ -78,11 +78,11 @@ function EateryCardContent({ location, isPinned, onTogglePin, isHidden, onToggle
                 <div className="card-body__rating" aria-label={`Rated ${ratingValue} out of five`}>
                     <span className="card-body__rating-score">{ratingValue.toFixed(1)}</span>
                     <span className="card-body__stars">
-                        {Array.from({ length: 5 }).map((_, index) => (
+                        {STAR_SLOTS.map((slot) => (
                             <Star
-                                key={index}
+                                key={slot}
                                 size={16}
-                                className={`card-body__star ${index < filledStars ? 'card-body__star--filled' : ''}`}
+                                className={`card-body__star ${slot < filledStars ? 'card-body__star--filled' : ''}`}
                             />
                         ))}
                     </span>

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import './Drawer.css';
-import { DrawerContext } from '../pages/ListPage';
+import DrawerContext from '../contexts/DrawerContext';
 
 function Drawer() {
     const drawerContext = useContext(DrawerContext);
@@ -8,24 +8,22 @@ function Drawer() {
     const name = location?.name;
     // const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location?;
 
+    if (!drawerContext.isDrawerActive) return null;
+
     return (
-        <>
-            {drawerContext.isDrawerActive && (
-                <div className="drawer-box">
-                    <button
-                        type="button"
-                        onClick={() => {
-                            drawerContext.setIsDrawerActive(false);
-                            drawerContext.setDrawerLocation(null);
-                        }}
-                    >
-                        Close
-                    </button>
-                    {name}
-                    <div className="drawer-in"></div>
-                </div>
-            )}
-        </>
+        <div className="drawer-box">
+            <button
+                type="button"
+                onClick={() => {
+                    drawerContext.setIsDrawerActive(false);
+                    drawerContext.setDrawerLocation(null);
+                }}
+            >
+                Close
+            </button>
+            {name}
+            <div className="drawer-in" />
+        </div>
     );
 }
 

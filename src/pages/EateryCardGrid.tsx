@@ -107,11 +107,10 @@ export default function EateryCardGrid({
 
                     return compareLocations(location1, location2);
                 })
-                .map((location, i) => (
+                .map((location) => (
                     <EateryCard
                         location={location}
                         key={location.conceptId}
-                        index={i}
                         animate={shouldAnimateCards}
                         partOfMainGrid
                         isPinned={location.conceptId.toString() in pinnedIds}

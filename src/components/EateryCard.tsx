@@ -3,13 +3,12 @@ import { Grid } from '@mui/material';
 
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCard.css';
-import { DrawerContext } from '../pages/ListPage';
+import DrawerContext from '../contexts/DrawerContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 
 type EateryCardProps = {
     location: IReadOnlyLocation_Combined;
-    index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
     isPinned?: boolean;
@@ -20,7 +19,6 @@ type EateryCardProps = {
 
 function EateryCard({
     location,
-    index: _index = 0,
     partOfMainGrid = false,
     animate = false,
     isPinned = false,

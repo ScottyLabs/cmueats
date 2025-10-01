@@ -1,5 +1,6 @@
 import { useState, useContext, createContext, useLayoutEffect, useMemo } from 'react';
 import IS_MIKU_DAY from './util/constants';
+import { logError } from './util/logger';
 
 type Theme = 'none' | 'miku';
 
@@ -20,7 +21,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         try {
             localStorage.setItem('theme', _theme);
         } catch (e) {
-            console.error(e);
+            logError('Failed to persist theme', e);
         }
         setTheme(_theme);
     };
