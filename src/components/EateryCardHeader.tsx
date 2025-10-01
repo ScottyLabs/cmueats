@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { MoreHorizontal } from 'lucide-react';
-import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import './EateryCardHeader.css';
 
@@ -23,23 +23,18 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
     const absoluteTime = location.statusMsg.substring(location.statusMsg.indexOf('(')).slice(1, -1);
 
     return (
-        <>
+        <div className="card-header-container" style={{ '--status-color': highlightColors[location.locationState] }}>
             <div
-                className="card-header-container"
-                style={{ '--status-color': highlightColors[location.locationState] }}
-            >
-                <div
-                    className={`card-header-dot ${statusChangesSoon ? 'card-header-dot-blinking' : ''}`}
-                    style={{
-                        backgroundColor: highlightColors[location.locationState],
-                    }}
-                    ref={dotRef}
-                />
-                <div className="card-header-relative-time-text">{relativeTime}</div>
-                <div className="card-header-absolute-time-text">{absoluteTime}</div>
-                <MoreHorizontal className="card-header-more-button" />
-            </div>
-        </>
+                className={`card-header-dot ${statusChangesSoon ? 'card-header-dot-blinking' : ''}`}
+                style={{
+                    backgroundColor: highlightColors[location.locationState],
+                }}
+                ref={dotRef}
+            />
+            <div className="card-header-relative-time-text">{relativeTime}</div>
+            <div className="card-header-absolute-time-text">{absoluteTime}</div>
+            <MoreHorizontal className="card-header-more-button" />
+        </div>
     );
 }
 

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { DrawerContext } from '../pages/ListPage';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { MapPin } from 'lucide-react';
+import { DrawerContext } from '../contexts/DrawerContext';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCardContent.css';
 
 function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined }) {

@@ -3,8 +3,8 @@ import './DrawerTabNav.css';
 function DrawerTabNav() {
     return (
         <div className="drawer-tab-nav">
-            <button>description</button>
-            <button>menu</button>
+            <button type="button">description</button>
+            <button type="button">menu</button>
         </div>
     );
 }

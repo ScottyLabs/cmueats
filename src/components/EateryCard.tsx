@@ -1,28 +1,10 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
-import {
-    CardHeader,
-    Typography,
-    Link,
-    styled,
-    Grid,
-    Button,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    CardContent,
-    Dialog,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { DateTime } from 'luxon';
-
-import { getTimeSlotsString } from '../util/time';
-import TextProps from '../types/interfaces';
-import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
-import './EateryCard.css';
-import { highlightColors, textColors } from '../constants/colors';
-import { DrawerContext } from '../pages/ListPage';
+import { useContext } from 'react';
+import { Grid } from '@mui/material';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { DrawerContext } from '../contexts/DrawerContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
+import './EateryCard.css';
 
 function EateryCard({
     location,
