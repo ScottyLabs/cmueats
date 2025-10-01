@@ -46,8 +46,13 @@ function EateryCard({
     const isDouble = drawerContext.isDrawerActive ? 2 : 1;
     return (
         <Grid item xs={12} md={4 * isDouble} lg={3 * isDouble} xl={2 * isDouble}>
-            <EateryCardHeader location={location} />
-            <EateryCardContent location={location} />
+            <div
+                className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}
+                style={{ '--card-show-delay': `${index * 50}ms` }}
+            >
+                <EateryCardHeader location={location} />
+                <EateryCardContent location={location} />
+            </div>
         </Grid>
     );
 }

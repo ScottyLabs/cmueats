@@ -167,30 +167,6 @@
     }
 }
 
-.card {
-    --card-glow-animation: glow-animation 1.5s ease 0s infinite;
-
-    box-sizing: border-box;
-    height: 100%;
-
-    background-color: var(--card-bg);
-    border: var(--card-border-width) solid var(--card-border-color);
-    border-radius: 7px;
-
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    &:hover {
-        animation: var(--card-glow-animation);
-    }
-
-    position: relative;
-}
-.card__header {
-    background: var(--card-header-bg);
-}
 /* additional .card__header needed to override MUI styles. We can discard when we finish migration */
 .card__header .card__header__text {
     line-height: 1.6;
@@ -220,44 +196,6 @@
     }
 }
 
-.card--animated {
-    opacity: 0;
-    --card-show-delay: 0s;
-    --card-fade-in-animation: fade-in 0.7s forwards var(--card-show-delay) cubic-bezier(0.08, 0.67, 0.64, 1.01);
-    animation: var(--card-fade-in-animation);
-
-    &:hover {
-        animation: var(--card-fade-in-animation), var(--card-glow-animation);
-    }
-}
-
-@keyframes fade-in {
-    0% {
-        opacity: 0;
-        transform: translate(-10px, 0);
-        filter: blur(3px);
-    }
-    55% {
-        filter: blur(0);
-    }
-
-    100% {
-        transform: translate(0, 0);
-        opacity: 1;
-        filter: blur(0);
-    }
-}
-@keyframes glow-animation {
-    0% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
-    50% {
-        box-shadow: 0 0 20px var(--hover-accent-color);
-    }
-    100% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
-}
 @keyframes oscillate-opacity {
     0% {
         opacity: 1;

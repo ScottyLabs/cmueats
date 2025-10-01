@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import { DrawerContext } from '../pages/ListPage';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { MapPin } from 'lucide-react';
+import './EateryCardContent.css';
 
 function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined }) {
     const drawerContext = useContext(DrawerContext);
@@ -8,11 +10,14 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
 
     return (
         <>
-            <p>
+            <h6>
                 <a href={url}>{name}</a>
-            </p>
+            </h6>
 
-            <p>{physicalLocation}</p>
+            <span className="physical-location-text">
+                <MapPin size={15} />
+                {physicalLocation}
+            </span>
 
             <div className="">
                 <button
