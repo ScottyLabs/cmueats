@@ -21,6 +21,18 @@
     position: relative;
 }
 
+.list-header__icon {
+    display: flex;
+    justify-content: center;
+    padding-top: 28px;
+}
+
+.list-header__icon img {
+    width: 96px;
+    height: auto;
+    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.45));
+}
+
 .list-header__intro {
     display: flex;
     flex-direction: column;
@@ -185,12 +197,16 @@
 }
 @media screen and (max-width: 900px) {
     .list-header {
-        padding: 24px 15px 12px;
+        padding: 20px 15px 10px;
         gap: 0.9rem;
     }
 
     .list-header__controls {
         grid-template-columns: 1fr;
+    }
+
+    .list-header__icon {
+        padding-top: 18px;
     }
 }
 

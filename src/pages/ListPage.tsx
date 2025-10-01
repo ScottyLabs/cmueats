@@ -13,6 +13,7 @@ import SearchBar from '../components/SearchBar';
 import { useTheme } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
+import cmueatsIconUrl from '../assets/cmueats-icon.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid'; //TODO
@@ -177,6 +178,10 @@ function ListPage({
                                 map while you are offline. We apologize for any inconvenience. 🌐🚫
                             </StyledAlert>
                         )}
+
+                        <div className="list-header__icon">
+                            <img src={cmueatsIconUrl} alt="CMUEats" />
+                        </div>
 
                         <header className="list-header">
                             <div className="list-header__intro">
