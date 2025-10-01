@@ -6,6 +6,8 @@
     background-color: var(--card-bg, #1f2227);
     border-bottom: 3px solid var(--status-color);
     position: relative;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
 }
 
 .card-header-status {
