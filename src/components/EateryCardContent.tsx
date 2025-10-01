@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { MapPin, MoreHorizontal, Star } from 'lucide-react';
+import { EyeOff, MapPin, MoreHorizontal, Pin, Star } from 'lucide-react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCardContent.css';
 
@@ -59,6 +59,16 @@ function EateryCardContent({ location, isPinned, onTogglePin, isHidden, onToggle
         };
     }, [isMenuOpen]);
 
+    const moreButtonIcon = useMemo(() => {
+        if (isHidden) {
+            return <EyeOff size={20} aria-hidden />;
+        }
+        if (isPinned) {
+            return <Pin size={20} aria-hidden />;
+        }
+        return <MoreHorizontal size={20} aria-hidden />;
+    }, [isHidden, isPinned]);
+
     return (
         <div className="card-body">
             <div className="card-body__content">
@@ -101,7 +111,7 @@ function EateryCardContent({ location, isPinned, onTogglePin, isHidden, onToggle
                         aria-expanded={isMenuOpen}
                         aria-label={`More actions for ${displayName}`}
                     >
-                        <MoreHorizontal size={20} aria-hidden />
+                        {moreButtonIcon}
                     </button>
                     {isMenuOpen && (
                         <div className="card-body__menu" role="menu">
