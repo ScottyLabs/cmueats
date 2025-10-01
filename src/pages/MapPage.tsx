@@ -118,7 +118,8 @@ function MapPage({
                                     location={extendedLocationData[selectedLocationIndex]}
                                     isPinned={false}
                                     onTogglePin={() => {}}
-                                    showPinButton={false}
+                                    isHidden={false}
+                                    onToggleHide={() => {}}
                                 />
                             )}
                         </div>

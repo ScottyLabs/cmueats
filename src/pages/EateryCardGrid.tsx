@@ -18,6 +18,8 @@ export default function EateryCardGrid({
     apiError,
     pinnedIds,
     updatePinnedIds,
+    hiddenIds,
+    updateHiddenIds,
 }: {
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
@@ -26,6 +28,8 @@ export default function EateryCardGrid({
     apiError: boolean;
     pinnedIds: Record<string, true>;
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    hiddenIds: Record<string, true>;
+    updateHiddenIds: (newHiddenIds: Record<string, true>) => void;
 }) {
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -89,6 +93,11 @@ export default function EateryCardGrid({
 
                     const isPinned1 = id1 in pinnedIds;
                     const isPinned2 = id2 in pinnedIds;
+                    const isHidden1 = id1 in hiddenIds;
+                    const isHidden2 = id2 in hiddenIds;
+
+                    if (isHidden1 && !isHidden2) return 1;
+                    if (!isHidden1 && isHidden2) return -1;
 
                     if (isPinned1 && isPinned2) {
                         return compareLocations(location1, location2);
@@ -115,6 +124,17 @@ export default function EateryCardGrid({
                                 newPinnedIds[id] = true;
                             }
                             updatePinnedIds(newPinnedIds);
+                        }}
+                        isHidden={location.conceptId.toString() in hiddenIds}
+                        onToggleHide={() => {
+                            const id = location.conceptId.toString();
+                            const newHiddenIds = { ...hiddenIds };
+                            if (newHiddenIds[id]) {
+                                delete newHiddenIds[id];
+                            } else {
+                                newHiddenIds[id] = true;
+                            }
+                            updateHiddenIds(newHiddenIds);
                         }}
                     />
                 ))}

@@ -1,6 +1,5 @@
-import { useContext, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { MapPin, MoreHorizontal, Star } from 'lucide-react';
-import { DrawerContext } from '../pages/ListPage';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCardContent.css';
 
@@ -13,13 +12,48 @@ function buildFallbackReviewCount(conceptId: number) {
     return 18 + ((conceptId * 17) % 40);
 }
 
-function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined }) {
-    const drawerContext = useContext(DrawerContext);
+type EateryCardContentProps = {
+    location: IReadOnlyLocation_Combined;
+    isPinned: boolean;
+    onTogglePin: () => void;
+    isHidden: boolean;
+    onToggleHide: () => void;
+};
+
+function EateryCardContent({ location, isPinned, onTogglePin, isHidden, onToggleHide }: EateryCardContentProps) {
     const { location: physicalLocation, name, url, conceptId } = location;
 
     const ratingValue = useMemo(() => buildFallbackRating(conceptId), [conceptId]);
     const ratingCount = useMemo(() => buildFallbackReviewCount(conceptId), [conceptId]);
     const filledStars = Math.round(ratingValue);
+    const displayName = useMemo(() => name.split(' - ')[0], [name]);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (!isMenuOpen) return;
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (!menuRef.current) return;
+            if (!menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscape);
+        };
+    }, [isMenuOpen]);
 
     return (
         <div className="card-body">
@@ -30,7 +64,7 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                         href={url}
                         onClick={(event) => event.stopPropagation()}
                     >
-                        {name}
+                        {displayName}
                     </a>
                 </h3>
 
@@ -55,18 +89,47 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                     <span className="card-body__rating-count">({ratingCount})</span>
                 </div>
 
-                <button
-                    type="button"
-                    className="card-body__more"
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        drawerContext.setIsDrawerActive(true);
-                        drawerContext.setDrawerLocation(location);
-                    }}
-                    aria-label={`See more about ${name}`}
-                >
-                    <MoreHorizontal size={20} aria-hidden />
-                </button>
+                <div className="card-body__more-wrapper" ref={menuRef}>
+                    <button
+                        type="button"
+                        className="card-body__more"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            setIsMenuOpen((prev) => !prev);
+                        }}
+                        aria-haspopup="true"
+                        aria-expanded={isMenuOpen}
+                        aria-label={`More actions for ${displayName}`}
+                    >
+                        <MoreHorizontal size={20} aria-hidden />
+                    </button>
+                    {isMenuOpen && (
+                        <div className="card-body__menu" role="menu">
+                            <button
+                                type="button"
+                                role="menuitem"
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    setIsMenuOpen(false);
+                                    onTogglePin();
+                                }}
+                            >
+                                {isPinned ? 'Unpin card' : 'Pin card'}
+                            </button>
+                            <button
+                                type="button"
+                                role="menuitem"
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    setIsMenuOpen(false);
+                                    onToggleHide();
+                                }}
+                            >
+                                {isHidden ? 'Show card' : 'Hide card'}
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

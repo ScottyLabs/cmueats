@@ -68,11 +68,15 @@ function ListPage({
     locations,
     pinnedIds,
     updatePinnedIds,
+    hiddenIds,
+    updateHiddenIds,
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     pinnedIds: Record<string, true>;
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    hiddenIds: Record<string, true>;
+    updateHiddenIds: (newHiddenIds: Record<string, true>) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -241,6 +245,11 @@ function ListPage({
                                     updatePinnedIds: (newPinnedIds: Record<string, true>) => {
                                         shouldAnimateCards.current = false;
                                         updatePinnedIds(newPinnedIds);
+                                    },
+                                    hiddenIds,
+                                    updateHiddenIds: (newHiddenIds: Record<string, true>) => {
+                                        shouldAnimateCards.current = false;
+                                        updateHiddenIds(newHiddenIds);
                                     },
                                 }}
                             />

@@ -7,24 +7,30 @@ import { DrawerContext } from '../pages/ListPage';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 
+type EateryCardProps = {
+    location: IReadOnlyLocation_Combined;
+    index?: number;
+    partOfMainGrid?: boolean;
+    animate?: boolean;
+    isPinned?: boolean;
+    onTogglePin?: () => void;
+    isHidden?: boolean;
+    onToggleHide?: () => void;
+};
+
 function EateryCard({
     location,
     index: _index = 0,
     partOfMainGrid = false,
     animate = false,
-    isPinned: _isPinned,
-    onTogglePin: _onTogglePin,
-    showPinButton: _showPinButton = true,
-}: {
-    location: IReadOnlyLocation_Combined;
-    index?: number;
-    partOfMainGrid?: boolean;
-    animate?: boolean;
-    isPinned: boolean;
-    onTogglePin: () => void;
-    showPinButton?: boolean;
-}) {
+    isPinned = false,
+    onTogglePin = () => {},
+    isHidden = false,
+    onToggleHide = () => {},
+}: EateryCardProps) {
     const drawerContext = useContext(DrawerContext);
+
+    const displayName = location.name.split(' - ')[0];
 
     const openDrawer = () => {
         drawerContext.setIsDrawerActive(true);
@@ -45,12 +51,18 @@ function EateryCard({
                 className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}
                 role="button"
                 tabIndex={0}
-                aria-label={`${location.name} details`}
+                aria-label={`${displayName} details`}
                 onClick={openDrawer}
                 onKeyDown={handleKeyDown}
             >
                 <EateryCardHeader location={location} />
-                <EateryCardContent location={location} />
+                <EateryCardContent
+                    location={location}
+                    isPinned={isPinned}
+                    onTogglePin={onTogglePin}
+                    isHidden={isHidden}
+                    onToggleHide={onToggleHide}
+                />
             </div>
         </Grid>
     );

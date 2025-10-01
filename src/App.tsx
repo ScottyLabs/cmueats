@@ -52,6 +52,7 @@ function App() {
     }, []);
 
     const [pinnedIds, setPinnedIdsState] = useState<Record<string, true>>(getPinnedIds());
+    const [hiddenIds, setHiddenIds] = useState<Record<string, true>>({});
 
     const updatePinnedIds = (newObj: Record<string, true>) => {
         setPinnedIds(newObj);
@@ -83,6 +84,10 @@ function App() {
 
     new LocationChecker(locations).assertExtraDataInSync(extraLocationData);
 
+    const updateHiddenIds = (newHiddenIds: Record<string, true>) => {
+        setHiddenIds(newHiddenIds);
+    };
+
     return (
         <React.StrictMode>
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
@@ -101,6 +106,8 @@ function App() {
                                             locations={locations}
                                             pinnedIds={pinnedIds}
                                             updatePinnedIds={updatePinnedIds}
+                                            hiddenIds={hiddenIds}
+                                            updateHiddenIds={updateHiddenIds}
                                         />
                                     }
                                 />
