@@ -2,18 +2,17 @@
     appearance: none;
     cursor: pointer;
     display: block;
-    min-width: 500px;
-    width: fit-content;
+    width: 100%;
 
-    padding: 0.8rem 0.9rem;
-    border-radius: 1rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.9rem;
     background: var(--input-bg) url(../assets/select.svg) no-repeat calc(100% - 10px) 50%;
     outline: none;
     border: 1px solid transparent;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
     transition: all 0.2s;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--input-text);
     font-weight: 500;
     animation: slide-in 1.2s forwards;

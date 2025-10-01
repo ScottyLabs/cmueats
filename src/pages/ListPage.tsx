@@ -179,32 +179,33 @@ function ListPage({
                         )}
 
                         <header className="list-header">
-                            <div className="list-header-greeting-container">
+                            <div className="list-header__intro">
                                 <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
                                     {desktopGreeting}
                                 </h3>
                                 <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
                                     {mobileGreeting}
                                 </h3>
+                                <p className="list-header__subtitle">Search by name or filter by building to find what’s open.</p>
+                                {IS_MIKU_DAY && (
+                                    <button
+                                        onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
+                                        onTouchEnd={(e) => {
+                                            e.preventDefault();
+                                            updateTheme(theme === 'miku' ? 'none' : 'miku');
+                                        }}
+                                        type="button"
+                                        className="Locations-header__miku-toggle"
+                                    >
+                                        <img src={mikuKeychainUrl} alt="click me!" />
+                                    </button>
+                                )}
                             </div>
 
-                            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-                            <SelectLocation {...{ setLocationFilterQuery, locations }} />
-
-                            {IS_MIKU_DAY && (
-                                <button
-                                    onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
-                                    onTouchEnd={(e) => {
-                                        e.preventDefault();
-                                        updateTheme(theme === 'miku' ? 'none' : 'miku');
-                                    }}
-                                    type="button"
-                                    className="Locations-header__miku-toggle"
-                                >
-                                    <img src={mikuKeychainUrl} alt="click me!" />
-                                </button>
-                            )}
+                            <div className="list-header__controls">
+                                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                                <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                            </div>
                         </header>
                         {/* <header className="Locations-header">
                             <div className="Locations-header__greeting-container">
