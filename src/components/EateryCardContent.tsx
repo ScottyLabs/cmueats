@@ -59,6 +59,21 @@ function EateryCardContent({ location, isPinned, onTogglePin, isHidden, onToggle
         };
     }, [isMenuOpen]);
 
+    useEffect(() => {
+        const cardElement = menuRef.current?.closest('.card');
+        if (!cardElement) return undefined;
+
+        if (isMenuOpen) {
+            cardElement.classList.add('card--menu-open');
+        } else {
+            cardElement.classList.remove('card--menu-open');
+        }
+
+        return () => {
+            cardElement.classList.remove('card--menu-open');
+        };
+    }, [isMenuOpen]);
+
     const moreButtonIcon = useMemo(() => {
         if (isHidden) {
             return <EyeOff size={20} aria-hidden />;

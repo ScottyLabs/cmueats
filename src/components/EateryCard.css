@@ -1,4 +1,5 @@
 .card {
+    position: relative;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -13,6 +14,10 @@
     transition:
         border-color 0.15s ease,
         box-shadow 0.15s ease;
+}
+
+.card--menu-open {
+    z-index: 50;
 }
 
 .card-animated {
