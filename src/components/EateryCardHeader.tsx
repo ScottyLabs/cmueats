@@ -1,17 +1,9 @@
 import { CSSProperties } from 'react';
-import { Pin } from 'lucide-react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import './EateryCardHeader.css';
 
-type EateryCardHeaderProps = {
-    location: IReadOnlyLocation_Combined;
-    isPinned: boolean;
-    onTogglePin: () => void;
-    showPinButton?: boolean;
-};
-
-function EateryCardHeader({ location, isPinned, onTogglePin, showPinButton = true }: EateryCardHeaderProps) {
+function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
     const statusColor = highlightColors[location.locationState];
     const hasExplicitTime = location.statusMsg.includes('(');
     const relativeTime = hasExplicitTime
@@ -28,21 +20,6 @@ function EateryCardHeader({ location, isPinned, onTogglePin, showPinButton = tru
                 <span className="card-header-relative-time-text">{relativeTime}</span>
                 {absoluteTime && <span className="card-header-absolute-time-text">at {absoluteTime}</span>}
             </div>
-
-            {showPinButton && (
-                <button
-                    type="button"
-                    className={`card-header-pin ${isPinned ? 'card-header-pin--active' : ''}`}
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        onTogglePin();
-                    }}
-                    aria-pressed={isPinned}
-                    aria-label={isPinned ? 'Unpin location' : 'Pin location'}
-                >
-                    <Pin size={18} aria-hidden />
-                </button>
-            )}
         </div>
     );
 }

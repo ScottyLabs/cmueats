@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { MapPin, Star } from 'lucide-react';
+import { MapPin, MoreHorizontal, Star } from 'lucide-react';
 import { DrawerContext } from '../pages/ListPage';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCardContent.css';
@@ -15,13 +15,7 @@ function buildFallbackReviewCount(conceptId: number) {
 
 function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined }) {
     const drawerContext = useContext(DrawerContext);
-    const {
-        location: physicalLocation,
-        name,
-        url,
-        shortDescription,
-        conceptId,
-    } = location;
+    const { location: physicalLocation, name, url, conceptId } = location;
 
     const ratingValue = useMemo(() => buildFallbackRating(conceptId), [conceptId]);
     const ratingCount = useMemo(() => buildFallbackReviewCount(conceptId), [conceptId]);
@@ -44,8 +38,6 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                     <MapPin size={16} strokeWidth={2} />
                     <span>{physicalLocation}</span>
                 </div>
-
-                {shortDescription && <p className="card-body__description">{shortDescription}</p>}
             </div>
 
             <div className="card-body__footer">
@@ -65,14 +57,15 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
 
                 <button
                     type="button"
-                    className="card-body__details"
+                    className="card-body__more"
                     onClick={(event) => {
                         event.stopPropagation();
-                        drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+                        drawerContext.setIsDrawerActive(true);
                         drawerContext.setDrawerLocation(location);
                     }}
+                    aria-label={`See more about ${name}`}
                 >
-                    View details
+                    <MoreHorizontal size={20} aria-hidden />
                 </button>
             </div>
         </div>

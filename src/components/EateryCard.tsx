@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { KeyboardEvent, useContext } from 'react';
 import { Grid } from '@mui/material';
 
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
@@ -12,9 +12,9 @@ function EateryCard({
     index: _index = 0,
     partOfMainGrid = false,
     animate = false,
-    isPinned,
-    onTogglePin,
-    showPinButton = true,
+    isPinned: _isPinned,
+    onTogglePin: _onTogglePin,
+    showPinButton: _showPinButton = true,
 }: {
     location: IReadOnlyLocation_Combined;
     index?: number;
@@ -26,16 +26,30 @@ function EateryCard({
 }) {
     const drawerContext = useContext(DrawerContext);
 
+    const openDrawer = () => {
+        drawerContext.setIsDrawerActive(true);
+        drawerContext.setDrawerLocation(location);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openDrawer();
+        }
+    };
+
     const isDouble = drawerContext.isDrawerActive ? 2 : 1;
     return (
         <Grid item xs={12} md={4 * isDouble} lg={3 * isDouble} xl={2 * isDouble}>
-            <div className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}>
-                <EateryCardHeader
-                    location={location}
-                    isPinned={isPinned}
-                    onTogglePin={onTogglePin}
-                    showPinButton={showPinButton}
-                />
+            <div
+                className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}
+                role="button"
+                tabIndex={0}
+                aria-label={`${location.name} details`}
+                onClick={openDrawer}
+                onKeyDown={handleKeyDown}
+            >
+                <EateryCardHeader location={location} />
                 <EateryCardContent location={location} />
             </div>
         </Grid>

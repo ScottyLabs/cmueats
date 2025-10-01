@@ -12,6 +12,15 @@ function Drawer() {
         <>
             {drawerContext.isDrawerActive && (
                 <div className="drawer-box">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            drawerContext.setIsDrawerActive(false);
+                            drawerContext.setDrawerLocation(null);
+                        }}
+                    >
+                        Close
+                    </button>
                     {name}
                     <div className="drawer-in"></div>
                 </div>
