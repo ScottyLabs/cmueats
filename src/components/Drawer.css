@@ -1,7 +1,7 @@
 .drawer-box {
     flex: 1;
-    background: green;
-    height: 400px;
+    background: darkslategray;
+    height: 100%;
     overflow-y: scroll;
 
     @media screen and (max-width: 900px) {
