@@ -1,6 +1,5 @@
 .list-page-container {
     display: flex;
-    gap: 1em;
     overflow-y: scroll;
     height: 100%;
 }

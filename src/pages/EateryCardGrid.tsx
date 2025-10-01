@@ -107,9 +107,10 @@ export default function EateryCardGrid({
 
                     return compareLocations(location1, location2);
                 })
-                .map((location) => (
+                .map((location, idx) => (
                     <EateryCard
                         location={location}
+                        index={idx}
                         key={location.conceptId}
                         animate={shouldAnimateCards}
                         partOfMainGrid

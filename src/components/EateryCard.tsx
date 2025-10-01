@@ -9,6 +9,7 @@ import EateryCardContent from './EateryCardContent';
 
 type EateryCardProps = {
     location: IReadOnlyLocation_Combined;
+    index: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
     isPinned?: boolean;
@@ -19,6 +20,7 @@ type EateryCardProps = {
 
 function EateryCard({
     location,
+    index = 0,
     partOfMainGrid = false,
     animate = false,
     isPinned = false,
@@ -47,6 +49,7 @@ function EateryCard({
         <Grid item xs={12} md={4 * isDouble} lg={3 * isDouble} xl={2 * isDouble}>
             <div
                 className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}
+                style={{ '--card-show-delay': `${index * 50}ms` }}
                 role="button"
                 tabIndex={0}
                 aria-label={`${displayName} details`}

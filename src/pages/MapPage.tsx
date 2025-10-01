@@ -116,6 +116,7 @@ function MapPage({
                             {selectedLocationIndex !== undefined && (
                                 <EateryCard
                                     location={extendedLocationData[selectedLocationIndex]}
+                                    index={0}
                                     isPinned={false}
                                     onTogglePin={() => {}}
                                     isHidden={false}
