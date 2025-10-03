@@ -7,7 +7,7 @@
 
     --input-bg: #23272a;
     --input-text: var(--text-primary);
-    --input-text-placeholder: rgba(255, 255, 255, 0.785);
+    --input-text-placeholder: rgba(255, 255, 255, 0.585);
 
     --card-bg: #23272a;
     --card-header-bg: #1d1f21;

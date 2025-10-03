@@ -5,6 +5,7 @@ import './ListPage.css';
 import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
+import SearchBar from '../components/SearchBar';
 import { useTheme } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
@@ -148,13 +149,7 @@ function ListPage({
                             {mobileGreeting}
                         </h3>
                     </div>
-                    <input
-                        className="Locations-search"
-                        type="search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search"
-                    />
+                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
                     {IS_MIKU_DAY && (
                         <button
