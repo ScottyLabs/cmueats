@@ -33,7 +33,7 @@ export enum CardStatus {
     HIDDEN,
 }
 
-export type CardStateMap = Map<string, CardStatus>;
+export type CardStateMap = Record<string, CardStatus>;
 
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
     fontWeight: 500,

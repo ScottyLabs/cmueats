@@ -84,8 +84,8 @@ export default function EateryCardGrid({
                     ...extraLocationData[location.conceptId], // add on our extra data here
                 }))
                 .sort((location1, location2) => {
-                    const state1 = stateMap.get(location1.conceptId.toString()) ?? CardStatus.NORMAL;
-                    const state2 = stateMap.get(location2.conceptId.toString()) ?? CardStatus.NORMAL;
+                    const state1 = stateMap[location1.conceptId.toString()] ?? CardStatus.NORMAL;
+                    const state2 = stateMap[location2.conceptId.toString()] ?? CardStatus.NORMAL;
 
                     const delta = state1 - state2;
 
@@ -100,13 +100,13 @@ export default function EateryCardGrid({
                         index={i}
                         animate={shouldAnimateCards}
                         partOfMainGrid
-                        currentStatus={stateMap.get(location.conceptId.toString()) ?? CardStatus.NORMAL}
+                        currentStatus={stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL}
                         updateStatus={(newStatus: CardStatus) => {
                             const id = location.conceptId.toString();
 
                             // TODO: investigate clone performance
-                            const clone = new Map(stateMap);
-                            clone.set(id, newStatus);
+                            const clone = { ...stateMap };
+                            clone[id] = newStatus;
                             updatePinnedIds(clone);
                         }}
                     />
