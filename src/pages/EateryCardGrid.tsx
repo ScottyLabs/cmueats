@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import { useState } from 'react';
 import EateryCard, { CardStateMap, CardStatus } from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
@@ -10,10 +11,9 @@ import {
 } from '../types/locationTypes';
 import assert from '../util/assert';
 
-import css from "./EateryCardGrid.module.css"
+import css from './EateryCardGrid.module.css';
 
-import dropdown_arrow from "../assets/control_button/dropdown_arrow.svg";
-import { useState } from 'react';
+import dropdown_arrow from '../assets/control_button/dropdown_arrow.svg';
 
 export default function EateryCardGrid({
     locations,
@@ -32,9 +32,8 @@ export default function EateryCardGrid({
     stateMap: CardStateMap;
     updateStateMap: (newPinnedIds: CardStateMap) => void;
 }) {
-
     const [showHiddens, setShowHiddens] = useState(false);
-    const [showPinned, setShowPinned] = useState(false);
+    const [showPinned, setShowPinned] = useState(true);
 
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -85,10 +84,11 @@ export default function EateryCardGrid({
         return location1.timeUntil - location2.timeUntil;
     };
 
-    var sortedLocations = locations.map((location) => ({
-        ...location,
-        ...extraLocationData[location.conceptId], // add on our extra data here
-    }))
+    const sortedLocations = locations
+        .map((location) => ({
+            ...location,
+            ...extraLocationData[location.conceptId], // add on our extra data here
+        }))
         .sort((location1, location2) => {
             const state1 = stateMap[location1.conceptId.toString()] ?? CardStatus.NORMAL;
             const state2 = stateMap[location2.conceptId.toString()] ?? CardStatus.NORMAL;
@@ -100,66 +100,84 @@ export default function EateryCardGrid({
             return compareLocations(location1, location2);
         });
 
+    function locationToCard(location: IReadOnlyLocation_Combined, i: number) {
+        return (
+            <EateryCard
+                location={location}
+                key={location.conceptId}
+                index={i}
+                animate={shouldAnimateCards}
+                partOfMainGrid
+                currentStatus={stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL}
+                updateStatus={(newStatus: CardStatus) => {
+                    const id = location.conceptId.toString();
+
+                    // TODO: investigate clone performance
+                    const clone = { ...stateMap };
+                    clone[id] = newStatus;
+                    updatePinnedIds(clone);
+                }}
+            />
+        );
+    }
     return (
-        <div className={css["supergrid"]}>
+        <div className={css.supergrid}>
+            <div className={css.section}>
+                <button
+                    className={css["dropdown-button"]}
+                    onClick={() => {
+                        setShowPinned(!showPinned);
+                    }}
+                >
+                    <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
+                    <p>{showPinned ? 'Hide' : 'Show'} pinned locations</p>
+                </button>
+
+                {showPinned && (
+                    <Grid container spacing={2}>
+                        {sortedLocations
+                            .filter(
+                                (location) =>
+                                    (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) ===
+                                    CardStatus.PINNED,
+                            )
+                            .map(locationToCard)}
+                    </Grid>
+                )}
+            </div>
 
             <Grid container spacing={2}>
                 {sortedLocations
-                    .filter((location) => {
-                        return (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) !== CardStatus.HIDDEN
-                    })
-                    .map((location, i) => (
-                        <EateryCard
-                            location={location}
-                            key={location.conceptId}
-                            index={i}
-                            animate={shouldAnimateCards}
-                            partOfMainGrid
-                            currentStatus={stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL}
-                            updateStatus={(newStatus: CardStatus) => {
-                                const id = location.conceptId.toString();
-
-                                // TODO: investigate clone performance
-                                const clone = { ...stateMap };
-                                clone[id] = newStatus;
-                                updatePinnedIds(clone);
-                            }}
-                        />
-                    ))}
+                    .filter(
+                        (location) =>
+                            (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) === CardStatus.NORMAL,
+                    )
+                    .map(locationToCard)}
             </Grid>
 
-            <a className={css["dropdown"]} onClick={() => { setShowHiddens(!showHiddens) }}>
-                <img src={dropdown_arrow} height={8}></img>
-                {showHiddens ? "Hide" : "Show"} hidden locations
-            </a>
+            <div className={css.section}>
+                <button
+                    className={css["dropdown-button"]}
+                    onClick={() => {
+                        setShowHiddens(!showHiddens);
+                    }}
+                >
+                    <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
+                    <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
+                </button>
 
-            {
-                (showHiddens) &&
-                <Grid container spacing={2}>
-                    {sortedLocations
-                        .filter((location) => {
-                            return (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) == CardStatus.HIDDEN
-                        })
-                        .map((location, i) => (
-                            <EateryCard
-                                location={location}
-                                key={location.conceptId}
-                                index={i}
-                                animate={shouldAnimateCards}
-                                partOfMainGrid
-                                currentStatus={stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL}
-                                updateStatus={(newStatus: CardStatus) => {
-                                    const id = location.conceptId.toString();
-
-                                    // TODO: investigate clone performance
-                                    const clone = { ...stateMap };
-                                    clone[id] = newStatus;
-                                    updatePinnedIds(clone);
-                                }}
-                            />
-                        ))}
-                </Grid>
-            }
-        </div >
+                {showHiddens && (
+                    <Grid container spacing={2}>
+                        {sortedLocations
+                            .filter(
+                                (location) =>
+                                    (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) ===
+                                    CardStatus.HIDDEN,
+                            )
+                            .map(locationToCard)}
+                    </Grid>
+                )}
+            </div>
+        </div>
     );
 }

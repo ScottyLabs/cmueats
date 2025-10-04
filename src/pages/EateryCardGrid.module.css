@@ -1,13 +1,27 @@
-.dropdown {
+.dropdown-button {
     display: flex;
     color: var(--black-400);
-    gap: 1em;
+    gap: 1rem;
+
     cursor: pointer;
+
     align-items: center;
+    border: none;
+    background-color: transparent;
+
+    & p {
+        font-size: 1rem;
+    }
 }
 
 .supergrid {
     display: flex;
     flex-direction: column;
-    gap: 2em;
+    gap: 1rem;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
