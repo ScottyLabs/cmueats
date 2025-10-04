@@ -1,4 +1,4 @@
-import { CardStateMap, CardStatus } from '../components/EateryCard';
+import { CardStateMap } from '../components/EateryCard';
 
 export function getStateMap(): CardStateMap {
     try {
