@@ -3,34 +3,10 @@
     align-items: center;
     gap: 1em;
     color: var(--status-color);
-    border-bottom: 2px var(--status-color) solid;
+    border-left: 10px var(--status-color) solid;
     height: 2em;
     padding-inline: 10px;
     background: var(--card-header-bg);
-}
-
-.card-header-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-}
-.card-header-dot-blinking {
-    animation: blinking 1s infinite;
-    animation-play-state: paused;
-}
-@keyframes blinking {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    75% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
 }
 
 .card-header-relative-time-text {

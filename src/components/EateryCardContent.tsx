@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { MapPin } from 'lucide-react';
+import { MapPin, MoreHorizontal } from 'lucide-react';
 import { DrawerContext } from '../contexts/DrawerContext';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import './EateryCardContent.css';
@@ -10,9 +10,9 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
 
     return (
         <>
-            <h6>
+            <h4>
                 <a href={url}>{name}</a>
-            </h6>
+            </h4>
 
             <span className="physical-location-text">
                 <MapPin size={15} />
@@ -28,6 +28,8 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                 >
                     details
                 </button>
+
+                <MoreHorizontal className="card-header-more-button" />
             </div>
         </>
     );
