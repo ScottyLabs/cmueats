@@ -1,13 +1,13 @@
+import { tabType } from './Drawer';
 import './DrawerTabContent.css';
 
-function DrawerTabContent() {
+function DrawerTabContent({ currTab }: { currTab: tabType }) {
     return (
         <div className="drawer-tab-content">
-            {Array(36)
-                .fill(null)
-                .map(() => (
-                    <div style={{ marginTop: '20px' }}>lorem</div>
-                ))}
+            {currTab === 'description' && <div>description</div>}
+            {currTab === 'menu' && <div>menu</div>}
+            {currTab === 'hours' && <div>hours</div>}
+            {currTab === 'reviews' && <div>reviews</div>}
         </div>
     );
 }
