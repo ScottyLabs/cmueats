@@ -38,3 +38,20 @@
         min-width: 0;
     }
 }
+
+@keyframes slide-in {
+    0% {
+        opacity: 0;
+        /* clip-path: inset(0px 100% 0px 0px); */
+        transform: translate(-10px, 0);
+        --right-cutoff: 0%;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0);
+        --right-cutoff: 100%;
+    }
+}

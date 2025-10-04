@@ -1,0 +1,7 @@
+.physical-location-text {
+    color: gray;
+}
+
+.card-header-more-button {
+    color: var(--text-primary);
+}

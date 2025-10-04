@@ -1,9 +1,9 @@
 import { tabType } from './Drawer';
-import './DrawerTabNav.css';
+import css from './DrawerTabNav.module.css';
 
 function DrawerTabNav({ setCurrTab }: { setCurrTab: React.Dispatch<tabType> }) {
     return (
-        <div className="drawer-tab-nav">
+        <div className={css['drawer-tab-nav']}>
             <button type="button" onClick={() => setCurrTab('description')}>
                 description
             </button>

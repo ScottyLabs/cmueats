@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { DrawerContext } from '../contexts/DrawerContext';
-import './DrawerHeader.css';
+import css from './DrawerHeader.module.css';
 
 function DrawerHeader() {
     const drawerContext = useContext(DrawerContext);
@@ -8,7 +8,7 @@ function DrawerHeader() {
     const { name, statusMsg: status, location: physicalLocation } = location ?? {};
 
     return (
-        <div className="drawer-header">
+        <div className={css['drawer-header']}>
             <div>
                 <span>{name}</span>
                 <button type="button" onClick={() => drawerContext.setIsDrawerActive(false)}>

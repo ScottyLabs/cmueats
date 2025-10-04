@@ -4,7 +4,7 @@ import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { DrawerContext } from '../contexts/DrawerContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
-import './EateryCard.css';
+import css from './EateryCard.module.css';
 
 function EateryCard({
     location,
@@ -29,7 +29,7 @@ function EateryCard({
     return (
         <Grid item xs={12} md={4 * isDouble} lg={3 * isDouble} xl={2 * isDouble}>
             <div
-                className={`card ${animate ? 'card-animated' : ''} ${partOfMainGrid ? 'card-in-main-grid' : ''}`}
+                className={`${css.card} ${animate ? css['card-animated'] : ''} ${partOfMainGrid ? css['card-in-main-grid'] : ''}`}
                 style={{ '--card-show-delay': `${index * 50}ms` }}
             >
                 <EateryCardHeader location={location} />

@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import './Drawer.css';
 import { DrawerContext } from '../contexts/DrawerContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
+import css from './Drawer.module.css';
 
 export type tabType = 'description' | 'menu' | 'hours' | 'reviews' | 'specials';
 
@@ -18,7 +18,7 @@ function Drawer() {
 
     return (
         drawerContext.isDrawerActive && (
-            <div className="drawer-box">
+            <div className={css['drawer-box']}>
                 <DrawerHeader />
                 <DrawerTabNav setCurrTab={setCurrTab} />
                 <DrawerTabContent currTab={currTab} />
