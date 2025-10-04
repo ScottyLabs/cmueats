@@ -1,0 +1,13 @@
+.dropdown {
+    display: flex;
+    color: var(--black-400);
+    gap: 1em;
+    cursor: pointer;
+    align-items: center;
+}
+
+.supergrid {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
