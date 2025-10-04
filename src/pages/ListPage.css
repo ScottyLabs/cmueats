@@ -14,22 +14,47 @@
 }
 
 .list-header {
-    display: grid;
-    padding: 72px 48px 48px;
-    grid-gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 24px 12px;
     position: relative;
     @media screen and (max-width: 900px) {
         & {
-            padding: 50px 15px;
+            padding: 16px 15px 12px;
         }
     }
 }
 
+.list-header-greeting-container {
+    container-type: inline-size;
+    padding: 32px 32px 16px;
+    & .Locations-header__greeting--desktop {
+        display: none;
+    }
+    padding-left: 2px;
+    /* 600px is the approximate width of the location dropdown selector (we are also assuming that the desktop greeting is less than 600px wide) */
+    @container (min-width: 600px) {
+        & .Locations-header__greeting--desktop {
+            display: block;
+        }
+        & .Locations-header__greeting--mobile {
+            display: none;
+        }
+    }
+}
+
+.list-header-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 230px;
+    gap: 0.6rem;
+    align-items: center;
+}
+
 .eatery-card-grid-container {
-    padding: 72px 48px;
+    padding: 16px 24px;
     @media screen and (max-width: 900px) {
         & {
-            padding: 50px 15px;
+            padding: 16px 15px;
         }
     }
 }
@@ -95,22 +120,6 @@
     }
     50% {
         transform: rotate(-1deg);
-    }
-}
-.Locations-header__greeting-container {
-    container-type: inline-size;
-    & .Locations-header__greeting--desktop {
-        display: none;
-    }
-    padding-left: 2px;
-    /* 600px is the approximate width of the location dropdown selector (we are also assuming that the desktop greeting is less than 600px wide) */
-    @container (min-width: 600px) {
-        & .Locations-header__greeting--desktop {
-            display: block;
-        }
-        & .Locations-header__greeting--mobile {
-            display: none;
-        }
     }
 }
 /* we need this to properly animate the mask gradient */

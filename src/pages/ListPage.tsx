@@ -173,9 +173,10 @@ function ListPage({
                             </h3>
                         </div>
 
-                        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-                        <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                        <div className="list-header-controls">
+                            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                            <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                        </div>
 
                         {IS_MIKU_DAY && (
                             <button
