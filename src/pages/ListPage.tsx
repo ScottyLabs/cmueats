@@ -16,7 +16,7 @@ import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid'; // TODO
 import Drawer from '../components/Drawer';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
@@ -133,14 +133,17 @@ function ListPage({
 
     const [isDrawerActive, setIsDrawerActive] = useState(false);
     const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
+    const [activeTab, setActiveTab] = useState<TabType>('description');
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,
             setIsDrawerActive,
             drawerLocation,
             setDrawerLocation,
+            activeTab,
+            setActiveTab,
         }),
-        [isDrawerActive, drawerLocation],
+        [isDrawerActive, drawerLocation, activeTab],
     );
 
     return (

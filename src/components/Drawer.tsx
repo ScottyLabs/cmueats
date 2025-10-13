@@ -1,11 +1,9 @@
 import { useContext, useState } from 'react';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
-
-export type tabType = 'description' | 'menu' | 'hours' | 'reviews' | 'specials';
 
 function Drawer() {
     const drawerContext = useContext(DrawerContext);
@@ -14,14 +12,14 @@ function Drawer() {
     // on yelp, under their title is "rating (review number)", "location", "isOpen and hours"
     // their order is "add a review / add photos (button)", "menu", "location & hours", "review"
     // for reference <https://www.yelp.com/biz/paris-66-pittsburgh-2?hrid=ffQedKt12wIRLXZX8OTOqA>
-    const [currTab, setCurrTab] = useState<tabType>('description');
+    const [currTab, setCurrTab] = useState<TabType>('description');
 
     return (
         drawerContext.isDrawerActive && (
             <div className={css['drawer-box']}>
                 <DrawerHeader />
-                <DrawerTabNav setCurrTab={setCurrTab} />
-                <DrawerTabContent currTab={currTab} />
+                <DrawerTabNav />
+                <DrawerTabContent />
             </div>
         )
     );
