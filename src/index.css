@@ -1,7 +1,4 @@
 :root {
-    --navbar-height: 70px;
-    --navbar-height: calc(56px + max(env(safe-area-inset-bottom), 14px));
-
     --main-bg: hsl(214, 7%, 19%);
     --main-bg-accent: #23272a;
     --text-primary: white;
@@ -10,7 +7,7 @@
 
     --input-bg: #23272a;
     --input-text: var(--text-primary);
-    --input-text-placeholder: rgba(255, 255, 255, 0.785);
+    --input-text-placeholder: rgba(255, 255, 255, 0.585);
 
     --card-bg: #23272a;
     --card-header-bg: #1d1f21;

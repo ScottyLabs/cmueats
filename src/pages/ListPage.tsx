@@ -5,6 +5,7 @@ import './ListPage.css';
 import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
+import SearchBar from '../components/SearchBar';
 import { useTheme } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
@@ -148,13 +149,7 @@ function ListPage({
                             {mobileGreeting}
                         </h3>
                     </div>
-                    <input
-                        className="Locations-search"
-                        type="search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search"
-                    />
+                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
                     {IS_MIKU_DAY && (
                         <button
@@ -201,7 +196,14 @@ function ListPage({
                             All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
                         </FooterText>
                         <FooterText>
-                            If you encounter any problems, please contact{' '}
+                            If you encounter any problems, please fill out our{' '}
+                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
+                                feedback form
+                            </a>{' '}
+                            (the fastest way to reach us!).
+                        </FooterText>
+                        <FooterText>
+                            Otherwise, reach out to{' '}
                             {emails.length > 0 ? (
                                 emails.map((person, idx) => (
                                     <span key={person.email}>
@@ -220,13 +222,6 @@ function ListPage({
                                     </a>
                                 </span>
                             )}
-                            .
-                        </FooterText>
-                        <FooterText>
-                            Alternatively, fill out our{' '}
-                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
-                                feedback form
-                            </a>
                             .
                         </FooterText>
                         <FooterText>
