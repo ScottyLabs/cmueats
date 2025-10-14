@@ -168,12 +168,12 @@ function ListPage({
 
                     <header className="list-header">
                         <div className="list-header-greeting-container">
-                            <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
+                            <h2 className="Locations-header__greeting Locations-header__greeting--desktop">
                                 {desktopGreeting}
-                            </h3>
-                            <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
+                            </h2>
+                            <h2 className="Locations-header__greeting Locations-header__greeting--mobile">
                                 {mobileGreeting}
-                            </h3>
+                            </h2>
                         </div>
 
                         <div className="list-header-controls">
@@ -195,31 +195,6 @@ function ListPage({
                             </button>
                         )}
                     </header>
-                    {/* <header className="Locations-header">
-                            <div className="Locations-header__greeting-container">
-                                <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
-                                    {desktopGreeting}
-                                </h3>
-                                <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
-                                    {mobileGreeting}
-                                </h3>
-                            </div>
-                            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                            <SelectLocation {...{ setLocationFilterQuery, locations }} />
-                            {IS_MIKU_DAY && (
-                                <button
-                                    onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
-                                    onTouchEnd={(e) => {
-                                        e.preventDefault();
-                                        updateTheme(theme === 'miku' ? 'none' : 'miku');
-                                    }}
-                                    type="button"
-                                    className="Locations-header__miku-toggle"
-                                >
-                                    <img src={mikuKeychainUrl} alt="click me!" />
-                                </button>
-                            )}
-                        </header> */}
 
                     <div className="eatery-card-grid-container">
                         <EateryCardGrid

@@ -10,9 +10,9 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
 
     return (
         <>
-            <h4>
+            <h3 className={css['location-name-text']}>
                 <a href={url}>{name}</a>
-            </h4>
+            </h3>
 
             <span className={css['physical-location-text']}>
                 <MapPin size={15} />

@@ -15,7 +15,7 @@ function DrawerTabContent() {
                 <div>
                     {drawerContext.drawerLocation?.description}
 
-                    <h6>Hours</h6>
+                    <h4>Hours</h4>
                     {Array(7)
                         .fill(true)
                         .map((_, i) => {
