@@ -22,9 +22,18 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
             <div className="">
                 <button
                     onClick={() => {
+                        // open default tab "overview"
                         drawerContext.setActiveTab('overview');
-                        drawerContext.setDrawerLocation(location);
-                        drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+                        // when the drawer is open, click other cards will open that
+                        // card's detail, instead of closing the drawer;
+                        // click on the same card will close the drawer.
+                        if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
+                            drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+                            drawerContext.setDrawerLocation(null);
+                        } else {
+                            drawerContext.setDrawerLocation(location);
+                            drawerContext.setIsDrawerActive(true);
+                        }
                     }}
                 >
                     details
