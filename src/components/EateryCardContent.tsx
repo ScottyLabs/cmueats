@@ -22,8 +22,9 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
             <div className="">
                 <button
                     onClick={() => {
-                        drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+                        drawerContext.setActiveTab('overview');
                         drawerContext.setDrawerLocation(location);
+                        drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
                     }}
                 >
                     details

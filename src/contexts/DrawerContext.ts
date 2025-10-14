@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
-export type TabType = 'description' | 'menu' | 'reviews' | 'specials';
+export type TabType = 'overview' | 'menu' | 'reviews' | 'specials';
 
 export type DrawerContextValue = {
     isDrawerActive: boolean;
@@ -17,6 +17,6 @@ export const DrawerContext = createContext<DrawerContextValue>({
     setIsDrawerActive: () => {},
     drawerLocation: null,
     setDrawerLocation: () => {},
-    activeTab: 'description',
+    activeTab: 'overview',
     setActiveTab: () => {},
 });

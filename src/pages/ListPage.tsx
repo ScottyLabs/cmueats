@@ -133,7 +133,7 @@ function ListPage({
 
     const [isDrawerActive, setIsDrawerActive] = useState(false);
     const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
-    const [activeTab, setActiveTab] = useState<TabType>('description');
+    const [activeTab, setActiveTab] = useState<TabType>('overview');
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,

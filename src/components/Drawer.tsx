@@ -12,7 +12,7 @@ function Drawer() {
     // on yelp, under their title is "rating (review number)", "location", "isOpen and hours"
     // their order is "add a review / add photos (button)", "menu", "location & hours", "review"
     // for reference <https://www.yelp.com/biz/paris-66-pittsburgh-2?hrid=ffQedKt12wIRLXZX8OTOqA>
-    const [currTab, setCurrTab] = useState<TabType>('description');
+    const [currTab, setCurrTab] = useState<TabType>('overview');
 
     return (
         drawerContext.isDrawerActive && (

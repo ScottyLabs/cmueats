@@ -11,7 +11,7 @@ function DrawerTabContent() {
     const timeSlots = getTimeSlotsString(drawerContext.drawerLocation?.times ?? []);
     return (
         <div className={css['drawer-tab-content']}>
-            {drawerContext.activeTab === 'description' && (
+            {drawerContext.activeTab === 'overview' && (
                 <div>
                     {drawerContext.drawerLocation?.description}
 

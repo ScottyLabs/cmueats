@@ -6,8 +6,8 @@ function DrawerTabNav() {
     const drawerContext = useContext(DrawerContext);
     return (
         <div className={css['drawer-tab-nav']}>
-            <button type="button" onClick={() => drawerContext.setActiveTab('description')}>
-                description
+            <button type="button" onClick={() => drawerContext.setActiveTab('overview')}>
+                overview
             </button>
             {/* <button type="button" onClick={() => drawerContext.setActiveTab('menu')}>
                 menu
