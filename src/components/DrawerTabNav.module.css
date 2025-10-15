@@ -1,4 +1,4 @@
 .drawer-tab-nav {
     padding: 7px 7px;
-    background: mediumpurple;
+    background: var(--main-bg-accent);
 }
