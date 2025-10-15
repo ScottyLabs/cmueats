@@ -1,7 +1,71 @@
-.physical-location-text {
-    color: gray;
+.card-content-container {
+    padding: 1rem;
 }
 
-.card-header-more-button {
+.location-name-text {
+    font-family: var(--text-primary-font);
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    & a {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.physical-location-text {
+    font-size: 1rem;
+    color: var(--card-text-muted);
+    display: block;
+    margin-top: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    & svg {
+        margin-right: 0.3rem;
+    }
+}
+
+.card-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.details-button {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 0.4rem 0.5rem;
+    border: none;
+    border-radius: 3px;
+    background-color: var(--button-bg);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--button-bg--hover);
+        letter-spacing: 0.05em;
+    }
+}
+
+.card-content-more-button {
     color: var(--text-primary);
+
+    &:hover {
+        color: var(--hover-accent-color);
+    }
 }

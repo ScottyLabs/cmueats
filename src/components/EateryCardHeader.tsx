@@ -11,8 +11,8 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
             className={css['card-header-container']}
             style={{ '--status-color': highlightColors[location.locationState] }}
         >
-            <div className="card-header-relative-time-text">{relativeTime}</div>
-            <div className="card-header-absolute-time-text">{absoluteTime}</div>
+            <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
+            <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
         </div>
     );
 }

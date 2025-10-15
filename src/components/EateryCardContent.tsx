@@ -9,18 +9,20 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
     const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location;
 
     return (
-        <>
+        <div className={css['card-content-container']}>
             <h3 className={css['location-name-text']}>
                 <a href={url}>{name}</a>
             </h3>
 
             <span className={css['physical-location-text']}>
-                <MapPin size={15} />
+                <MapPin size={13} />
                 {physicalLocation}
             </span>
 
-            <div className="">
+            <div className={css['card-action-bar']}>
                 <button
+                    type="button"
+                    className={css['details-button']}
                     onClick={() => {
                         // open default tab "overview"
                         drawerContext.setActiveTab('overview');
@@ -38,9 +40,9 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                     details
                 </button>
 
-                <MoreHorizontal className={css['card-header-more-button']} />
+                <MoreHorizontal className={css['card-content-more-button']} />
             </div>
-        </>
+        </div>
     );
 }
 

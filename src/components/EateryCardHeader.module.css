@@ -3,7 +3,7 @@
     align-items: center;
     gap: 1em;
     color: var(--status-color);
-    border-left: 10px var(--status-color) solid;
+    border-left: 15px solid var(--status-color);
     height: 2em;
     padding-inline: 10px;
     background: var(--card-header-bg);
