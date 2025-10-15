@@ -29,7 +29,6 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                         // click on the same card will close the drawer.
                         if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
                             drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
-                            drawerContext.setDrawerLocation(null);
                         } else {
                             drawerContext.setDrawerLocation(location);
                             drawerContext.setIsDrawerActive(true);

@@ -137,7 +137,11 @@ function ListPage({
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,
-            setIsDrawerActive,
+            setIsDrawerActive: (active: boolean) => {
+                setIsDrawerActive(active);
+                // ensure drawerLocation is null if it is inactive
+                if (active === false) setDrawerLocation(null);
+            },
             drawerLocation,
             setDrawerLocation,
             activeTab,
