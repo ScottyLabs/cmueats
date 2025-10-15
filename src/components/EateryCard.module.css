@@ -31,6 +31,27 @@
     }
 }
 
+.card-active {
+    box-shadow:
+        0 0 2px var(--hover-accent-color),
+        0 0 25px var(--hover-accent-color);
+}
+
+.card-animated.card-active {
+    box-shadow:
+        0 0 2px var(--hover-accent-color),
+        0 0 25px var(--hover-accent-color);
+
+    &:hover {
+        box-shadow:
+            0 0 2px var(--hover-accent-color),
+            0 0 25px var(--hover-accent-color);
+        animation:
+            var(--card-fade-in-animation),
+            glow-animation-reverse 1.5s ease 0s infinite;
+    }
+}
+
 .card__pin-container {
     position: absolute;
     bottom: 16px;
@@ -92,5 +113,17 @@
     }
     100% {
         box-shadow: 0 0 5px var(--hover-accent-color);
+    }
+}
+
+@keyframes glow-animation-reverse {
+    0% {
+        box-shadow: 0 0 20px var(--hover-accent-color);
+    }
+    50% {
+        box-shadow: 0 0 5px var(--hover-accent-color);
+    }
+    100% {
+        box-shadow: 0 0 20px var(--hover-accent-color);
     }
 }
