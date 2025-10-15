@@ -139,8 +139,11 @@ function ListPage({
             isDrawerActive,
             setIsDrawerActive: (active: boolean) => {
                 setIsDrawerActive(active);
-                // ensure drawerLocation is null if it is inactive
-                if (active === false) setDrawerLocation(null);
+                // ensure drawer content don't change before fully exited
+                setTimeout(() => {
+                    // ensure drawerLocation is null if it is inactive
+                    if (active === false) setDrawerLocation(null);
+                }, 500);
             },
             drawerLocation,
             setDrawerLocation,
