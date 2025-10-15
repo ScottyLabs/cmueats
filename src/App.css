@@ -63,6 +63,7 @@ body {
     min-height: 130px;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
     &:has(.footer__miku) {
         min-height: 530px;
         /* we create a new stacking context so miku doesn't go below the bg */
