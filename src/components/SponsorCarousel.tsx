@@ -14,7 +14,7 @@ function SponsorCarousel({ darkMode }: { darkMode: Boolean }) {
         };
     });
 
-    //double it because it loops seamlessly
+    // double it because it loops seamlessly
     const doubleLogos = [...logos, ...logos];
 
     return (
@@ -30,7 +30,7 @@ function SponsorCarousel({ darkMode }: { darkMode: Boolean }) {
                         <ul className="carousel__track">
                             {doubleLogos.map((logo) => (
                                 <li className="carousel__item">
-                                    <img src={logo.src} className="carousel__image" />
+                                    <img src={logo.src} alt="" className="carousel__image" />
                                 </li>
                             ))}
                         </ul>
