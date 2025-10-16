@@ -300,46 +300,10 @@
     flex: 1;
 }
 
-.footer__sponsors {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    max-width: 50%;
-}
-
-.footer__sponsors-carousel {
-    max-width: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .footer__logo-mobile {
     display: none;
 }
 
 .footer__logo-desktop {
     display: block;
-}
-
-@media screen and (max-width: 600px) {
-    .footer {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .footer__sponsors {
-        max-width: 100%;
-        width: 100%;
-        margin-top: 16px;
-    }
-    .footer__logo-mobile {
-        display: block;
-        margin-top: 12px;
-        text-align: center;
-    }
-    .footer__logo-desktop {
-        display: none;
-    }
 }

@@ -267,12 +267,6 @@ function ListPage({
                         </LogoText>
                     </div>
                 </div>
-                <div className="footer__sponsors">
-                    <FooterText>ScottyLabs is sponsored by</FooterText>
-                    <div className="footer__sponsors-carousel">
-                        <SponsorCarousel darkMode />
-                    </div>
-                </div>
                 <div className="footer__logo-mobile">
                     <LogoText variant="h4">
                         cmu
@@ -281,6 +275,7 @@ function ListPage({
                 </div>
                 {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
             </footer>
+            <SponsorCarousel darkMode />
             <link rel="prefetch" href={mikuBgUrl} />
         </div>
     );
