@@ -251,3 +251,49 @@
         fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
         oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
 }
+
+.block-period {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.block-period__current {
+    text-decoration: none;
+    margin-left: 11px;
+    margin-top: 15px;
+}
+
+.block-period__current--hidden {
+    opacity: 0;
+    border-bottom: none;
+}
+
+.block-period__current--popup {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #474747;
+    margin-left: 0px;
+    margin-top: 14.5px;
+}
+
+.block-period__popover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--card-bg);
+    border: 1px solid #474747;
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px rgba(40, 40, 40, 0.589);
+    padding: 0px 10px;
+    padding-bottom: 10px;
+    z-index: 1000;
+}
+
+.block-period__popover__times {
+    margin-bottom: 5px;
+    padding-top: 0px;
+}
+
+.block-period__popover__times--current {
+    font-weight: bold;
+}
