@@ -256,6 +256,8 @@
     position: relative;
     display: inline-block;
     cursor: pointer;
+    background-color: var(--input-bg);
+    border-radius: 1rem;
 }
 
 .block-period__current {
@@ -282,11 +284,15 @@
     left: 0;
     background-color: var(--card-bg);
     border: 1px solid #474747;
-    border-radius: 10px;
-    box-shadow: 4px 4px 4px rgba(40, 40, 40, 0.589);
+    border-radius: 1rem;
     padding: 0px 10px;
     padding-bottom: 10px;
     z-index: 1000;
+    transition: all 0.5s;
+    box-shadow: 0 0 40px var(--hover-accent-color);
+    border-color: var(--hover-accent-color);
+    outline: none;
+    width: 93%;
 }
 
 .block-period__popover__times {
