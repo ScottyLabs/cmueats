@@ -66,13 +66,14 @@ function getBlockPeriod(): string {
 
     if (seconds >= breakfastStart && seconds < lunchStart) {
         return 'Breakfast';
-    } else if (seconds >= lunchStart && seconds < dinnerStart) {
-        return 'Lunch';
-    } else if (seconds >= dinnerStart && seconds < lateNightStart) {
-        return 'Dinner';
-    } else {
-        return 'Late Night';
     }
+    if (seconds >= lunchStart && seconds < dinnerStart) {
+        return 'Lunch';
+    }
+    if (seconds >= dinnerStart && seconds < lateNightStart) {
+        return 'Dinner';
+    }
+    return 'Late Night';
 }
 
 function ListPage({
