@@ -196,7 +196,8 @@ function ListPage({
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
                     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="block-period">
                         <p className={`block-period__current ${isPopupVisible ? 'block-period__current--hidden' : ''}`}>
-                            Block Period: {currentPeriod}
+                            <div style={{fontWeight: "bold"}}> Current Block Period </div>
+                            {currentPeriod}: {blockPeriods.find(p => p.period === currentPeriod)?.timeRange}
                         </p>
                         {isPopupVisible && (
                             <div className="block-period__popover">
@@ -205,7 +206,7 @@ function ListPage({
                                         isPopupVisible ? 'block-period__current--popup' : ''
                                     }`}
                                 >
-                                    Block Period: {currentPeriod}
+                                    Current Block Period: {currentPeriod}
                                 </p>
                                 {blockPeriods.map(({ period, timeRange }) => (
                                     <div
