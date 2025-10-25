@@ -162,6 +162,7 @@ export default function EateryCardGrid({
                     onClick={() => {
                         setShowHiddens(!showHiddens);
                     }}
+                    type="button"
                 >
                     <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
                     <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
