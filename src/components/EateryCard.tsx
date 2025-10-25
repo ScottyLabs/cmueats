@@ -142,6 +142,7 @@ function EateryCard({
     } = location;
 
     const [openedModal, setOpenedModal] = useState<'none' | 'specials' | 'description'>('none');
+    const isMobile = window.innerWidth < 900;
 
     return (
         <Grid item xs={12} md={4} lg={3} xl={3}>
@@ -185,11 +186,10 @@ function EateryCard({
                     >
                         Details
                     </ActionButton>
-                    {grubhubUrl !== undefined && (
+                    {grubhubUrl !== undefined && isMobile && (
                         <ActionButton
                             onClick={() => {
-                                console.log("clicked link and redirecting to " + grubhubUrl);
-                                window.open(grubhubUrl, '_blank');
+                                window.open(grubhubUrl, '_self');
                             }}
                         >
                             Order in GrubHub
