@@ -33,7 +33,8 @@ export default function EateryCardGrid({
     updateStateMap: (newPinnedIds: CardStateMap) => void;
 }) {
     const [showHiddens, setShowHiddens] = useState(false);
-    const [showPinned, setShowPinned] = useState(true);
+    // const [showPinned, setShowPinned] = useState(true);
+    const showPinned = true;
 
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -123,15 +124,15 @@ export default function EateryCardGrid({
     return (
         <div className={css.supergrid}>
             <div className={css.section}>
-                <button
-                    className={css["dropdown-button"]}
+                {/* <button
+                    className={`${css["dropdown-button"]} ${!showPinned && css["dropdown-button--hidden"]}`}
                     onClick={() => {
                         setShowPinned(!showPinned);
                     }}
                 >
                     <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
                     <p>{showPinned ? 'Hide' : 'Show'} pinned locations</p>
-                </button>
+                </button> */}
 
                 {showPinned && (
                     <Grid container spacing={2}>
@@ -157,7 +158,7 @@ export default function EateryCardGrid({
 
             <div className={css.section}>
                 <button
-                    className={css["dropdown-button"]}
+                    className={`${css["dropdown-button"]} ${showHiddens && css["dropdown-button--up"]}`}
                     onClick={() => {
                         setShowHiddens(!showHiddens);
                     }}
