@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 function EateryCard({ onClear }: { onClear: () => unknown }) {
     return (
         <div className="error-container">
-            <h2 className="error-container__title">No results found</h2>
+            <h3 className="error-container__title">No results found</h3>
             <p className="error-container__text">
                 Try searching for a name (e.g. “Schatz”) or location (e.g. “Cohon”).
             </p>

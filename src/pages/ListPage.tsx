@@ -1,8 +1,11 @@
 import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
-import './ListPage.css';
-import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
+import {
+    IReadOnlyLocation_ExtraData_Map,
+    IReadOnlyLocation_FromAPI_PostProcessed,
+    IReadOnlyLocation_Combined,
+} from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -11,8 +14,11 @@ import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
-import EateryCardGrid from './EateryCardGrid';
+import EateryCardGrid from './EateryCardGrid'; // TODO
+import Drawer from '../components/Drawer';
+import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
+import './ListPage.css';
 import env from '../env';
 
 const LogoText = styled(Typography)({
@@ -125,142 +131,186 @@ function ListPage({
         };
     }, []);
 
+    const [isDrawerActive, setIsDrawerActive] = useState(false);
+    const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
+    const [activeTab, setActiveTab] = useState<TabType>('overview');
+    const isDrawerActiveRef = useRef(isDrawerActive);
+    useEffect(() => {
+        isDrawerActiveRef.current = isDrawerActive;
+    }, [isDrawerActive]);
+    const drawerContextValue = useMemo(
+        () => ({
+            isDrawerActive,
+            setIsDrawerActive: (active: boolean) => {
+                setIsDrawerActive(active);
+                // ensure drawer content don't change before fully exited
+                setTimeout(() => {
+                    // ensure drawerLocation is null if it is inactive
+                    if (isDrawerActiveRef.current === false) setDrawerLocation(null);
+                }, 500);
+            },
+            drawerLocation,
+            setDrawerLocation,
+            activeTab,
+            setActiveTab,
+        }),
+        [isDrawerActive, drawerLocation, activeTab],
+    );
+
     return (
-        <div className="ListPage">
-            {/*  showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description]
-        Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
-            {showOfflineAlert && (
-                <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
-                    🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
-                    you are offline. We apologize for any inconvenience. 🌐🚫
-                </StyledAlert>
-            )}
-
-            <div className="ListPage__container">
-                <header className="Locations-header">
-                    <div className="Locations-header__greeting-container">
-                        <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
-                            {desktopGreeting}
-                        </h3>
-                        <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
-                            {mobileGreeting}
-                        </h3>
-                    </div>
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
-                    {IS_MIKU_DAY && (
-                        <button
-                            onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
-                            onTouchEnd={(e) => {
-                                e.preventDefault();
-                                updateTheme(theme === 'miku' ? 'none' : 'miku');
-                            }}
-                            type="button"
-                            className="Locations-header__miku-toggle"
+        <DrawerContext.Provider value={drawerContextValue}>
+            <div className="list-page-container">
+                <div className="list-box">
+                    {/* {showAlert && (
+                            <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
+                                🚧 [Issue Description] Please remain patient while we work on a fix. Thank you. 🚧
+                            </StyledAlert>
+                        )} */}
+                    {showOfflineAlert && (
+                        <StyledAlert
+                            severity="info"
+                            className="announcement"
+                            onClose={() => setShowOfflineAlert(false)}
                         >
-                            <img src={mikuKeychainUrl} alt="click me!" />
-                        </button>
+                            🚫🌐 We are temporarily unable to provide the latest available dining information or the map
+                            while you are offline. We apologize for any inconvenience. 🌐🚫
+                        </StyledAlert>
                     )}
-                </header>
 
-                <EateryCardGrid
-                    key={`${searchQuery}-${locationFilterQuery}`}
-                    {...{
-                        locations: filteredLocations,
-                        shouldAnimateCards: shouldAnimateCards.current,
-                        apiError: locations !== undefined && locations.length === 0,
-                        extraLocationData,
-                        setSearchQuery,
-                        pinnedIds,
-                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
-                            shouldAnimateCards.current = false;
-                            updatePinnedIds(newPinnedIds);
-                        },
-                    }}
-                />
-            </div>
+                    <header className="list-header">
+                        <div className="list-header-greeting-container">
+                            <h2 className="Locations-header__greeting Locations-header__greeting--desktop">
+                                {desktopGreeting}
+                            </h2>
+                            <h2 className="Locations-header__greeting Locations-header__greeting--mobile">
+                                {mobileGreeting}
+                            </h2>
+                        </div>
 
-            <footer className="footer">
-                {theme === 'miku' ? (
-                    <FooterText>
-                        Blue hair, blue tie, hiding in your wifi
-                        <br />
-                        All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
-                    </FooterText>
-                ) : (
-                    <>
-                        <FooterText>
-                            All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
-                        </FooterText>
-                        <FooterText>
-                            If you encounter any problems, please fill out our{' '}
-                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
-                                feedback form
-                            </a>{' '}
-                            (the fastest way to reach us!).
-                        </FooterText>
-                        <FooterText>
-                            Otherwise, reach out to{' '}
-                            {emails.length > 0 ? (
-                                emails.map((person, idx) => (
-                                    <span key={person.email}>
-                                        <a href={`mailto:${person.email}`} style={{ color: 'white' }}>
-                                            {person.name}
-                                        </a>
-                                        {idx < emails.length - 2 ? ', ' : ''}
-                                        {/* eslint-disable-next-line no-nested-ternary */}
-                                        {idx === emails.length - 2 ? (emails.length > 2 ? ', or ' : ' or ') : ''}
-                                    </span>
-                                ))
-                            ) : (
-                                <span>
-                                    <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
-                                        ScottyLabs
-                                    </a>
-                                </span>
-                            )}
-                            .
-                        </FooterText>
-                        <FooterText>
-                            To provide feedback on your dining experience, please contact{' '}
-                            <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
-                                Dining Services
-                            </a>{' '}
-                            or take the{' '}
-                            <a href="https://forms.gle/fTnWrS7jkTFRB14DA" style={{ color: 'white' }}>
-                                dining survey
-                            </a>
-                            .
-                        </FooterText>
-                        <FooterText>
-                            Made with ❤️ by the{' '}
-                            <a href="https://scottylabs.org" style={{ color: 'white' }}>
-                                ScottyLabs
-                            </a>{' '}
-                            Tech Committee (not the official{' '}
-                            <a
-                                href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ color: 'white' }}
+                        <div className="list-header-controls">
+                            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                            <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                        </div>
+
+                        {IS_MIKU_DAY && (
+                            <button
+                                onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
+                                onTouchEnd={(e) => {
+                                    e.preventDefault();
+                                    updateTheme(theme === 'miku' ? 'none' : 'miku');
+                                }}
+                                type="button"
+                                className="Locations-header__miku-toggle"
                             >
-                                dining website
-                            </a>
-                            ).
-                        </FooterText>
-                    </>
-                )}
-                <LogoText variant="h4">
-                    cmu
-                    <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
-                </LogoText>
-                {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
-            </footer>
-            <link rel="prefetch" href={mikuBgUrl} />
-        </div>
+                                <img src={mikuKeychainUrl} alt="click me!" />
+                            </button>
+                        )}
+                    </header>
+
+                    <div className="eatery-card-grid-container">
+                        <EateryCardGrid
+                            key={`${searchQuery}-${locationFilterQuery}`}
+                            {...{
+                                locations: filteredLocations,
+                                shouldAnimateCards: shouldAnimateCards.current,
+                                apiError: locations !== undefined && locations.length === 0,
+                                extraLocationData,
+                                setSearchQuery,
+                                pinnedIds,
+                                updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                                    shouldAnimateCards.current = false;
+                                    updatePinnedIds(newPinnedIds);
+                                },
+                            }}
+                        />
+                    </div>
+
+                    <footer className="footer">
+                        {theme === 'miku' ? (
+                            <FooterText>
+                                Blue hair, blue tie, hiding in your wifi
+                                <br />
+                                All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
+                            </FooterText>
+                        ) : (
+                            <>
+                                <FooterText>
+                                    All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
+                                </FooterText>
+                                <FooterText>
+                                    If you encounter any problems, please fill out our{' '}
+                                    <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
+                                        feedback form
+                                    </a>{' '}
+                                    (the fastest way to reach us!).
+                                </FooterText>
+                                <FooterText>
+                                    Otherwise, reach out to{' '}
+                                    {emails.length > 0 ? (
+                                        emails.map((person, idx) => (
+                                            <span key={person.email}>
+                                                <a href={`mailto:${person.email}`} style={{ color: 'white' }}>
+                                                    {person.name}
+                                                </a>
+                                                {idx < emails.length - 2 ? ', ' : ''}
+                                                {/* eslint-disable-next-line no-nested-ternary */}
+                                                {idx === emails.length - 2
+                                                    ? emails.length > 2
+                                                        ? ', or '
+                                                        : ' or '
+                                                    : ''}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span>
+                                            <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+                                                ScottyLabs
+                                            </a>
+                                        </span>
+                                    )}
+                                    .
+                                </FooterText>
+                                <FooterText>
+                                    To provide feedback on your dining experience, please contact{' '}
+                                    <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
+                                        Dining Services
+                                    </a>{' '}
+                                    or take the{' '}
+                                    <a href="https://forms.gle/fTnWrS7jkTFRB14DA" style={{ color: 'white' }}>
+                                        dining survey
+                                    </a>
+                                    .
+                                </FooterText>
+                                <FooterText>
+                                    Made with ❤️ by the{' '}
+                                    <a href="https://scottylabs.org" style={{ color: 'white' }}>
+                                        ScottyLabs
+                                    </a>{' '}
+                                    Tech Committee (not the official{' '}
+                                    <a
+                                        href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        style={{ color: 'white' }}
+                                    >
+                                        dining website
+                                    </a>
+                                    ).
+                                </FooterText>
+                            </>
+                        )}
+                        <LogoText variant="h4">
+                            cmu
+                            <span style={{ color: 'var(--logo-second-half)' }}>:eats</span>
+                        </LogoText>
+                        {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
+                    </footer>
+                    <link rel="prefetch" href={mikuBgUrl} />
+                </div>
+
+                <Drawer />
+            </div>
+        </DrawerContext.Provider>
     );
 }
 

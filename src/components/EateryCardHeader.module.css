@@ -1,0 +1,26 @@
+.card-header-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--status-color);
+    border-bottom: 2px solid var(--status-color);
+    height: 2em;
+    padding-inline: 12px;
+    background: var(--card-header-bg);
+}
+
+.card-header-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--status-color);
+}
+
+.card-header-relative-time-text {
+    font-size: medium;
+}
+
+.card-header-absolute-time-text {
+    font-size: small;
+    color: grey;
+}

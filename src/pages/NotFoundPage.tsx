@@ -6,7 +6,7 @@ function NotFoundPage() {
 
     return (
         <div className="error-container">
-            <h2 className="error-container__title">Oops!</h2>
+            <h3 className="error-container__title">Oops!</h3>
             <p className="error-container__text">We couldn’t find the page you are looking for.</p>
             <Button
                 onClick={() => {
