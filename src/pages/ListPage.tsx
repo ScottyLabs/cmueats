@@ -134,6 +134,10 @@ function ListPage({
     const [isDrawerActive, setIsDrawerActive] = useState(false);
     const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
     const [activeTab, setActiveTab] = useState<TabType>('overview');
+    const isDrawerActiveRef = useRef(isDrawerActive);
+    useEffect(() => {
+        isDrawerActiveRef.current = isDrawerActive;
+    }, [isDrawerActive]);
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,
@@ -142,7 +146,7 @@ function ListPage({
                 // ensure drawer content don't change before fully exited
                 setTimeout(() => {
                     // ensure drawerLocation is null if it is inactive
-                    if (active === false) setDrawerLocation(null);
+                    if (isDrawerActiveRef.current === false) setDrawerLocation(null);
                 }, 500);
             },
             drawerLocation,
