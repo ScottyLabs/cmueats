@@ -121,65 +121,45 @@ export default function EateryCardGrid({
             />
         );
     }
+
+    const hiddenLocations = sortedLocations
+        .filter(
+            (location) =>
+                (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) ===
+                CardStatus.HIDDEN,
+        );
+
     return (
         <div className={css.supergrid}>
-            <div className={css.section}>
-                {/* <button
-                    className={`${css["dropdown-button"]} ${!showPinned && css["dropdown-button--hidden"]}`}
-                    onClick={() => {
-                        setShowPinned(!showPinned);
-                    }}
-                >
-                    <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
-                    <p>{showPinned ? 'Hide' : 'Show'} pinned locations</p>
-                </button> */}
-
-                {showPinned && (
-                    <Grid container spacing={2}>
-                        {sortedLocations
-                            .filter(
-                                (location) =>
-                                    (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) ===
-                                    CardStatus.PINNED,
-                            )
-                            .map(locationToCard)}
-                    </Grid>
-                )}
-            </div>
-
             <Grid container spacing={2}>
                 {sortedLocations
                     .filter(
                         (location) =>
-                            (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) === CardStatus.NORMAL,
+                            (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) !== CardStatus.HIDDEN,
                     )
                     .map(locationToCard)}
             </Grid>
 
             <div className={css.section}>
-                <button
-                    className={`${css["dropdown-button"]} ${showHiddens && css["dropdown-button--up"]}`}
-                    onClick={() => {
-                        setShowHiddens(!showHiddens);
-                    }}
-                    type="button"
-                >
-                    <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
-                    <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
-                </button>
+                {hiddenLocations.length > 0 &&
+                    < button
+                        className={`${css["dropdown-button"]} ${showHiddens && css["dropdown-button--up"]}`}
+                        onClick={() => {
+                            setShowHiddens(!showHiddens);
+                        }}
+                        type="button"
+                    >
+                        <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
+                        <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
+                    </button>
+                }
 
                 {showHiddens && (
                     <Grid container spacing={2}>
-                        {sortedLocations
-                            .filter(
-                                (location) =>
-                                    (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) ===
-                                    CardStatus.HIDDEN,
-                            )
-                            .map(locationToCard)}
+                        {hiddenLocations.map(locationToCard)}
                     </Grid>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
