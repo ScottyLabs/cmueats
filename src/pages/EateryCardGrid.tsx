@@ -34,7 +34,6 @@ export default function EateryCardGrid({
 }) {
     const [showHiddens, setShowHiddens] = useState(false);
     // const [showPinned, setShowPinned] = useState(true);
-    const showPinned = true;
 
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
