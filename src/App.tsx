@@ -88,9 +88,11 @@ function App() {
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                 <BrowserRouter>
                     <div className="App">
-                        {/* <Banner /> */}
-                        {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
-                            &gt;_&lt;</div> */}
+                        <Banner />
+                        {/* <div className="AdBanner">
+                            CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
+                            &gt;_&lt;
+                        </div> */}
                         <div className="MainContent">
                             <Routes>
                                 <Route
@@ -138,23 +140,25 @@ function Banner() {
                     <span className="welcome-banner__text--long">
                         <img src={scottyDog} alt="" />
                         <span>
-                            Interested in Tech/Design or want to help build the future of CMUEats? Join{' '}
                             <a
-                                href="https://tartanconnect.cmu.edu/scottylabs/club_signup"
+                                href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                ScottyLabs
-                            </a>
-                            !
+                                Register
+                            </a>{' '}
+                            for Nova, ScottyLabs&apos; GenAI Hackathon by Nov. 1st!
                         </span>
                     </span>
                     <span className="welcome-banner__text--short">
-                        Interested in Tech/Design? Join{' '}
-                        <a href="https://tartanconnect.cmu.edu/scottylabs/club_signup" target="_blank" rel="noreferrer">
-                            ScottyLabs
-                        </a>
-                        !{' '}
+                        <a
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Register
+                        </a>{' '}
+                        for Nova by Nov. 1st!
                     </span>
                 </div>
                 <div className="welcome-banner__close welcome-banner-padding welcome-banner-padding--button">
