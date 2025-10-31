@@ -147,7 +147,7 @@ function Banner() {
                             >
                                 Register
                             </a>{' '}
-                            for Nova, ScottyLabs' GenAI Hackathon by Nov. 1st!
+                            for Nova, ScottyLabs&apos; GenAI Hackathon by Nov. 1st!
                         </span>
                     </span>
                     <span className="welcome-banner__text--short">
