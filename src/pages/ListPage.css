@@ -1,6 +1,7 @@
 .list-page-container {
     display: flex;
     position: relative;
+    overflow-x: hidden;
     overflow-y: auto;
     min-height: 100%;
     height: 100%;
