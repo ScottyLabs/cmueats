@@ -143,6 +143,7 @@ function Banner() {
                             <a
                                 href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
                                 target="_blank"
+                                rel="noreferrer"
                             >
                                 Register
                             </a>{' '}
@@ -153,6 +154,7 @@ function Banner() {
                         <a
                             href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             Register
                         </a>{' '}
