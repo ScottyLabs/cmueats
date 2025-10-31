@@ -219,31 +219,31 @@ function EateryCard({
                     <div className="card__pin-container">
                         {showControlButtons && (
                             // Pin Button
-                            <Button
+                            <button
+                                type="button"
                                 onClick={() => {
                                     updateStatus(
                                         currentStatus !== CardStatus.PINNED ? CardStatus.PINNED : CardStatus.NORMAL,
                                     );
                                 }}
                                 className={`card__pin-button ${currentStatus === CardStatus.PINNED ? 'card__pin-button--pinned' : ''}`}
-                                size="small"
                             >
                                 {pinButton()}
-                            </Button>
+                            </button>
                         )}
                         {showControlButtons && (
                             // Hide Button
-                            <Button
+                            <button
+                                type="button"
                                 onClick={() => {
                                     updateStatus(
                                         currentStatus !== CardStatus.HIDDEN ? CardStatus.HIDDEN : CardStatus.NORMAL,
                                     );
                                 }}
                                 className={`card__pin-button ${currentStatus === CardStatus.HIDDEN ? 'card__pin-button--hidden' : ''}`}
-                                size="small"
                             >
                                 {hideButton()}
-                            </Button>
+                            </button>
                         )}
                     </div>
                 </div>
