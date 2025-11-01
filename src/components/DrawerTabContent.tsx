@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { DateTime } from 'luxon';
 import { getTimeSlotsString } from '../util/time';
-import { DrawerContext, TabType } from '../contexts/DrawerContext';
+import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerTabContent.module.css';
 
 function DrawerTabContent() {
@@ -9,35 +9,46 @@ function DrawerTabContent() {
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const drawerContext = useContext(DrawerContext);
     const timeSlots = getTimeSlotsString(drawerContext.drawerLocation?.times ?? []);
-    return (
-        <div className={css['drawer-tab-content']}>
-            {drawerContext.activeTab === 'overview' && (
-                <div>
-                    {drawerContext.drawerLocation?.description}
 
-                    <h4>Hours</h4>
-                    {Array(7)
-                        .fill(true)
-                        .map((_, i) => {
-                            const realI = (i + dayOffsetFromSunday) % 7;
-                            return (
-                                <div
-                                    style={{
-                                        marginBottom: '10px',
-                                        fontWeight: realI === dayOffsetFromSunday ? 'bold' : 'normal',
-                                        color: realI === dayOffsetFromSunday ? 'white' : '',
-                                    }}
-                                    key={daysStartingFromSunday[realI]}
-                                >
-                                    <span style={{ color: 'white' }}>{daysStartingFromSunday[realI]}</span>:{' '}
-                                    {timeSlots[realI]}
-                                </div>
-                            );
-                        })}
+    const renderDescription = () => {
+        return <>{drawerContext.drawerLocation?.shortDescription}</>;
+    };
+
+    const renderHours = () => {
+        return (
+            <>
+                <h4 className={css['section-header']}>Hours</h4>
+
+                <div className={css['hours-list']}>
+                    {daysStartingFromSunday.map((_, index) => {
+                        const realIndex = (index + dayOffsetFromSunday) % 7;
+                        const label = daysStartingFromSunday[realIndex];
+                        const isToday = realIndex === dayOffsetFromSunday;
+                        return (
+                            <div
+                                key={label}
+                                className={`${css['hours-row']} ${isToday ? css['hours-row-active'] : ''}`}
+                            >
+                                <span className={css['hours-day']}>{label}</span>
+                                <span className={css['hours-times']}>{timeSlots[realIndex]}</span>
+                            </div>
+                        );
+                    })}
                 </div>
+            </>
+        );
+    };
+
+    return (
+        <div className={css.container}>
+            {drawerContext.activeTab === 'overview' && (
+                <>
+                    {renderDescription()}
+                    {renderHours()}
+                </>
             )}
-            {drawerContext.activeTab === 'menu' && <div>menu</div>}
-            {drawerContext.activeTab === 'reviews' && <div>reviews</div>}
+            {drawerContext.activeTab === 'menu' && <p>menu</p>}
+            {drawerContext.activeTab === 'reviews' && <p>reviews</p>}
         </div>
     );
 }

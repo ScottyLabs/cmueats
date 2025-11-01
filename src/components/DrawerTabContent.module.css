@@ -1,4 +1,50 @@
-.drawer-tab-content {
-    padding: 1rem;
-    background: cadetblue;
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 27px 40px;
+}
+
+.section-header {
+    font-size: 1.5rem;
+    margin: 30px 0px 20px;
+    color: var(--text-primary);
+}
+
+.hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hours-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-muted);
+}
+
+.hours-row-active {
+    color: var(--text-primary);
+    font-weight: 600;
+
+    &.hours-day::after {
+        border-bottom-color: rgba(255, 255, 255, 0.35);
+    }
+}
+
+.hours-day {
+    display: flex;
+    align-items: center;
+    flex: 1;
+
+    &::after {
+        content: '';
+        flex: 1;
+        margin-inline: 12px;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+}
+
+.hours-time {
+    text-align: right;
 }
