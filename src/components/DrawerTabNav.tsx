@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { MessageSquare, Sparkles, TextAlignStart, Utensils } from 'lucide-react';
+import { BookOpen, Star, TextAlignStart } from 'lucide-react';
 import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerTabNav.module.css';
 
@@ -15,12 +15,12 @@ function DrawerTabNav() {
                 <TextAlignStart size={16} />
                 overview
             </button>
-            {/* <button
+            <button
                 className={`${css['tab-button']} ${activeTab === 'menu' ? css['tab-button-active'] : ''}`}
                 type="button"
                 onClick={() => setActiveTab('menu')}
             >
-                <Utensils size={16} />
+                <BookOpen size={16} />
                 menu
             </button>
             <button
@@ -28,9 +28,9 @@ function DrawerTabNav() {
                 type="button"
                 onClick={() => setActiveTab('reviews')}
             >
-                <MessageSquare size={16} />
+                <Star size={16} />
                 reviews
-            </button> */}
+            </button>
         </div>
     );
 }
