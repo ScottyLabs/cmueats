@@ -1,20 +1,34 @@
 import { useContext } from 'react';
-import { TextAlignStart } from 'lucide-react';
+import { MessageSquare, Sparkles, TextAlignStart, Utensils } from 'lucide-react';
 import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerTabNav.module.css';
 
 function DrawerTabNav() {
-    const drawerContext = useContext(DrawerContext);
+    const { activeTab, setActiveTab } = useContext(DrawerContext);
     return (
         <div className={css['drawer-tab-nav']}>
-            <button type="button" onClick={() => drawerContext.setActiveTab('overview')}>
-                <TextAlignStart />
+            <button
+                className={`${css['tab-button']} ${activeTab === 'overview' ? css['tab-button-active'] : ''}`}
+                type="button"
+                onClick={() => setActiveTab('overview')}
+            >
+                <TextAlignStart size={16} />
                 overview
             </button>
-            {/* <button type="button" onClick={() => drawerContext.setActiveTab('menu')}>
+            {/* <button
+                className={`${css['tab-button']} ${activeTab === 'menu' ? css['tab-button-active'] : ''}`}
+                type="button"
+                onClick={() => setActiveTab('menu')}
+            >
+                <Utensils size={16} />
                 menu
             </button>
-            <button type="button" onClick={() => drawerContext.setActiveTab('reviews')}>
+            <button
+                className={`${css['tab-button']} ${activeTab === 'reviews' ? css['tab-button-active'] : ''}`}
+                type="button"
+                onClick={() => setActiveTab('reviews')}
+            >
+                <MessageSquare size={16} />
                 reviews
             </button> */}
         </div>
