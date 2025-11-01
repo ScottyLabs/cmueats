@@ -15,12 +15,13 @@ import {
 } from './util/queryLocations';
 import './App.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
-import { getPinnedIds, setPinnedIds } from './util/storage';
+import { getStateMap, setLocationStateMap } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
+import { CardStateMap } from './components/EateryCard';
 
 const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
 function ErrorBoundaryFallback() {
@@ -51,11 +52,11 @@ function App() {
         });
     }, []);
 
-    const [pinnedIds, setPinnedIdsState] = useState<Record<string, true>>(getPinnedIds());
+    const [pinnedIds, setLocationStateMapState] = useState<CardStateMap>(getStateMap());
 
-    const updatePinnedIds = (newObj: Record<string, true>) => {
-        setPinnedIds(newObj);
-        setPinnedIdsState(newObj);
+    const updateStateMap = (newObj: CardStateMap) => {
+        setLocationStateMapState(newObj);
+        setLocationStateMap(newObj);
     };
 
     // periodically update extra location data
@@ -99,8 +100,8 @@ function App() {
                                         <ListPage
                                             extraLocationData={extraLocationData}
                                             locations={locations}
-                                            pinnedIds={pinnedIds}
-                                            updatePinnedIds={updatePinnedIds}
+                                            stateMap={pinnedIds}
+                                            updateStateMap={updateStateMap}
                                         />
                                     }
                                 />
