@@ -46,6 +46,37 @@ function getPittsburghTime() {
     return now.toLocaleString('en-US', options);
 }
 
+function getBlockPeriodsWithTimes(): { period: string; timeRange: string }[] {
+    return [
+        { period: 'Breakfast', timeRange: '03:30 AM - 10:29 AM' },
+        { period: 'Lunch', timeRange: '10:30 AM - 04:29 PM' },
+        { period: 'Dinner', timeRange: '04:30 PM - 08:59 PM' },
+        { period: 'Late Night', timeRange: '09:00 PM - 03:29 AM' },
+    ];
+}
+
+function getBlockPeriod(): string {
+    const now = new Date();
+    const pittsburghTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    const seconds = pittsburghTime.getHours() * 3600 + pittsburghTime.getMinutes() * 60 + pittsburghTime.getSeconds();
+
+    const breakfastStart = 3 * 3600 + 30 * 60;
+    const lunchStart = 10 * 3600 + 30 * 60;
+    const dinnerStart = 16 * 3600 + 30 * 60;
+    const lateNightStart = 21 * 3600;
+
+    if (seconds >= breakfastStart && seconds < lunchStart) {
+        return 'Breakfast';
+    }
+    if (seconds >= lunchStart && seconds < dinnerStart) {
+        return 'Lunch';
+    }
+    if (seconds >= dinnerStart && seconds < lateNightStart) {
+        return 'Dinner';
+    }
+    return 'Late Night';
+}
+
 function ListPage({
     extraLocationData,
     locations,
@@ -59,6 +90,9 @@ function ListPage({
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
+
+    const blockPeriods = getBlockPeriodsWithTimes();
+    const currentPeriod = getBlockPeriod();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -77,6 +111,7 @@ function ListPage({
     );
     const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
+    const [isPopupVisible, setPopupVisible] = useState(false);
 
     const { mobileGreeting, desktopGreeting } = useMemo(
         () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
@@ -88,6 +123,14 @@ function ListPage({
         searchQuery,
         locationFilterQuery,
     });
+
+    const handleMouseEnter = () => {
+        setPopupVisible(true);
+    };
+
+    const handleMouseLeave = () => {
+        setPopupVisible(false);
+    };
 
     // Fetch emails on mount
     useEffect(() => {
@@ -152,6 +195,31 @@ function ListPage({
                     </div>
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="block-period">
+                        <p className={`block-period__current ${isPopupVisible ? 'block-period__current--hidden' : ''}`}>
+                            <div style={{ fontWeight: 'bold' }}> Current Block Period: {currentPeriod} </div>
+                            {blockPeriods.find((p) => p.period === currentPeriod)?.timeRange}
+                        </p>
+                        {isPopupVisible && (
+                            <div className="block-period__popover">
+                                <p
+                                    className={`block-period__current ${
+                                        isPopupVisible ? 'block-period__current--popup' : ''
+                                    }`}
+                                >
+                                    Current Block Period: {currentPeriod}
+                                </p>
+                                {blockPeriods.map(({ period, timeRange }) => (
+                                    <div
+                                        key={period}
+                                        className={`block-period__popover__times ${period === currentPeriod ? 'block-period__popover__times--current' : ''}`}
+                                    >
+                                        {period}: {timeRange}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                     {IS_MIKU_DAY && (
                         <button
                             onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
