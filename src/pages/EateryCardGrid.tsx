@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
-import EateryCard from '../components/EateryCard';
+import { useState } from 'react';
+import EateryCard, { CardStateMap, CardStatus } from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import {
@@ -10,23 +11,30 @@ import {
 } from '../types/locationTypes';
 import assert from '../util/assert';
 
+import css from './EateryCardGrid.module.css';
+
+import dropdown_arrow from '../assets/control_button/dropdown_arrow.svg';
+
 export default function EateryCardGrid({
     locations,
     extraLocationData,
     setSearchQuery,
     shouldAnimateCards,
     apiError,
-    pinnedIds,
-    updatePinnedIds,
+    stateMap,
+    updateStateMap: updatePinnedIds,
 }: {
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
-    pinnedIds: Record<string, true>;
-    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    stateMap: CardStateMap;
+    updateStateMap: (newPinnedIds: CardStateMap) => void;
 }) {
+    const [showHiddens, setShowHiddens] = useState(false);
+    // const [showPinned, setShowPinned] = useState(true);
+
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
         return (
@@ -76,48 +84,81 @@ export default function EateryCardGrid({
         return location1.timeUntil - location2.timeUntil;
     };
 
+    const sortedLocations = locations
+        .map((location) => ({
+            ...location,
+            ...extraLocationData[location.conceptId], // add on our extra data here
+        }))
+        .sort((location1, location2) => {
+            const state1 = stateMap[location1.conceptId.toString()] ?? CardStatus.NORMAL;
+            const state2 = stateMap[location2.conceptId.toString()] ?? CardStatus.NORMAL;
+
+            const delta = state1 - state2;
+
+            if (delta !== 0) return delta;
+
+            return compareLocations(location1, location2);
+        });
+
+    function locationToCard(location: IReadOnlyLocation_Combined, i: number) {
+        return (
+            <EateryCard
+                location={location}
+                key={location.conceptId}
+                index={i}
+                animate={shouldAnimateCards}
+                partOfMainGrid
+                currentStatus={stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL}
+                updateStatus={(newStatus: CardStatus) => {
+                    const id = location.conceptId.toString();
+
+                    // TODO: investigate clone performance
+                    const clone = { ...stateMap };
+                    clone[id] = newStatus;
+                    updatePinnedIds(clone);
+                }}
+            />
+        );
+    }
+
+    const hiddenLocations = sortedLocations
+        .filter(
+            (location) =>
+                (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) ===
+                CardStatus.HIDDEN,
+        );
+
     return (
-        <Grid container spacing={2}>
-            {locations
-                .map((location) => ({
-                    ...location,
-                    ...extraLocationData[location.conceptId], // add on our extra data here
-                }))
-                .sort((location1, location2) => {
-                    const id1 = location1.conceptId.toString();
-                    const id2 = location2.conceptId.toString();
+        <div className={css.supergrid}>
+            <Grid container spacing={2}>
+                {sortedLocations
+                    .filter(
+                        (location) =>
+                            (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) !== CardStatus.HIDDEN,
+                    )
+                    .map(locationToCard)}
+            </Grid>
 
-                    const isPinned1 = id1 in pinnedIds;
-                    const isPinned2 = id2 in pinnedIds;
-
-                    if (isPinned1 && isPinned2) {
-                        return compareLocations(location1, location2);
-                    }
-                    if (isPinned1) return -1;
-                    if (isPinned2) return 1;
-
-                    return compareLocations(location1, location2);
-                })
-                .map((location, i) => (
-                    <EateryCard
-                        location={location}
-                        key={location.conceptId}
-                        index={i}
-                        animate={shouldAnimateCards}
-                        partOfMainGrid
-                        isPinned={location.conceptId.toString() in pinnedIds}
-                        onTogglePin={() => {
-                            const id = location.conceptId.toString();
-                            const newPinnedIds = { ...pinnedIds };
-                            if (newPinnedIds[id]) {
-                                delete newPinnedIds[id];
-                            } else {
-                                newPinnedIds[id] = true;
-                            }
-                            updatePinnedIds(newPinnedIds);
+            <div className={css.section}>
+                {hiddenLocations.length > 0 &&
+                    < button
+                        className={`${css["dropdown-button"]} ${showHiddens && css["dropdown-button--up"]}`}
+                        onClick={() => {
+                            setShowHiddens(!showHiddens);
                         }}
-                    />
-                ))}
-        </Grid>
+                        type="button"
+                    >
+                        <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
+                        <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
+                    </button>
+                }
+
+                {showHiddens && (
+                    <Grid container spacing={2}>
+                        {hiddenLocations.map(locationToCard)}
+                    </Grid>
+                )}
+            </div>
+        </div >
     );
 }

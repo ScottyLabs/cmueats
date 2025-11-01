@@ -14,6 +14,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
+import { CardStateMap } from '../components/EateryCard';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -79,13 +80,13 @@ function getBlockPeriod(): string {
 function ListPage({
     extraLocationData,
     locations,
-    pinnedIds,
-    updatePinnedIds,
+    stateMap,
+    updateStateMap,
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    pinnedIds: Record<string, true>;
-    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    stateMap: CardStateMap;
+    updateStateMap: (newStateMap: CardStateMap) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -242,10 +243,10 @@ function ListPage({
                         apiError: locations !== undefined && locations.length === 0,
                         extraLocationData,
                         setSearchQuery,
-                        pinnedIds,
-                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                        stateMap,
+                        updateStateMap: (newStateMap: CardStateMap) => {
                             shouldAnimateCards.current = false;
-                            updatePinnedIds(newPinnedIds);
+                            updateStateMap(newStateMap);
                         },
                     }}
                 />
