@@ -6,7 +6,7 @@ import css from './EateryCardContent.module.css';
 
 function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined }) {
     const drawerContext = useContext(DrawerContext);
-    const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location;
+    const { location: physicalLocation, name, url } = location;
 
     return (
         <div className={css['card-content-container']}>
