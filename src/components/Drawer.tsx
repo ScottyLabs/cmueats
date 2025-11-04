@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { DrawerContext } from '../contexts/DrawerContext';
 import { CSSTransition } from 'react-transition-group';
 import DrawerHeader from './DrawerHeader';
@@ -7,17 +7,31 @@ import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
 
 function Drawer() {
-    const drawerContext = useContext(DrawerContext);
-    // const { location: physicalLocation, name, url, todaysSoups = [], todaysSpecials = [], description } = location?;
-
-    // on yelp, under their title is "rating (review number)", "location", "isOpen and hours"
-    // their order is "add a review / add photos (button)", "menu", "location & hours", "review"
-    // for reference <https://www.yelp.com/biz/paris-66-pittsburgh-2?hrid=ffQedKt12wIRLXZX8OTOqA>
+    const { isDrawerActive, setIsDrawerActive } = useContext(DrawerContext);
     const drawerRef = useRef<HTMLDivElement | null>(null);
+
+    // `esc` to close the drawer
+    useEffect(() => {
+        if (!isDrawerActive) return;
+
+        function handleKeyDown(event: KeyboardEvent) {
+            if (event.key !== 'Escape') return;
+
+            const target = event.target as HTMLElement;
+            const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
+
+            if (isTyping) return;
+
+            setIsDrawerActive(false);
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isDrawerActive, setIsDrawerActive]);
 
     return (
         <CSSTransition
-            in={drawerContext.isDrawerActive}
+            in={isDrawerActive}
             timeout={300}
             mountOnEnter
             unmountOnExit
