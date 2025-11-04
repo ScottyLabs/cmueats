@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from 'react';
-import { DrawerContext } from '../contexts/DrawerContext';
 import { CSSTransition } from 'react-transition-group';
+import { DrawerContext } from '../contexts/DrawerContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
@@ -12,7 +12,7 @@ function Drawer() {
 
     // `esc` to close the drawer
     useEffect(() => {
-        if (!isDrawerActive) return;
+        if (!isDrawerActive) return () => {};
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;

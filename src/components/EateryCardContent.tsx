@@ -40,12 +40,12 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                 style={{ top: `${menuPosition.top}px`, left: `${menuPosition.left}px` }}
                 id={menuId}
             >
-                <button className={css['menu-button']}>
+                <button type="button" className={css['menu-button']}>
                     <Pin size={16} />
                     <div>Pin Card</div>
                 </button>
 
-                <button className={css['menu-button']}>
+                <button type="button" className={css['menu-button']}>
                     <EyeOff size={16} />
                     <div>Unseen Card</div>
                 </button>
