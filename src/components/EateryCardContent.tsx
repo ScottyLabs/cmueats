@@ -1,11 +1,22 @@
 import { useContext, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { MapPin, MoreHorizontal, Pin, EyeOff } from 'lucide-react';
+import { MapPin, MoreHorizontal, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 import { DrawerContext } from '../contexts/DrawerContext';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { CardStatus } from './EateryCard';
 import css from './EateryCardContent.module.css';
 
-function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined }) {
+function EateryCardContent({
+    location,
+    currentStatus,
+    updateStatus,
+    showControlButtons,
+}: {
+    location: IReadOnlyLocation_Combined;
+    currentStatus: CardStatus;
+    updateStatus: (newStatus: CardStatus) => void;
+    showControlButtons?: boolean;
+}) {
     const drawerContext = useContext(DrawerContext);
     const { location: physicalLocation, name, url } = location;
 
@@ -40,14 +51,44 @@ function EateryCardContent({ location }: { location: IReadOnlyLocation_Combined 
                 style={{ top: `${menuPosition.top}px`, left: `${menuPosition.left}px` }}
                 id={menuId}
             >
-                <button type="button" className={css['menu-button']}>
-                    <Pin size={16} />
-                    <div>Pin Card</div>
+                <button
+                    type="button"
+                    className={css['menu-button']}
+                    onClick={() => {
+                        updateStatus(currentStatus === CardStatus.PINNED ? CardStatus.NORMAL : CardStatus.PINNED);
+                    }}
+                >
+                    {currentStatus === CardStatus.PINNED ? (
+                        <>
+                            <PinOff size={16} />
+                            <div>Unpin Card</div>
+                        </>
+                    ) : (
+                        <>
+                            <Pin size={16} />
+                            <div>Pin Card</div>
+                        </>
+                    )}
                 </button>
 
-                <button type="button" className={css['menu-button']}>
-                    <EyeOff size={16} />
-                    <div>Unseen Card</div>
+                <button
+                    type="button"
+                    className={css['menu-button']}
+                    onClick={() => {
+                        updateStatus(currentStatus === CardStatus.HIDDEN ? CardStatus.NORMAL : CardStatus.HIDDEN);
+                    }}
+                >
+                    {currentStatus === CardStatus.HIDDEN ? (
+                        <>
+                            <Eye size={16} />
+                            <div>Show Card</div>
+                        </>
+                    ) : (
+                        <>
+                            <EyeOff size={16} />
+                            <div>Hide Card</div>
+                        </>
+                    )}
                 </button>
             </div>,
             document.body,

@@ -6,22 +6,30 @@ import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 import css from './EateryCard.module.css';
 
+export enum CardStatus {
+    PINNED,
+    NORMAL,
+    HIDDEN,
+}
+
+export type CardStateMap = Record<string, CardStatus>;
+
 function EateryCard({
     location,
     index = 0,
     partOfMainGrid = false,
     animate = false,
-    isPinned,
-    onTogglePin,
-    showPinButton = true,
+    currentStatus,
+    updateStatus,
+    showControlButtons = true,
 }: {
     location: IReadOnlyLocation_Combined;
     index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
-    isPinned: boolean;
-    onTogglePin: () => void;
-    showPinButton?: boolean;
+    currentStatus: CardStatus;
+    updateStatus: (newStatus: CardStatus) => void;
+    showControlButtons?: boolean;
 }) {
     const drawerContext = useContext(DrawerContext);
     const { isDrawerActive, drawerLocation } = drawerContext;
@@ -54,7 +62,12 @@ function EateryCard({
                 ref={cardRef}
             >
                 <EateryCardHeader location={location} />
-                <EateryCardContent location={location} />
+                <EateryCardContent
+                    location={location}
+                    currentStatus={currentStatus}
+                    updateStatus={updateStatus}
+                    showControlButtons={showControlButtons}
+                />
             </div>
         </Grid>
     );
