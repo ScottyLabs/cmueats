@@ -6,11 +6,11 @@ function upgradeToCardStateMapFromOldFormat(old: string): CardStateMap {
 }
 
 export function getStateMap(): CardStateMap {
-    const old = localStorage.getItem("pinnedEateries")
+    const old = localStorage.getItem('pinnedEateries');
     if (old !== null) {
-        localStorage.removeItem("pinnedEateries")
+        localStorage.removeItem('pinnedEateries');
         const ret = upgradeToCardStateMapFromOldFormat(old);
-        return ret
+        return ret;
     }
 
     try {
@@ -21,7 +21,6 @@ export function getStateMap(): CardStateMap {
     } catch {
         return {};
     }
-
 }
 
 export function setLocationStateMap(obj: CardStateMap) {

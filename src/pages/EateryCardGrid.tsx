@@ -121,12 +121,9 @@ export default function EateryCardGrid({
         );
     }
 
-    const hiddenLocations = sortedLocations
-        .filter(
-            (location) =>
-                (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) ===
-                CardStatus.HIDDEN,
-        );
+    const hiddenLocations = sortedLocations.filter(
+        (location) => (stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL) === CardStatus.HIDDEN,
+    );
 
     return (
         <div className={css.supergrid}>
@@ -140,9 +137,9 @@ export default function EateryCardGrid({
             </Grid>
 
             <div className={css.section}>
-                {hiddenLocations.length > 0 &&
-                    < button
-                        className={`${css["dropdown-button"]} ${showHiddens && css["dropdown-button--up"]}`}
+                {hiddenLocations.length > 0 && (
+                    <button
+                        className={`${css['dropdown-button']} ${showHiddens && css['dropdown-button--up']}`}
                         onClick={() => {
                             setShowHiddens(!showHiddens);
                         }}
@@ -151,7 +148,7 @@ export default function EateryCardGrid({
                         <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
                         <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
                     </button>
-                }
+                )}
 
                 {showHiddens && (
                     <Grid container spacing={2}>
@@ -159,6 +156,6 @@ export default function EateryCardGrid({
                     </Grid>
                 )}
             </div>
-        </div >
+        </div>
     );
 }

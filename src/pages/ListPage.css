@@ -67,7 +67,6 @@
 }
 
 @keyframes sway {
-
     0%,
     100% {
         transform: rotate(1deg);
@@ -121,10 +120,12 @@
     animation-delay: 0.1s;
     opacity: 0;
 
-    mask-image: linear-gradient(to right,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 1) var(--right-cutoff),
-            rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%));
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) var(--right-cutoff),
+        rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
+    );
 
     &.Locations-header__greeting--mobile {
         font-size: 2rem;
