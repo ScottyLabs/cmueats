@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
-import EateryCard, { CardStateMap, CardStatus } from '../components/EateryCard';
+import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import {
@@ -10,10 +10,9 @@ import {
     IReadOnlyLocation_Combined,
 } from '../types/locationTypes';
 import assert from '../util/assert';
-
+import { CardStateMap, CardStatus } from '../types/cardTypes';
 import css from './EateryCardGrid.module.css';
-
-import dropdown_arrow from '../assets/control_button/dropdown_arrow.svg';
+import { ChevronDown } from 'lucide-react';
 
 export default function EateryCardGrid({
     locations,
@@ -145,7 +144,7 @@ export default function EateryCardGrid({
                         }}
                         type="button"
                     >
-                        <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
+                        <ChevronDown className="chevron-down" size={16} />
                         <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
                     </button>
                 )}
