@@ -55,5 +55,6 @@
 }
 
 .hidden-grid {
+    opacity: 60%;
     width: 100%;
 }

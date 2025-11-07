@@ -55,7 +55,6 @@ function EateryCard({
                 isCardActiveInDrawer ? css['card-active'] : '',
                 partOfMainGrid ? css['card-in-main-grid'] : '',
                 currentStatus === CardStatus.PINNED ? css['card-pinned'] : '',
-                currentStatus === CardStatus.HIDDEN ? css['card-hidden'] : '',
             ]
                 .filter(Boolean)
                 .join(' '),
