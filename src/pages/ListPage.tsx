@@ -139,6 +139,17 @@ function ListPage({
     useEffect(() => {
         isDrawerActiveRef.current = isDrawerActive;
     }, [isDrawerActive]);
+    // if drawer if open, update the drawer's content whenever extraLocationData gets updated
+    useEffect(() => {
+        if (!isDrawerActiveRef.current || !drawerLocation || !locations || !extraLocationData) return;
+        const baseLocation = locations.find((loc) => loc.conceptId === drawerLocation.conceptId);
+        const extraData = extraLocationData[drawerLocation.conceptId];
+        if (!baseLocation || !extraData) return;
+        setDrawerLocation({
+            ...baseLocation,
+            ...extraData,
+        });
+    }, [drawerLocation?.conceptId, extraLocationData, locations]);
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,
@@ -147,7 +158,7 @@ function ListPage({
                 // ensure drawer content don't change before fully exited
                 setTimeout(() => {
                     // ensure drawerLocation is null if it is inactive
-                    if (isDrawerActiveRef.current === false) setDrawerLocation(null);
+                    if (!isDrawerActiveRef.current) setDrawerLocation(null);
                 }, 500);
             },
             drawerLocation,
