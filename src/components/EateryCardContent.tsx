@@ -56,6 +56,7 @@ function EateryCardContent({
                     className={css['menu-button']}
                     onClick={() => {
                         updateStatus(currentStatus === CardStatus.PINNED ? CardStatus.NORMAL : CardStatus.PINNED);
+                        setIsMenuOpen(false);
                     }}
                 >
                     {currentStatus === CardStatus.PINNED ? (
@@ -76,6 +77,7 @@ function EateryCardContent({
                     className={css['menu-button']}
                     onClick={() => {
                         updateStatus(currentStatus === CardStatus.HIDDEN ? CardStatus.NORMAL : CardStatus.HIDDEN);
+                        setIsMenuOpen(false);
                     }}
                 >
                     {currentStatus === CardStatus.HIDDEN ? (
