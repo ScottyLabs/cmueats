@@ -1,7 +1,8 @@
 import { useMemo, useState, useRef } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
 import { CSSTransition } from 'react-transition-group';
-import EateryCard, { CardStatus } from '../components/EateryCard';
+import EateryCard from '../components/EateryCard';
+import { CardStatus } from '../types/cardTypes';
 import './MapPage.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';

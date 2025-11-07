@@ -20,7 +20,7 @@ import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
-import { CardStateMap } from '../components/EateryCard';
+import { CardStateMap } from '../types/cardTypes';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',

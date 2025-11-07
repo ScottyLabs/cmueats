@@ -21,7 +21,7 @@ function DrawerTabContent() {
     const menu = location.menu ?? '';
 
     function renderDescription() {
-        return <>{drawerContext.drawerLocation?.shortDescription}</>;
+        return drawerContext.drawerLocation?.description;
     }
 
     function renderHours() {
@@ -52,7 +52,7 @@ function DrawerTabContent() {
     function renderTodaysSpecials() {
         return (
             <>
-                <h4 className={css['section-header']}>Today's Specials</h4>
+                <h4 className={css['section-header']}>Today&apos;s Specials</h4>
                 <div>
                     {specials.concat(soups).map((item) => (
                         <>

@@ -1,18 +1,11 @@
 import { useContext, useEffect, useRef } from 'react';
 import { Grid } from '@mui/material';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { CardStatus } from '../types/cardTypes';
 import { DrawerContext } from '../contexts/DrawerContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 import css from './EateryCard.module.css';
-
-export enum CardStatus {
-    PINNED,
-    NORMAL,
-    HIDDEN,
-}
-
-export type CardStateMap = Record<string, CardStatus>;
 
 function EateryCard({
     location,

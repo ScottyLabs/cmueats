@@ -21,7 +21,7 @@ import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
-import { CardStateMap } from './components/EateryCard';
+import { CardStateMap } from './types/cardTypes';
 
 const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
 function ErrorBoundaryFallback() {

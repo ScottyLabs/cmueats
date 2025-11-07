@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { MapPin, MoreHorizontal, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 import { DrawerContext } from '../contexts/DrawerContext';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
-import { CardStatus } from './EateryCard';
+import { CardStatus } from '../types/cardTypes';
 import css from './EateryCardContent.module.css';
 
 function EateryCardContent({

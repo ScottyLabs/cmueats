@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
@@ -12,7 +13,6 @@ import {
 import assert from '../util/assert';
 import { CardStateMap, CardStatus } from '../types/cardTypes';
 import css from './EateryCardGrid.module.css';
-import { ChevronDown } from 'lucide-react';
 
 export default function EateryCardGrid({
     locations,
