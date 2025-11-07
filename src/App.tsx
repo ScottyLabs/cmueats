@@ -23,7 +23,8 @@ import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
 import { CardStateMap } from './components/EateryCard';
 
-const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
+const BACKEND_LOCATIONS_URL =
+    env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
 function ErrorBoundaryFallback() {
     return (
         <div className="outer-error-container">
