@@ -57,7 +57,6 @@ body {
 }
 
 .footer {
-    margin-top: 80px;
     background-color: var(--footer-bg);
     padding: 40px;
     min-height: 130px;

@@ -36,3 +36,24 @@
     flex-direction: column;
     gap: 1rem;
 }
+
+.hidden-grid-container {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease;
+}
+
+.hidden-grid-container--open {
+    max-height: max-content;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
+}
+
+.hidden-grid {
+    width: 100%;
+}

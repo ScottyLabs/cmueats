@@ -135,24 +135,32 @@ export default function EateryCardGrid({
                     .map(locationToCard)}
             </Grid>
 
+            {/* keep hidden cards mounted so their intro animation runs only once */}
             <div className={css.section}>
                 {hiddenLocations.length > 0 && (
-                    <button
-                        className={`${css['dropdown-button']} ${showHiddens && css['dropdown-button--up']}`}
-                        onClick={() => {
-                            setShowHiddens(!showHiddens);
-                        }}
-                        type="button"
-                    >
-                        <ChevronDown className="chevron-down" size={16} />
-                        <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
-                    </button>
-                )}
+                    <>
+                        <button
+                            className={`${css['dropdown-button']} ${showHiddens && css['dropdown-button--up']}`}
+                            onClick={() => {
+                                setShowHiddens(!showHiddens);
+                            }}
+                            type="button"
+                        >
+                            <ChevronDown className="chevron-down" size={16} />
+                            <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
+                        </button>
 
-                {showHiddens && (
-                    <Grid container spacing={2}>
-                        {hiddenLocations.map(locationToCard)}
-                    </Grid>
+                        <div
+                            className={`${css['hidden-grid-container']} ${
+                                showHiddens ? css['hidden-grid-container--open'] : ''
+                            }`}
+                            aria-hidden={!showHiddens}
+                        >
+                            <Grid container spacing={2} className={css['hidden-grid']}>
+                                {hiddenLocations.map(locationToCard)}
+                            </Grid>
+                        </div>
+                    </>
                 )}
             </div>
         </div>
