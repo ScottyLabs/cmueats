@@ -138,36 +138,38 @@ function EateryCardContent({
                 {physicalLocation}
             </span>
 
-            <div className={css['card-action-bar']}>
-                <button
-                    type="button"
-                    className={css['details-button']}
-                    onClick={() => {
-                        // open default tab "overview"
-                        drawerContext.setActiveTab('overview');
-                        // when the drawer is open, click other cards will open that
-                        // card's detail, instead of closing the drawer;
-                        // click on the same card will close the drawer.
-                        if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
-                            drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
-                        } else {
-                            drawerContext.setDrawerLocation(location);
-                            drawerContext.setIsDrawerActive(true);
-                        }
-                    }}
-                >
-                    details
-                </button>
+            {showControlButtons && (
+                <div className={css['card-action-bar']}>
+                    <button
+                        type="button"
+                        className={css['details-button']}
+                        onClick={() => {
+                            // open default tab "overview"
+                            drawerContext.setActiveTab('overview');
+                            // when the drawer is open, click other cards will open that
+                            // card's detail, instead of closing the drawer;
+                            // click on the same card will close the drawer.
+                            if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
+                                drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+                            } else {
+                                drawerContext.setDrawerLocation(location);
+                                drawerContext.setIsDrawerActive(true);
+                            }
+                        }}
+                    >
+                        details
+                    </button>
 
-                <button
-                    type="button"
-                    className={css['card-content-more-button']}
-                    onClick={handleToggleMenu}
-                    ref={moreButtonRef}
-                >
-                    <MoreHorizontal size={18} />
-                </button>
-            </div>
+                    <button
+                        type="button"
+                        className={css['card-content-more-button']}
+                        onClick={handleToggleMenu}
+                        ref={moreButtonRef}
+                    >
+                        <MoreHorizontal size={18} />
+                    </button>
+                </div>
+            )}
             {isMenuOpen && renderMenu()}
         </div>
     );
