@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useMemo, useRef } from 'react';
 import { Grid } from '@mui/material';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { CardStatus } from '../types/cardTypes';
@@ -47,13 +47,24 @@ function EateryCard({
     }, [drawerLocation?.conceptId, isDrawerActive, location.conceptId]);
 
     const isDouble = isDrawerActive ? 2 : 1;
+    const cardClassName = useMemo(
+        () =>
+            [
+                css.card,
+                animate ? css['card-animated'] : '',
+                isCardActiveInDrawer ? css['card-active'] : '',
+                partOfMainGrid ? css['card-in-main-grid'] : '',
+                currentStatus === CardStatus.PINNED ? css['card-pinned'] : '',
+                currentStatus === CardStatus.HIDDEN ? css['card-hidden'] : '',
+            ]
+                .filter(Boolean)
+                .join(' '),
+        [animate, isCardActiveInDrawer, partOfMainGrid, currentStatus],
+    );
+
     return (
         <Grid item xs={12} md={isDrawerActive ? 12 : 4} lg={3 * isDouble} xl={2 * isDouble}>
-            <div
-                className={`${css.card} ${animate ? css['card-animated'] : ''} ${isCardActiveInDrawer ? css['card-active'] : ''} ${partOfMainGrid ? css['card-in-main-grid'] : ''}`}
-                style={{ '--card-show-delay': `${index * 50}ms` }}
-                ref={cardRef}
-            >
+            <div className={cardClassName} style={{ '--card-show-delay': `${index * 50}ms` }} ref={cardRef}>
                 <EateryCardHeader location={location} />
                 <EateryCardContent
                     location={location}

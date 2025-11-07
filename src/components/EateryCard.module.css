@@ -52,6 +52,14 @@
     }
 }
 
+.card-pinned {
+    border: var(--card-border-width) solid var(--hover-accent-color);
+}
+
+.card-hidden {
+    opacity: 0.6;
+}
+
 .card__pin-container {
     position: absolute;
     bottom: 16px;
