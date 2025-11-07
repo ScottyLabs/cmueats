@@ -48,7 +48,7 @@
 }
 
 .hidden-grid-container--open {
-    max-height: max-content;
+    max-height: 9999px;
     opacity: 1;
     overflow: visible;
     pointer-events: auto;

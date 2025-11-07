@@ -32,7 +32,6 @@ export default function EateryCardGrid({
     updateStateMap: (newPinnedIds: CardStateMap) => void;
 }) {
     const [showHiddens, setShowHiddens] = useState(false);
-    // const [showPinned, setShowPinned] = useState(true);
 
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -140,13 +139,13 @@ export default function EateryCardGrid({
                 {hiddenLocations.length > 0 && (
                     <>
                         <button
+                            type="button"
                             className={`${css['dropdown-button']} ${showHiddens && css['dropdown-button--up']}`}
                             onClick={() => {
                                 setShowHiddens(!showHiddens);
                             }}
-                            type="button"
                         >
-                            <ChevronDown className="chevron-down" size={16} />
+                            <ChevronDown size={16} />
                             <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
                         </button>
 
