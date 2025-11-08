@@ -19,6 +19,7 @@ function EateryCardContent({
 }) {
     const drawerContext = useContext(DrawerContext);
     const { location: physicalLocation, name, url } = location;
+    const isMobile = window.innerWidth <= 600;
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -42,6 +43,8 @@ function EateryCardContent({
 
         setIsMenuOpen(true);
     }
+
+    const mobileLocation = physicalLocation.split(',').slice(0,1).join(",");
 
     function renderMenu() {
         return createPortal(
@@ -136,11 +139,11 @@ function EateryCardContent({
             </h3>
 
             <span className={css['physical-location-text']}>
-                <MapPin size={13} />
-                {physicalLocation}
+                <MapPin size={isMobile ? 12 : 13} />
+                {isMobile ? mobileLocation : physicalLocation}
             </span>
 
-            {showControlButtons && (
+            {showControlButtons && !isMobile && (
                 <div className={css['card-action-bar']}>
                     <button
                         type="button"

@@ -24,3 +24,22 @@
     font-size: small;
     color: grey;
 }
+
+@media (max-width: 600px) {
+    .card-header-dot {
+        width: 8px;
+        height: 8px;
+    }
+    .card-header-relative-time-text {
+        font-size: 0.9rem;
+    }   
+
+    .card-header-container {
+        gap: 7px;
+        height: 2.4em;
+    }
+
+    .desktop {
+        display: none
+    }
+}

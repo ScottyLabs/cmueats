@@ -98,3 +98,17 @@
     align-items: center;
     justify-content: center;
 }
+
+
+@media (max-width: 600px) {
+    .desktop {
+        display: none
+    }
+    .card-content-container {
+        padding: 0.9rem 1.2rem;
+    }
+    .physical-location-text {
+        font-size: 0.9rem;
+        color: var(--black-300, #CBCFD3);
+    }
+}

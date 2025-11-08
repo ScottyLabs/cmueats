@@ -20,6 +20,7 @@ import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
+import InfoIcon from "../assets/info.svg";
 import { CardStateMap } from '../types/cardTypes';
 
 const LogoText = styled(Typography)({
@@ -65,6 +66,8 @@ function ListPage({
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
+
+    const isMobile = window.innerWidth <= 600;
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -201,7 +204,7 @@ function ListPage({
 
                         <div className="list-header-controls">
                             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                            <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                            {isMobile ? <></>: <SelectLocation {...{ setLocationFilterQuery, locations }} />}
                         </div>
 
                         {IS_MIKU_DAY && (
