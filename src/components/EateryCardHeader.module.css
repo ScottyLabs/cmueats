@@ -1,7 +1,7 @@
 .card-header-container {
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 12px;
     color: var(--status-color);
     border-bottom: 2px solid var(--status-color);
     height: 2em;
