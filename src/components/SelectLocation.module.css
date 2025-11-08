@@ -55,3 +55,9 @@
         --right-cutoff: 100%;
     }
 }
+
+@media (max-width: 600px) {
+    .hide-mobile{
+        display: none
+    }
+}

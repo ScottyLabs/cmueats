@@ -27,7 +27,7 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
     const dedeupedLocationStrings = [...new Set(locationStrings)];
 
     return (
-        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css['select']}>
+        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={`${css['select']} ${css['hide-mobile']}`}>
             <option value="" key="Filter by Building" label="Filter by Building" />
             {dedeupedLocationStrings.map((location) => (
                 <option key={location} value={location}>
