@@ -5,18 +5,20 @@ import css from './EateryCardHeader.module.css';
 
 function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
-    const relativeTime =
-        location.statusMsg === 'Closed until further notice'
-            ? location.statusMsg
-            : location.statusMsg === 'Open 24/7'
-              ? location.statusMsg
-              : location.statusMsg.substring(0, location.statusMsg.indexOf('(') - 1);
-    const absoluteTime =
-        location.statusMsg === 'Closed until further notice'
-            ? ''
-            : location.statusMsg === 'Open 24/7'
-              ? ''
-              : location.statusMsg.substring(location.statusMsg.indexOf('(')).slice(1, -1);
+
+    const { statusMsg } = location;
+    let relativeTime = 'Status unavailable';
+    let absoluteTime = '';
+    if (statusMsg) {
+        const start = statusMsg.indexOf('(');
+        const end = statusMsg.lastIndexOf(')');
+        if (start >= 0 && end >= 0 && end > start) {
+            relativeTime = statusMsg.slice(0, start).trim();
+            absoluteTime = statusMsg.slice(start + 1, end).trim();
+        } else {
+            relativeTime = statusMsg;
+        }
+    }
 
     return (
         <div

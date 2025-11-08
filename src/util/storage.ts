@@ -1,13 +1,28 @@
-export function getPinnedIds(): Record<string, true> {
+import { CardStateMap, CardStatus } from '../types/cardTypes';
+
+function upgradeToCardStateMapFromOldFormat(old: string): CardStateMap {
+    const arr = JSON.parse(old);
+    return Object.fromEntries((arr as string[]).map((id) => [id, CardStatus.PINNED]));
+}
+
+export function getStateMap(): CardStateMap {
+    const old = localStorage.getItem('pinnedEateries');
+    if (old !== null) {
+        localStorage.removeItem('pinnedEateries');
+        const ret = upgradeToCardStateMapFromOldFormat(old);
+        return ret;
+    }
+
     try {
-        const arr = JSON.parse(localStorage.getItem('pinnedEateries') ?? '[]');
-        return Object.fromEntries((arr as string[]).map((id) => [id, true]));
+        const arr: CardStateMap = JSON.parse(localStorage.getItem('eateryStates') ?? '{}');
+        // return new Map(arr.map(obj => [obj.key, obj.value]));
+        // console.log(new Map(arr))
+        return arr;
     } catch {
         return {};
     }
 }
 
-export function setPinnedIds(obj: Record<string, true>) {
-    const arr = Object.keys(obj);
-    localStorage.setItem('pinnedEateries', JSON.stringify(arr));
+export function setLocationStateMap(obj: CardStateMap) {
+    localStorage.setItem('eateryStates', JSON.stringify(obj));
 }

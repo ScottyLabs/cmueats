@@ -20,7 +20,7 @@ import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
-import InfoIcon from "../assets/info.svg";
+import { CardStateMap } from '../types/cardTypes';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -55,13 +55,13 @@ function getPittsburghTime() {
 function ListPage({
     extraLocationData,
     locations,
-    pinnedIds,
-    updatePinnedIds,
+    stateMap,
+    updateStateMap,
 }: {
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    pinnedIds: Record<string, true>;
-    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    stateMap: CardStateMap;
+    updateStateMap: (newStateMap: CardStateMap) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -135,6 +135,21 @@ function ListPage({
     const [isDrawerActive, setIsDrawerActive] = useState(false);
     const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
     const [activeTab, setActiveTab] = useState<TabType>('overview');
+    const isDrawerActiveRef = useRef(isDrawerActive);
+    useEffect(() => {
+        isDrawerActiveRef.current = isDrawerActive;
+    }, [isDrawerActive]);
+    // if drawer if open, update the drawer's content whenever extraLocationData gets updated
+    useEffect(() => {
+        if (!isDrawerActiveRef.current || !drawerLocation || !locations || !extraLocationData) return;
+        const baseLocation = locations.find((loc) => loc.conceptId === drawerLocation.conceptId);
+        const extraData = extraLocationData[drawerLocation.conceptId];
+        if (!baseLocation || !extraData) return;
+        setDrawerLocation({
+            ...baseLocation,
+            ...extraData,
+        });
+    }, [drawerLocation?.conceptId, extraLocationData, locations]);
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,
@@ -143,7 +158,7 @@ function ListPage({
                 // ensure drawer content don't change before fully exited
                 setTimeout(() => {
                     // ensure drawerLocation is null if it is inactive
-                    if (active === false) setDrawerLocation(null);
+                    if (!isDrawerActiveRef.current) setDrawerLocation(null);
                 }, 500);
             },
             drawerLocation,
@@ -218,10 +233,10 @@ function ListPage({
                                 apiError: locations !== undefined && locations.length === 0,
                                 extraLocationData,
                                 setSearchQuery,
-                                pinnedIds,
-                                updatePinnedIds: (newPinnedIds: Record<string, true>) => {
+                                stateMap,
+                                updateStateMap: (newStateMap: CardStateMap) => {
                                     shouldAnimateCards.current = false;
-                                    updatePinnedIds(newPinnedIds);
+                                    updateStateMap(newStateMap);
                                 },
                             }}
                         />

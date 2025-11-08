@@ -2,6 +2,7 @@ import { useMemo, useState, useRef } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
+import { CardStatus } from '../types/cardTypes';
 import './MapPage.css';
 import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
@@ -116,9 +117,9 @@ function MapPage({
                             {selectedLocationIndex !== undefined && (
                                 <EateryCard
                                     location={extendedLocationData[selectedLocationIndex]}
-                                    isPinned={false}
-                                    onTogglePin={() => {}}
-                                    showPinButton={false}
+                                    currentStatus={CardStatus.NORMAL}
+                                    updateStatus={() => {}}
+                                    showControlButtons={false}
                                 />
                             )}
                         </div>

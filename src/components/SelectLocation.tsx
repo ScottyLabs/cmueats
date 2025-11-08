@@ -14,7 +14,7 @@ function getPrimaryLocation(locationString: string) {
 function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
     if (locations === undefined) {
         return (
-            <select className={css['select']}>
+            <select className={css.select}>
                 {/* Keep label the same as the default option below to reduce loading jank */}
                 <option value="" label="Filter by Building" />
             </select>
@@ -27,7 +27,7 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
     const dedeupedLocationStrings = [...new Set(locationStrings)];
 
     return (
-        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={`${css['select']} ${css['hide-mobile']}`}>
+        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
             <option value="" key="Filter by Building" label="Filter by Building" />
             {dedeupedLocationStrings.map((location) => (
                 <option key={location} value={location}>

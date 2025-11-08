@@ -1,0 +1,60 @@
+.dropdown-button {
+    display: flex;
+    color: #b4bbc0;
+    gap: 1rem;
+
+    cursor: pointer;
+
+    align-items: center;
+    border: none;
+    background-color: transparent;
+
+    & svg {
+        rotate: -90deg;
+        transition: rotate 0.2s linear;
+    }
+
+    & p {
+        font-size: 1rem;
+    }
+}
+
+.dropdown-button--up {
+    & svg {
+        rotate: 0deg;
+    }
+}
+
+.supergrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.hidden-grid-container {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease;
+}
+
+.hidden-grid-container--open {
+    max-height: 9999px;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
+}
+
+.hidden-grid {
+    opacity: 60%;
+    width: 100%;
+}
