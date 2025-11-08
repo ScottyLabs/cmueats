@@ -18,6 +18,8 @@ export default function EateryCardGrid({
     apiError,
     pinnedIds,
     updatePinnedIds,
+    sortBy,
+    locationDistances,
 }: {
     locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
     extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
@@ -26,6 +28,8 @@ export default function EateryCardGrid({
     apiError: boolean;
     pinnedIds: Record<string, true>;
     updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    sortBy: string;
+    locationDistances: Map<number, number>;
 }) {
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -59,6 +63,39 @@ export default function EateryCardGrid({
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
     const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
+        if (sortBy === 'location') {
+            const state1 = location1.locationState;
+            const state2 = location2.locationState;
+            
+            const getPriority = (state: LocationState) => {
+                if (state === LocationState.OPEN
+                    || state === LocationState.CLOSES_SOON) return 0;
+                if (state === LocationState.OPENS_SOON) return 1;
+                if (state === LocationState.CLOSED
+                    || state === LocationState.CLOSED_LONG_TERM) return 2;
+                return 3;
+            };
+            
+            const priority1 = getPriority(state1);
+            const priority2 = getPriority(state2);
+            
+            if (priority1 !== priority2) {
+                return priority1 - priority2;
+            }
+
+            const distance1 = locationDistances.get(location1.conceptId);
+            const distance2 = locationDistances.get(location2.conceptId);
+
+            if (distance1 !== undefined && distance2 !== undefined) {
+                return distance1 - distance2;
+            }
+
+            if (distance1 !== undefined) return -1;
+            if (distance2 !== undefined) return 1;
+
+            return location1.name.localeCompare(location2.name);
+        }
+
         const state1 = location1.locationState;
         const state2 = location2.locationState;
 

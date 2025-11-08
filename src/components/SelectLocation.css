@@ -1,13 +1,33 @@
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-label {
+    color: var(--text-primary);
+    font-family: var(--text-primary-font);
+    font-weight: 500;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+@media screen and (min-width: 900px) {
+    .filter-label {
+        font-size: 1.2rem;
+    }
+}
+
 .select {
     appearance: none;
     cursor: pointer;
     display: block;
-    min-width: 500px;
+    min-width: 220px;
     width: fit-content;
 
     padding: 0.8rem 0.9rem;
     border-radius: 1rem;
-    background: var(--input-bg) url(../assets/select.svg) no-repeat calc(100% - 10px) 50%;
+    background: var(--input-bg) url(../assets/select.svg) no-repeat calc(100% - 5px) 50%;
     outline: none;
     border: 1px solid transparent;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
@@ -21,6 +41,12 @@
     /* we add a delay so it doesn't look jittery on page load */
     animation-delay: 0.1s;
     opacity: 0;
+}
+
+@media screen and (min-width: 900px) {
+    .select {
+        min-width: 300px;
+    }
 }
 
 .select:hover {

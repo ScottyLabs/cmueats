@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4.95 10">
-  <polygon fill="#fff" points="1.41 4.67 2.48 3.18 3.54 4.67 1.41 4.67"/>
-  <polygon fill="#fff" points="3.54 5.33 2.48 6.82 1.41 5.33 3.54 5.33"/>
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4.95 4.95">
+  <g id="Capa_1" style="transform-origin: 4.17405px 2.98995px;" transform="matrix(0.048817, 0, 0, 0.052918, -1.68726, -0.280212)">
+    <g id="SVGRepo_bgCarrier" stroke-width="0" transform="matrix(1, 0, 0, 1, -11.189576, -12.373548)"/>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" transform="matrix(1, 0, 0, 1, -11.189576, -12.373548)"/>
+    <g id="SVGRepo_iconCarrier" transform="matrix(1, 0, 0, 1, -11.189576, -12.373548)">
+      <g>
+        <path d="M29.994,10.183L15.363,24.812L0.733,10.184c-0.977-0.978-0.977-2.561,0-3.536c0.977-0.977,2.559-0.976,3.536,0 l11.095,11.093L26.461,6.647c0.977-0.976,2.559-0.976,3.535,0C30.971,7.624,30.971,9.206,29.994,10.183z" style="fill: rgb(255, 255, 255);"/>
+      </g>
+    </g>
+  </g>
 </svg>

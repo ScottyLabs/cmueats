@@ -88,7 +88,7 @@ function App() {
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                 <BrowserRouter>
                     <div className="App">
-                        <Banner />
+                        {/* <Banner /> */}
                         {/* <div className="AdBanner">
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;

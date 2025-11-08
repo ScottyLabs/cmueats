@@ -1,0 +1,34 @@
+.sort-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sort-label {
+    color: var(--text-primary);
+    font-family: var(--text-primary-font);
+    font-weight: 500;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+@media screen and (min-width: 900px) {
+    .sort-label {
+        font-size: 1.2rem;
+    }
+}
+
+.sort-select {
+    width: 180px;
+    min-width: 0;
+}
+
+.Locations-header__filters .select:not(.sort-select) {
+    width: 220px;
+}
+
+@media screen and (min-width: 900px) {
+    .Locations-header__filters .select:not(.sort-select) {
+        width: 440px;
+    }
+}

@@ -117,5 +117,15 @@ export default defineConfig(({ command, mode }) => {
                 typescript: true,
             }),
         ],
+        server: {
+            proxy: {
+                '/api/cmu-maps': {
+                    target: 'https://rust.api.maps.scottylabs.org',
+                    changeOrigin: true,
+                    rewrite: (path) => path.replace(/^\/api\/cmu-maps/, ''),
+                    secure: true,
+                },
+            },
+        },
     };
 });

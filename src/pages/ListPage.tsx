@@ -6,6 +6,7 @@ import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcesse
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
+import SortBy from '../components/SortBy';
 import { useTheme } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
 import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
@@ -74,6 +75,12 @@ function ListPage({
         },
         '',
     );
+
+    const [sortBy, setSortBy] = useReducer<(_: string, x: string) => string>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, 'closing-time');
+    const [locationDistances, setLocationDistances] = useState<Map<number, number>>(new Map());
     const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
@@ -150,7 +157,17 @@ function ListPage({
                         </h3>
                     </div>
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    <div className="Locations-header__filters">
+                        <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                        <SortBy
+                            {...{
+                                setSortBy,
+                                sortBy,
+                                locations,
+                                onLocationDistancesCalculated: setLocationDistances,
+                            }}
+                        />
+                    </div>
                     {IS_MIKU_DAY && (
                         <button
                             onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}
@@ -167,7 +184,7 @@ function ListPage({
                 </header>
 
                 <EateryCardGrid
-                    key={`${searchQuery}-${locationFilterQuery}`}
+                    key={`${searchQuery}-${locationFilterQuery}-${sortBy}`}
                     {...{
                         locations: filteredLocations,
                         shouldAnimateCards: shouldAnimateCards.current,
@@ -175,6 +192,8 @@ function ListPage({
                         extraLocationData,
                         setSearchQuery,
                         pinnedIds,
+                        sortBy,
+                        locationDistances,
                         updatePinnedIds: (newPinnedIds: Record<string, true>) => {
                             shouldAnimateCards.current = false;
                             updatePinnedIds(newPinnedIds);

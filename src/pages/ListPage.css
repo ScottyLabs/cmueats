@@ -128,10 +128,82 @@
         --right-cutoff: 100%;
     }
 }
+.Locations-header__filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.Locations-header__filters .sort-container {
+    order: 1;
+}
+
+.Locations-header__filters .filter-container {
+    order: 2;
+}
+
+@media screen and (max-width: 900px) {
+    .Locations-header__filters {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .Locations-header__filters .sort-container,
+    .Locations-header__filters .filter-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .Locations-header__filters .select {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
 @media screen and (min-width: 900px) {
     .Locations-header {
         grid-template-columns: 1fr 300px;
         align-items: center;
+    }
+    
+    .Locations-header__filters {
+        justify-content: flex-start;
+    }
+}
+
+.Locations-search {
+    display: block;
+    width: 100%;
+    align-self: start;
+    padding: 0.8rem 1rem;
+    padding-left: 3rem;
+    border-radius: 1rem;
+    background: var(--input-bg);
+    outline: none;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 1rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='rgba(255, 255, 255, .6)' class='w-5 h-5'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: 1rem center;
+    color: var(--input-text);
+    font-weight: 500;
+    &::-webkit-search-decoration {
+        display: none;
+    }
+    &:focus {
+        transition: all 0.5s;
+        box-shadow: 0 0 40px var(--hover-accent-color);
+        border-color: var(--hover-accent-color);
+        outline: none;
+    }
+    &::placeholder {
+        color: var(--input-text-placeholder);
     }
 }
 
