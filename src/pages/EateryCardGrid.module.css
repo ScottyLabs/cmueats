@@ -1,6 +1,6 @@
 .dropdown-button {
     display: flex;
-    color: var(--black-400);
+    color: #b4bbc0;
     gap: 1rem;
 
     cursor: pointer;
@@ -9,9 +9,9 @@
     border: none;
     background-color: transparent;
 
-    img {
-        rotate: 0deg;
-        transition: rotate 0.2s ease;
+    & svg {
+        rotate: -90deg;
+        transition: rotate 0.2s linear;
     }
 
     & p {
@@ -20,8 +20,8 @@
 }
 
 .dropdown-button--up {
-    img {
-        rotate: 180deg;
+    & svg {
+        rotate: 0deg;
     }
 }
 
@@ -35,4 +35,26 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.hidden-grid-container {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease;
+}
+
+.hidden-grid-container--open {
+    max-height: 9999px;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
+}
+
+.hidden-grid {
+    opacity: 60%;
+    width: 100%;
 }

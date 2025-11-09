@@ -1,4 +1,4 @@
-import { CardStateMap, CardStatus } from '../components/EateryCard';
+import { CardStateMap, CardStatus } from '../types/cardTypes';
 
 function upgradeToCardStateMapFromOldFormat(old: string): CardStateMap {
     const arr = JSON.parse(old);

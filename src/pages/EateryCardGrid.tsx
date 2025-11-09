@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
-import EateryCard, { CardStateMap, CardStatus } from '../components/EateryCard';
+import { ChevronDown } from 'lucide-react';
+import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import {
@@ -10,10 +11,8 @@ import {
     IReadOnlyLocation_Combined,
 } from '../types/locationTypes';
 import assert from '../util/assert';
-
+import { CardStateMap, CardStatus } from '../types/cardTypes';
 import css from './EateryCardGrid.module.css';
-
-import dropdown_arrow from '../assets/control_button/dropdown_arrow.svg';
 
 export default function EateryCardGrid({
     locations,
@@ -33,7 +32,6 @@ export default function EateryCardGrid({
     updateStateMap: (newPinnedIds: CardStateMap) => void;
 }) {
     const [showHiddens, setShowHiddens] = useState(false);
-    // const [showPinned, setShowPinned] = useState(true);
 
     if (locations === undefined || extraLocationData === undefined) {
         // Display skeleton cards while loading
@@ -136,24 +134,32 @@ export default function EateryCardGrid({
                     .map(locationToCard)}
             </Grid>
 
+            {/* keep hidden cards mounted so their intro animation runs only once */}
             <div className={css.section}>
                 {hiddenLocations.length > 0 && (
-                    <button
-                        className={`${css['dropdown-button']} ${showHiddens && css['dropdown-button--up']}`}
-                        onClick={() => {
-                            setShowHiddens(!showHiddens);
-                        }}
-                        type="button"
-                    >
-                        <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
-                        <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
-                    </button>
-                )}
+                    <>
+                        <button
+                            type="button"
+                            className={`${css['dropdown-button']} ${showHiddens && css['dropdown-button--up']}`}
+                            onClick={() => {
+                                setShowHiddens(!showHiddens);
+                            }}
+                        >
+                            <ChevronDown size={16} />
+                            <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
+                        </button>
 
-                {showHiddens && (
-                    <Grid container spacing={2}>
-                        {hiddenLocations.map(locationToCard)}
-                    </Grid>
+                        <div
+                            className={`${css['hidden-grid-container']} ${
+                                showHiddens ? css['hidden-grid-container--open'] : ''
+                            }`}
+                            aria-hidden={!showHiddens}
+                        >
+                            <Grid container spacing={2} className={css['hidden-grid']}>
+                                {hiddenLocations.map(locationToCard)}
+                            </Grid>
+                        </div>
+                    </>
                 )}
             </div>
         </div>

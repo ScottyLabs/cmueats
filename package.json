@@ -23,6 +23,7 @@
         "joi": "^17.12.2",
         "jest": "^30.2.0",
         "jsonwebtoken": "^9.0.2",
+        "lucide-react": "^0.546.0",
         "luxon": "^3.4.4",
         "mapkit-react": "^1.14.1",
         "million": "latest",
