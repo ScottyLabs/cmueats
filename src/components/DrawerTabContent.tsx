@@ -21,7 +21,7 @@ function DrawerTabContent() {
     const menu = location.menu ?? '';
 
     function renderDescription() {
-        return drawerContext.drawerLocation?.description;
+        return <div className={css.description}>{drawerContext.drawerLocation?.description}</div>;
     }
 
     function renderHours() {

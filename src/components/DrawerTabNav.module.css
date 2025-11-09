@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 27px;
+    padding: 6px 27px;
     background: var(--main-bg-accent);
     overflow-x: auto;
     scrollbar-width: thin;
@@ -12,12 +12,13 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 10px 10px;
+    padding: 8px 10px;
     border-radius: 5px;
     border: 1px solid transparent;
     background: transparent;
     color: var(--text-muted);
     font-family: var(--text-secondary-font);
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;

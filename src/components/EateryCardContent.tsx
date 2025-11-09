@@ -136,7 +136,7 @@ function EateryCardContent({
             </h3>
 
             <span className={css['physical-location-text']}>
-                <MapPin size={13} />
+                <MapPin size={12} />
                 {physicalLocation}
             </span>
 
