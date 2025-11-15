@@ -8,70 +8,35 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
-import {
-    queryLocations,
-    getExtendedLocationData as getExtraLocationData,
-    getLocationStatus,
-} from './util/queryLocations';
+import { queryLocations, getLocationStatus } from './util/queryLocations';
 import './App.css';
-import {
-    IReadOnlyLocation_FromAPI_PostProcessed,
-    IReadOnlyLocation_ExtraData_Map,
-    IReadOnlyLocation_Combined,
-} from './types/locationTypes';
-import { CardViewPreferences, getStateMap, setStateMapInLocalStorage } from './util/storage';
+import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_Combined } from './types/locationTypes';
+import { useUserCardViewPreferences } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
+import useRefreshWhenBackOnline from './util/network';
 
 const BACKEND_LOCATIONS_URL =
     env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
-function ErrorBoundaryFallback() {
-    return (
-        <div className="outer-error-container">
-            oh... uhhh... well this is awkward. we have encountered an issue while rendering this page{' '}
-            <img src={bocchiError} alt="" />
-            the error has been automatically reported to the cmueats team
-            <div className="outer-error-container__small-text">
-                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
-                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
-                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
-                </a>{' '}
-                for now
-            </div>
-        </div>
-    );
-}
+
 function App() {
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [now, setNow] = useState(DateTime.now().setZone('America/New_York'));
+    const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
+
+    useRefreshWhenBackOnline();
 
     useEffect(() => {
         queryLocations(BACKEND_LOCATIONS_URL).then(setLocations);
     }, []);
 
-    const [cardViewPreferences, setCardViewPreferences] = useState(() => getStateMap());
-    console.log(cardViewPreferences); // TODO: why is this randomly updating to the new one when you set the old key + new key?
     useEffect(() => {
         const intervalId = setInterval(() => setNow(DateTime.now().setZone('America/New_York')), 1000);
         return () => clearInterval(intervalId);
-    }, []);
-
-    // Auto-refresh the page when the user goes online after previously being offline
-    useEffect(() => {
-        function handleOnline() {
-            if (navigator.onLine) {
-                // Refresh the page
-                window.location.reload();
-            }
-        }
-
-        window.addEventListener('online', handleOnline);
-
-        return () => window.removeEventListener('online', handleOnline);
     }, []);
 
     const fullLocationData: IReadOnlyLocation_Combined[] | undefined = locations?.map((location) => ({
@@ -100,7 +65,6 @@ function App() {
                                             setNewViewPreference={(id, preference) => {
                                                 const newPreferences = { ...cardViewPreferences, [id]: preference };
                                                 setCardViewPreferences(newPreferences);
-                                                setStateMapInLocalStorage(newPreferences);
                                             }}
                                         />
                                     }
@@ -116,6 +80,24 @@ function App() {
         </React.StrictMode>
     );
 }
+
+function ErrorBoundaryFallback() {
+    return (
+        <div className="outer-error-container">
+            oh... uhhh... well this is awkward. we have encountered an issue while rendering this page{' '}
+            <img src={bocchiError} alt="" />
+            the error has been automatically reported to the cmueats team
+            <div className="outer-error-container__small-text">
+                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
+                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
+                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
+                </a>{' '}
+                for now
+            </div>
+        </div>
+    );
+}
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
 function Banner() {

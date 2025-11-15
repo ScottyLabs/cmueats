@@ -154,20 +154,3 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
         return [];
     }
 }
-
-export function getExtendedLocationData(
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined,
-    now: DateTime,
-): IReadOnlyLocation_ExtraData_Map | undefined {
-    // Remove .setZone('America/New_York') and change time in computer settings when testing
-    // Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
-    return locations?.reduce(
-        (acc, location) => ({
-            ...acc,
-            [location.conceptId]: {
-                ...getLocationStatus(location.times, now),
-            },
-        }),
-        {},
-    ); // foldl!
-}
