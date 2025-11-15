@@ -15,6 +15,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTime } from 'luxon';
 
+import { motion } from 'motion/react';
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
 import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
@@ -129,20 +130,16 @@ const ExitButton = styled(Button)({
 
 function EateryCard({
     location,
-    index = 0,
     partOfMainGrid = false,
     animate = false,
     currentStatus,
     updateStatus,
-    showControlButtons = true,
 }: {
     location: IReadOnlyLocation_Combined;
-    index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
     currentStatus: CardStatus;
     updateStatus: (newStatus: CardStatus) => void;
-    showControlButtons?: boolean;
 }) {
     const {
         name,
@@ -176,9 +173,25 @@ function EateryCard({
 
     return (
         <Grid item xs={12} md={4} lg={3} xl={3}>
-            <div
-                className={`card ${animate ? 'card--animated' : ''} ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
-                style={{ '--card-show-delay': `${index * 50}ms` }}
+            <motion.div
+                layout="position"
+                className={`card ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
+                initial={
+                    animate
+                        ? {
+                              opacity: 0,
+                              transform: 'translate(-10px,0)',
+                              filter: 'blur(3px)',
+                              transition: { duration: 0.7, ease: [0.08, 0.67, 0.64, 1.01] },
+                          }
+                        : false
+                }
+                animate={{
+                    transform: 'translate(0,0)',
+                    opacity: 1,
+                    filter: 'blur(0)',
+                }}
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
             >
                 <EateryCardHeader location={location} />
                 <CardContent className="card__content">
@@ -217,7 +230,7 @@ function EateryCard({
                         Details
                     </ActionButton>
                     <div className="card__pin-container">
-                        {showControlButtons && (
+                        {partOfMainGrid && (
                             // Pin Button
                             <button
                                 type="button"
@@ -231,7 +244,7 @@ function EateryCard({
                                 {pinButton()}
                             </button>
                         )}
-                        {showControlButtons && (
+                        {partOfMainGrid && (
                             // Hide Button
                             <button
                                 type="button"
@@ -259,7 +272,7 @@ function EateryCard({
                     location={location}
                     type="description"
                 />
-            </div>
+            </motion.div>
         </Grid>
     );
 }
