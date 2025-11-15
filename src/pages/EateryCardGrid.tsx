@@ -115,7 +115,9 @@ export default function EateryCardGrid({
                         type="button"
                     >
                         <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
-                        <p>{showHiddenSection ? 'Hide' : 'Show'} hidden locations</p>
+                        <p>
+                            {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
+                        </p>
                     </button>
                     {showHiddenSection && (
                         <Grid container spacing={2}>
