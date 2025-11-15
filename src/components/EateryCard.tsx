@@ -182,6 +182,7 @@ function EateryCard({
                               opacity: 0,
                               transform: 'translate(-10px,0)',
                               filter: 'blur(3px)',
+                              transition: { duration: 0.7, ease: [0.08, 0.67, 0.64, 1.01] },
                           }
                         : false
                 }

@@ -158,7 +158,6 @@
         transition: 0.05s opacity;
     }
     &:hover {
-        background: hsl(206, 6, 25);
         img {
             opacity: 1;
         }
