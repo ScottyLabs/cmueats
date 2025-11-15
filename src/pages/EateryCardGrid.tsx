@@ -101,7 +101,7 @@ export default function EateryCardGrid({
             return compareLocations(location1, location2);
         });
 
-    function locationToCard(location: IReadOnlyLocation_Combined, i: number) {
+    function locationToCard(location: IReadOnlyLocation_Combined) {
         return (
             <EateryCard
                 location={location}
