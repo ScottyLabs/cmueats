@@ -1,0 +1,39 @@
+.dropdown-button {
+    display: flex;
+    color: var(--black-400);
+    gap: 1rem;
+
+    cursor: pointer;
+
+    align-items: center;
+    border: none;
+    background-color: transparent;
+
+    img {
+        rotate: -90deg;
+        transition: rotate 0.2s ease;
+    }
+
+    & p {
+        font-size: 16px;
+        margin-left: -3px;
+    }
+}
+
+.dropdown-button--up {
+    img {
+        rotate: 0deg;
+    }
+}
+
+.supergrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

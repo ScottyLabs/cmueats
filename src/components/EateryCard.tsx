@@ -15,13 +15,26 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTime } from 'luxon';
 
-import PinIcon from '../assets/pin.svg';
-import UnpinIcon from '../assets/unpin.svg';
+import { motion } from 'motion/react';
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
 import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
 import './EateryCard.css';
 import { highlightColors, textColors } from '../constants/colors';
+
+import eyeIcon from '../assets/control_button/eye.svg';
+import eyeIconOff from '../assets/control_button/eye-off.svg';
+
+import pinIcon from '../assets/control_button/pinned.svg';
+import pinIconOff from '../assets/control_button/unpinned.svg';
+
+export enum CardStatus {
+    PINNED,
+    NORMAL,
+    HIDDEN,
+}
+
+export type CardStateMap = Record<string, CardStatus>;
 
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
     fontWeight: 500,
@@ -120,17 +133,15 @@ function EateryCard({
     index = 0,
     partOfMainGrid = false,
     animate = false,
-    isPinned,
-    onTogglePin,
-    showPinButton = true,
+    currentStatus,
+    updateStatus,
 }: {
     location: IReadOnlyLocation_Combined;
     index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
-    isPinned: boolean;
-    onTogglePin: () => void;
-    showPinButton?: boolean;
+    currentStatus: CardStatus;
+    updateStatus: (newStatus: CardStatus) => void;
 }) {
     const {
         name,
@@ -144,11 +155,44 @@ function EateryCard({
 
     const [openedModal, setOpenedModal] = useState<'none' | 'specials' | 'description'>('none');
 
+    const pinButton = () => {
+        switch (currentStatus) {
+            case CardStatus.PINNED:
+                return <img src={pinIcon} alt="Pinned" />;
+            default:
+                return <img src={pinIconOff} alt="Unpinned" />;
+        }
+    };
+
+    const hideButton = () => {
+        switch (currentStatus) {
+            case CardStatus.HIDDEN:
+                return <img src={eyeIconOff} alt="Hidden" />;
+            default:
+                return <img src={eyeIcon} alt="Visible" />;
+        }
+    };
+
     return (
         <Grid item xs={12} md={4} lg={3} xl={3}>
-            <div
-                className={`card ${animate ? 'card--animated' : ''} ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
-                style={{ '--card-show-delay': `${index * 50}ms` }}
+            <motion.div
+                layout="position"
+                className={`card ${partOfMainGrid ? 'card--in-main-grid' : ''}`}
+                initial={
+                    animate
+                        ? {
+                              opacity: 0,
+                              transform: 'translate(-10px,0)',
+                              filter: 'blur(3px)',
+                          }
+                        : false
+                }
+                animate={{
+                    transform: 'translate(0,0)',
+                    opacity: 1,
+                    filter: 'blur(0)',
+                }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
             >
                 <EateryCardHeader location={location} />
                 <CardContent className="card__content">
@@ -187,18 +231,33 @@ function EateryCard({
                         Details
                     </ActionButton>
                     <div className="card__pin-container">
-                        {showPinButton && (
-                            <Button
-                                onClick={onTogglePin}
-                                className={`card__pin-button ${isPinned ? 'card__pin-button--pinned' : ''}`}
-                                size="small"
+                        {partOfMainGrid && (
+                            // Pin Button
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    updateStatus(
+                                        currentStatus !== CardStatus.PINNED ? CardStatus.PINNED : CardStatus.NORMAL,
+                                    );
+                                }}
+                                className={`card__pin-button ${currentStatus === CardStatus.PINNED ? 'card__pin-button--pinned' : ''}`}
                             >
-                                {isPinned ? (
-                                    <img src={PinIcon} alt="Pin Icon" />
-                                ) : (
-                                    <img src={UnpinIcon} alt="Unpin Icon" />
-                                )}
-                            </Button>
+                                {pinButton()}
+                            </button>
+                        )}
+                        {partOfMainGrid && (
+                            // Hide Button
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    updateStatus(
+                                        currentStatus !== CardStatus.HIDDEN ? CardStatus.HIDDEN : CardStatus.NORMAL,
+                                    );
+                                }}
+                                className={`card__pin-button ${currentStatus === CardStatus.HIDDEN ? 'card__pin-button--hidden' : ''}`}
+                            >
+                                {hideButton()}
+                            </button>
                         )}
                     </div>
                 </div>
@@ -214,7 +273,7 @@ function EateryCard({
                     location={location}
                     type="description"
                 />
-            </div>
+            </motion.div>
         </Grid>
     );
 }
