@@ -103,7 +103,7 @@ function MapPage({ locations }: { locations: IReadOnlyLocation_Combined[] | unde
                             {selectedLocationIndex !== undefined && (
                                 <EateryCard
                                     location={locations[selectedLocationIndex]!}
-                                    updateStatus={() => {}}
+                                    updateViewPreference={() => {}}
                                 />
                             )}
                         </div>

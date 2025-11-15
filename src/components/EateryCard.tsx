@@ -126,12 +126,12 @@ function EateryCard({
     location,
     partOfMainGrid = false,
     animate = false,
-    updateStatus,
+    updateViewPreference,
 }: {
     location: IReadOnlyLocation_Combined;
     partOfMainGrid?: boolean;
     animate?: boolean;
-    updateStatus: (newStatus: CardViewPreference) => void;
+    updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const {
         name,
@@ -228,7 +228,7 @@ function EateryCard({
                             <button
                                 type="button"
                                 onClick={() => {
-                                    updateStatus(cardViewPreference !== 'pinned' ? 'pinned' : 'normal');
+                                    updateViewPreference(cardViewPreference !== 'pinned' ? 'pinned' : 'normal');
                                 }}
                                 className={clsx(
                                     'card__pin-button',
@@ -243,7 +243,7 @@ function EateryCard({
                             <button
                                 type="button"
                                 onClick={() => {
-                                    updateStatus(cardViewPreference !== 'hidden' ? 'hidden' : 'normal');
+                                    updateViewPreference(cardViewPreference !== 'hidden' ? 'hidden' : 'normal');
                                 }}
                                 className={clsx(
                                     'card__pin-button',

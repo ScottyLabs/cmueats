@@ -85,7 +85,7 @@ export default function EateryCardGrid({
                 key={location.conceptId}
                 animate={shouldAnimateCards}
                 partOfMainGrid
-                updateStatus={(newPreference: CardViewPreference) => {
+                updateViewPreference={(newPreference: CardViewPreference) => {
                     updateCardViewPreference(location.conceptId.toString(), newPreference);
                 }}
             />
