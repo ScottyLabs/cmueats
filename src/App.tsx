@@ -8,86 +8,46 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
-import {
-    queryLocations,
-    getExtendedLocationData as getExtraLocationData,
-    LocationChecker,
-} from './util/queryLocations';
+import { queryLocations, getLocationStatus } from './util/queryLocations';
 import './App.css';
-import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
-import { getStateMap, setLocationStateMap } from './util/storage';
+import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_Combined } from './types/locationTypes';
+import { useUserCardViewPreferences } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
-import { CardStateMap } from './components/EateryCard';
+import useRefreshWhenBackOnline from './util/network';
 
 const BACKEND_LOCATIONS_URL =
     env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
-function ErrorBoundaryFallback() {
-    return (
-        <div className="outer-error-container">
-            oh... uhhh... well this is awkward. we have encountered an issue while rendering this page{' '}
-            <img src={bocchiError} alt="" />
-            the error has been automatically reported to the cmueats team
-            <div className="outer-error-container__small-text">
-                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
-                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
-                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
-                </a>{' '}
-                for now
-            </div>
-        </div>
-    );
-}
+
 function App() {
     const mainContainerRef = useRef<HTMLDivElement | null>(null);
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
-    const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
+    const [now, setNow] = useState(DateTime.now().setZone('America/New_York'));
+    const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
+
+    useRefreshWhenBackOnline();
+
     useEffect(() => {
-        queryLocations(BACKEND_LOCATIONS_URL).then((parsedLocations) => {
-            setLocations(parsedLocations);
-            setExtraLocationData(getExtraLocationData(parsedLocations, DateTime.now().setZone('America/New_York')));
-            // set extended data in same render to keep the two things in sync
-        });
+        queryLocations(BACKEND_LOCATIONS_URL).then(setLocations);
     }, []);
 
-    const [pinnedIds, setLocationStateMapState] = useState<CardStateMap>(getStateMap());
-
-    const updateStateMap = (newObj: CardStateMap) => {
-        setLocationStateMapState(newObj);
-        setLocationStateMap(newObj);
-    };
-
-    // periodically update extra location data
     useEffect(() => {
-        const intervalId = setInterval(
-            () => setExtraLocationData(getExtraLocationData(locations, DateTime.now().setZone('America/New_York'))),
-            1000,
-        );
+        const intervalId = setInterval(() => setNow(DateTime.now().setZone('America/New_York')), 1000);
         return () => clearInterval(intervalId);
-    }, [locations]);
-
-    // Auto-refresh the page when the user goes online after previously being offline
-    useEffect(() => {
-        function handleOnline() {
-            if (navigator.onLine) {
-                // Refresh the page
-                window.location.reload();
-            }
-        }
-
-        window.addEventListener('online', handleOnline);
-
-        return () => window.removeEventListener('online', handleOnline);
     }, []);
     useEffect(() => {
         mainContainerRef.current?.focus();
     }, []);
 
-    new LocationChecker(locations).assertExtraDataInSync(extraLocationData);
+    const fullLocationData: IReadOnlyLocation_Combined[] | undefined = locations?.map((location) => ({
+        ...location,
+        ...getLocationStatus(location.times, now),
+        cardViewPreference: cardViewPreferences[location.conceptId] ?? 'normal',
+    }));
 
     return (
         <React.StrictMode>
@@ -105,17 +65,15 @@ function App() {
                                     path="/"
                                     element={
                                         <ListPage
-                                            extraLocationData={extraLocationData}
-                                            locations={locations}
-                                            stateMap={pinnedIds}
-                                            updateStateMap={updateStateMap}
+                                            locations={fullLocationData}
+                                            updateCardViewPreference={(id, preference) => {
+                                                const newPreferences = { ...cardViewPreferences, [id]: preference };
+                                                setCardViewPreferences(newPreferences);
+                                            }}
                                         />
                                     }
                                 />
-                                <Route
-                                    path="/map"
-                                    element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
-                                />
+                                <Route path="/map" element={<MapPage locations={fullLocationData} />} />
                                 <Route path="*" element={<NotFoundPage />} />
                             </Routes>
                         </div>
@@ -126,6 +84,24 @@ function App() {
         </React.StrictMode>
     );
 }
+
+function ErrorBoundaryFallback() {
+    return (
+        <div className="outer-error-container">
+            oh... uhhh... well this is awkward. we have encountered an issue while rendering this page{' '}
+            <img src={bocchiError} alt="" />
+            the error has been automatically reported to the cmueats team
+            <div className="outer-error-container__small-text">
+                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
+                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
+                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
+                </a>{' '}
+                for now
+            </div>
+        </div>
+    );
+}
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
 function Banner() {

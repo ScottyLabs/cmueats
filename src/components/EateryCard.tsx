@@ -15,6 +15,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTime } from 'luxon';
 
+import clsx from 'clsx';
 import { motion } from 'motion/react';
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
@@ -27,14 +28,7 @@ import eyeIconOff from '../assets/control_button/eye-off.svg';
 
 import pinIcon from '../assets/control_button/pinned.svg';
 import pinIconOff from '../assets/control_button/unpinned.svg';
-
-export enum CardStatus {
-    PINNED,
-    NORMAL,
-    HIDDEN,
-}
-
-export type CardStateMap = Record<string, CardStatus>;
+import { CardViewPreference } from '../util/storage';
 
 const StyledCardHeader = styled(CardHeader)<{ state: LocationState }>(({ state }) => ({
     fontWeight: 500,
@@ -132,14 +126,12 @@ function EateryCard({
     location,
     partOfMainGrid = false,
     animate = false,
-    currentStatus,
-    updateStatus,
+    updateViewPreference,
 }: {
     location: IReadOnlyLocation_Combined;
     partOfMainGrid?: boolean;
     animate?: boolean;
-    currentStatus: CardStatus;
-    updateStatus: (newStatus: CardStatus) => void;
+    updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const {
         name,
@@ -149,13 +141,14 @@ function EateryCard({
         menu,
         todaysSpecials = [],
         todaysSoups = [],
+        cardViewPreference,
     } = location;
 
     const [openedModal, setOpenedModal] = useState<'none' | 'specials' | 'description'>('none');
 
     const pinButton = () => {
-        switch (currentStatus) {
-            case CardStatus.PINNED:
+        switch (cardViewPreference) {
+            case 'pinned':
                 return <img src={pinIcon} alt="Pinned" />;
             default:
                 return <img src={pinIconOff} alt="Unpinned" />;
@@ -163,8 +156,8 @@ function EateryCard({
     };
 
     const hideButton = () => {
-        switch (currentStatus) {
-            case CardStatus.HIDDEN:
+        switch (cardViewPreference) {
+            case 'hidden':
                 return <img src={eyeIconOff} alt="Hidden" />;
             default:
                 return <img src={eyeIcon} alt="Visible" />;
@@ -235,11 +228,12 @@ function EateryCard({
                             <button
                                 type="button"
                                 onClick={() => {
-                                    updateStatus(
-                                        currentStatus !== CardStatus.PINNED ? CardStatus.PINNED : CardStatus.NORMAL,
-                                    );
+                                    updateViewPreference(cardViewPreference !== 'pinned' ? 'pinned' : 'normal');
                                 }}
-                                className={`card__pin-button ${currentStatus === CardStatus.PINNED ? 'card__pin-button--pinned' : ''}`}
+                                className={clsx(
+                                    'card__pin-button',
+                                    cardViewPreference === 'pinned' && 'card__pin-button--pinned',
+                                )}
                             >
                                 {pinButton()}
                             </button>
@@ -249,11 +243,12 @@ function EateryCard({
                             <button
                                 type="button"
                                 onClick={() => {
-                                    updateStatus(
-                                        currentStatus !== CardStatus.HIDDEN ? CardStatus.HIDDEN : CardStatus.NORMAL,
-                                    );
+                                    updateViewPreference(cardViewPreference !== 'hidden' ? 'hidden' : 'normal');
                                 }}
-                                className={`card__pin-button ${currentStatus === CardStatus.HIDDEN ? 'card__pin-button--hidden' : ''}`}
+                                className={clsx(
+                                    'card__pin-button',
+                                    cardViewPreference === 'hidden' && 'card__pin-button--hidden',
+                                )}
                             >
                                 {hideButton()}
                             </button>

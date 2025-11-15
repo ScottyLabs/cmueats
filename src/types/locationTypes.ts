@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import { CardViewPreference } from '../util/storage';
+
 /** Note that everything being exported here is readonly */
 
 export type RecursiveReadonly<T> = T extends object
@@ -87,24 +89,27 @@ interface ILocation_FromAPI_PostProcessed extends ILocation_FromAPI_PreProcessed
 // All of the following are extended from the base API type
 
 // 'closedLongTerm' here refers to closed for the next 7 days (no timeslots available)
-interface ILocation_ExtraData_Base {
+interface ILocation_TimeStatusData_Base {
     /** No forseeable opening times after *now* */
     closedLongTerm: boolean;
     statusMsg: string;
     locationState: LocationState;
 }
-interface ILocation_ExtraData_NotPermanentlyClosed extends ILocation_ExtraData_Base {
+interface ILocation_TimeStateData_NotPermanentlyClosed extends ILocation_TimeStatusData_Base {
     closedLongTerm: false;
     isOpen: boolean;
     timeUntil: number;
     changesSoon: boolean;
     locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
 }
-interface ILocation_ExtraData_PermanentlyClosed extends ILocation_ExtraData_Base {
+interface ILocation_TimeStatusData_PermanentlyClosed extends ILocation_TimeStatusData_Base {
     closedLongTerm: true;
     locationState: LocationState.CLOSED_LONG_TERM;
 }
-type ILocation_ExtraData = ILocation_ExtraData_NotPermanentlyClosed | ILocation_ExtraData_PermanentlyClosed;
+
+export type ILocation_TimeStatusData =
+    | ILocation_TimeStateData_NotPermanentlyClosed
+    | ILocation_TimeStatusData_PermanentlyClosed;
 
 /** What we get directly from the API (single location data) */
 export type IReadOnlyLocation_FromAPI_PreProcessed = RecursiveReadonly<ILocation_FromAPI_PreProcessed>;
@@ -112,7 +117,11 @@ export type IReadOnlyLocation_FromAPI_PreProcessed = RecursiveReadonly<ILocation
 export type IReadOnlyLocation_FromAPI_PostProcessed = RecursiveReadonly<ILocation_FromAPI_PostProcessed>;
 
 /** Extra data derived from a single location */
-export type IReadOnlyLocation_ExtraData = RecursiveReadonly<ILocation_ExtraData>;
+export type IReadOnlyLocation_ExtraData = RecursiveReadonly<
+    ILocation_TimeStatusData & {
+        cardViewPreference: CardViewPreference;
+    }
+>;
 
 /** we'll typically pass this into components for efficient look-up of extra data (like time until close) */
 export type IReadOnlyLocation_ExtraData_Map = {
