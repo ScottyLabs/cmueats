@@ -10,6 +10,7 @@ import {
     ITimeRangeList,
     IReadOnlyLocation_FromAPI_PreProcessed,
     IReadOnlyLocation_ExtraData_Map,
+    ILocation_TimeStatusData,
 } from '../types/locationTypes';
 import {
     diffInMinutes,
@@ -73,7 +74,7 @@ export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlot, now: Date
  * @param now
  * @returns
  */
-export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IReadOnlyLocation_ExtraData {
+export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): ILocation_TimeStatusData {
     assert(isValidTimeSlotArray(timeSlots), `${JSON.stringify(timeSlots)} is invalid!`);
     const MINUTES_IN_A_WEEK = 60 * 24 * 7;
     const nextTimeSlot = getNextTimeSlot(timeSlots, now);
@@ -169,19 +170,4 @@ export function getExtendedLocationData(
         }),
         {},
     ); // foldl!
-}
-export class LocationChecker {
-    locations?: IReadOnlyLocation_FromAPI_PostProcessed[];
-
-    constructor(locations?: IReadOnlyLocation_FromAPI_PostProcessed[]) {
-        this.locations = locations;
-    }
-
-    assertExtraDataInSync(extraData?: IReadOnlyLocation_ExtraData_Map) {
-        this.locations?.forEach((location) => {
-            if (!extraData || !(location.conceptId in extraData)) {
-                console.error(location.conceptId, 'missing from extraData!');
-            }
-        });
-    }
 }

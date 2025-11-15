@@ -11,17 +11,20 @@ import NotFoundPage from './pages/NotFoundPage';
 import {
     queryLocations,
     getExtendedLocationData as getExtraLocationData,
-    LocationChecker,
+    getLocationStatus,
 } from './util/queryLocations';
 import './App.css';
-import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
-import { getStateMap, setLocationStateMap } from './util/storage';
+import {
+    IReadOnlyLocation_FromAPI_PostProcessed,
+    IReadOnlyLocation_ExtraData_Map,
+    IReadOnlyLocation_Combined,
+} from './types/locationTypes';
+import { CardViewPreferences, getStateMap, setStateMapInLocalStorage } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
-import { CardStateMap } from './components/EateryCard';
 
 const BACKEND_LOCATIONS_URL =
     env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
@@ -44,30 +47,18 @@ function ErrorBoundaryFallback() {
 function App() {
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
-    const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
+    const [now, setNow] = useState(DateTime.now().setZone('America/New_York'));
+
     useEffect(() => {
-        queryLocations(BACKEND_LOCATIONS_URL).then((parsedLocations) => {
-            setLocations(parsedLocations);
-            setExtraLocationData(getExtraLocationData(parsedLocations, DateTime.now().setZone('America/New_York')));
-            // set extended data in same render to keep the two things in sync
-        });
+        queryLocations(BACKEND_LOCATIONS_URL).then(setLocations);
     }, []);
 
-    const [pinnedIds, setLocationStateMapState] = useState<CardStateMap>(getStateMap());
-
-    const updateStateMap = (newObj: CardStateMap) => {
-        setLocationStateMapState(newObj);
-        setLocationStateMap(newObj);
-    };
-
-    // periodically update extra location data
+    const [cardViewPreferences, setCardViewPreferences] = useState(() => getStateMap());
+    console.log(cardViewPreferences); // TODO: why is this randomly updating to the new one when you set the old key + new key?
     useEffect(() => {
-        const intervalId = setInterval(
-            () => setExtraLocationData(getExtraLocationData(locations, DateTime.now().setZone('America/New_York'))),
-            1000,
-        );
+        const intervalId = setInterval(() => setNow(DateTime.now().setZone('America/New_York')), 1000);
         return () => clearInterval(intervalId);
-    }, [locations]);
+    }, []);
 
     // Auto-refresh the page when the user goes online after previously being offline
     useEffect(() => {
@@ -83,7 +74,11 @@ function App() {
         return () => window.removeEventListener('online', handleOnline);
     }, []);
 
-    new LocationChecker(locations).assertExtraDataInSync(extraLocationData);
+    const fullLocationData: IReadOnlyLocation_Combined[] | undefined = locations?.map((location) => ({
+        ...location,
+        ...getLocationStatus(location.times, now),
+        cardViewPreference: cardViewPreferences[location.conceptId] ?? 'normal',
+    }));
 
     return (
         <React.StrictMode>
@@ -101,17 +96,16 @@ function App() {
                                     path="/"
                                     element={
                                         <ListPage
-                                            extraLocationData={extraLocationData}
-                                            locations={locations}
-                                            stateMap={pinnedIds}
-                                            updateStateMap={updateStateMap}
+                                            locations={fullLocationData}
+                                            setNewViewPreference={(id, preference) => {
+                                                const newPreferences = { ...cardViewPreferences, [id]: preference };
+                                                setCardViewPreferences(newPreferences);
+                                                setStateMapInLocalStorage(newPreferences);
+                                            }}
                                         />
                                     }
                                 />
-                                <Route
-                                    path="/map"
-                                    element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
-                                />
+                                <Route path="/map" element={<MapPage locations={fullLocationData} />} />
                                 <Route path="*" element={<NotFoundPage />} />
                             </Routes>
                         </div>

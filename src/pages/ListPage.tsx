@@ -2,7 +2,11 @@ import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
 import './ListPage.css';
-import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
+import {
+    IReadOnlyLocation_Combined,
+    IReadOnlyLocation_ExtraData_Map,
+    IReadOnlyLocation_FromAPI_PostProcessed,
+} from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -14,7 +18,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
-import { CardStateMap } from '../components/EateryCard';
+import { CardViewPreference } from '../util/storage';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -47,15 +51,11 @@ function getPittsburghTime() {
 }
 
 function ListPage({
-    extraLocationData,
     locations,
-    stateMap,
-    updateStateMap,
+    setNewViewPreference,
 }: {
-    extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    stateMap: CardStateMap;
-    updateStateMap: (newStateMap: CardStateMap) => void;
+    locations: IReadOnlyLocation_Combined[] | undefined;
+    setNewViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -169,17 +169,13 @@ function ListPage({
 
                 <EateryCardGrid
                     key={`${searchQuery}-${locationFilterQuery}`}
-                    {...{
-                        locations: filteredLocations,
-                        shouldAnimateCards: shouldAnimateCards.current,
-                        apiError: locations !== undefined && locations.length === 0,
-                        extraLocationData,
-                        setSearchQuery,
-                        stateMap,
-                        updateStateMap: (newStateMap: CardStateMap) => {
-                            shouldAnimateCards.current = false;
-                            updateStateMap(newStateMap);
-                        },
+                    locations={filteredLocations}
+                    shouldAnimateCards={shouldAnimateCards.current}
+                    apiError={locations !== undefined && locations.length === 0}
+                    setSearchQuery={setSearchQuery}
+                    updateCardViewPreferene={(id, preference) => {
+                        shouldAnimateCards.current = false;
+                        setNewViewPreference(id, preference);
                     }}
                 />
             </div>

@@ -1,28 +1,35 @@
-import { CardStateMap, CardStatus } from '../components/EateryCard';
+import z from 'zod';
 
-function upgradeToCardStateMapFromOldFormat(old: string): CardStateMap {
-    const arr = JSON.parse(old);
-    return Object.fromEntries((arr as string[]).map((id) => [id, CardStatus.PINNED]));
-}
-
-export function getStateMap(): CardStateMap {
-    const old = localStorage.getItem('pinnedEateries');
-    if (old !== null) {
-        localStorage.removeItem('pinnedEateries');
-        const ret = upgradeToCardStateMapFromOldFormat(old);
-        return ret;
-    }
-
+const stringToJSONSchema = z.string().transform((str, ctx): z.infer<ReturnType<any>> => {
     try {
-        const arr: CardStateMap = JSON.parse(localStorage.getItem('eateryStates') ?? '{}');
-        // return new Map(arr.map(obj => [obj.key, obj.value]));
-        // console.log(new Map(arr))
-        return arr;
-    } catch {
+        return JSON.parse(str);
+    } catch (e) {
         return {};
     }
+});
+
+const OldCardViewPreferences = stringToJSONSchema.pipe(z.array(z.string()).catch([]));
+const CardViewPreferences = stringToJSONSchema.pipe(
+    z.record(z.string(), z.enum(['pinned', 'normal', 'hidden'])).catch({}),
+);
+export type OldCardViewPreferences = z.infer<typeof OldCardViewPreferences>;
+export type CardViewPreferences = z.infer<typeof CardViewPreferences>;
+export type CardViewPreference = CardViewPreferences[string];
+function upgradeToCardStateMapFromOldFormat(oldPreferences: OldCardViewPreferences): CardViewPreferences {
+    return Object.fromEntries(oldPreferences.map((id) => [id, 'pinned']));
 }
 
-export function setLocationStateMap(obj: CardStateMap) {
+export function getStateMap() {
+    const oldPreferences = localStorage.getItem('pinnedEateries');
+    console.log('called');
+
+    if (oldPreferences !== null) {
+        localStorage.removeItem('pinnedEateries');
+        return upgradeToCardStateMapFromOldFormat(OldCardViewPreferences.parse(oldPreferences));
+    }
+    return CardViewPreferences.parse(localStorage.getItem('eateryStates') ?? '{}');
+}
+
+export function setStateMapInLocalStorage(obj: CardViewPreferences) {
     localStorage.setItem('eateryStates', JSON.stringify(obj));
 }
