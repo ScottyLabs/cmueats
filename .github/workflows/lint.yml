@@ -1,18 +1,20 @@
 name: Lint
-on:   
-  push:
-  pull_request:
-    types: [opened, reopened, synchronize]
+permissions:
+    contents: read
+on:
+    push:
+    pull_request:
+        types: [opened, reopened, synchronize]
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2 # Setup bun
-        with:
-            bun-version: latest 
-      - run: bun install
-      - name: Check TypeScript
-        run: bunx tsc
-      - name: Run ESLint
-        run: bun lint
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pnpm/action-setup@v2 # Setup pnpm
+              with:
+                  version: latest
+            - run: pnpm install
+            - name: Check TypeScript
+              run: pnpm tsc
+            - name: Run ESLint
+              run: pnpm lint

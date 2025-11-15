@@ -1,4 +1,4 @@
-import { test, expect, describe } from 'bun:test';
+import { test, expect, describe } from 'vitest';
 import { getLocationStatus, getStatusMessage } from '../../src/util/queryLocations';
 import { ITimeSlot, LocationState } from '../../src/types/locationTypes';
 import makeDateTime from './helper';

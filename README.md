@@ -11,11 +11,11 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 2. Create an account on [Github](https://github.com). Later, you should also apply to get access to the [Github Student Developer Pack](https://education.github.com/pack).
 
-3. To start developing, you'll need to download [Bun.js](https://bun.sh/docs/installation), [Git](https://git-scm.com/download/win), and an IDE (I recommend [VSCode](https://code.visualstudio.com)). You should also download [Github Desktop](https://desktop.github.com) to make development easier at the beginning. I recommend checking out [Learn Git Branching](https://learngitbranching.js.org) later.
+3. To start developing, you'll need to download [pnpm](https://pnpm.io/installation), [Git](https://git-scm.com/download/win), and an IDE (I recommend [VSCode](https://code.visualstudio.com)). You should also download [Github Desktop](https://desktop.github.com) to make development easier at the beginning. I recommend checking out [Learn Git Branching](https://learngitbranching.js.org) later.
 
 4. If you followed my IDE recommendation, also download the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 
-5. Any of the following steps where you type something (i.e. git clone…, bun install, etc.) should be done in your IDE's terminal.
+5. Any of the following steps where you type something (i.e. git clone…, pnpm install, etc.) should be done in your IDE's terminal.
 
 6. Then, clone this repository to your computer by running `git clone https://github.com/ScottyLabs/cmueats.git` after making sure you have [git](https://git-scm.com/downloads) downloaded or running `gh repo clone ScottyLabs/cmueats` if you have the [Github CLI](https://cli.github.com/).
 
@@ -27,9 +27,9 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 10. If you already have the node_modules folder or package-lock.json from previous versions of the Dining API, please remove them before continuing.
 
-11. Now install the CMUEats dependencies by ['cd'-ing](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/#) into the root of the location where you cloned CMUEats and running `bun install`. If you don't have Bun installed, you can install it using the instructions [here](https://bun.sh/).
+11. Now install the CMUEats dependencies by ['cd'-ing](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/#) into the root of the location where you cloned CMUEats and running `pnpm install`. If you don't have pnpm installed, you can install it using the instructions [here](https://pnpm.io/installation).
 
-12. Now run the code with `bun start` and it should work! Just click on the link that appears and you''ll see the web app. You can also use `bun run start` since `bun start` is its shorthand version
+12. Now run the code with `pnpm start` and it should work! Just click on the link that appears and you''ll see the web app. You can also use `pnpm run start` since `pnpm start` is its shorthand version
 
 13. Now follow the installation steps for the dining API as well (steps 9 to 12).
 
@@ -45,9 +45,9 @@ Note that GitHub will automatically run checks (workflows) on your PR. This incl
 
 ![Example checks](/public/checks_example.png)
 
-17. To run unit tests locally, type `bun run test`.
+17. To run unit tests locally, type `pnpm run test`.
 
-Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
+Note: To add new dependencies, use `pnpm add dependency-name`. To remove dependencies, use `pnpm remove dependency-name`. Run `pnpm outdated` to see what dependencies are outdated and `pnpm update` to update all outdated dependencies to the latest version.
 
 ## Mocking out the backend
 
@@ -75,15 +75,15 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 
     ```
     cd ../dining-api
-    bun install
-    bun run dev
+    pnpm install
+    pnpm run dev
     ```
 
     This runs the dining-api server on port 5010.
 
 2. Start the frontend:
     ```
-    bun run dev
+    pnpm run dev
     ```
     This runs the Vite dev server on port 5173.
 
@@ -93,5 +93,5 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 
 - Deploy dining-api to Railway with the start command:
     ```
-    bun run start
+    pnpm run start
     ```
