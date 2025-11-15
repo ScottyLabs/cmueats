@@ -52,4 +52,5 @@
     padding-inline: 10px;
     background: var(--card-header-bg);
     text-wrap-mode: nowrap;
+    padding-left: 14px;
 }
