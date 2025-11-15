@@ -19,8 +19,13 @@
     margin-right: 8px;
 }
 
+.time-container {
+    display: flex;
+    align-items: baseline;
+}
+
 .card-header-relative-time-text {
-    font-size: 15px;
+    font-size: 14px;
     margin-right: 4px;
 }
 

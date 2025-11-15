@@ -31,8 +31,10 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
                 ref={dotRef}
             />
 
-            <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
-            <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
+            <div className={css['time-container']}>
+                <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
+                <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
+            </div>
         </div>
     );
 }

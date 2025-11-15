@@ -1,5 +1,6 @@
 .drawer-box {
-    flex: 1;
+    --drawer-width: 40%;
+    width: var(--drawer-width);
     background: var(--main-bg);
     height: 100%;
     box-shadow: -32px 0 80px rgba(0, 0, 0, 0.45);
@@ -8,6 +9,7 @@
 
     @media screen and (max-width: 900px) {
         & {
+            --drawer-width: 100%;
             position: absolute;
             overflow-y: auto;
             height: 100%;
@@ -37,7 +39,7 @@
 .drawer-exit {
     /* make it absolute so that grid recovery immediately */
     position: absolute;
-    width: 50%;
+    width: var(--drawer-width);
     right: 0;
     opacity: 1;
     transform: translateX(0);
@@ -56,7 +58,7 @@
 .drawer-exit-active {
     /* as stated in .drawer-exit */
     position: absolute;
-    width: 50%;
+    width: var(--drawer-width);
     right: 0;
     opacity: 0;
     transform: translateX(30px);

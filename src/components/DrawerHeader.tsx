@@ -10,19 +10,6 @@ function DrawerHeader() {
     if (!location) return null;
     const { name, statusMsg, location: physicalLocation, url } = location;
 
-    let relativeTime = 'Status unavailable';
-    let absoluteTime = '';
-    if (statusMsg) {
-        const start = statusMsg.indexOf('(');
-        const end = statusMsg.lastIndexOf(')');
-        if (start >= 0 && end >= 0 && end > start) {
-            relativeTime = statusMsg.slice(0, start).trim();
-            absoluteTime = statusMsg.slice(start + 1, end).trim();
-        } else {
-            relativeTime = statusMsg;
-        }
-    }
-
     return (
         <div className={css['drawer-header-container']}>
             <div className={css.header}>
@@ -47,14 +34,8 @@ function DrawerHeader() {
                     className={css['status-text']}
                     style={{ '--status-color': highlightColors[location?.locationState ?? 0] }}
                 >
-                    {relativeTime}
+                    {statusMsg}
                 </span>
-                {absoluteTime && (
-                    <span className={css['status-absolute-time']}>
-                        <Clock size={16} />
-                        {absoluteTime}
-                    </span>
-                )}
             </div>
 
             <div>
