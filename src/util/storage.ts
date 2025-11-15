@@ -35,12 +35,10 @@ export function getPreferences() {
     const oldPreferences = localStorage.getItem('pinnedEateries');
 
     if (oldPreferences !== null) {
+        const newPreferences = upgradeToCardStateMapFromOldFormat(OldCardViewPreferences.parse(oldPreferences));
         localStorage.removeItem('pinnedEateries');
-        localStorage.setItem(
-            'eateryStates',
-            JSON.stringify(upgradeToCardStateMapFromOldFormat(OldCardViewPreferences.parse(oldPreferences))),
-        );
-        return getPreferences();
+        localStorage.setItem('eateryStates', JSON.stringify(newPreferences));
+        return newPreferences;
     }
     return CardViewPreferences.parse(localStorage.getItem('eateryStates') ?? '{}');
 }

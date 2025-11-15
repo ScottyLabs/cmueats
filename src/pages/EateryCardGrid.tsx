@@ -117,9 +117,7 @@ export default function EateryCardGrid({
                     </button>
                     {showHiddenSection && (
                         <Grid container spacing={2}>
-                            {sortedLocations
-                                .filter((location) => location.cardViewPreference === 'hidden')
-                                .map(locationToCard)}
+                            {hiddenLocations.map(locationToCard)}
                         </Grid>
                     )}
                 </div>
