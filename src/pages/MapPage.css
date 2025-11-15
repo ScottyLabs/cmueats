@@ -6,10 +6,12 @@
 }
 
 .MapDrawer {
-    padding: 14px;
     background: var(--map-drawer-bg);
     overflow: hidden;
     box-sizing: content-box;
+    & > div {
+        padding: 14px;
+    }
 }
 
 @media (prefers-reduced-motion: no-preference) {

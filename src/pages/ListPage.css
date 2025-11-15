@@ -1,17 +1,21 @@
 .ListPage {
     display: flex;
     flex-direction: column;
-    min-height: 100%; /* So the contact info footer actually stays at the bottom */
+    min-height: 100%;
+    /* So the contact info footer actually stays at the bottom */
 }
+
 .ListPage__container {
     padding: 72px 48px 0;
     flex-grow: 1;
+
     @media screen and (max-width: 900px) {
         & {
             padding: 50px 15px;
         }
     }
 }
+
 .badge-accent {
     color: #105c03;
     background: #19b875;
@@ -25,6 +29,7 @@
     padding-bottom: 48px;
     position: relative;
 }
+
 .Locations-header__miku-toggle {
     position: absolute;
     top: -290px;
@@ -40,53 +45,66 @@
     transition: 0.3s all;
     transform-origin: top;
     animation: 3s sway infinite cubic-bezier(0.364212, 0, 0.635788, 1);
+
     &:hover {
         top: -280px;
+
         &:active {
             top: -272px;
         }
     }
+
     & img {
         height: 410px;
     }
 }
+
 @media screen and (max-width: 900px) {
     .Locations-header__miku-toggle {
         right: -20px;
         left: auto;
     }
 }
+
 @keyframes sway {
     0%,
     100% {
         transform: rotate(1deg);
     }
+
     50% {
         transform: rotate(-1deg);
     }
 }
+
 .Locations-header__greeting-container {
     container-type: inline-size;
+
     & .Locations-header__greeting--desktop {
         display: none;
     }
+
     padding-left: 2px;
+
     /* 600px is the approximate width of the location dropdown selector (we are also assuming that the desktop greeting is less than 600px wide) */
     @container (min-width: 600px) {
         & .Locations-header__greeting--desktop {
             display: block;
         }
+
         & .Locations-header__greeting--mobile {
             display: none;
         }
     }
 }
+
 /* we need this to properly animate the mask gradient */
 @property --right-cutoff {
     syntax: '<percentage>';
     inherits: false;
     initial-value: 0%;
 }
+
 .Locations-header__greeting {
     color: var(--text-greeting);
     margin: 0;
@@ -108,10 +126,12 @@
         rgba(0, 0, 0, 1) var(--right-cutoff),
         rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
     );
+
     &.Locations-header__greeting--mobile {
         font-size: 2rem;
     }
 }
+
 @keyframes slide-in {
     0% {
         opacity: 0;
@@ -119,15 +139,18 @@
         transform: translate(-10px, 0);
         --right-cutoff: 0%;
     }
+
     20% {
         opacity: 1;
     }
+
     100% {
         opacity: 1;
         transform: translate(0, 0);
         --right-cutoff: 100%;
     }
 }
+
 @media screen and (min-width: 900px) {
     .Locations-header {
         grid-template-columns: 1fr 300px;
@@ -135,108 +158,6 @@
     }
 }
 
-.card {
-    --card-glow-animation: glow-animation 1.5s ease 0s infinite;
-
-    box-sizing: border-box;
-    height: 100%;
-
-    background-color: var(--card-bg);
-    border: var(--card-border-width) solid var(--card-border-color);
-    border-radius: 7px;
-
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    &:hover {
-        animation: var(--card-glow-animation);
-    }
-
-    position: relative;
-}
-.card__header {
-    background: var(--card-header-bg);
-}
-/* additional .card__header needed to override MUI styles. We can discard when we finish migration */
-.card__header .card__header__text {
-    line-height: 1.6;
-    text-underline-offset: 20px;
-}
-
-.card .card__content {
-    padding: 24px 16px 32px;
-    @media screen and (max-width: 900px) {
-        padding: 24px 16px;
-    }
-}
-.card__actions {
-    /* makes sure footer is actually on the bottom (we're in a flexbox column layout) */
-    margin-top: auto;
-    padding: 0 16px 16px 16px;
-    margin-left: -2px; /* the illusion of alignment */
-
-    display: flex;
-    gap: 12px;
-}
-/* the overlay card. modifiers (in this case --dialog) actually cascade to relevant children */
-.card--dialog {
-    background: var(--dialog-bg);
-    .card__header {
-        background: var(--dialog-header-bg);
-    }
-}
-
-.card--animated {
-    opacity: 0;
-    --card-show-delay: 0s;
-    --card-fade-in-animation: fade-in 0.7s forwards var(--card-show-delay) cubic-bezier(0.08, 0.67, 0.64, 1.01);
-    animation: var(--card-fade-in-animation);
-
-    &:hover {
-        animation: var(--card-fade-in-animation), var(--card-glow-animation);
-    }
-}
-
-@keyframes fade-in {
-    0% {
-        opacity: 0;
-        transform: translate(-10px, 0);
-        filter: blur(3px);
-    }
-    55% {
-        filter: blur(0);
-    }
-
-    100% {
-        transform: translate(0, 0);
-        opacity: 1;
-        filter: blur(0);
-    }
-}
-@keyframes glow-animation {
-    0% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
-    50% {
-        box-shadow: 0 0 20px var(--hover-accent-color);
-    }
-    100% {
-        box-shadow: 0 0 5px var(--hover-accent-color);
-    }
-}
-@keyframes oscillate-opacity {
-    0% {
-        opacity: 1;
-    }
-    30% {
-        opacity: 0.6;
-    }
-    90% {
-        opacity: 1;
-    }
-}
 .locations__error-text {
     color: var(--text-primary);
     font-family: var(--text-primary-font);

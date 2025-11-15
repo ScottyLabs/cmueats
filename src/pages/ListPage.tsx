@@ -2,7 +2,7 @@ import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
 import './ListPage.css';
-import { IReadOnlyLocation_ExtraData_Map, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -14,6 +14,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
+import { CardViewPreference } from '../util/storage';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -46,15 +47,11 @@ function getPittsburghTime() {
 }
 
 function ListPage({
-    extraLocationData,
     locations,
-    pinnedIds,
-    updatePinnedIds,
+    updateCardViewPreference,
 }: {
-    extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    pinnedIds: Record<string, true>;
-    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    locations: IReadOnlyLocation_Combined[] | undefined;
+    updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -168,17 +165,13 @@ function ListPage({
 
                 <EateryCardGrid
                     key={`${searchQuery}-${locationFilterQuery}`}
-                    {...{
-                        locations: filteredLocations,
-                        shouldAnimateCards: shouldAnimateCards.current,
-                        apiError: locations !== undefined && locations.length === 0,
-                        extraLocationData,
-                        setSearchQuery,
-                        pinnedIds,
-                        updatePinnedIds: (newPinnedIds: Record<string, true>) => {
-                            shouldAnimateCards.current = false;
-                            updatePinnedIds(newPinnedIds);
-                        },
+                    locations={filteredLocations}
+                    shouldAnimateCards={shouldAnimateCards.current}
+                    apiError={locations !== undefined && locations.length === 0}
+                    setSearchQuery={setSearchQuery}
+                    updateCardViewPreference={(id, preference) => {
+                        shouldAnimateCards.current = false;
+                        updateCardViewPreference(id, preference);
                     }}
                 />
             </div>

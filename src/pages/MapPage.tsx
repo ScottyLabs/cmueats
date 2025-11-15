@@ -3,12 +3,12 @@ import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react'
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
-import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from '../types/locationTypes';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
 import env from '../env';
 
 function abbreviate(longName: string) {
-    const importantPart = longName.split(/(-|\(|'|&| at )/i)[0].trim();
+    const importantPart = longName.split(/(-|\(|'|&| at )/i)[0]!.trim();
     return importantPart
         .split(' ')
         .map((word) => word.charAt(0))
@@ -22,13 +22,7 @@ function abbreviate(longName: string) {
  */
 const stripVarFromString = (varString: string) => varString.match(/var\((.+)\)/)?.[1] ?? '';
 
-function MapPage({
-    locations,
-    extraLocationData,
-}: {
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
-}) {
+function MapPage({ locations }: { locations: IReadOnlyLocation_Combined[] | undefined }) {
     const [selectedLocationIndex, setSelectedLocationIndex] = useState<number>();
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const drawerRef = useRef(null);
@@ -53,16 +47,9 @@ function MapPage({
         [],
     );
     const derivedRootColors = useMemo(() => window.getComputedStyle(document.body), []);
-    const extendedLocationData =
-        locations && extraLocationData
-            ? locations.map((location) => ({
-                  ...location,
-                  ...extraLocationData[location.conceptId],
-              }))
-            : undefined;
     return (
         <div className="MapPage">
-            {extendedLocationData && (
+            {locations && (
                 <>
                     <Map
                         token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
@@ -75,7 +62,7 @@ function MapPage({
                         showsUserLocationControl
                         allowWheelToZoom
                     >
-                        {extendedLocationData.map((location, locationIndex) => {
+                        {locations.map((location, locationIndex) => {
                             if (!location.coordinates) return undefined;
                             const bgColor = derivedRootColors.getPropertyValue(
                                 stripVarFromString(mapMarkerBackgroundColors[location.locationState]),
@@ -115,10 +102,8 @@ function MapPage({
                         <div className="MapDrawer" ref={drawerRef}>
                             {selectedLocationIndex !== undefined && (
                                 <EateryCard
-                                    location={extendedLocationData[selectedLocationIndex]}
-                                    isPinned={false}
-                                    onTogglePin={() => {}}
-                                    showPinButton={false}
+                                    location={locations[selectedLocationIndex]!}
+                                    updateViewPreference={() => {}}
                                 />
                             )}
                         </div>
