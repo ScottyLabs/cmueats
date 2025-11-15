@@ -2,11 +2,7 @@ import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
 import './ListPage.css';
-import {
-    IReadOnlyLocation_Combined,
-    IReadOnlyLocation_ExtraData_Map,
-    IReadOnlyLocation_FromAPI_PostProcessed,
-} from '../types/locationTypes';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -52,10 +48,10 @@ function getPittsburghTime() {
 
 function ListPage({
     locations,
-    setNewViewPreference,
+    updateCardViewPreference,
 }: {
     locations: IReadOnlyLocation_Combined[] | undefined;
-    setNewViewPreference: (id: string, newStatus: CardViewPreference) => void;
+    updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -173,9 +169,9 @@ function ListPage({
                     shouldAnimateCards={shouldAnimateCards.current}
                     apiError={locations !== undefined && locations.length === 0}
                     setSearchQuery={setSearchQuery}
-                    updateCardViewPreferene={(id, preference) => {
+                    updateCardViewPreference={(id, preference) => {
                         shouldAnimateCards.current = false;
-                        setNewViewPreference(id, preference);
+                        updateCardViewPreference(id, preference);
                     }}
                 />
             </div>

@@ -62,7 +62,7 @@ function App() {
                                     element={
                                         <ListPage
                                             locations={fullLocationData}
-                                            setNewViewPreference={(id, preference) => {
+                                            updateCardViewPreference={(id, preference) => {
                                                 const newPreferences = { ...cardViewPreferences, [id]: preference };
                                                 setCardViewPreferences(newPreferences);
                                             }}

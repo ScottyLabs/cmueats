@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import z from 'zod';
 
-const stringToJSONSchema = z.string().transform((str): z.infer<ReturnType<any>> => {
+const stringToJSONSchema = z.string().transform((str) => {
     try {
         return JSON.parse(str);
     } catch (e) {

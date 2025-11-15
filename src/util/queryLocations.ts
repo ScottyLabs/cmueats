@@ -6,10 +6,8 @@ import {
     LocationState,
     ITimeSlot,
     IReadOnlyLocation_FromAPI_PostProcessed,
-    IReadOnlyLocation_ExtraData,
     ITimeRangeList,
     IReadOnlyLocation_FromAPI_PreProcessed,
-    IReadOnlyLocation_ExtraData_Map,
     ILocation_TimeStatusData,
 } from '../types/locationTypes';
 import {

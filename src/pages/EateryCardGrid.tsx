@@ -34,16 +34,15 @@ export default function EateryCardGrid({
     setSearchQuery,
     shouldAnimateCards,
     apiError,
-    updateCardViewPreferene: updateStatus,
+    updateCardViewPreference,
 }: {
     locations: IReadOnlyLocation_Combined[] | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
-    updateCardViewPreferene: (id: string, newStatus: CardViewPreference) => void;
+    updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
-    const [showHiddens, setShowHiddens] = useState(false);
-    // const [showPinned, setShowPinned] = useState(true);
+    const [showHiddenSection, setShowHiddenSection] = useState(false);
 
     if (locations === undefined) {
         // Display skeleton cards while loading
@@ -76,7 +75,7 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
-    const sortedLocations = locations.sort(compareLocations);
+    const sortedLocations = [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
 
     function locationToCard(location: IReadOnlyLocation_Combined, i: number) {
         return (
@@ -87,7 +86,7 @@ export default function EateryCardGrid({
                 animate={shouldAnimateCards}
                 partOfMainGrid
                 updateStatus={(newPreference: CardViewPreference) => {
-                    updateStatus(location.conceptId.toString(), newPreference);
+                    updateCardViewPreference(location.conceptId.toString(), newPreference);
                 }}
             />
         );
@@ -106,25 +105,23 @@ export default function EateryCardGrid({
 
             {hiddenLocations.length > 0 && (
                 <div className={css.section}>
-                    (
                     <button
-                        className={`${css['dropdown-button']} ${showHiddens && css['dropdown-button--up']}`}
+                        className={`${css['dropdown-button']} ${showHiddenSection && css['dropdown-button--up']}`}
                         onClick={() => {
-                            setShowHiddens(!showHiddens);
+                            setShowHiddenSection(!showHiddenSection);
                         }}
                         type="button"
                     >
                         <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
-                        <p>{showHiddens ? 'Hide' : 'Show'} hidden locations</p>
+                        <p>{showHiddenSection ? 'Hide' : 'Show'} hidden locations</p>
                     </button>
-                    {showHiddens && (
+                    {showHiddenSection && (
                         <Grid container spacing={2}>
                             {sortedLocations
                                 .filter((location) => location.cardViewPreference === 'hidden')
                                 .map(locationToCard)}
                         </Grid>
                     )}
-                    )
                 </div>
             )}
         </div>
