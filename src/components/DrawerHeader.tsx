@@ -29,7 +29,7 @@ function DrawerHeader() {
                 <h3 className={css['drawer-loction-text']}>
                     <a className={css['location-link']} href={url} target="_blank" rel="noreferrer">
                         <span>{name}</span>
-                        <ExternalLink size={18} aria-hidden />
+                        <ExternalLink size={22} strokeWidth={3} aria-hidden />
                     </a>
                 </h3>
                 <button

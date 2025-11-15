@@ -14,7 +14,7 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
         const end = statusMsg.lastIndexOf(')');
         if (start >= 0 && end >= 0 && end > start) {
             relativeTime = statusMsg.slice(0, start).trim();
-            absoluteTime = statusMsg.slice(start + 1, end).trim();
+            absoluteTime = statusMsg.slice(statusMsg.indexOf('at'), end).trim();
         } else {
             relativeTime = statusMsg;
         }

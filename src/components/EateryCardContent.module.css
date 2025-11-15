@@ -1,10 +1,10 @@
 .card-content-container {
-    padding: 1rem;
+    padding: 12px 10px;
 }
 
 .location-name-text {
     font-family: var(--text-primary-font);
-    font-size: 1.4rem;
+    font-size: 22px;
     font-weight: 500;
     margin: 0;
     padding: 0;
@@ -23,7 +23,7 @@
 }
 
 .physical-location-text {
-    font-size: 1rem;
+    font-size: 14px;
     color: var(--card-text-muted);
     display: block;
     margin-top: 0.5rem;
