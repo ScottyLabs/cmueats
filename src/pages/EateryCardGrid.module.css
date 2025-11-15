@@ -10,18 +10,19 @@
     background-color: transparent;
 
     img {
-        rotate: 0deg;
+        rotate: -90deg;
         transition: rotate 0.2s ease;
     }
 
     & p {
-        font-size: 1rem;
+        font-size: 16px;
+        margin-left: -3px;
     }
 }
 
 .dropdown-button--up {
     img {
-        rotate: 180deg;
+        rotate: 0deg;
     }
 }
 

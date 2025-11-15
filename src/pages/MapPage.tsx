@@ -118,7 +118,6 @@ function MapPage({
                                     location={extendedLocationData[selectedLocationIndex]}
                                     currentStatus={CardStatus.NORMAL}
                                     updateStatus={() => {}}
-                                    showControlButtons={false}
                                 />
                             )}
                         </div>
