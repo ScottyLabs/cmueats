@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Clock, ExternalLink, MapPin, X } from 'lucide-react';
+import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
 import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerHeader.module.css';

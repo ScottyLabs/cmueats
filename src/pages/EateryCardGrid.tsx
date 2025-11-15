@@ -125,7 +125,7 @@ export default function EateryCardGrid({
 
     return (
         <div className={css.supergrid}>
-            <div className={css['grid-tooltip']} tabIndex={0}>
+            <div className={css['grid-tooltip']}>
                 <Info size={16} aria-hidden="true" />
                 <span>Tap or click on the cards to see more information!</span>
             </div>
