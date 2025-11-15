@@ -130,14 +130,12 @@ const ExitButton = styled(Button)({
 
 function EateryCard({
     location,
-    index = 0,
     partOfMainGrid = false,
     animate = false,
     currentStatus,
     updateStatus,
 }: {
     location: IReadOnlyLocation_Combined;
-    index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
     currentStatus: CardStatus;

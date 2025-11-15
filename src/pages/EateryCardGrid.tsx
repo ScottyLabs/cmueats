@@ -106,7 +106,6 @@ export default function EateryCardGrid({
             <EateryCard
                 location={location}
                 key={location.conceptId}
-                index={i}
                 animate={shouldAnimateCards}
                 partOfMainGrid
                 currentStatus={stateMap[location.conceptId.toString()] ?? CardStatus.NORMAL}
