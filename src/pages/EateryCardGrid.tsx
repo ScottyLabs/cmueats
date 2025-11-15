@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Info } from 'lucide-react';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
@@ -125,6 +125,10 @@ export default function EateryCardGrid({
 
     return (
         <div className={css.supergrid}>
+            <div className={css['grid-tooltip']} tabIndex={0}>
+                <Info size={16} aria-hidden="true" />
+                <span>Tap or click on the cards to see more information!</span>
+            </div>
             <Grid container spacing={2}>
                 {sortedLocations
                     .filter(

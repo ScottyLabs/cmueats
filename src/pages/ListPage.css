@@ -53,7 +53,7 @@
 }
 
 .eatery-card-grid-container {
-    padding: 16px 24px;
+    padding: 0px 24px 16px;
     flex-grow: 1; /* So the contact info footer actually stays at the bottom */
     @media screen and (max-width: 900px) {
         & {
