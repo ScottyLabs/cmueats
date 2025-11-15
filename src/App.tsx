@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
@@ -42,6 +42,7 @@ function ErrorBoundaryFallback() {
     );
 }
 function App() {
+    const mainContainerRef = useRef<HTMLDivElement | null>(null);
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
@@ -82,6 +83,9 @@ function App() {
 
         return () => window.removeEventListener('online', handleOnline);
     }, []);
+    useEffect(() => {
+        mainContainerRef.current?.focus();
+    }, []);
 
     new LocationChecker(locations).assertExtraDataInSync(extraLocationData);
 
@@ -95,7 +99,7 @@ function App() {
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;
                         </div> */}
-                        <div className="MainContent">
+                        <div className="MainContent" ref={mainContainerRef}>
                             <Routes>
                                 <Route
                                     path="/"
