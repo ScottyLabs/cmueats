@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
@@ -23,6 +23,7 @@ const BACKEND_LOCATIONS_URL =
     env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
 
 function App() {
+    const mainContainerRef = useRef<HTMLDivElement | null>(null);
     // Load locations
     const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
     const [now, setNow] = useState(DateTime.now().setZone('America/New_York'));
@@ -38,6 +39,9 @@ function App() {
         const intervalId = setInterval(() => setNow(DateTime.now().setZone('America/New_York')), 1000);
         return () => clearInterval(intervalId);
     }, []);
+    useEffect(() => {
+        mainContainerRef.current?.focus();
+    }, []);
 
     const fullLocationData: IReadOnlyLocation_Combined[] | undefined = locations?.map((location) => ({
         ...location,
@@ -50,12 +54,12 @@ function App() {
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                 <BrowserRouter>
                     <div className="App">
-                        <Banner />
+                        {/* <Banner /> */}
                         {/* <div className="AdBanner">
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;
                         </div> */}
-                        <div className="MainContent">
+                        <div className="MainContent" ref={mainContainerRef}>
                             <Routes>
                                 <Route
                                     path="/"

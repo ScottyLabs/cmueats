@@ -104,7 +104,6 @@ function MapPage({ locations }: { locations: IReadOnlyLocation_Combined[] | unde
                                 <EateryCard
                                     location={locations[selectedLocationIndex]!}
                                     updateStatus={() => {}}
-                                    showControlButtons={false}
                                 />
                             )}
                         </div>

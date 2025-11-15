@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
+import { AnimatePresence } from 'motion/react';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
@@ -77,12 +78,11 @@ export default function EateryCardGrid({
 
     const sortedLocations = [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
 
-    function locationToCard(location: IReadOnlyLocation_Combined, i: number) {
+    function locationToCard(location: IReadOnlyLocation_Combined) {
         return (
             <EateryCard
                 location={location}
                 key={location.conceptId}
-                index={i}
                 animate={shouldAnimateCards}
                 partOfMainGrid
                 updateStatus={(newPreference: CardViewPreference) => {
@@ -97,10 +97,12 @@ export default function EateryCardGrid({
     return (
         <div className={css.supergrid}>
             <Grid container spacing={2}>
-                {[
-                    ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
-                    ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
-                ].map(locationToCard)}
+                <AnimatePresence>
+                    {[
+                        ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
+                        ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
+                    ].map(locationToCard)}
+                </AnimatePresence>
             </Grid>
 
             {hiddenLocations.length > 0 && (
@@ -117,7 +119,7 @@ export default function EateryCardGrid({
                     </button>
                     {showHiddenSection && (
                         <Grid container spacing={2}>
-                            {hiddenLocations.map(locationToCard)}
+                            <AnimatePresence>{hiddenLocations.map(locationToCard)}</AnimatePresence>
                         </Grid>
                     )}
                 </div>
