@@ -190,7 +190,7 @@ function EateryCard({
                     opacity: 1,
                     filter: 'blur(0)',
                 }}
-                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
             >
                 <EateryCardHeader location={location} />
                 <CardContent className="card__content">
