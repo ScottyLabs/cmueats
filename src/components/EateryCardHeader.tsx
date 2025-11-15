@@ -2,9 +2,21 @@ import { useRef } from 'react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
+import EateryCardDropdown from "./EateryCardDropdown.tsx";
+import { CardStatus } from '../types/cardTypes';
 
-function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
+
+function EateryCardHeader({ 
+    location,
+    currentStatus,
+    updateStatus,
+}: { 
+    location: IReadOnlyLocation_Combined,
+    currentStatus: CardStatus;
+    updateStatus: (newStatus: CardStatus) => void;
+ }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
+    const isMobile = window.innerWidth <= 600;
 
     const { statusMsg } = location;
     let relativeTime = 'Status unavailable';
@@ -21,10 +33,12 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
     }
 
     return (
-        <div>
+        <div
+            className = {css['card-header-bar']}
+            style={{ '--status-color': highlightColors[location.locationState] }}
+        >
             <div
                 className={css['card-header-container']}
-                style={{ '--status-color': highlightColors[location.locationState] }}
             >
                 <div
                     className={css['card-header-dot']}
@@ -33,6 +47,13 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
                 />
                 <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
                 <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
+            </div>
+            <div>
+                {
+                    isMobile ? 
+                    <EateryCardDropdown currentStatus={currentStatus} updateStatus={updateStatus} /> 
+                    : <></>
+                }
             </div>
         </div>
     );
