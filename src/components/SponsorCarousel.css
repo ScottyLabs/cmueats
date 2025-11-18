@@ -48,6 +48,11 @@
     opacity: 30%;
 }
 
+.sponsors--dark .carousel__image:hover {
+    filter: brightness(0) invert(1);
+    opacity: 70%;
+}
+
 .sponsors--light .carousel__image {
     filter: brightness(0) invert(0);
     opacity: 50%;
@@ -97,7 +102,7 @@
 }
 
 .sponsors--dark .footer__sponsors-text {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .sponsors--light .footer__sponsors-text {
