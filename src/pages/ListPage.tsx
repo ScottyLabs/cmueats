@@ -172,10 +172,10 @@ function ListPage({
     return (
         <div className="ListPage">
             {/*  showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description]
-        Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
+        <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
+            🚧 [Issue Description]
+            Please remain patient while we work on a fix. Thank you. 🚧
+        </StyledAlert>  */}
             {showOfflineAlert && (
                 <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
                     🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
