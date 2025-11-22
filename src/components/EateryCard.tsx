@@ -64,11 +64,7 @@ function EateryCard({
     return (
         <Grid item xs={12} md={isDrawerActive ? 12 : 4} lg={3 * isDouble} xl={2 * isDouble}>
             <div className={cardClassName} style={{ '--card-show-delay': `${index * 50}ms` }} ref={cardRef}>
-                <EateryCardHeader 
-                    location={location} 
-                    currentStatus={currentStatus}
-                    updateStatus={updateStatus}
-                />
+                <EateryCardHeader location={location} />
                 <EateryCardContent
                     location={location}
                     currentStatus={currentStatus}
