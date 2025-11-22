@@ -1,33 +1,51 @@
 import { Grid } from '@mui/material';
+import { useState } from 'react';
+import { AnimatePresence } from 'motion/react';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
-import {
-    IReadOnlyLocation_FromAPI_PostProcessed,
-    IReadOnlyLocation_ExtraData_Map,
-    LocationState,
-    IReadOnlyLocation_Combined,
-} from '../types/locationTypes';
+import { LocationState, IReadOnlyLocation_Combined } from '../types/locationTypes';
 import assert from '../util/assert';
+
+import css from './EateryCardGrid.module.css';
+
+import dropdown_arrow from '../assets/control_button/dropdown_arrow.svg';
+import { CardViewPreference } from '../util/storage';
+
+const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
+    const state1 = location1.locationState;
+    const state2 = location2.locationState;
+
+    if (state1 !== state2) return state1 - state2;
+
+    // this if statement is janky but otherwise TS won't
+    // realize that the timeUntil property exists on both l1 and l2
+    if (location1.closedLongTerm || location2.closedLongTerm) {
+        assert(location1.closedLongTerm && location2.closedLongTerm);
+        return location1.name.localeCompare(location2.name);
+    }
+    if (state1 === LocationState.OPEN || state1 === LocationState.CLOSES_SOON) {
+        return location2.timeUntil - location1.timeUntil;
+    }
+    return location1.timeUntil - location2.timeUntil;
+};
 
 export default function EateryCardGrid({
     locations,
-    extraLocationData,
     setSearchQuery,
     shouldAnimateCards,
     apiError,
-    pinnedIds,
-    updatePinnedIds,
+    updateCardViewPreference,
 }: {
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
+    locations: IReadOnlyLocation_Combined[] | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
-    pinnedIds: Record<string, true>;
-    updatePinnedIds: (newPinnedIds: Record<string, true>) => void;
+    updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
-    if (locations === undefined || extraLocationData === undefined) {
+    const [showHiddenSection, setShowHiddenSection] = useState(false);
+
+    if (locations === undefined) {
         // Display skeleton cards while loading
         return (
             <Grid container spacing={2}>
@@ -58,66 +76,56 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
-    const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
-        const state1 = location1.locationState;
-        const state2 = location2.locationState;
+    const sortedLocations = [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
 
-        if (state1 !== state2) return state1 - state2;
+    function locationToCard(location: IReadOnlyLocation_Combined) {
+        return (
+            <EateryCard
+                location={location}
+                key={location.conceptId}
+                animate={shouldAnimateCards}
+                partOfMainGrid
+                updateViewPreference={(newPreference: CardViewPreference) => {
+                    updateCardViewPreference(location.conceptId.toString(), newPreference);
+                }}
+            />
+        );
+    }
 
-        // this if statement is janky but otherwise TS won't
-        // realize that the timeUntil property exists on both l1 and l2
-        if (location1.closedLongTerm || location2.closedLongTerm) {
-            assert(location1.closedLongTerm && location2.closedLongTerm);
-            return location1.name.localeCompare(location2.name);
-        }
-        if (state1 === LocationState.OPEN || state1 === LocationState.CLOSES_SOON) {
-            return location2.timeUntil - location1.timeUntil;
-        }
-        return location1.timeUntil - location2.timeUntil;
-    };
+    const hiddenLocations = sortedLocations.filter((location) => location.cardViewPreference === 'hidden');
 
     return (
-        <Grid container spacing={2}>
-            {locations
-                .map((location) => ({
-                    ...location,
-                    ...extraLocationData[location.conceptId], // add on our extra data here
-                }))
-                .sort((location1, location2) => {
-                    const id1 = location1.conceptId.toString();
-                    const id2 = location2.conceptId.toString();
+        <div className={css.supergrid}>
+            <Grid container spacing={2}>
+                <AnimatePresence>
+                    {[
+                        ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
+                        ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
+                    ].map(locationToCard)}
+                </AnimatePresence>
+            </Grid>
 
-                    const isPinned1 = id1 in pinnedIds;
-                    const isPinned2 = id2 in pinnedIds;
-
-                    if (isPinned1 && isPinned2) {
-                        return compareLocations(location1, location2);
-                    }
-                    if (isPinned1) return -1;
-                    if (isPinned2) return 1;
-
-                    return compareLocations(location1, location2);
-                })
-                .map((location, i) => (
-                    <EateryCard
-                        location={location}
-                        key={location.conceptId}
-                        index={i}
-                        animate={shouldAnimateCards}
-                        partOfMainGrid
-                        isPinned={location.conceptId.toString() in pinnedIds}
-                        onTogglePin={() => {
-                            const id = location.conceptId.toString();
-                            const newPinnedIds = { ...pinnedIds };
-                            if (newPinnedIds[id]) {
-                                delete newPinnedIds[id];
-                            } else {
-                                newPinnedIds[id] = true;
-                            }
-                            updatePinnedIds(newPinnedIds);
+            {hiddenLocations.length > 0 && (
+                <div className={css.section}>
+                    <button
+                        className={`${css['dropdown-button']} ${showHiddenSection && css['dropdown-button--up']}`}
+                        onClick={() => {
+                            setShowHiddenSection(!showHiddenSection);
                         }}
-                    />
-                ))}
-        </Grid>
+                        type="button"
+                    >
+                        <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
+                        <p>
+                            {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
+                        </p>
+                    </button>
+                    {showHiddenSection && (
+                        <Grid container spacing={2}>
+                            <AnimatePresence>{hiddenLocations.map(locationToCard)}</AnimatePresence>
+                        </Grid>
+                    )}
+                </div>
+            )}
+        </div>
     );
 }

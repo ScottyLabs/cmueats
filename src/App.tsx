@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
@@ -8,21 +8,83 @@ import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
-import {
-    queryLocations,
-    getExtendedLocationData as getExtraLocationData,
-    LocationChecker,
-} from './util/queryLocations';
+import { queryLocations, getLocationStatus } from './util/queryLocations';
 import './App.css';
-import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_ExtraData_Map } from './types/locationTypes';
-import { getPinnedIds, setPinnedIds } from './util/storage';
+import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_Combined } from './types/locationTypes';
+import { useUserCardViewPreferences } from './util/storage';
 import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
+import useRefreshWhenBackOnline from './util/network';
 
-const BACKEND_LOCATIONS_URL = `${env.VITE_API_URL}/locations`;
+const BACKEND_LOCATIONS_URL =
+    env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
+
+function App() {
+    const mainContainerRef = useRef<HTMLDivElement | null>(null);
+    // Load locations
+    const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
+    const [now, setNow] = useState(DateTime.now().setZone('America/New_York'));
+    const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
+
+    useRefreshWhenBackOnline();
+
+    useEffect(() => {
+        queryLocations(BACKEND_LOCATIONS_URL).then(setLocations);
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => setNow(DateTime.now().setZone('America/New_York')), 1000);
+        return () => clearInterval(intervalId);
+    }, []);
+    useEffect(() => {
+        mainContainerRef.current?.focus();
+    }, []);
+
+    const fullLocationData: IReadOnlyLocation_Combined[] | undefined = locations?.map((location) => ({
+        ...location,
+        ...getLocationStatus(location.times, now),
+        cardViewPreference: cardViewPreferences[location.conceptId] ?? 'normal',
+    }));
+
+    return (
+        <React.StrictMode>
+            <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
+                <BrowserRouter>
+                    <div className="App">
+                        {/* <Banner /> */}
+                        {/* <div className="AdBanner">
+                            CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
+                            &gt;_&lt;
+                        </div> */}
+                        <div className="MainContent" ref={mainContainerRef}>
+                            <Routes>
+                                <Route
+                                    path="/"
+                                    element={
+                                        <ListPage
+                                            locations={fullLocationData}
+                                            updateCardViewPreference={(id, preference) => {
+                                                const newPreferences = { ...cardViewPreferences, [id]: preference };
+                                                setCardViewPreferences(newPreferences);
+                                            }}
+                                        />
+                                    }
+                                />
+                                <Route path="/map" element={<MapPage locations={fullLocationData} />} />
+                                <Route path="*" element={<NotFoundPage />} />
+                            </Routes>
+                        </div>
+                        <Navbar />
+                    </div>
+                </BrowserRouter>
+            </ErrorBoundary>
+        </React.StrictMode>
+    );
+}
+
 function ErrorBoundaryFallback() {
     return (
         <div className="outer-error-container">
@@ -39,85 +101,9 @@ function ErrorBoundaryFallback() {
         </div>
     );
 }
-function App() {
-    // Load locations
-    const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
-    const [extraLocationData, setExtraLocationData] = useState<IReadOnlyLocation_ExtraData_Map>();
-    useEffect(() => {
-        queryLocations(BACKEND_LOCATIONS_URL).then((parsedLocations) => {
-            setLocations(parsedLocations);
-            setExtraLocationData(getExtraLocationData(parsedLocations, DateTime.now().setZone('America/New_York')));
-            // set extended data in same render to keep the two things in sync
-        });
-    }, []);
 
-    const [pinnedIds, setPinnedIdsState] = useState<Record<string, true>>(getPinnedIds());
-
-    const updatePinnedIds = (newObj: Record<string, true>) => {
-        setPinnedIds(newObj);
-        setPinnedIdsState(newObj);
-    };
-
-    // periodically update extra location data
-    useEffect(() => {
-        const intervalId = setInterval(
-            () => setExtraLocationData(getExtraLocationData(locations, DateTime.now().setZone('America/New_York'))),
-            1000,
-        );
-        return () => clearInterval(intervalId);
-    }, [locations]);
-
-    // Auto-refresh the page when the user goes online after previously being offline
-    useEffect(() => {
-        function handleOnline() {
-            if (navigator.onLine) {
-                // Refresh the page
-                window.location.reload();
-            }
-        }
-
-        window.addEventListener('online', handleOnline);
-
-        return () => window.removeEventListener('online', handleOnline);
-    }, []);
-
-    new LocationChecker(locations).assertExtraDataInSync(extraLocationData);
-
-    return (
-        <React.StrictMode>
-            <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
-                <BrowserRouter>
-                    <div className="App">
-                        <Banner />
-                        {/* <div className="AdBanner">CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
-                            &gt;_&lt;</div> */}
-                        <div className="MainContent">
-                            <Routes>
-                                <Route
-                                    path="/"
-                                    element={
-                                        <ListPage
-                                            extraLocationData={extraLocationData}
-                                            locations={locations}
-                                            pinnedIds={pinnedIds}
-                                            updatePinnedIds={updatePinnedIds}
-                                        />
-                                    }
-                                />
-                                <Route
-                                    path="/map"
-                                    element={<MapPage locations={locations} extraLocationData={extraLocationData} />}
-                                />
-                                <Route path="*" element={<NotFoundPage />} />
-                            </Routes>
-                        </div>
-                        <Navbar />
-                    </div>
-                </BrowserRouter>
-            </ErrorBoundary>
-        </React.StrictMode>
-    );
-}
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @ts-ignore
 function Banner() {
     const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
     const closeBanner = () => {
@@ -136,23 +122,25 @@ function Banner() {
                     <span className="welcome-banner__text--long">
                         <img src={scottyDog} alt="" />
                         <span>
-                            Interested in Tech/Design or want to help build the future of CMUEats? Join{' '}
                             <a
-                                href="https://tartanconnect.cmu.edu/scottylabs/club_signup"
+                                href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                ScottyLabs
-                            </a>
-                            !
+                                Register
+                            </a>{' '}
+                            for Nova, ScottyLabs&apos; GenAI Hackathon by Nov. 1st!
                         </span>
                     </span>
                     <span className="welcome-banner__text--short">
-                        Interested in Tech/Design? Join{' '}
-                        <a href="https://tartanconnect.cmu.edu/scottylabs/club_signup" target="_blank" rel="noreferrer">
-                            ScottyLabs
-                        </a>
-                        !{' '}
+                        <a
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Register
+                        </a>{' '}
+                        for Nova by Nov. 1st!
                     </span>
                 </div>
                 <div className="welcome-banner__close welcome-banner-padding welcome-banner-padding--button">

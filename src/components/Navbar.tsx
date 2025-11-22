@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import * as motion from 'motion/react-client';
+import clsx from 'clsx';
 import css from './Navbar.module.css';
 
 const tabs = [
@@ -88,8 +89,8 @@ function Navbar() {
                             target={external ? '_blank' : ''}
                             rel="noopener noreferrer"
                             key={link}
-                            className={css['navbar-link']}
-                            style={{ zIndex: isActive ? 0 : 1 }}
+                            className={clsx(css['navbar-link'], isActive && css['navbar-link--active'])}
+                            // style={{ zIndex: isActive ? 0 : 1 }}
                             // so the bg active indicator slides underneath the old link
                         >
                             {icon}
