@@ -51,8 +51,8 @@ function App() {
     }));
 
     return (
-        <React.StrictMode>
-            <GoogleOAuthProvider clientId={env.GOOGLE_OAUTH_CLIENT_ID}>
+        <GoogleOAuthProvider clientId={env.VITE_GOOGLE_OAUTH_CLIENT_ID}>
+            <React.StrictMode>
                 <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                     <BrowserRouter>
                         <div className="App">
@@ -83,8 +83,8 @@ function App() {
                         </div>
                     </BrowserRouter>
                 </ErrorBoundary>
-            </GoogleOAuthProvider>
-        </React.StrictMode>
+            </React.StrictMode>
+        </GoogleOAuthProvider>
     );
 }
 
