@@ -143,12 +143,9 @@
 }
 
 .card__pin-button {
-    border-radius: 10px;
-
     background: transparent;
     box-shadow: none;
     border: none;
-    outline: none;
     cursor: pointer;
     img {
         height: 19px;
@@ -156,6 +153,8 @@
         padding: 5px 2px;
         opacity: 0.6;
         transition: 0.05s opacity;
+        -webkit-user-drag: none;
+        user-drag: none;
     }
     &:hover {
         img {
