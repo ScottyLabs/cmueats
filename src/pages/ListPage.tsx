@@ -15,6 +15,7 @@ import EateryCardGrid from './EateryCardGrid';
 import useFilteredLocations from './useFilteredLocations';
 import env from '../env';
 import { CardViewPreference } from '../util/storage';
+import { GoogleLogin } from '@react-oauth/google';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -124,18 +125,24 @@ function ListPage({
 
     return (
         <div className="ListPage">
-            {/*  showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description]
-        Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
+            <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                    console.log(credentialResponse);
+                }}
+                onError={() => {
+                    console.log('Login Failed');
+                }}
+            />
+            {/* showAlert &&
+            <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
+                🚧 [Issue Description] Please remain patient while we work on a fix. Thank you. 🚧
+            </StyledAlert> */}
             {showOfflineAlert && (
                 <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
                     🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
                     you are offline. We apologize for any inconvenience. 🌐🚫
                 </StyledAlert>
             )}
-
             <div className="ListPage__container">
                 <header className="Locations-header">
                     <div className="Locations-header__greeting-container">
@@ -175,7 +182,6 @@ function ListPage({
                     }}
                 />
             </div>
-
             <footer className="footer">
                 {theme === 'miku' ? (
                     <FooterText>

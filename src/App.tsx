@@ -18,6 +18,7 @@ import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import bocchiError from './assets/bocchi-error.webp';
 import useRefreshWhenBackOnline from './util/network';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const BACKEND_LOCATIONS_URL =
     env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
@@ -51,36 +52,38 @@ function App() {
 
     return (
         <React.StrictMode>
-            <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
-                <BrowserRouter>
-                    <div className="App">
-                        {/* <Banner /> */}
-                        {/* <div className="AdBanner">
+            <GoogleOAuthProvider clientId={env.GOOGLE_OAUTH_CLIENT_ID}>
+                <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
+                    <BrowserRouter>
+                        <div className="App">
+                            {/* <Banner /> */}
+                            {/* <div className="AdBanner">
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;
                         </div> */}
-                        <div className="MainContent" ref={mainContainerRef}>
-                            <Routes>
-                                <Route
-                                    path="/"
-                                    element={
-                                        <ListPage
-                                            locations={fullLocationData}
-                                            updateCardViewPreference={(id, preference) => {
-                                                const newPreferences = { ...cardViewPreferences, [id]: preference };
-                                                setCardViewPreferences(newPreferences);
-                                            }}
-                                        />
-                                    }
-                                />
-                                <Route path="/map" element={<MapPage locations={fullLocationData} />} />
-                                <Route path="*" element={<NotFoundPage />} />
-                            </Routes>
+                            <div className="MainContent" ref={mainContainerRef}>
+                                <Routes>
+                                    <Route
+                                        path="/"
+                                        element={
+                                            <ListPage
+                                                locations={fullLocationData}
+                                                updateCardViewPreference={(id, preference) => {
+                                                    const newPreferences = { ...cardViewPreferences, [id]: preference };
+                                                    setCardViewPreferences(newPreferences);
+                                                }}
+                                            />
+                                        }
+                                    />
+                                    <Route path="/map" element={<MapPage locations={fullLocationData} />} />
+                                    <Route path="*" element={<NotFoundPage />} />
+                                </Routes>
+                            </div>
+                            <Navbar />
                         </div>
-                        <Navbar />
-                    </div>
-                </BrowserRouter>
-            </ErrorBoundary>
+                    </BrowserRouter>
+                </ErrorBoundary>
+            </GoogleOAuthProvider>
         </React.StrictMode>
     );
 }
