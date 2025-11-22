@@ -1,11 +1,8 @@
 import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
-import {
-    IReadOnlyLocation_ExtraData_Map,
-    IReadOnlyLocation_FromAPI_PostProcessed,
-    IReadOnlyLocation_Combined,
-} from '../types/locationTypes';
+import './ListPage.css';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -20,7 +17,7 @@ import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
-import { CardStateMap } from '../types/cardTypes';
+import { CardViewPreference } from '../util/storage';
 
 const LogoText = styled(Typography)({
     color: 'var(--logo-first-half)',
@@ -53,15 +50,11 @@ function getPittsburghTime() {
 }
 
 function ListPage({
-    extraLocationData,
     locations,
-    stateMap,
-    updateStateMap,
+    updateCardViewPreference,
 }: {
-    extraLocationData: IReadOnlyLocation_ExtraData_Map | undefined;
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
-    stateMap: CardStateMap;
-    updateStateMap: (newStateMap: CardStateMap) => void;
+    locations: IReadOnlyLocation_Combined[] | undefined;
+    updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
@@ -140,16 +133,13 @@ function ListPage({
         isDrawerActiveRef.current = isDrawerActive;
     }, [isDrawerActive]);
     // if drawer if open, update the drawer's content whenever extraLocationData gets updated
+    // TODO: might buggy
     useEffect(() => {
-        if (!isDrawerActiveRef.current || !drawerLocation || !locations || !extraLocationData) return;
+        if (!isDrawerActiveRef.current || !drawerLocation || !locations) return;
         const baseLocation = locations.find((loc) => loc.conceptId === drawerLocation.conceptId);
-        const extraData = extraLocationData[drawerLocation.conceptId];
-        if (!baseLocation || !extraData) return;
-        setDrawerLocation({
-            ...baseLocation,
-            ...extraData,
-        });
-    }, [drawerLocation?.conceptId, extraLocationData, locations]);
+        if (!baseLocation) return;
+        setDrawerLocation(baseLocation);
+    }, [drawerLocation?.conceptId, locations]);
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,
@@ -222,17 +212,13 @@ function ListPage({
                     <div className="eatery-card-grid-container">
                         <EateryCardGrid
                             key={`${searchQuery}-${locationFilterQuery}`}
-                            {...{
-                                locations: filteredLocations,
-                                shouldAnimateCards: shouldAnimateCards.current,
-                                apiError: locations !== undefined && locations.length === 0,
-                                extraLocationData,
-                                setSearchQuery,
-                                stateMap,
-                                updateStateMap: (newStateMap: CardStateMap) => {
-                                    shouldAnimateCards.current = false;
-                                    updateStateMap(newStateMap);
-                                },
+                            locations={filteredLocations}
+                            shouldAnimateCards={shouldAnimateCards.current}
+                            apiError={locations !== undefined && locations.length === 0}
+                            setSearchQuery={setSearchQuery}
+                            updateCardViewPreference={(id, preference) => {
+                                shouldAnimateCards.current = false;
+                                updateCardViewPreference(id, preference);
                             }}
                         />
                     </div>

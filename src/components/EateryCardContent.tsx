@@ -2,21 +2,19 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MapPin, MoreHorizontal, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
-import { CardStatus } from '../types/cardTypes';
+import { CardViewPreference } from '../util/storage';
 import css from './EateryCardContent.module.css';
 
 function EateryCardContent({
     location,
-    currentStatus,
-    updateStatus,
-    showControlButtons,
+    updateViewPreference,
+    partOfMainGrid,
 }: {
     location: IReadOnlyLocation_Combined;
-    currentStatus: CardStatus;
-    updateStatus: (newStatus: CardStatus) => void;
-    showControlButtons?: boolean;
+    updateViewPreference: (newViewPreference: CardViewPreference) => void;
+    partOfMainGrid: boolean;
 }) {
-    const { location: physicalLocation, name } = location;
+    const { location: physicalLocation, name, cardViewPreference } = location;
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -53,11 +51,11 @@ function EateryCardContent({
                     type="button"
                     className={css['menu-button']}
                     onClick={() => {
-                        updateStatus(currentStatus === CardStatus.PINNED ? CardStatus.NORMAL : CardStatus.PINNED);
+                        updateViewPreference(cardViewPreference === 'pinned' ? 'normal' : 'pinned');
                         setIsMenuOpen(false);
                     }}
                 >
-                    {currentStatus === CardStatus.PINNED ? (
+                    {cardViewPreference === 'pinned' ? (
                         <>
                             <PinOff size={16} />
                             <div>Unpin Card</div>
@@ -74,11 +72,11 @@ function EateryCardContent({
                     type="button"
                     className={css['menu-button']}
                     onClick={() => {
-                        updateStatus(currentStatus === CardStatus.HIDDEN ? CardStatus.NORMAL : CardStatus.HIDDEN);
+                        updateViewPreference(cardViewPreference === 'hidden' ? 'normal' : 'hidden');
                         setIsMenuOpen(false);
                     }}
                 >
-                    {currentStatus === CardStatus.HIDDEN ? (
+                    {cardViewPreference === 'hidden' ? (
                         <>
                             <Eye size={16} />
                             <div>Show Card</div>
@@ -136,7 +134,7 @@ function EateryCardContent({
                 {physicalLocation}
             </span>
 
-            {showControlButtons && (
+            {partOfMainGrid && (
                 <div className={css['card-action-bar']}>
                     <button
                         type="button"

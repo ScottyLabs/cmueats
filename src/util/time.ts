@@ -111,17 +111,17 @@ export function getTimeString(time: ITimeSlot) {
 export function isValidTimeSlotArray(timeSlots: ITimeRangeList) {
     for (let i = 0; i < timeSlots.length; i += 1) {
         const allowWrapAround = i === timeSlots.length - 1;
-        if (!isTimeRange(timeSlots[i], allowWrapAround)) return false;
+        if (!isTimeRange(timeSlots[i]!, allowWrapAround)) return false;
         if (i > 0) {
-            const { start } = timeSlots[i];
-            const prevEnd = timeSlots[i - 1].end;
+            const { start } = timeSlots[i]!;
+            const prevEnd = timeSlots[i - 1]!.end;
             if (minutesSinceStartOfSundayTimeSlot(prevEnd) >= minutesSinceStartOfSundayTimeSlot(start)) return false;
         }
-        if (i === timeSlots.length - 1 && isWrapAroundTimeSlot(timeSlots[i])) {
+        if (i === timeSlots.length - 1 && isWrapAroundTimeSlot(timeSlots[i]!)) {
             // last time is a wrap-around time, need to check for overlap against first time
             if (
-                minutesSinceStartOfSundayTimeSlot(timeSlots[i].end) >=
-                minutesSinceStartOfSundayTimeSlot(timeSlots[0].start)
+                minutesSinceStartOfSundayTimeSlot(timeSlots[i]!.end) >=
+                minutesSinceStartOfSundayTimeSlot(timeSlots[0]!.start)
             )
                 return false;
         }
@@ -257,7 +257,7 @@ export function getNextTimeSlot(times: ITimeRangeList, now: DateTime) {
 
     if (nextTimeSlot === undefined) {
         // End of the week. Return the first time slot instead.
-        return times[0];
+        return times[0]!;
     }
     return nextTimeSlot;
 }

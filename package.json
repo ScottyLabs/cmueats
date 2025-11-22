@@ -46,6 +46,7 @@
         "start": "vite --host",
         "dev": "vite --host",
         "build": "tsc && vite build",
+        "typecheck": "tsc",
         "test": "dotenv -e .env.test -- vitest --coverage",
         "eject": "vite eject",
         "lint": "pnpm eslint src",

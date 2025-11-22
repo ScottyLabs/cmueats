@@ -6,10 +6,9 @@ import {
     LocationState,
     ITimeSlot,
     IReadOnlyLocation_FromAPI_PostProcessed,
-    IReadOnlyLocation_ExtraData,
     ITimeRangeList,
     IReadOnlyLocation_FromAPI_PreProcessed,
-    IReadOnlyLocation_ExtraData_Map,
+    ILocation_TimeStatusData,
 } from '../types/locationTypes';
 import {
     diffInMinutes,
@@ -73,7 +72,7 @@ export function getStatusMessage(isOpen: boolean, nextTime: ITimeSlot, now: Date
  * @param now
  * @returns
  */
-export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): IReadOnlyLocation_ExtraData {
+export function getLocationStatus(timeSlots: ITimeRangeList, now: DateTime): ILocation_TimeStatusData {
     assert(isValidTimeSlotArray(timeSlots), `${JSON.stringify(timeSlots)} is invalid!`);
     const MINUTES_IN_A_WEEK = 60 * 24 * 7;
     const nextTimeSlot = getNextTimeSlot(timeSlots, now);
@@ -151,37 +150,5 @@ export async function queryLocations(cmuEatsAPIUrl: string): Promise<IReadOnlyLo
         console.error(err);
         notifySlack(`<!channel> queryLocations failed with error ${err}`);
         return [];
-    }
-}
-
-export function getExtendedLocationData(
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined,
-    now: DateTime,
-): IReadOnlyLocation_ExtraData_Map | undefined {
-    // Remove .setZone('America/New_York') and change time in computer settings when testing
-    // Alternatively, simply set now = DateTime.local(2023, 12, 22, 18, 33); where the parameters are Y,M,D,H,M
-    return locations?.reduce(
-        (acc, location) => ({
-            ...acc,
-            [location.conceptId]: {
-                ...getLocationStatus(location.times, now),
-            },
-        }),
-        {},
-    ); // foldl!
-}
-export class LocationChecker {
-    locations?: IReadOnlyLocation_FromAPI_PostProcessed[];
-
-    constructor(locations?: IReadOnlyLocation_FromAPI_PostProcessed[]) {
-        this.locations = locations;
-    }
-
-    assertExtraDataInSync(extraData?: IReadOnlyLocation_ExtraData_Map) {
-        this.locations?.forEach((location) => {
-            if (!extraData || !(location.conceptId in extraData)) {
-                console.error(location.conceptId, 'missing from extraData!');
-            }
-        });
     }
 }

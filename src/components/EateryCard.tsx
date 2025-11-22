@@ -1,7 +1,9 @@
 import { KeyboardEvent, useContext, useEffect, useMemo, useRef } from 'react';
 import { Grid } from '@mui/material';
+import clsx from 'clsx';
+import { motion } from 'motion/react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
-import { CardStatus } from '../types/cardTypes';
+import { CardViewPreference } from '../util/storage';
 import { DrawerContext } from '../contexts/DrawerContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
@@ -9,20 +11,14 @@ import css from './EateryCard.module.css';
 
 function EateryCard({
     location,
-    index = 0,
     partOfMainGrid = false,
     animate = false,
-    currentStatus,
-    updateStatus,
-    showControlButtons = true,
+    updateViewPreference,
 }: {
     location: IReadOnlyLocation_Combined;
-    index?: number;
     partOfMainGrid?: boolean;
     animate?: boolean;
-    currentStatus: CardStatus;
-    updateStatus: (newStatus: CardStatus) => void;
-    showControlButtons?: boolean;
+    updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const drawerContext = useContext(DrawerContext);
     const { isDrawerActive, drawerLocation } = drawerContext;
@@ -58,7 +54,7 @@ function EateryCard({
                     behavior: 'smooth',
                     block: 'center',
                 });
-            }, 100);
+            }, 400);
         }
 
         return () => {
@@ -70,24 +66,39 @@ function EateryCard({
     const isDouble = isDrawerActive ? 2 : 1;
     const cardClassName = useMemo(
         () =>
-            [
+            clsx(
                 css.card,
-                animate ? css['card-animated'] : '',
+                // animate ? css['card-animated'] : '',
                 isCardActiveInDrawer ? css['card-active'] : '',
                 partOfMainGrid ? css['card-in-main-grid'] : '',
-                currentStatus === CardStatus.PINNED ? css['card-pinned'] : '',
-            ]
-                .filter(Boolean)
-                .join(' '),
-        [animate, isCardActiveInDrawer, partOfMainGrid, currentStatus],
+                location.cardViewPreference === 'pinned' ? css['card-pinned'] : '',
+            ),
+        [animate, isCardActiveInDrawer, partOfMainGrid],
     );
 
     return (
         <Grid item xs={12} md={isDrawerActive ? 12 : 4} lg={3 * isDouble} xl={2 * isDouble}>
-            <div
+            <motion.div
+                layout="position"
                 className={cardClassName}
-                style={{ '--card-show-delay': `${index * 50}ms` }}
+                initial={
+                    animate
+                        ? {
+                              opacity: 0,
+                              transform: 'translate(-10px,0)',
+                              filter: 'blur(3px)',
+                              transition: { duration: 0.7, ease: [0.08, 0.67, 0.64, 1.01] },
+                          }
+                        : false
+                }
+                animate={{
+                    transform: 'translate(0,0)',
+                    opacity: 1,
+                    filter: 'blur(0)',
+                }}
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
                 ref={cardRef}
+                // whole card clickable
                 role="button"
                 tabIndex={0}
                 onClick={handleCardSelection}
@@ -96,11 +107,10 @@ function EateryCard({
                 <EateryCardHeader location={location} />
                 <EateryCardContent
                     location={location}
-                    currentStatus={currentStatus}
-                    updateStatus={updateStatus}
-                    showControlButtons={showControlButtons}
+                    updateViewPreference={updateViewPreference}
+                    partOfMainGrid={partOfMainGrid}
                 />
-            </div>
+            </motion.div>
         </Grid>
     );
 }
