@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef } from 'react';
+import { KeyboardEvent, useContext, useEffect, useMemo, useRef } from 'react';
 import { Grid } from '@mui/material';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { CardStatus } from '../types/cardTypes';
@@ -24,10 +24,33 @@ function EateryCard({
     updateStatus: (newStatus: CardStatus) => void;
     showControlButtons?: boolean;
 }) {
+    const isMobile = window.innerWidth <= 600;
+
     const drawerContext = useContext(DrawerContext);
     const { isDrawerActive, drawerLocation } = drawerContext;
     const isCardActiveInDrawer = isDrawerActive && drawerLocation?.conceptId === location.conceptId;
     const cardRef = useRef<HTMLDivElement | null>(null);
+    function handleCardSelection() {
+        // open default tab "overview"
+        drawerContext.setActiveTab('overview');
+        // when the drawer is open, click other cards will open that
+        // card's detail, instead of closing the drawer;
+        // click on the same card will close the drawer.
+        if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
+            drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+        } else {
+            drawerContext.setDrawerLocation(location);
+            drawerContext.setIsDrawerActive(true);
+        }
+    }
+
+    const handleCardKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+        if (event.target !== event.currentTarget) return;
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleCardSelection();
+        }
+    };
 
     useEffect(() => {
         let timeoutId: number | undefined;
@@ -63,7 +86,15 @@ function EateryCard({
 
     return (
         <Grid item xs={12} md={isDrawerActive ? 12 : 4} lg={3 * isDouble} xl={2 * isDouble}>
-            <div className={cardClassName} style={{ '--card-show-delay': `${index * 50}ms` }} ref={cardRef}>
+            <div
+                className={cardClassName}
+                style={{ '--card-show-delay': `${index * 50}ms` }}
+                ref={cardRef}
+                role="button"
+                tabIndex={0}
+                onClick={!isMobile ? handleCardSelection: () => {}}
+                onKeyDown={!isMobile ? handleCardKeyDown: () => {}}
+            >
                 <EateryCardHeader 
                     location={location} 
                     currentStatus={currentStatus}

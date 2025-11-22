@@ -44,39 +44,43 @@ function EateryCardHeader({
                     style={{ '--status-color': highlightColors[location.locationState] }}
                     ref={dotRef}
                 />
-                <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
-                <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
+                <div className={css['time-container']}>
+                    <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
+                    <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
+                </div>
             </div>
             {
                 isMobile &&
-                (<div className={css['card-header-buttons']}>
-                    <div
-                        onClick={() => {
-                            updateStatus(currentStatus === CardStatus.PINNED ? CardStatus.NORMAL : CardStatus.PINNED);
-                        }}
-                    >
-                        {currentStatus === CardStatus.PINNED ? (
-                            <Pin size={20} color={"#F6CC5D"}/>
-                        ) : (
-                            <Pin size={20}/>
-                        )}
-                    </div>
+                (
+                    <div className={css['card-header-buttons']}>
+                        <div
+                            onClick={() => {
+                                updateStatus(currentStatus === CardStatus.PINNED ? CardStatus.NORMAL : CardStatus.PINNED);
+                            }}
+                        >
+                            {currentStatus === CardStatus.PINNED ? (
+                                <Pin size={20} color={"#F6CC5D"}/>
+                            ) : (
+                                <Pin size={20}/>
+                            )}
+                        </div>
 
-                    <div
-                        className={css['menu-button']}
-                        onClick={() => {
-                            updateStatus(currentStatus === CardStatus.HIDDEN ? CardStatus.NORMAL : CardStatus.HIDDEN);
-                        }}
-                    >
-                        {currentStatus === CardStatus.HIDDEN ? (
-                            <EyeOff size={20} />
-                        ) : (
-                            <Eye size={20} />
-                        )}
+                        <div
+                            className={css['menu-button']}
+                            onClick={() => {
+                                updateStatus(currentStatus === CardStatus.HIDDEN ? CardStatus.NORMAL : CardStatus.HIDDEN);
+                            }}
+                        >
+                            {currentStatus === CardStatus.HIDDEN ? (
+                                <EyeOff size={20} />
+                            ) : (
+                                <Eye size={20} />
+                            )}
+                        </div>
                     </div>
-                </div>)
+                )
             }
-        </div>
+            </div>
     );
 }
 

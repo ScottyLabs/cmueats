@@ -1,5 +1,5 @@
 .drawer-header-container {
-    padding: 10px 27px;
+    padding: 15px 27px 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -66,14 +66,6 @@
     width: fit-content;
     padding: 4px 7px;
     font-weight: 700;
-}
-
-.status-absolute-time {
-    font-size: 15px;
-    display: inline-flex;
-    align-items: center;
-    color: var(--text-muted);
-    gap: 5px;
 }
 
 .location-text {

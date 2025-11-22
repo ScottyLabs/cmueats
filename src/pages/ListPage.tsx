@@ -20,7 +20,6 @@ import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
-import InfoIcon from "../assets/info.svg";
 import { CardStateMap } from '../types/cardTypes';
 
 const LogoText = styled(Typography)({
@@ -221,10 +220,6 @@ function ListPage({
                             </button>
                         )}
 
-                        <div className="info-container mobile">
-                            <img src={InfoIcon}></img>
-                            <span className = "info-text">Tap on a card for more details!</span>
-                        </div>
                     </header>
 
                     <div className="eatery-card-grid-container">
