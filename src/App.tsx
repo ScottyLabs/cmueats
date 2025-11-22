@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
@@ -21,7 +21,7 @@ import useRefreshWhenBackOnline from './util/network';
 
 const BACKEND_LOCATIONS_URL =
     env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
-
+const BANNER_VERSION = '11/14';
 function App() {
     const mainContainerRef = useRef<HTMLDivElement | null>(null);
     // Load locations
@@ -54,7 +54,7 @@ function App() {
             <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
                 <BrowserRouter>
                     <div className="App">
-                        {/* <Banner /> */}
+                        <Banner />
                         {/* <div className="AdBanner">
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;
@@ -104,17 +104,70 @@ function ErrorBoundaryFallback() {
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
+console.log(localStorage)
 function Banner() {
-    const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
+    // store banner's current state in browser local storage
+    const [bannerStateOutput, setBannerStateOutput] = useLocalStorage('banner-state');
+    
+    // Parse banner state from localStorage, with default values (reactive to bannerStateOutput changes)
+    const bannerState = useMemo(() => {
+        if (bannerStateOutput) {
+            try {
+                return JSON.parse(bannerStateOutput);
+            } catch (e) {
+                // If parsing fails, return default
+                return { version: BANNER_VERSION, closed: false };
+            }
+        }
+        return { version: BANNER_VERSION, closed: false };
+    }, [bannerStateOutput]);
+    
+    // when app loads, checks if stored banner version matches local 'BANNER_VERSION'
+    // if version is different, reset the closed state to show the banner again
+    useEffect(() => {
+        const currentState = localStorage.getItem('banner-state');
+        if (currentState) {
+            try {
+                const parsed = JSON.parse(currentState);
+                if (parsed.version !== BANNER_VERSION) {
+                    setBannerStateOutput(JSON.stringify({ version: BANNER_VERSION, closed: false }));
+                }
+            } catch (e) {
+                // If parsing fails, initialize with current version
+                setBannerStateOutput(JSON.stringify({ version: BANNER_VERSION, closed: false }));
+            }
+        } else {
+            // No existing state, initialize
+            setBannerStateOutput(JSON.stringify({ version: BANNER_VERSION, closed: false }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Only run once on mount
+    
+    // Listen for localStorage changes from other tabs
+    useEffect(() => {
+        const handleStorageChange = (e: StorageEvent) => {
+            if (e.key === 'banner-state' && e.newValue) {
+                // Force re-read from localStorage when another tab updates it
+                setBannerStateOutput(e.newValue);
+            }
+        };
+        
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, [setBannerStateOutput]);
+    
+    // Ensure we're using the current version when closing
     const closeBanner = () => {
-        setIsClosed('true');
+        setBannerStateOutput(JSON.stringify({ version: BANNER_VERSION, closed: true }));
     };
 
+    // Show banner if not closed and version matches
+    const shouldShow = !bannerState.closed && bannerState.version === BANNER_VERSION;
     return (
         <motion.div
             className="welcome-banner-container"
-            animate={{ height: closed === null ? 'auto' : 0 }}
-            initial={{ height: closed === null ? 'auto' : 0 }}
+            animate={{ height: shouldShow ? 'auto' : 0 }}
+            initial={{ height: shouldShow ? 'auto' : 0 }}
         >
             <div className="welcome-banner">
                 <div className="welcome-banner__spacer" />
