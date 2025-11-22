@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './SponsorCarousel.css';
 
-function SponsorCarousel({ darkMode, defaultOpen }: { darkMode: boolean; defaultOpen: boolean }) {
-    const [carouselVisible, setCarouselVisible] = useState(defaultOpen);
+function SponsorCarousel({ darkMode, openByDefault }: { darkMode: boolean; openByDefault: boolean }) {
+    const [carouselVisible, setCarouselVisible] = useState(openByDefault);
 
     const logos = Object.values(
         import.meta.glob('../assets/logos/*', {
