@@ -14,6 +14,10 @@
     animation: carousel 90s linear infinite;
 }
 
+.footer__sponsors--hidden {
+    display: none;
+}
+
 @media (max-width: 600px) {
     .carousel__track {
         animation: carousel 120s linear infinite;
@@ -41,16 +45,12 @@
     object-fit: contain;
     display: block;
     margin: 20px 0px;
+    padding: 5px;
 }
 
 .sponsors--dark .carousel__image {
     filter: brightness(0) invert(1);
     opacity: 30%;
-}
-
-.sponsors--dark .carousel__image:hover {
-    filter: brightness(0) invert(1);
-    opacity: 70%;
 }
 
 .sponsors--light .carousel__image {
@@ -107,4 +107,17 @@
 
 .sponsors--light .footer__sponsors-text {
     color: rgba(0, 0, 0, 0.5);
+}
+
+.footer__sponsors-text {
+    all: unset;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border-radius: 10px 10px 0px 0px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.footer__sponsors-text:hover {
+    cursor: pointer;
 }

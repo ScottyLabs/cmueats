@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import './SponsorCarousel.css';
 
-function SponsorCarousel({ darkMode }: { darkMode: Boolean }) {
+function SponsorCarousel({ darkMode, defaultOpen }: { darkMode: boolean; defaultOpen: boolean }) {
+    const [carouselVisible, setCarouselVisible] = useState(defaultOpen);
+
     const logos = Object.values(
         import.meta.glob('../assets/logos/*', {
             eager: true,
@@ -21,10 +24,18 @@ function SponsorCarousel({ darkMode }: { darkMode: Boolean }) {
         <div className={`${darkMode ? 'sponsors--dark' : 'sponsors--light'}`}>
             <div className="footer__sponsors-tab">
                 <span className="footer__sponsors-desc">
-                    <p className="footer__sponsors-text">ScottyLabs is sponsored by</p>
+                    <button
+                        onClick={() => {
+                            console.log(carouselVisible);
+                            setCarouselVisible(!carouselVisible);
+                        }}
+                        className="footer__sponsors-text"
+                    >
+                        ScottyLabs is sponsored by
+                    </button>
                 </span>
             </div>
-            <div className="footer__sponsors">
+            <div className={`footer__sponsors ${carouselVisible ? '' : 'footer__sponsors--hidden'}`}>
                 <div className="footer__sponsors-carousel">
                     <div className="carousel">
                         <ul className="carousel__track">

@@ -275,7 +275,7 @@ function ListPage({
                 </div>
                 {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
             </footer>
-            <SponsorCarousel darkMode />
+            <SponsorCarousel darkMode defaultOpen />
             <link rel="prefetch" href={mikuBgUrl} />
         </div>
     );
