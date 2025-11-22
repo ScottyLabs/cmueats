@@ -67,7 +67,6 @@
 }
 
 @keyframes sway {
-
     0%,
     100% {
         transform: rotate(1deg);
@@ -121,10 +120,12 @@
     animation-delay: 0.1s;
     opacity: 0;
 
-    mask-image: linear-gradient(to right,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 1) var(--right-cutoff),
-            rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%));
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) var(--right-cutoff),
+        rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
+    );
 
     &.Locations-header__greeting--mobile {
         font-size: 2rem;
@@ -287,56 +288,4 @@
     animation:
         fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
         oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
-}
-
-.block-period {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    background-color: var(--input-bg);
-    border-radius: 1rem;
-}
-
-.block-period__current {
-    text-decoration: none;
-    margin-left: 11px;
-    margin-top: 15px;
-}
-
-.block-period__current--hidden {
-    opacity: 0;
-    border-bottom: none;
-}
-
-.block-period__current--popup {
-    padding-bottom: 12px;
-    border-bottom: 1px solid #474747;
-    margin-left: 0px;
-    margin-top: 14.5px;
-}
-
-.block-period__popover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: var(--card-bg);
-    border: 1px solid #474747;
-    border-radius: 1rem;
-    padding: 0px 10px;
-    padding-bottom: 10px;
-    z-index: 1000;
-    transition: all 0.5s;
-    box-shadow: 0 0 20px var(--hover-accent-color);
-    border-color: var(--hover-accent-color);
-    outline: none;
-    width: 93%;
-}
-
-.block-period__popover__times {
-    margin-bottom: 5px;
-    padding-top: 0px;
-}
-
-.block-period__popover__times--current {
-    font-weight: bold;
 }
