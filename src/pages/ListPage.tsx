@@ -1,7 +1,6 @@
 import { Typography, Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { getGreetings } from '../util/greeting';
-import './ListPage.css';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 import SelectLocation from '../components/SelectLocation';

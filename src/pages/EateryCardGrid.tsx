@@ -7,7 +7,6 @@ import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
 import { LocationState, IReadOnlyLocation_Combined } from '../types/locationTypes';
 import assert from '../util/assert';
-import { CardStateMap, CardStatus } from '../types/cardTypes';
 import css from './EateryCardGrid.module.css';
 
 import { CardViewPreference } from '../util/storage';
@@ -111,31 +110,29 @@ export default function EateryCardGrid({
 
             {hiddenLocations.length > 0 && (
                 <div className={css.section}>
-                    <>
-                        <button
-                            type="button"
-                            className={`${css['dropdown-button']} ${showHiddenSection && css['dropdown-button--up']}`}
-                            onClick={() => {
-                                setShowHiddenSection(!showHiddenSection);
-                            }}
-                        >
-                            <ChevronDown size={16} />
-                            <p>
-                                {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
-                            </p>
-                        </button>
+                    <button
+                        type="button"
+                        className={`${css['dropdown-button']} ${showHiddenSection && css['dropdown-button--up']}`}
+                        onClick={() => {
+                            setShowHiddenSection(!showHiddenSection);
+                        }}
+                    >
+                        <ChevronDown size={16} />
+                        <p>
+                            {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
+                        </p>
+                    </button>
 
-                        <div
-                            className={`${css['hidden-grid-container']} ${
-                                showHiddenSection ? css['hidden-grid-container--open'] : ''
-                            }`}
-                            aria-hidden={!showHiddenSection}
-                        >
-                            <Grid container spacing={2} className={css['hidden-grid']}>
-                                {hiddenLocations.map(locationToCard)}
-                            </Grid>
-                        </div>
-                    </>
+                    <div
+                        className={`${css['hidden-grid-container']} ${
+                            showHiddenSection ? css['hidden-grid-container--open'] : ''
+                        }`}
+                        aria-hidden={!showHiddenSection}
+                    >
+                        <Grid container spacing={2} className={css['hidden-grid']}>
+                            {hiddenLocations.map(locationToCard)}
+                        </Grid>
+                    </div>
                 </div>
             )}
         </div>
