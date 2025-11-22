@@ -204,7 +204,7 @@ function ListPage({
 
                         <div className="list-header-controls">
                             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                            {isMobile ? <></>: <SelectLocation {...{ setLocationFilterQuery, locations }} />}
+                            {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
                         </div>
 
                         {IS_MIKU_DAY && (

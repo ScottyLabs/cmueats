@@ -2,9 +2,20 @@ import { useRef } from 'react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
+import { CardStatus } from '../types/cardTypes';
+import { Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 
-function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
+function EateryCardHeader({ 
+    location,
+    currentStatus,
+    updateStatus,
+}: { 
+    location: IReadOnlyLocation_Combined,
+    currentStatus: CardStatus;
+    updateStatus: (newStatus: CardStatus) => void;
+ }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
+    const isMobile = window.innerWidth <= 600;
 
     const { statusMsg } = location;
     let relativeTime = 'Status unavailable';
@@ -21,10 +32,12 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
     }
 
     return (
-        <div>
+        <div
+            className = {css['card-header-bar']}
+            style={{ '--status-color': highlightColors[location.locationState] }}
+        >
             <div
                 className={css['card-header-container']}
-                style={{ '--status-color': highlightColors[location.locationState] }}
             >
                 <div
                     className={css['card-header-dot']}
@@ -34,6 +47,35 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
                 <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
                 <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
             </div>
+            {
+                isMobile &&
+                (<div className={css['card-header-buttons']}>
+                    <div
+                        onClick={() => {
+                            updateStatus(currentStatus === CardStatus.PINNED ? CardStatus.NORMAL : CardStatus.PINNED);
+                        }}
+                    >
+                        {currentStatus === CardStatus.PINNED ? (
+                            <Pin size={20} color={"#F6CC5D"}/>
+                        ) : (
+                            <Pin size={20}/>
+                        )}
+                    </div>
+
+                    <div
+                        className={css['menu-button']}
+                        onClick={() => {
+                            updateStatus(currentStatus === CardStatus.HIDDEN ? CardStatus.NORMAL : CardStatus.HIDDEN);
+                        }}
+                    >
+                        {currentStatus === CardStatus.HIDDEN ? (
+                            <EyeOff size={20} />
+                        ) : (
+                            <Eye size={20} />
+                        )}
+                    </div>
+                </div>)
+            }
         </div>
     );
 }
