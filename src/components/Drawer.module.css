@@ -1,5 +1,5 @@
 .drawer-box {
-    --drawer-width: 40%;
+    --drawer-width: 600px;
     width: var(--drawer-width);
     background: var(--main-bg);
     height: 100%;

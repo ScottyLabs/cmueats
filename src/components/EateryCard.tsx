@@ -73,7 +73,7 @@ function EateryCard({
                 partOfMainGrid ? css['card-in-main-grid'] : '',
                 location.cardViewPreference === 'pinned' ? css['card-pinned'] : '',
             ),
-        [animate, isCardActiveInDrawer, partOfMainGrid],
+        [animate, isCardActiveInDrawer, partOfMainGrid, location.cardViewPreference],
     );
 
     return (

@@ -1,6 +1,6 @@
 .dropdown-button {
     display: flex;
-    color: var(--black-400);
+    color: var(--card-text-muted);
     gap: 1rem;
 
     cursor: pointer;

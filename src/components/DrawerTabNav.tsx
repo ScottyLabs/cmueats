@@ -25,6 +25,7 @@ function DrawerTabNav() {
             </button>
             <button
                 className={`${css['tab-button']} ${activeTab === 'reviews' ? css['tab-button-active'] : ''}`}
+                style={{ visibility: 'hidden' }}
                 type="button"
                 onClick={() => setActiveTab('reviews')}
             >

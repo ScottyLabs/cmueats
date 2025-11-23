@@ -33,27 +33,21 @@
     }
 }
 
-.card-action-bar {
+.action-bar {
     display: flex;
+    margin-top: 12px;
     align-items: center;
-    justify-content: flex-end;
-    margin-top: 1rem;
+    justify-content: space-between;
 }
 
-.card-content-more-button {
-    color: var(--text-primary);
-    border: none;
-    border-radius: 5px;
-    background: transparent;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.rating {
+    visibility: hidden;
+}
 
-    &:hover {
-        color: var(--hover-accent-color);
-        background-color: rgba(255, 255, 255, 0.08);
-    }
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .card-content-menu {
@@ -70,9 +64,60 @@
     padding: 5px 8px;
 }
 
-.menu-button {
+.action-button {
     display: inline-flex;
-    font-size: 14px;
     align-items: center;
     justify-content: center;
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-primary);
+    width: 34px;
+    height: 34px;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--hover-accent-color);
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    &::after {
+        content: attr(aria-label);
+        z-index: 999;
+        position: absolute;
+        bottom: 115%;
+        left: -100%;
+        font-size: 12px;
+        background-color: var(--main-bg);
+        color: var(--text-primary);
+        text-align: center;
+        border-radius: 5px;
+        padding: 5px 8px;
+        white-space: nowrap;
+        opacity: 0;
+        transition:
+            opacity 0.2s ease,
+            visibility 0.2s ease;
+        pointer-events: none;
+    }
+    &:hover::after {
+        opacity: 1;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        bottom: 70%;
+        border-width: 8px;
+        border-style: solid;
+        border-color: var(--main-bg) transparent transparent transparent;
+        opacity: 0;
+        transition:
+            opacity 0.2s ease,
+            visibility 0.2s ease;
+    }
+    &:hover::before {
+        opacity: 1;
+    }
 }
