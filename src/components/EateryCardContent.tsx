@@ -1,4 +1,8 @@
-import { MapPin, Pin, Eye, EyeOff } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import UnpinnedControlIcon from '../assets/control_buttons/unpinned.svg?react';
+import PinnedControlIcon from '../assets/control_buttons/pinned.svg?react';
+import EyeControlIcon from '../assets/control_buttons/eye.svg?react';
+import EyeOffControlIcon from '../assets/control_buttons/eyeOff.svg?react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { CardViewPreference } from '../util/storage';
 import css from './EateryCardContent.module.css';
@@ -40,9 +44,9 @@ function EateryCardContent({
                             }}
                         >
                             {isPinned ? (
-                                <Pin style={{ fill: 'yellow', stroke: 'yellow' }} size={20} />
+                                <PinnedControlIcon className={css['action-icon']} />
                             ) : (
-                                <Pin size={20} />
+                                <UnpinnedControlIcon className={css['action-icon']} />
                             )}
                         </button>
 
@@ -55,7 +59,11 @@ function EateryCardContent({
                                 updateViewPreference(isHidden ? 'normal' : 'hidden');
                             }}
                         >
-                            {isHidden ? <EyeOff size={20} /> : <Eye size={20} />}
+                            {isHidden ? (
+                                <EyeOffControlIcon className={css['action-icon']} />
+                            ) : (
+                                <EyeControlIcon className={css['action-icon']} />
+                            )}
                         </button>
                     </div>
                 </div>

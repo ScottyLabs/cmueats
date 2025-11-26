@@ -1,7 +1,7 @@
 .dropdown-button {
     display: flex;
     color: var(--card-text-muted);
-    gap: 1rem;
+    gap: 10px;
 
     cursor: pointer;
 
@@ -14,7 +14,7 @@
         transition: rotate 0.2s linear;
     }
 
-    & p {
+    & span {
         font-size: 16px;
         margin-left: -3px;
     }

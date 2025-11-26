@@ -117,10 +117,10 @@ export default function EateryCardGrid({
                             setShowHiddenSection(!showHiddenSection);
                         }}
                     >
-                        <ChevronDown size={16} />
-                        <p>
+                        <ChevronDown size={18} />
+                        <span>
                             {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
-                        </p>
+                        </span>
                     </button>
 
                     <div

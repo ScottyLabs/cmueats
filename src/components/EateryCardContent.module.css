@@ -121,3 +121,9 @@
         opacity: 1;
     }
 }
+
+.action-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--text-primary);
+}
