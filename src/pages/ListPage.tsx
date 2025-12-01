@@ -151,9 +151,17 @@ function ListPage({
                             {mobileGreeting}
                         </h3>
                     </div>
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <BlockPeriods />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    <div className="Locations-header__block-periods">
+                        <BlockPeriods />
+                    </div>
+
+                    <div className="Locations-header__search">
+                        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    </div>
+
+                    <div className="Locations-header__filter">
+                        <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    </div>
                     {IS_MIKU_DAY && (
                         <button
                             onClick={() => updateTheme(theme === 'miku' ? 'none' : 'miku')}

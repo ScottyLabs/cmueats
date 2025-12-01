@@ -30,6 +30,51 @@
     position: relative;
 }
 
+@media screen and (min-width: 900px) {
+    .Locations-header {
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+    }
+
+    .Locations-header__greeting-container {
+        order: 0;
+    }
+
+    .Locations-header__search {
+        order: 1;
+    }
+
+    .Locations-header__block-periods {
+        order: 2;
+    }
+
+    .Locations-header__filter {
+        order: 3;
+    }
+}
+
+@media screen and (max-width: 899px) {
+    .Locations-header {
+        grid-template-columns: 1fr;
+    }
+
+    .Locations-header__greeting-container {
+        order: 0;
+    }
+
+    .Locations-header__search {
+        order: 2;
+    }
+
+    .Locations-header__block-periods {
+        order: 1;
+    }
+
+    .Locations-header__filter {
+        order: 3;
+    }
+}
+
 .Locations-header__miku-toggle {
     position: absolute;
     top: -290px;

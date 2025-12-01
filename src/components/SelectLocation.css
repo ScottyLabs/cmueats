@@ -2,8 +2,9 @@
     appearance: none;
     cursor: pointer;
     display: block;
-    min-width: 500px;
-    width: fit-content;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
 
     padding: 0.8rem 0.9rem;
     border-radius: 1rem;

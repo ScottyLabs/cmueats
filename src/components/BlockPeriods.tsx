@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import './BlockPeriods.css';
+import x from '../assets/control_button/x.svg';
 
 function getBlockPeriodsWithTimes(): { period: string; timeRange: string }[] {
     return [
@@ -36,29 +38,59 @@ export function BlockPeriods() {
 
     const blockPeriods = getBlockPeriodsWithTimes();
     const currentPeriod = getBlockPeriod();
+    const currentRange = blockPeriods.find((p) => p.period === currentPeriod)?.timeRange;
 
-    const handleMouseEnter = () => {
-        setPopupVisible(true);
-    };
-
-    const handleMouseLeave = () => {
-        setPopupVisible(false);
-    };
     return (
-        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <div>
-                <p>Block Period: </p>
-                <p>{currentPeriod} </p>
-                <p>({blockPeriods.find((p) => p.period === currentPeriod)?.timeRange})</p>
+        <div className="block-periods__desktop">
+            <button type="button" className="block-periods__desktop-summary" onClick={() => setPopupVisible((v) => !v)}>
+                <span className="block-periods__label">Block Period:</span>
+                <span className="block-periods__period">{currentPeriod}</span>
+                <span className="block-periods__range">({currentRange})</span>
+            </button>
+
+            <div className="block-periods__mobile">
+                <div className="block-periods__mobile-top-rule" />
+                <button
+                    type="button"
+                    className="block-periods__mobile-summary"
+                    onClick={() => setPopupVisible((v) => !v)}
+                >
+                    <span className="block-periods__label">Block period:</span>
+                    <span className="block-periods__period">{currentPeriod}</span>
+                </button>
+                <div className="block-periods__mobile-bottom-rule" />
             </div>
+
             {isPopupVisible && (
-                <div>
-                    <p>Block Period: {currentPeriod}</p>
-                    {blockPeriods.map(({ period, timeRange }) => (
-                        <div key={period}>
-                            {period}: {timeRange}
+                <div className="block-periods__popup">
+                    <div className="block-periods__popup-header">
+                        <div className="block-periods__popup-title">
+                            Block Period: <span className="block-periods__period">{currentPeriod}</span>
+                            <span className="block-periods__range"> ({currentRange})</span>
                         </div>
-                    ))}
+                        <button
+                            type="button"
+                            className="block-periods__popup-close"
+                            onClick={() => setPopupVisible(false)}
+                        >
+                            <img src={x} alt="close icon" />
+                        </button>
+                    </div>
+
+                    <div className="block-periods__popup-list">
+                        {blockPeriods.map(({ period, timeRange }) => (
+                            <div
+                                key={period}
+                                className={
+                                    'block-periods__row' +
+                                    (period === currentPeriod ? ' block-periods__row--active' : '')
+                                }
+                            >
+                                <span className="block-periods__row-label">{period}</span>
+                                <span className="block-periods__row-time">{timeRange}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
         </div>
