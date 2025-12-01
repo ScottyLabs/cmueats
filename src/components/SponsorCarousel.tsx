@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './SponsorCarousel.css';
+import dropdownArrow from '../assets/control_button/dropdown_arrow.svg';
 
 function SponsorCarousel({ darkMode, openByDefault }: { darkMode: boolean; openByDefault: boolean }) {
     const [carouselVisible, setCarouselVisible] = useState(openByDefault);
@@ -25,17 +26,26 @@ function SponsorCarousel({ darkMode, openByDefault }: { darkMode: boolean; openB
             <div className="footer__sponsors-tab">
                 <span className="footer__sponsors-desc">
                     <button
-                        onClick={() => {
-                            console.log(carouselVisible);
-                            setCarouselVisible(!carouselVisible);
-                        }}
+                        onClick={() => setCarouselVisible((v) => !v)}
                         className="footer__sponsors-text"
+                        aria-expanded={carouselVisible}
                     >
-                        ScottyLabs is sponsored by
+                        ScottyLabs is sponsored by{' '}
+                        <span
+                            className={`footer__sponsors-arrow ${carouselVisible ? 'footer__sponsors-arrow--open' : ''}`}
+                        >
+                            <img src={dropdownArrow} alt="Dropdown arrow" />
+                        </span>
                     </button>
                 </span>
             </div>
-            <div className={`footer__sponsors ${carouselVisible ? '' : 'footer__sponsors--hidden'}`}>
+
+            <div
+                className={`footer__sponsors ${
+                    carouselVisible ? 'footer__sponsors--open' : 'footer__sponsors--closed'
+                }`}
+                aria-hidden={!carouselVisible}
+            >
                 <div className="footer__sponsors-carousel">
                     <div className="carousel">
                         <ul className="carousel__track">

@@ -14,10 +14,6 @@
     animation: carousel 90s linear infinite;
 }
 
-.footer__sponsors--hidden {
-    display: none;
-}
-
 @media (max-width: 600px) {
     .carousel__track {
         animation: carousel 120s linear infinite;
@@ -120,4 +116,31 @@
 
 .footer__sponsors-text:hover {
     cursor: pointer;
+}
+
+.footer__sponsors {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+        max-height 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.3s ease-out,
+        transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.footer__sponsors--open {
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.footer__sponsors-arrow {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.footer__sponsors-arrow--open {
+    transform: rotate(180deg);
 }
