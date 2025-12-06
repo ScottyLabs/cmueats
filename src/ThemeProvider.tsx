@@ -1,5 +1,6 @@
 import { useState, useContext, createContext, useLayoutEffect, useMemo } from 'react';
 import IS_MIKU_DAY from './util/constants';
+import { safeGetItem, safeSetItem } from './util/safeStorage';
 
 type Theme = 'none' | 'miku';
 
@@ -9,19 +10,13 @@ const ThemeContext = createContext<{
 }>({ theme: 'none', updateTheme: () => {} });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<Theme>(() =>
-        IS_MIKU_DAY && localStorage.getItem('theme') === 'miku' ? 'miku' : 'none',
-    );
+    const [theme, setTheme] = useState<Theme>(() => (IS_MIKU_DAY && safeGetItem('theme') === 'miku' ? 'miku' : 'none'));
     useLayoutEffect(() => {
         document.body.className = theme;
     }, [theme]);
 
     const updateTheme = (_theme: Theme) => {
-        try {
-            localStorage.setItem('theme', _theme);
-        } catch (e) {
-            console.error(e);
-        }
+        safeSetItem('theme', _theme);
         setTheme(_theme);
     };
     const exportedContext = useMemo(() => ({ theme, updateTheme }), [theme, updateTheme]);
