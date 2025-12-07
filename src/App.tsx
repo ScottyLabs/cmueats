@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
 import { motion } from 'motion/react';
-import { ErrorBoundary } from 'react-error-boundary';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
@@ -16,7 +15,6 @@ import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
-import bocchiError from './assets/bocchi-error.webp';
 import useRefreshWhenBackOnline from './util/network';
 
 const BACKEND_LOCATIONS_URL =
@@ -51,54 +49,35 @@ function App() {
 
     return (
         <React.StrictMode>
-            <ErrorBoundary fallback={<ErrorBoundaryFallback />}>
-                <BrowserRouter>
-                    <div className="App">
-                        {/* <Banner /> */}
-                        {/* <div className="AdBanner">
+            <BrowserRouter>
+                <div className="App">
+                    {/* <Banner /> */}
+                    {/* <div className="AdBanner">
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;
                         </div> */}
-                        <div className="MainContent" ref={mainContainerRef}>
-                            <Routes>
-                                <Route
-                                    path="/"
-                                    element={
-                                        <ListPage
-                                            locations={fullLocationData}
-                                            updateCardViewPreference={(id, preference) => {
-                                                const newPreferences = { ...cardViewPreferences, [id]: preference };
-                                                setCardViewPreferences(newPreferences);
-                                            }}
-                                        />
-                                    }
-                                />
-                                <Route path="/map" element={<MapPage locations={fullLocationData} />} />
-                                <Route path="*" element={<NotFoundPage />} />
-                            </Routes>
-                        </div>
-                        <Navbar />
+                    <div className="MainContent" ref={mainContainerRef}>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={
+                                    <ListPage
+                                        locations={fullLocationData}
+                                        updateCardViewPreference={(id, preference) => {
+                                            const newPreferences = { ...cardViewPreferences, [id]: preference };
+                                            setCardViewPreferences(newPreferences);
+                                        }}
+                                    />
+                                }
+                            />
+                            <Route path="/map" element={<MapPage locations={fullLocationData} />} />
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
                     </div>
-                </BrowserRouter>
-            </ErrorBoundary>
+                    <Navbar />
+                </div>
+            </BrowserRouter>
         </React.StrictMode>
-    );
-}
-
-function ErrorBoundaryFallback() {
-    return (
-        <div className="outer-error-container">
-            oh... uhhh... well this is awkward. we have encountered an issue while rendering this page{' '}
-            <img src={bocchiError} alt="" />
-            the error has been automatically reported to the cmueats team
-            <div className="outer-error-container__small-text">
-                Please <a href=".">refresh the page</a> or check dining hours on GrubHub or{' '}
-                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
-                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
-                </a>{' '}
-                for now
-            </div>
-        </div>
     );
 }
 
