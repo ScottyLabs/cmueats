@@ -1,7 +1,7 @@
 .dropdown-button {
     display: flex;
     color: var(--black-400);
-    gap: 1rem;
+    gap: 16px;
 
     cursor: pointer;
 
@@ -29,11 +29,11 @@
 .supergrid {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 16px;
 }
 
 .section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 16px;
 }
