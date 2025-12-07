@@ -55,7 +55,6 @@ function ListPage({
 }) {
     const { theme, updateTheme } = useTheme();
     const shouldAnimateCards = useRef(true);
-    throw new Error('hi');
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
