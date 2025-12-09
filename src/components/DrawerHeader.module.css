@@ -10,7 +10,7 @@
     justify-content: space-between;
 }
 
-.drawer-loction-text {
+.drawer-location-text {
     font-family: var(--text-primary-font);
     color: var(--text-primary);
     font-size: 2rem;
