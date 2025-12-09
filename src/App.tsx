@@ -35,6 +35,12 @@ function App() {
         queryLocations(BACKEND_LOCATIONS_URL).then(setLocations);
     }, []);
 
+    // Preload MapPage in the background (fixes mobile tap delay)
+    useEffect(() => {
+        import('./pages/MapPage');
+    }, []);
+
+
     useEffect(() => {
         const intervalId = setInterval(() => setNow(DateTime.now().setZone('America/New_York')), 1000);
         return () => clearInterval(intervalId);
