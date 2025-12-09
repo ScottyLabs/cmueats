@@ -13,7 +13,7 @@ function DrawerHeader() {
     return (
         <div className={css['drawer-header-container']}>
             <div className={css.header}>
-                <h3 className={css['drawer-loction-text']}>
+                <h3 className={css['drawer-location-text']}>
                     <a className={css['location-link']} href={url} target="_blank" rel="noreferrer">
                         <span>{name}</span>
                         <ExternalLink size={22} strokeWidth={3} aria-hidden />
