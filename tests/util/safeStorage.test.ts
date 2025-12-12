@@ -116,14 +116,8 @@ describe('safeStorage utilities', () => {
         });
 
         test('leaves localStorage clean after successful availability check', () => {
-            // Ensure localStorage is initially empty
-            localStorage.clear();
-
             const result = isStorageAvailable();
             expect(result).toBe(true);
-
-            // Verify no test key remains in localStorage
-            expect(localStorage.getItem('__storage_test__')).toBeNull();
             expect(localStorage.length).toBe(0);
         });
     });
