@@ -1,4 +1,7 @@
 .navbar {
+    position: sticky;
+    bottom: 0;
+    flex-shrink: 0;
     background-color: var(--nav-bg);
     padding: 13px 0;
     border-top: 2px solid var(--nav-border-top);

@@ -36,8 +36,6 @@ body {
 }
 
 .MainContent {
-    overflow-y: auto;
-    overflow-x: hidden;
     flex: 1;
     &:focus {
         outline: none;
