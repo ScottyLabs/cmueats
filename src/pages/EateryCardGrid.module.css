@@ -1,6 +1,6 @@
 .dropdown-button {
     display: flex;
-    color: var(--card-text-muted);
+    color: var(--black-400);
     gap: 10px;
 
     cursor: pointer;
@@ -29,7 +29,7 @@
 .supergrid {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 16px;
 }
 
 .grid-tooltip {
@@ -44,7 +44,7 @@
 .section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 16px;
 }
 
 .hidden-grid-container {

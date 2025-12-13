@@ -204,16 +204,16 @@ body {
     font-family: var(--text-primary-font);
     margin-top: 0;
     margin-bottom: 12px;
-    font-size: 1.5rem;
+    font-size: 24px;
 }
 .error-container__text {
     color: var(--text-muted);
     font-family: var(--text-secondary-font);
     margin-bottom: 20px;
-    font-size: 1rem;
+    font-size: 16px;
 }
 .error-container__error-button.MuiButton-root {
-    font-size: 1rem;
+    font-size: 16px;
     font-family: var(--text-secondary-font);
     background-color: var(--button-bg);
     color: var(--button-text);

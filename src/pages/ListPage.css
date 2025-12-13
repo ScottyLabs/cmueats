@@ -120,7 +120,7 @@
     margin: 0;
     font-family: var(--text-primary-font);
     font-weight: 800;
-    font-size: 2.5rem;
+    font-size: 40px;
 
     --right-cutoff: 100%;
     width: fit-content;
@@ -137,7 +137,7 @@
         rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
     );
     &.Locations-header__greeting--mobile {
-        font-size: 2rem;
+        font-size: 32px;
     }
 }
 @keyframes slide-in {
@@ -166,7 +166,7 @@
 .locations__error-text {
     color: var(--text-primary);
     font-family: var(--text-primary-font);
-    font-size: 1.5rem;
+    font-size: 24px;
     width: fit-content;
 }
 
