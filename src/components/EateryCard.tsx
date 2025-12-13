@@ -77,41 +77,39 @@ function EateryCard({
     );
 
     return (
-        <Grid item xs={12} md={isDrawerActive ? 12 : 4} lg={3 * isDouble} xl={2 * isDouble}>
-            <motion.div
-                layout="position"
-                className={cardClassName}
-                initial={
-                    animate
-                        ? {
-                              opacity: 0,
-                              transform: 'translate(-10px,0)',
-                              filter: 'blur(3px)',
-                              transition: { duration: 0.7, ease: [0.08, 0.67, 0.64, 1.01] },
-                          }
-                        : false
-                }
-                animate={{
-                    transform: 'translate(0,0)',
-                    opacity: 1,
-                    filter: 'blur(0)',
-                }}
-                exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                ref={cardRef}
-                // whole card clickable
-                role="button"
-                tabIndex={0}
-                onClick={handleCardSelection}
-                onKeyDown={handleCardKeyDown}
-            >
-                <EateryCardHeader location={location} />
-                <EateryCardContent
-                    location={location}
-                    updateViewPreference={updateViewPreference}
-                    partOfMainGrid={partOfMainGrid}
-                />
-            </motion.div>
-        </Grid>
+        <motion.div
+            layout="position"
+            className={cardClassName}
+            initial={
+                animate
+                    ? {
+                          opacity: 0,
+                          transform: 'translate(-10px,0)',
+                          filter: 'blur(3px)',
+                          transition: { duration: 0.7, ease: [0.08, 0.67, 0.64, 1.01] },
+                      }
+                    : false
+            }
+            animate={{
+                transform: 'translate(0,0)',
+                opacity: 1,
+                filter: 'blur(0)',
+            }}
+            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+            ref={cardRef}
+            // whole card clickable
+            role="button"
+            tabIndex={0}
+            onClick={handleCardSelection}
+            onKeyDown={handleCardKeyDown}
+        >
+            <EateryCardHeader location={location} />
+            <EateryCardContent
+                location={location}
+                updateViewPreference={updateViewPreference}
+                partOfMainGrid={partOfMainGrid}
+            />
+        </motion.div>
     );
 }
 

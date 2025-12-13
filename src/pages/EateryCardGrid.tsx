@@ -1,7 +1,8 @@
 import { Grid } from '@mui/material';
 import { useState } from 'react';
 import { ChevronDown, Info } from 'lucide-react';
-import { AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
+import clsx from 'clsx';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
@@ -43,7 +44,7 @@ export default function EateryCardGrid({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
-
+    console.log(showHiddenSection);
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
@@ -95,21 +96,21 @@ export default function EateryCardGrid({
 
     return (
         <div className={css.supergrid}>
-            <div className={css['grid-tooltip']}>
+            <div className={css['supergrid__help-text']}>
                 <Info size={16} aria-hidden="true" />
                 <span>Tap or click on the cards to see more information!</span>
             </div>
-            <Grid container spacing={2}>
+            <div className={css.supergrid__grid}>
                 <AnimatePresence>
                     {[
                         ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
                         ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
                     ].map(locationToCard)}
                 </AnimatePresence>
-            </Grid>
+            </div>
 
             {hiddenLocations.length > 0 && (
-                <div className={css.section}>
+                <div className={css['supergrid__hidden-section']}>
                     <button
                         type="button"
                         className={`${css['dropdown-button']} ${showHiddenSection && css['dropdown-button--up']}`}
@@ -123,16 +124,24 @@ export default function EateryCardGrid({
                         </span>
                     </button>
 
-                    <div
-                        className={`${css['hidden-grid-container']} ${
-                            showHiddenSection ? css['hidden-grid-container--open'] : ''
-                        }`}
+                    <motion.div
+                        className={css['hidden-grid-container']}
+                        initial={{
+                            height: showHiddenSection ? 'auto' : 0,
+                            opacity: showHiddenSection ? 1 : 0,
+                            pointerEvents: showHiddenSection ? 'all' : 'none',
+                        }}
+                        animate={{
+                            height: showHiddenSection ? 'auto' : 0,
+                            opacity: showHiddenSection ? 1 : 0,
+                            pointerEvents: showHiddenSection ? 'all' : 'none',
+                        }}
                         aria-hidden={!showHiddenSection}
                     >
-                        <Grid container spacing={2} className={css['hidden-grid']}>
-                            {hiddenLocations.map(locationToCard)}
-                        </Grid>
-                    </div>
+                        <div className={clsx(css.supergrid__grid, css['hidden-grid'])}>
+                            <AnimatePresence>{hiddenLocations.map(locationToCard)}</AnimatePresence>
+                        </div>
+                    </motion.div>
                 </div>
             )}
         </div>

@@ -17,6 +17,26 @@
     background-color: var(--status-color);
     flex-shrink: 0;
     margin-right: 8px;
+    &.card-header-dot--blinking {
+        animation: blinking 1s infinite;
+    }
+}
+@keyframes blinking {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 .time-container {

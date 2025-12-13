@@ -1,4 +1,20 @@
 :root {
+    /* please use these color variables instead of the ones below! */
+    --black-0: hsla(240, 9%, 98%, 1);
+    --black-100: hsla(220, 8%, 93%, 1);
+    --black-200: hsla(210, 9%, 87%, 1);
+    --black-300: hsla(210, 8%, 81%, 1);
+    --black-400: hsla(205, 9%, 73%, 1);
+    --black-500: hsla(207, 9%, 59%, 1);
+    --black-600: hsla(206, 7%, 52%, 1);
+    --black-700: hsla(208, 6%, 43%, 1);
+    --black-800: hsla(207, 6%, 35%, 1);
+    --black-900: hsla(206, 6%, 25%, 1);
+    --black-950: hsla(206, 7%, 19%, 1);
+    --black-1000: hsla(206, 9%, 15%, 1);
+    --black-1050: hsla(210, 10%, 12%, 1);
+    --black-1100: hsla(200, 7%, 8%, 1);
+
     --main-bg: hsl(214, 7%, 19%);
     --main-bg-accent: #23272a;
     --text-primary: white;

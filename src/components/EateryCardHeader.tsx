@@ -1,10 +1,24 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import clsx from 'clsx';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
 
 function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
+    const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
+    useEffect(() => {
+        const dotAnimation = dotRef.current?.getAnimations()[0];
+        if (!statusChangesSoon) {
+            dotAnimation?.cancel(); // delete any dot blinking animation (if it exists)
+        } else {
+            // eslint-disable-next-line no-lonely-if
+            if (dotAnimation !== undefined) {
+                dotAnimation.startTime = 0;
+                dotAnimation.play(); // keeps the flashing dots between cards in-sync
+            }
+        }
+    });
 
     const { statusMsg } = location;
     let relativeTime = 'Status unavailable';
@@ -26,7 +40,7 @@ function EateryCardHeader({ location }: { location: IReadOnlyLocation_Combined }
             style={{ '--status-color': highlightColors[location.locationState] }}
         >
             <div
-                className={css['card-header-dot']}
+                className={clsx(css['card-header-dot'], statusChangesSoon && css['card-header-dot--blinking'])}
                 style={{ '--status-color': highlightColors[location.locationState] }}
                 ref={dotRef}
             />
