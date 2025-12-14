@@ -77,12 +77,11 @@ function EateryCard({
             ),
         [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
     );
+    const shouldAnimatePositionChange = prevSelectedIdRef.current === (drawerContext.drawerLocation?.conceptId ?? null); // aka change was not triggered by a drawer select/unselect
 
     return (
         <motion.div
-            layout={
-                prevSelectedIdRef.current === (drawerContext.drawerLocation?.conceptId ?? null) ? 'position' : undefined
-            }
+            layout
             className={cardClassName}
             initial={
                 animate
@@ -102,6 +101,22 @@ function EateryCard({
             }}
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
             ref={cardRef}
+            transition={
+                shouldAnimatePositionChange
+                    ? undefined // default transition animation
+                    : {
+                          layout: {
+                              type: false,
+                              // stiffness: 500,
+                              // damping: 25,
+                              // restSpeed: 10,
+                              // ease: 'easeInOut',
+                              // type: 'tween',
+                              // duration:
+                              //      ? undefined : 0,
+                          },
+                      }
+            }
             // whole card clickable
             role="button"
             tabIndex={0}
