@@ -49,7 +49,7 @@ function EateryCard({
     useEffect(() => {
         if (isCardSelected && cardRef.current) {
             cardRef.current.scrollIntoView({
-                behavior: 'smooth',
+                behavior: 'instant',
                 block: 'center',
             });
         }
@@ -59,7 +59,6 @@ function EateryCard({
         () =>
             clsx(
                 css.card,
-                // animate ? css['card-animated'] : '',
                 isCardSelected ? css['card-active'] : '',
                 partOfMainGrid ? css['card-in-main-grid'] : '',
                 location.cardViewPreference === 'pinned' ? css['card-pinned'] : '',
@@ -86,7 +85,6 @@ function EateryCard({
                 transform: 'translate(0,0)',
                 opacity: 1,
                 filter: 'blur(0)',
-                border: isCardSelected ? '2px solid white' : 'none',
             }}
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
             ref={cardRef}
@@ -96,13 +94,6 @@ function EateryCard({
                     : {
                           layout: {
                               type: false,
-                              // stiffness: 500,
-                              // damping: 25,
-                              // restSpeed: 10,
-                              // ease: 'easeInOut',
-                              // type: 'tween',
-                              // duration:
-                              //      ? undefined : 0,
                           },
                       }
             }
