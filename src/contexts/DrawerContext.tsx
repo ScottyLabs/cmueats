@@ -1,37 +1,31 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 export type DrawerTabType = 'overview' | 'menu' | 'reviews' | 'specials';
 
-export type DrawerContextValue = {
-    drawerLocation: IReadOnlyLocation_Combined | null;
-    setDrawerConceptId: (conceptId: number | null) => void;
+export type DrawerAPIContextValue = {
     activeTab: DrawerTabType;
     setActiveTab: (tab: DrawerTabType) => void;
-    closeDrawer: () => void;
+    location: IReadOnlyLocation_Combined;
 };
 
-const DrawerContext = createContext<DrawerContextValue | undefined>(undefined);
+const DrawerContext = createContext<DrawerAPIContextValue | undefined>(undefined);
 
 export function DrawerContextProvider({
     children,
-    locations,
+    location,
 }: {
     children: React.ReactNode;
-    locations: IReadOnlyLocation_Combined[] | undefined;
+    location: IReadOnlyLocation_Combined;
 }) {
-    const [drawerConceptId, setDrawerConceptId] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<DrawerTabType>('overview');
-
     const drawerContextValue = useMemo(
         () => ({
-            drawerLocation: locations?.find((loc) => loc.conceptId === drawerConceptId) ?? null,
-            closeDrawer: () => setDrawerConceptId(null),
-            setDrawerConceptId,
             activeTab,
             setActiveTab,
+            location,
         }),
-        [locations, drawerConceptId, activeTab],
+        [activeTab, location],
     );
     return <DrawerContext.Provider value={drawerContextValue}>{children}</DrawerContext.Provider>;
 }

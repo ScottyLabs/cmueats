@@ -1,19 +1,20 @@
-import { useContext, useEffect, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useDrawerContext } from '../contexts/DrawerContext';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
+import { DrawerContextProvider } from '../contexts/DrawerContext';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
-function Drawer() {
-    const { drawerLocation, closeDrawer, setActiveTab, activeTab } = useDrawerContext();
+function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undefined }) {
+    const { selectedConceptId, closeDrawer } = useDrawerAPIContext();
     const drawerRef = useRef<HTMLDivElement | null>(null);
-
+    const pickedLocation = locations?.find((loc) => loc.conceptId === selectedConceptId);
     // `esc` to close the drawer
     useEffect(() => {
-        if (drawerLocation === null) return () => {};
+        if (selectedConceptId === null) return;
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;
@@ -28,22 +29,24 @@ function Drawer() {
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [drawerLocation]);
+    }, [selectedConceptId]);
 
     return (
         <AnimatePresence mode="popLayout">
-            {drawerLocation !== null && (
+            {pickedLocation !== undefined && (
                 <motion.div
                     initial={{ opacity: 0, transform: 'translateX(30px)' }}
                     animate={{ opacity: 1, transform: 'translateX(0)' }}
                     exit={{ opacity: 0 }}
                     // transition={{ duration: 10 }}
                 >
-                    <div className={css['drawer-box']} ref={drawerRef}>
-                        <DrawerHeader location={drawerLocation} closeDrawer={closeDrawer} />
-                        <DrawerTabNav setActiveTab={setActiveTab} activeTab={activeTab} />
-                        <DrawerTabContent />
-                    </div>
+                    <DrawerContextProvider location={pickedLocation} key={pickedLocation.conceptId}>
+                        <div className={css['drawer-box']} ref={drawerRef}>
+                            <DrawerHeader />
+                            <DrawerTabNav />
+                            <DrawerTabContent />
+                        </div>
+                    </DrawerContextProvider>
                 </motion.div>
             )}
         </AnimatePresence>

@@ -12,7 +12,7 @@ import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid'; // TODO
 import Drawer from '../components/Drawer';
-import { DrawerContextProvider, DrawerTabType } from '../contexts/DrawerContext';
+import { DrawerAPIContextProvider } from '../contexts/DrawerAPIContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
@@ -125,7 +125,7 @@ function ListPage({
     }, []);
 
     return (
-        <DrawerContextProvider locations={locations}>
+        <DrawerAPIContextProvider>
             <div className="list-page-container">
                 <div className="list-box">
                     {/* {showAlert && (
@@ -270,9 +270,9 @@ function ListPage({
                     <link rel="prefetch" href={mikuBgUrl} />
                 </div>
 
-                <Drawer />
+                <Drawer locations={locations} />
             </div>
-        </DrawerContextProvider>
+        </DrawerAPIContextProvider>
     );
 }
 
