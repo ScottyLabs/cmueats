@@ -12,7 +12,7 @@ import footerMikuUrl from '../assets/miku/miku2.png';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid'; // TODO
 import Drawer from '../components/Drawer';
-import { DrawerContext, TabType } from '../contexts/DrawerContext';
+import { DrawerContextProvider, DrawerTabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import env from '../env';
@@ -124,42 +124,8 @@ function ListPage({
         };
     }, []);
 
-    const [isDrawerActive, setIsDrawerActive] = useState(false);
-    const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
-    const [activeTab, setActiveTab] = useState<TabType>('overview');
-    const isDrawerActiveRef = useRef(isDrawerActive);
-    useEffect(() => {
-        isDrawerActiveRef.current = isDrawerActive;
-    }, [isDrawerActive]);
-    // if drawer if open, update the drawer's content whenever extraLocationData gets updated
-    // TODO: might buggy
-    useEffect(() => {
-        if (!isDrawerActiveRef.current || !drawerLocation || !locations) return;
-        const baseLocation = locations.find((loc) => loc.conceptId === drawerLocation.conceptId);
-        if (!baseLocation) return;
-        setDrawerLocation(baseLocation);
-    }, [drawerLocation?.conceptId, locations]);
-    const drawerContextValue = useMemo(
-        () => ({
-            isDrawerActive,
-            setIsDrawerActive: (active: boolean) => {
-                setIsDrawerActive(active);
-                // ensure drawer content don't change before fully exited
-                setTimeout(() => {
-                    // ensure drawerLocation is null if it is inactive
-                    if (!isDrawerActiveRef.current) setDrawerLocation(null);
-                }, 500);
-            },
-            drawerLocation,
-            setDrawerLocation,
-            activeTab,
-            setActiveTab,
-        }),
-        [isDrawerActive, drawerLocation, activeTab],
-    );
-
     return (
-        <DrawerContext.Provider value={drawerContextValue}>
+        <DrawerContextProvider locations={locations}>
             <div className="list-page-container">
                 <div className="list-box">
                     {/* {showAlert && (
@@ -306,7 +272,7 @@ function ListPage({
 
                 <Drawer />
             </div>
-        </DrawerContext.Provider>
+        </DrawerContextProvider>
     );
 }
 

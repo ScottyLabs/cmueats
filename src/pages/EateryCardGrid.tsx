@@ -11,7 +11,12 @@ import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
 
 import { CardViewPreference } from '../util/storage';
+import { useDrawerContext } from '../contexts/DrawerContext';
 
+function Rand() {
+    const drawerCtx = useDrawerContext();
+    return <button onClick={() => drawerCtx.setDrawerConceptId(95)}>asdfd</button>;
+}
 const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
     const state1 = location1.locationState;
     const state2 = location2.locationState;
@@ -44,7 +49,7 @@ export default function EateryCardGrid({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
-    console.log(showHiddenSection);
+
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
@@ -101,6 +106,7 @@ export default function EateryCardGrid({
                 <span>Tap or click on the cards to see more information!</span>
             </div>
             <div className={css.supergrid__grid}>
+                <Rand />
                 <AnimatePresence>
                     {[
                         ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
@@ -130,11 +136,13 @@ export default function EateryCardGrid({
                             height: showHiddenSection ? 'auto' : 0,
                             opacity: showHiddenSection ? 1 : 0,
                             pointerEvents: showHiddenSection ? 'all' : 'none',
+                            overflow: showHiddenSection ? 'visible' : 'hidden',
                         }}
                         animate={{
                             height: showHiddenSection ? 'auto' : 0,
                             opacity: showHiddenSection ? 1 : 0,
                             pointerEvents: showHiddenSection ? 'all' : 'none',
+                            overflow: showHiddenSection ? 'visible' : 'hidden',
                         }}
                         aria-hidden={!showHiddenSection}
                     >

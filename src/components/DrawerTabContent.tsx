@@ -2,13 +2,13 @@ import { useContext } from 'react';
 import { ExternalLink } from 'lucide-react';
 import { DateTime } from 'luxon';
 import { getTimeSlotsString } from '../util/time';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { useDrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerTabContent.module.css';
 
 function DrawerTabContent() {
     const dayOffsetFromSunday = DateTime.now().weekday % 7; // literally will be refreshed every second because location status is. This is fine
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const drawerContext = useContext(DrawerContext);
+    const drawerContext = useDrawerContext();
     const location = drawerContext.drawerLocation;
 
     if (!location) {

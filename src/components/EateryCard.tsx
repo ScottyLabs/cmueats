@@ -1,10 +1,9 @@
-import { KeyboardEvent, useContext, useEffect, useMemo, useRef } from 'react';
-import { Grid } from '@mui/material';
+import { KeyboardEvent, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { CardViewPreference } from '../util/storage';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { useDrawerContext } from '../contexts/DrawerContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 import css from './EateryCard.module.css';
@@ -20,9 +19,15 @@ function EateryCard({
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
-    const drawerContext = useContext(DrawerContext);
-    const { isDrawerActive, drawerLocation } = drawerContext;
-    const isCardActiveInDrawer = isDrawerActive && drawerLocation?.conceptId === location.conceptId;
+    // console.log("render")
+    const drawerContext = useDrawerContext();
+    const prevSelectedIdRef = useRef<number | null>(null);
+    useEffect(() => {
+        prevSelectedIdRef.current = drawerContext.drawerLocation?.conceptId ?? null;
+    }, [drawerContext]);
+
+    // const { drawerLocation } = drawerContext;
+    const isCardSelected = drawerContext.drawerLocation?.conceptId === location.conceptId;
     const cardRef = useRef<HTMLDivElement | null>(null);
     function handleCardSelection() {
         // open default tab "overview"
@@ -31,10 +36,9 @@ function EateryCard({
         // card's detail, instead of closing the drawer;
         // click on the same card will close the drawer.
         if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
-            drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+            drawerContext.closeDrawer();
         } else {
-            drawerContext.setDrawerLocation(location);
-            drawerContext.setIsDrawerActive(true);
+            drawerContext.setDrawerConceptId(location.conceptId);
         }
     }
 
@@ -48,37 +52,37 @@ function EateryCard({
 
     useEffect(() => {
         let timeoutId: number | undefined;
-        if (isCardActiveInDrawer && cardRef.current) {
-            timeoutId = window.setTimeout(() => {
-                cardRef.current!.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                });
-            }, 400);
+        console.log(drawerContext);
+        if (isCardSelected && cardRef.current) {
+            cardRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            });
         }
 
-        return () => {
-            // if click two cards very fast, will only scroll to the second card clicked
-            if (timeoutId !== undefined) window.clearTimeout(timeoutId);
-        };
-    }, [drawerLocation?.conceptId, isDrawerActive, location.conceptId]);
+        // return () => {
+        //     // if click two cards very fast, will only scroll to the second card clicked
+        //     if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+        // };
+    }, [drawerContext.drawerLocation?.conceptId]);
 
-    const isDouble = isDrawerActive ? 2 : 1;
     const cardClassName = useMemo(
         () =>
             clsx(
                 css.card,
                 // animate ? css['card-animated'] : '',
-                isCardActiveInDrawer ? css['card-active'] : '',
+                isCardSelected ? css['card-active'] : '',
                 partOfMainGrid ? css['card-in-main-grid'] : '',
                 location.cardViewPreference === 'pinned' ? css['card-pinned'] : '',
             ),
-        [animate, isCardActiveInDrawer, partOfMainGrid, location.cardViewPreference],
+        [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
     );
 
     return (
         <motion.div
-            layout="position"
+            layout={
+                prevSelectedIdRef.current === (drawerContext.drawerLocation?.conceptId ?? null) ? 'position' : undefined
+            }
             className={cardClassName}
             initial={
                 animate
@@ -94,6 +98,7 @@ function EateryCard({
                 transform: 'translate(0,0)',
                 opacity: 1,
                 filter: 'blur(0)',
+                border: isCardSelected ? '2px solid white' : 'none',
             }}
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
             ref={cardRef}

@@ -1,18 +1,19 @@
 import { useContext, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { AnimatePresence, motion } from 'motion/react';
+import { useDrawerContext } from '../contexts/DrawerContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
 
 function Drawer() {
-    const { isDrawerActive, setIsDrawerActive } = useContext(DrawerContext);
+    const { drawerLocation, closeDrawer, setActiveTab, activeTab } = useDrawerContext();
     const drawerRef = useRef<HTMLDivElement | null>(null);
 
     // `esc` to close the drawer
     useEffect(() => {
-        if (!isDrawerActive) return () => {};
+        if (drawerLocation === null) return () => {};
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;
@@ -22,34 +23,30 @@ function Drawer() {
 
             if (isTyping) return;
 
-            setIsDrawerActive(false);
+            closeDrawer();
         }
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isDrawerActive, setIsDrawerActive]);
+    }, [drawerLocation]);
 
     return (
-        <CSSTransition
-            in={isDrawerActive}
-            timeout={300}
-            mountOnEnter
-            unmountOnExit
-            nodeRef={drawerRef}
-            classNames={{
-                enter: css['drawer-enter'],
-                enterActive: css['drawer-enter-active'],
-                enterDone: css['drawer-enter-done'],
-                exit: css['drawer-exit'],
-                exitActive: css['drawer-exit-active'],
-            }}
-        >
-            <div className={css['drawer-box']} ref={drawerRef}>
-                <DrawerHeader />
-                <DrawerTabNav />
-                <DrawerTabContent />
-            </div>
-        </CSSTransition>
+        <AnimatePresence mode="popLayout">
+            {drawerLocation !== null && (
+                <motion.div
+                    initial={{ opacity: 0, transform: 'translateX(30px)' }}
+                    animate={{ opacity: 1, transform: 'translateX(0)' }}
+                    exit={{ opacity: 0 }}
+                    // transition={{ duration: 10 }}
+                >
+                    <div className={css['drawer-box']} ref={drawerRef}>
+                        <DrawerHeader location={drawerLocation} closeDrawer={closeDrawer} />
+                        <DrawerTabNav setActiveTab={setActiveTab} activeTab={activeTab} />
+                        <DrawerTabContent />
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 

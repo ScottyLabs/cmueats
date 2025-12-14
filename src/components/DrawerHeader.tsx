@@ -1,13 +1,9 @@
-import { useContext } from 'react';
 import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
-import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerHeader.module.css';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
-function DrawerHeader() {
-    const drawerContext = useContext(DrawerContext);
-    const location = drawerContext.drawerLocation;
-    if (!location) return null;
+function DrawerHeader({ location, closeDrawer }: { location: IReadOnlyLocation_Combined; closeDrawer: () => void }) {
     const { name, statusMsg, location: physicalLocation, url } = location;
 
     return (
@@ -21,7 +17,7 @@ function DrawerHeader() {
                 </h3>
                 <button
                     type="button"
-                    onClick={() => drawerContext.setIsDrawerActive(false)}
+                    onClick={() => closeDrawer()}
                     className={css['close-button']}
                     aria-label="Close location drawer"
                 >
