@@ -28,7 +28,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // listen for localstorage changes
     return <ThemeContext.Provider value={exportedContext}>{children}</ThemeContext.Provider>;
 }
-export function useTheme() {
+export function useThemeContext() {
     const theme = useContext(ThemeContext);
     return theme;
 }

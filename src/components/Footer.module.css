@@ -1,0 +1,47 @@
+.footer {
+    margin-top: 80px;
+    background-color: var(--black-1050);
+    padding: 40px 0 0;
+    min-height: 130px;
+    position: relative;
+    overflow: hidden;
+    &:has(.footer__miku) {
+        min-height: 530px;
+        /* we create a new stacking context so miku doesn't go below the bg */
+        isolation: isolate;
+    }
+}
+.footer__text-section {
+    color: var(--black-0);
+    margin-bottom: 20px;
+    font-size: 16px;
+    padding: 0 40px;
+}
+.footer__logo {
+    font-family: var(--text-primary-font);
+    font-weight: 800;
+    font-size: 34px;
+    margin: 20px 0;
+    & :nth-child(1) {
+        color: var(--logo-first-half);
+    }
+    & :nth-child(2) {
+        color: var(--logo-second-half);
+    }
+}
+.footer__miku {
+    position: absolute;
+    right: 20px;
+    top: -56px;
+    height: 100%;
+    z-index: -1;
+    @media screen and (max-width: 900px) {
+        & {
+            top: 0;
+        }
+    }
+}
+.sponsors-spacer {
+    position: relative;
+    height: 35px;
+}
