@@ -36,8 +36,6 @@ body {
 }
 
 .MainContent {
-    overflow-y: auto;
-    overflow-x: hidden;
     flex: 1;
     &:focus {
         outline: none;
@@ -66,7 +64,7 @@ body {
 }
 
 .announcement {
-    padding: 1rem;
+    padding: 16px;
     font-size: 1.2em;
     color: white;
     text-align: center;
@@ -75,10 +73,10 @@ body {
 
 .AdBanner {
     /* display: none; */
-    padding: 1rem;
-    font-size: 1.3rem;
+    padding: 16px;
+    font-size: 20.8px;
     @media (max-width: 386px) {
-        font-size: 1.1rem;
+        font-size: 17.6px;
     }
     color: white;
     text-align: center;
@@ -126,7 +124,7 @@ body {
         isolation: isolate;
         align-self: stretch;
         position: relative;
-        font-size: 1.25rem;
+        font-size: 20px;
         width: fit-content;
         display: flex;
         align-items: center;

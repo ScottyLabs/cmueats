@@ -25,7 +25,7 @@
 
 .Locations-header {
     display: grid;
-    grid-gap: 1rem;
+    grid-gap: 16px;
     padding-bottom: 48px;
     position: relative;
 }
@@ -110,7 +110,7 @@
     margin: 0;
     font-family: var(--text-primary-font);
     font-weight: 800;
-    font-size: 2.5rem;
+    font-size: 40px;
 
     --right-cutoff: 100%;
     width: fit-content;
@@ -128,7 +128,7 @@
     );
 
     &.Locations-header__greeting--mobile {
-        font-size: 2rem;
+        font-size: 32px;
     }
 }
 
@@ -161,7 +161,7 @@
 .locations__error-text {
     color: var(--text-primary);
     font-family: var(--text-primary-font);
-    font-size: 1.5rem;
+    font-size: 24px;
     width: fit-content;
     word-break: break-word;
 }
