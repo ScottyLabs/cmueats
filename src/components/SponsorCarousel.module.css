@@ -96,7 +96,7 @@
     padding: 0;
     margin: 0;
     width: max-content;
-    animation: carousel 60s linear infinite;
+    animation: carousel 90s linear infinite;
     background-color: var(--sponsors-background-color);
 
     .carousel__item {
