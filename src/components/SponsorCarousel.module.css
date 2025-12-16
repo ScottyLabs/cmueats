@@ -69,8 +69,9 @@
 .sponsors-button__arrow {
     margin-left: 8px;
     transition: transform 0.3s ease;
+    transform: rotate(180deg);
     [aria-hidden='false'] & {
-        transform: rotate(180deg);
+        transform: rotate(0deg);
     }
 }
 
