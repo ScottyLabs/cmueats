@@ -48,6 +48,10 @@ function ListPage({
         },
         '',
     );
+    const mainContainerRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        mainContainerRef.current?.focus();
+    }, []);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
     const { mobileGreeting, desktopGreeting } = useMemo(
@@ -85,7 +89,7 @@ function ListPage({
     }, []);
 
     return (
-        <div className="ListPage">
+        <div className="ListPage" ref={mainContainerRef}>
             {/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]

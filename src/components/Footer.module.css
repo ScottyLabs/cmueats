@@ -44,4 +44,10 @@
 .sponsors-spacer {
     position: relative;
     height: 35px;
+    @media (max-width: 900px) {
+        height: 20px;
+    }
+    @media (max-width: 600px) {
+        height: 50px;
+    }
 }
