@@ -98,7 +98,6 @@
     width: max-content;
     animation: carousel 90s linear infinite;
     background-color: var(--sponsors-background-color);
-
     .carousel__item {
         flex: 0 0 auto;
         .carousel__image {
