@@ -6,20 +6,17 @@ import SponsorCarousel from './SponsorCarousel';
 import { useThemeContext } from '../ThemeProvider';
 import footerMikuUrl from '../assets/miku/miku2.png';
 
-function getPittsburghTime() {
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'America/New_York',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        timeZoneName: 'short',
-    };
-    return now.toLocaleString('en-US', options);
-}
-export default function Footer({}: { now: DateTime }) {
+export default function Footer({ now }: { now: DateTime }) {
     const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
     const { theme } = useThemeContext();
+    const nowString = now.toLocaleString({
+        weekday: 'short',
+        month: 'short',
+        day: '2-digit',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+    });
 
     // Fetch emails on mount
     useEffect(() => {
@@ -41,11 +38,11 @@ export default function Footer({}: { now: DateTime }) {
                     <p>
                         Blue hair, blue tie, hiding in your wifi
                         <br />
-                        All times are displayed in Pittsburgh local time ({getPittsburghTime()}).
+                        All times are displayed in Pittsburgh local time ({nowString}).
                     </p>
                 ) : (
                     <>
-                        <p>All times are displayed in Pittsburgh local time ({getPittsburghTime()}).</p>
+                        <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
                         <p>
                             If you encounter any problems, please fill out our{' '}
                             <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
