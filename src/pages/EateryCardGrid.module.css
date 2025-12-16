@@ -9,7 +9,7 @@
     border: none;
     background-color: transparent;
 
-    img {
+    svg {
         rotate: -90deg;
         transition: rotate 0.2s ease;
     }
@@ -21,7 +21,7 @@
 }
 
 .dropdown-button--up {
-    img {
+    svg {
         rotate: 0deg;
     }
 }

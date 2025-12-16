@@ -9,7 +9,7 @@ import assert from '../util/assert';
 
 import css from './EateryCardGrid.module.css';
 
-import dropdown_arrow from '../assets/control_button/dropdown_arrow.svg';
+import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 
 const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
@@ -114,7 +114,7 @@ export default function EateryCardGrid({
                         }}
                         type="button"
                     >
-                        <img src={dropdown_arrow} height={8} alt="Dropdown arrow" />
+                        <DropdownArrow height={8} />
                         <p>
                             {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
                         </p>
