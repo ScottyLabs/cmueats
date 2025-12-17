@@ -45,7 +45,7 @@ export default function EateryCardGrid({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
-    console.log(showHiddenSection);
+
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
@@ -101,28 +101,31 @@ export default function EateryCardGrid({
                 <Info size={16} aria-hidden="true" />
                 <span>Tap or click on the cards to see more information!</span>
             </div>
-            <div className={css.supergrid__grid}>
-                <AnimatePresence>
-                    {[
-                        ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
-                        ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
-                    ].map(locationToCard)}
-                </AnimatePresence>
+            <div className={css.supergrid__section}>
+                <div className={css.supergrid__grid}>
+                    <AnimatePresence>
+                        {[
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
+                        ].map(locationToCard)}
+                    </AnimatePresence>
+                </div>
             </div>
 
             {hiddenLocations.length > 0 && (
-                <div className={css['supergrid__hidden-section']}>
+                <div className={css.supergrid__section}>
                     <button
                         type="button"
-                        className={`${css['dropdown-button']} ${showHiddenSection && css['dropdown-button--up']}`}
+                        className={css['hidden-section__toggle']}
+                        aria-expanded={showHiddenSection}
                         onClick={() => {
                             setShowHiddenSection(!showHiddenSection);
                         }}
                     >
                         <DropdownArrow height={8} />
-                        <p>
+                        <span>
                             {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
-                        </p>
+                        </span>
                     </button>
 
                     <motion.div
@@ -137,6 +140,7 @@ export default function EateryCardGrid({
                             opacity: showHiddenSection ? 1 : 0,
                             pointerEvents: showHiddenSection ? 'all' : 'none',
                         }}
+                        transition={{ ease: [0.25, 0.8, 0.25, 1], duration: 0.6 }}
                         aria-hidden={!showHiddenSection}
                     >
                         <div className={clsx(css.supergrid__grid, css['hidden-grid'])}>

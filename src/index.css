@@ -72,6 +72,11 @@
 
     --logo-first-half: #dd3c18;
     --logo-second-half: #19b875;
+
+    --global-x-padding: 24px;
+    @media screen and (max-width: 900px) {
+        --global-x-padding: 15px;
+    }
 }
 
 body.miku {

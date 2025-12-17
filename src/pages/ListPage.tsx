@@ -126,48 +126,52 @@ function ListPage({
     );
 
     return (
-        <div className="ListPage" ref={mainContainerRef}>
-            {/*  showAlert &&
+        <DrawerContext.Provider value={drawerContextValue}>
+            <div className="list-page-container" ref={mainContainerRef}>
+                {/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
       </StyledAlert>  */}
-            {showOfflineAlert && (
-                <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
-                    🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
-                    you are offline. We apologize for any inconvenience. 🌐🚫
-                </StyledAlert>
-            )}
+                {showOfflineAlert && (
+                    <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
+                        🚫🌐 We are temporarily unable to provide the latest available dining information or the map
+                        while you are offline. We apologize for any inconvenience. 🌐🚫
+                    </StyledAlert>
+                )}
 
-            <div className="ListPage__container">
-                <header className="Locations-header">
-                    <div className="Locations-header__greeting-container">
-                        <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
-                            {desktopGreeting}
-                        </h3>
-                        <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
-                            {mobileGreeting}
-                        </h3>
-                    </div>
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
-                </header>
-
-                <EateryCardGrid
-                    key={`${searchQuery}-${locationFilterQuery}`}
-                    locations={filteredLocations}
-                    shouldAnimateCards={shouldAnimateCards.current}
-                    apiError={locations !== undefined && locations.length === 0}
-                    setSearchQuery={setSearchQuery}
-                    updateCardViewPreference={(id, preference) => {
-                        shouldAnimateCards.current = false;
-                        updateCardViewPreference(id, preference);
-                    }}
-                />
+                <div className="list-box">
+                    <header className="list-header">
+                        <div className="list-header-greeting-container">
+                            <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
+                                {desktopGreeting}
+                            </h3>
+                            <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
+                                {mobileGreeting}
+                            </h3>
+                        </div>
+                        <div className="list-header-controls">
+                            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                            <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                        </div>
+                    </header>
+                    <EateryCardGrid
+                        key={`${searchQuery}-${locationFilterQuery}`}
+                        locations={filteredLocations}
+                        shouldAnimateCards={shouldAnimateCards.current}
+                        apiError={locations !== undefined && locations.length === 0}
+                        setSearchQuery={setSearchQuery}
+                        updateCardViewPreference={(id, preference) => {
+                            shouldAnimateCards.current = false;
+                            updateCardViewPreference(id, preference);
+                        }}
+                    />
+                    <Footer now={now} />
+                </div>
+                <Drawer />
+                <link rel="prefetch" href={mikuBgUrl} />
             </div>
-            <Footer now={now} />
-            <link rel="prefetch" href={mikuBgUrl} />
-        </div>
+        </DrawerContext.Provider>
     );
 }
 

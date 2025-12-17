@@ -1,4 +1,6 @@
-.dropdown-button {
+.hidden-section__toggle {
+    margin-top: 30px;
+    margin-left: var(--global-x-padding);
     display: flex;
     color: var(--black-400);
     gap: 10px;
@@ -13,6 +15,11 @@
         rotate: -90deg;
         transition: rotate 0.2s linear;
     }
+    &[aria-expanded='true'] {
+        & svg {
+            rotate: 0deg;
+        }
+    }
 
     & span {
         font-size: 16px;
@@ -20,41 +27,31 @@
     }
 }
 
-.dropdown-button--up {
-    & svg {
-        rotate: 0deg;
-    }
-}
-
-.supergrid {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
 .supergrid__help-text {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
     color: var(--card-text-muted);
     font-size: 14px;
+    margin-left: var(--global-x-padding);
+}
+.supergrid {
+    margin-bottom: 35px;
 }
 .supergrid__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
     grid-auto-flow: dense;
     gap: 16px;
+    padding: 20px var(--global-x-padding) 10px;
 }
 
-.supergrid__hidden-section {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.supergrid__section {
     margin-top: 15px;
-    margin-bottom: 25px;
 }
-
+.hidden-grid-container {
+    overflow-y: hidden;
+}
 .hidden-grid {
     opacity: 60%;
-    width: 100%;
 }
