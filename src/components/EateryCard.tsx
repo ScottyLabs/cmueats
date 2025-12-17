@@ -92,7 +92,7 @@ const StatusText = styled(Typography, {
     shouldForwardProp: (prop) => prop !== 'state',
 })<TextProps>(({ state }) => ({
     color: textColors[state],
-    fontSize: '1rem',
+    fontSize: '16px',
     fontWeight: 500,
     fontFamily: 'var(--text-secondary-font)',
 }));

@@ -28,7 +28,7 @@ function EateryCardSkeleton({ index }: { index: number }) {
                 }}
             >
                 <StyledCardHeader
-                    title={<Skeleton variant="text" sx={{ fontSize: '1rem' }} animation={false} />}
+                    title={<Skeleton variant="text" sx={{ fontSize: '16px' }} animation={false} />}
                     avatar={
                         <Avatar
                             sx={{
@@ -42,9 +42,9 @@ function EateryCardSkeleton({ index }: { index: number }) {
                     }
                 />
                 <CardContent>
-                    <SkeletonText variant="text" sx={{ fontSize: '2rem' }} animation={false} />
-                    <SkeletonText variant="text" sx={{ fontSize: '1rem' }} animation={false} />
-                    <SkeletonText variant="text" sx={{ fontSize: '1.2rem' }} animation={false} />
+                    <SkeletonText variant="text" sx={{ fontSize: '32px' }} animation={false} />
+                    <SkeletonText variant="text" sx={{ fontSize: '16px' }} animation={false} />
+                    <SkeletonText variant="text" sx={{ fontSize: '19.2px' }} animation={false} />
                 </CardContent>
             </StyledCard>
         </Grid>

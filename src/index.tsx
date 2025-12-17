@@ -8,6 +8,7 @@ import App from './App';
 import { ThemeProvider } from './ThemeProvider';
 import env from './env';
 import notifySlack from './util/slack';
+import GlobalErrorBoundary from './ErrorFallback';
 
 posthog.init(env.VITE_POSTHOG_KEY || '', {
     person_profiles: 'identified_only',
@@ -27,11 +28,13 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
     createRoot(rootElement).render(
         <React.StrictMode>
-            <PostHogProvider client={posthog}>
-                <ThemeProvider>
-                    <App />
-                </ThemeProvider>
-            </PostHogProvider>
+            <GlobalErrorBoundary>
+                <PostHogProvider client={posthog}>
+                    <ThemeProvider>
+                        <App />
+                    </ThemeProvider>
+                </PostHogProvider>
+            </GlobalErrorBoundary>
         </React.StrictMode>,
     );
 }

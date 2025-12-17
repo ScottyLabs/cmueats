@@ -1,4 +1,7 @@
 .navbar {
+    position: sticky;
+    bottom: 0;
+    flex-shrink: 0;
     background-color: var(--nav-bg);
     padding: 13px 0;
     border-top: 2px solid var(--nav-border-top);
@@ -36,7 +39,7 @@
     font-family: var(--text-primary-font);
     font-weight: 500;
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 16px;
     text-decoration: none;
     svg {
         width: 24px;
