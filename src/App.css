@@ -38,6 +38,8 @@ body {
 .MainContent {
     flex: 1;
     min-height: 0;
+
+    overflow-y: auto;
     &:focus {
         outline: none;
     }
@@ -57,33 +59,6 @@ body {
 .App-link {
     color: #61dafb;
 }
-
-.footer {
-    background-color: var(--footer-bg);
-    padding: 40px;
-    min-height: 130px;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-    &:has(.footer__miku) {
-        min-height: 530px;
-        /* we create a new stacking context so miku doesn't go below the bg */
-        isolation: isolate;
-    }
-}
-.footer__miku {
-    position: absolute;
-    right: 20px;
-    top: -56px;
-    height: 100%;
-    z-index: -1;
-    @media screen and (max-width: 900px) {
-        & {
-            top: 0;
-        }
-    }
-}
-
 .MuiCard-root {
     display: flex;
     flex-direction: column;

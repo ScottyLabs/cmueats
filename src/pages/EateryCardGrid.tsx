@@ -10,6 +10,7 @@ import { LocationState, IReadOnlyLocation_Combined } from '../types/locationType
 import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
 
+import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 
 const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
@@ -118,10 +119,10 @@ export default function EateryCardGrid({
                             setShowHiddenSection(!showHiddenSection);
                         }}
                     >
-                        <ChevronDown size={18} />
-                        <span>
+                        <DropdownArrow height={8} />
+                        <p>
                             {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
-                        </span>
+                        </p>
                     </button>
 
                     <motion.div
