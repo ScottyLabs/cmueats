@@ -1,18 +1,65 @@
-.ListPage {
+.list-page-container {
+    display: flex;
+    position: relative;
+    overflow-x: hidden;
+    height: 100%;
+}
+.list-box {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+.list-header {
     display: flex;
     flex-direction: column;
-    min-height: 100%;
-    /* So the contact info footer actually stays at the bottom */
-}
-
-.ListPage__container {
-    padding: 72px 48px 0;
-    flex-grow: 1;
-
+    padding: 36px var(--global-x-padding) 20px calc(var(--global-x-padding) + 2px);
+    position: relative;
+    background-color: var(--black-1000);
     @media screen and (max-width: 900px) {
         & {
-            padding: 50px 15px;
+            padding-top: 16px;
+            padding-bottom: 16px;
         }
+    }
+    container-type: inline-size;
+    & .list-header__greeting--desktop {
+        display: none;
+    }
+    /* 600px is the approximate width of the location dropdown selector (we are also assuming that the desktop greeting is less than 600px wide) */
+    @container (min-width: 600px) {
+        & .list-header__greeting--desktop {
+            display: block;
+        }
+        & .list-header__greeting--mobile {
+            display: none;
+        }
+    }
+}
+
+/* solely for the purpose of a container query */
+.list-controls-container {
+    container-type: inline-size;
+    position: sticky;
+    top: 0;
+    z-index: 727;
+    background-color: var(--main-bg);
+}
+.list-controls-layout {
+    margin: 25px 0 25px;
+    padding: 0 var(--global-x-padding);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 230px;
+    max-width: 500px;
+    margin-left: auto;
+    gap: 0.6rem;
+    align-items: center;
+
+    @container (width<1000px) {
+        max-width: initial;
+    }
+    @container (width<600px) {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -21,13 +68,6 @@
     background: #19b875;
     padding: 10px;
     border-radius: 30;
-}
-
-.Locations-header {
-    display: grid;
-    grid-gap: 16px;
-    padding-bottom: 48px;
-    position: relative;
 }
 
 .Locations-header__miku-toggle {
@@ -45,67 +85,38 @@
     transition: 0.3s all;
     transform-origin: top;
     animation: 3s sway infinite cubic-bezier(0.364212, 0, 0.635788, 1);
-
     &:hover {
         top: -280px;
-
         &:active {
             top: -272px;
         }
     }
-
     & img {
         height: 410px;
     }
 }
-
 @media screen and (max-width: 900px) {
     .Locations-header__miku-toggle {
         right: -20px;
         left: auto;
     }
 }
-
 @keyframes sway {
     0%,
     100% {
         transform: rotate(1deg);
     }
-
     50% {
         transform: rotate(-1deg);
     }
 }
-
-.Locations-header__greeting-container {
-    container-type: inline-size;
-
-    & .Locations-header__greeting--desktop {
-        display: none;
-    }
-
-    padding-left: 2px;
-
-    /* 600px is the approximate width of the location dropdown selector (we are also assuming that the desktop greeting is less than 600px wide) */
-    @container (min-width: 600px) {
-        & .Locations-header__greeting--desktop {
-            display: block;
-        }
-
-        & .Locations-header__greeting--mobile {
-            display: none;
-        }
-    }
-}
-
 /* we need this to properly animate the mask gradient */
 @property --right-cutoff {
     syntax: '<percentage>';
     inherits: false;
     initial-value: 0%;
 }
-
-.Locations-header__greeting {
+.list-header__greeting {
     color: var(--text-greeting);
     margin: 0;
     font-family: var(--text-primary-font);
@@ -126,12 +137,10 @@
         rgba(0, 0, 0, 1) var(--right-cutoff),
         rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
     );
-
-    &.Locations-header__greeting--mobile {
-        font-size: 32px;
+    &.list-header__greeting--mobile {
+        font-size: 30px;
     }
 }
-
 @keyframes slide-in {
     0% {
         opacity: 0;
@@ -139,18 +148,15 @@
         transform: translate(-10px, 0);
         --right-cutoff: 0%;
     }
-
     20% {
         opacity: 1;
     }
-
     100% {
         opacity: 1;
         transform: translate(0, 0);
         --right-cutoff: 100%;
     }
 }
-
 @media screen and (min-width: 900px) {
     .Locations-header {
         grid-template-columns: 1fr 300px;
@@ -172,4 +178,33 @@
     animation:
         fade-in 1s cubic-bezier(0.08, 0.67, 0.64, 1.01) 1s forwards,
         oscillate-opacity 2s ease-in-out var(--oscillate-delay) infinite;
+}
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translate(-10px, 0);
+        filter: blur(3px);
+    }
+    55% {
+        filter: blur(0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+@keyframes oscillate-opacity {
+    0% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 1;
+    }
 }

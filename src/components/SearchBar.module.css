@@ -8,9 +8,9 @@
     width: 100%;
     /* stays at the top when greeting text wraps */
     align-self: start;
-    padding: 12.8px 16px;
-    padding-left: 48px;
-    border-radius: 16px;
+    padding: 10.4px 13.6px;
+    padding-left: 41.6px;
+    border-radius: 14.4px;
     background: var(--input-bg);
     outline: none;
     border: 1px solid transparent;

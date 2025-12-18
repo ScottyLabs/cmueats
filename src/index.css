@@ -1,4 +1,5 @@
 :root {
+    /* please use these color variables instead of the ones below! */
     --black-0: hsla(240, 9%, 98%, 1);
     --black-100: hsla(220, 8%, 93%, 1);
     --black-200: hsla(210, 9%, 87%, 1);
@@ -71,6 +72,11 @@
 
     --logo-first-half: #dd3c18;
     --logo-second-half: #19b875;
+
+    --global-x-padding: 24px;
+    @media screen and (max-width: 900px) {
+        --global-x-padding: 15px;
+    }
 }
 
 body.miku {
@@ -131,14 +137,12 @@ body.miku {
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-
         @media screen and (max-width: 900px) {
             & {
                 /* position miku's face front and center */
                 background-position: -650px 0;
             }
         }
-
         @media screen and (max-width: 600px) {
             & {
                 /* position miku's face front and center */
@@ -167,14 +171,12 @@ body.miku {
             }
         }
     }
-
     /* Adds a dark gradient at the top (so the greeting is actually readable) */
     .ListPage__container {
         position: relative;
         isolation: isolate;
         overflow: hidden;
         box-sizing: border-box;
-
         &::before {
             content: '';
             z-index: -1;
@@ -184,7 +186,6 @@ body.miku {
             background: linear-gradient(to bottom, hsla(180, 70%, 30%, 0.5) 70%, hsla(0, 0%, 0%, 0));
         }
     }
-
     .locations__error-text {
         position: relative;
         background-color: hsla(180, 4%, 22%, 0.837);
@@ -192,12 +193,10 @@ body.miku {
         padding: 10px;
         border-radius: 10px;
     }
-
-    .card--in-main-grid {
+    .card-in-main-grid {
         backdrop-filter: blur(3px) brightness(70%);
     }
-
-    .card--in-main-grid:hover {
+    .card-in-main-grid:hover {
         background-color: hsla(180, 4%, 22%, 1);
     }
 
@@ -207,7 +206,6 @@ body.miku {
         border-radius: 10px;
     }
 }
-
 body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
@@ -224,7 +222,6 @@ button {
     padding: 20px 30px;
     border-radius: 15px;
 }
-
 .error-container__title {
     color: var(--text-primary);
     font-family: var(--text-primary-font);
@@ -232,21 +229,18 @@ button {
     margin-bottom: 12px;
     font-size: 24px;
 }
-
 .error-container__text {
     color: var(--text-muted);
     font-family: var(--text-secondary-font);
     margin-bottom: 20px;
     font-size: 16px;
 }
-
 .error-container__error-button.MuiButton-root {
     font-size: 16px;
     font-family: var(--text-secondary-font);
     background-color: var(--button-bg);
     color: var(--button-text);
     font-weight: 600;
-
     &:hover {
         background-color: var(--button-bg--hover);
     }

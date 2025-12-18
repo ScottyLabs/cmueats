@@ -1,0 +1,79 @@
+.drawer-box {
+    --drawer-width: max(30vw, 500px);
+    width: var(--drawer-width);
+    background: var(--main-bg);
+    height: 100%;
+    z-index: 999;
+    box-shadow: -32px 0 80px rgba(0, 0, 0, 0.45);
+    overflow-y: auto;
+    scrollbar-width: thin;
+
+    @media screen and (max-width: 900px) {
+        & {
+            --drawer-width: 100%;
+            position: absolute;
+            overflow-y: auto;
+            height: 100%;
+            inset: 0;
+        }
+    }
+}
+
+.drawer-enter {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.drawer-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition:
+        transform 300ms cubic-bezier(0.4, 1, 0.2, 1),
+        opacity 300ms ease;
+}
+
+.drawer-enter-done {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.drawer-exit {
+    /* make it absolute so that grid recovery immediately */
+    position: absolute;
+    width: var(--drawer-width);
+    right: 0;
+    opacity: 1;
+    transform: translateX(0);
+
+    @media screen and (max-width: 900px) {
+        & {
+            position: absolute;
+            overflow-y: auto;
+            width: 100%;
+            height: 100%;
+            inset: 0;
+        }
+    }
+}
+
+.drawer-exit-active {
+    /* as stated in .drawer-exit */
+    position: absolute;
+    width: var(--drawer-width);
+    right: 0;
+    opacity: 0;
+    transform: translateX(30px);
+    transition:
+        transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 300ms ease;
+
+    @media screen and (max-width: 900px) {
+        & {
+            position: absolute;
+            overflow-y: auto;
+            width: 100%;
+            height: 100%;
+            inset: 0;
+        }
+    }
+}

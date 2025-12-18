@@ -23,6 +23,7 @@
         "joi": "^17.12.2",
         "jest": "^30.2.0",
         "jsonwebtoken": "^9.0.2",
+        "lucide-react": "^0.546.0",
         "luxon": "^3.4.4",
         "mapkit-react": "^1.14.1",
         "million": "latest",
@@ -49,7 +50,7 @@
         "test": "dotenv -e .env.test -- vitest --coverage",
         "eject": "vite eject",
         "lint": "pnpm eslint src",
-        "lint-fix": "pnpm eslint --fix src",
+        "lint-fix": "eslint --fix src",
         "format": "pnpm prettier --write src",
         "coverage": "pnpm vitest --coverage"
     },
