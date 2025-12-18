@@ -6,7 +6,6 @@ import { getGreetings } from '../util/greeting';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
-import { useThemeContext } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
@@ -14,7 +13,6 @@ import Drawer from '../components/Drawer';
 import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
-import env from '../env';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 
@@ -33,7 +31,6 @@ function ListPage({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const shouldAnimateCards = useRef(true);
-    const { theme, updateTheme } = useThemeContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)

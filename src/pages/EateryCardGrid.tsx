@@ -1,6 +1,5 @@
-import { Grid } from '@mui/material';
 import { useState } from 'react';
-import { ChevronDown, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import clsx from 'clsx';
 import EateryCard from '../components/EateryCard';

@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
-import UnpinnedControlIcon from '../assets/control_buttons/unpinned.svg?react';
-import PinnedControlIcon from '../assets/control_buttons/pinned.svg?react';
 import EyeControlIcon from '../assets/control_buttons/x.svg?react';
 import EyeOffControlIcon from '../assets/control_buttons/restore.svg?react';
 import { CardViewPreference } from '../util/storage';
@@ -18,7 +16,6 @@ function EateryCardHeader({
 }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
-    const isPinned = location.cardViewPreference === 'pinned';
     const isHidden = location.cardViewPreference === 'hidden';
 
     useEffect(() => {

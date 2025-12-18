@@ -1,4 +1,4 @@
-import { Card, CardHeader, styled, Grid, CardContent, Avatar, Skeleton } from '@mui/material';
+import { Card, CardHeader, styled, CardContent, Avatar, Skeleton } from '@mui/material';
 
 const StyledCard = styled(Card)({
     backgroundColor: 'var(--card-bg)',

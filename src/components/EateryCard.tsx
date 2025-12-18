@@ -1,5 +1,4 @@
 import { KeyboardEvent, useContext, useEffect, useMemo, useRef } from 'react';
-import { Grid } from '@mui/material';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
@@ -63,7 +62,6 @@ function EateryCard({
         };
     }, [drawerLocation?.conceptId, isDrawerActive, location.conceptId]);
 
-    const isDouble = isDrawerActive ? 2 : 1;
     const cardClassName = useMemo(
         () =>
             clsx(
