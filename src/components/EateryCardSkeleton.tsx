@@ -20,7 +20,7 @@ const SkeletonText = styled(Skeleton)({
 
 function EateryCardSkeleton({ index }: { index: number }) {
     return (
-        <Grid item xs={12} md={4} lg={3} xl={3}>
+        <div>
             <StyledCard
                 className="skeleton-card--animated"
                 style={{
@@ -47,7 +47,7 @@ function EateryCardSkeleton({ index }: { index: number }) {
                     <SkeletonText variant="text" sx={{ fontSize: '19.2px' }} animation={false} />
                 </CardContent>
             </StyledCard>
-        </Grid>
+        </div>
     );
 }
 

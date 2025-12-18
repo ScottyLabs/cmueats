@@ -36,7 +36,6 @@
     margin-left: var(--global-x-padding);
 }
 .supergrid {
-    margin-bottom: 35px;
 }
 .supergrid__grid {
     display: grid;

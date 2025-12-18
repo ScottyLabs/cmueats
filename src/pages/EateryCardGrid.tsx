@@ -49,7 +49,7 @@ export default function EateryCardGrid({
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
-            <Grid container spacing={2}>
+            <div className={css.supergrid__grid}>
                 {Array(36)
                     .fill(null)
                     .map((_, index) => (
@@ -59,7 +59,7 @@ export default function EateryCardGrid({
                             index={index}
                         />
                     ))}
-            </Grid>
+            </div>
         );
     }
 
