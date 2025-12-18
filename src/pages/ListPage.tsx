@@ -8,9 +8,8 @@ import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
 import { useThemeContext } from '../ThemeProvider';
 import IS_MIKU_DAY from '../util/constants';
-import mikuKeychainUrl from '../assets/miku/miku-keychain.svg';
 import mikuBgUrl from '../assets/miku/miku.jpg';
-import EateryCardGrid from './EateryCardGrid'; // TODO
+import EateryCardGrid from './EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerContext, TabType } from '../contexts/DrawerContext';
 import useFilteredLocations from './useFilteredLocations';
@@ -142,19 +141,15 @@ function ListPage({
 
                 <div className="list-box">
                     <header className="list-header">
-                        <div className="list-header-greeting-container">
-                            <h3 className="Locations-header__greeting Locations-header__greeting--desktop">
-                                {desktopGreeting}
-                            </h3>
-                            <h3 className="Locations-header__greeting Locations-header__greeting--mobile">
-                                {mobileGreeting}
-                            </h3>
-                        </div>
-                        <div className="list-header-controls">
+                        <h3 className="list-header__greeting list-header__greeting--desktop">{desktopGreeting}</h3>
+                        <h3 className="list-header__greeting list-header__greeting--mobile">{mobileGreeting}</h3>
+                    </header>
+                    <div className="list-controls-container">
+                        <div className="list-controls-layout">
                             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                             <SelectLocation {...{ setLocationFilterQuery, locations }} />
                         </div>
-                    </header>
+                    </div>
                     <EateryCardGrid
                         key={`${searchQuery}-${locationFilterQuery}`}
                         locations={filteredLocations}
