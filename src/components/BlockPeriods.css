@@ -77,6 +77,12 @@
         color: #e5e7eb;
         background: url(../assets/control_button/expand_arrow.svg) no-repeat calc(100% - 17px);
     }
+
+    .block-periods__mobile-top-rule--active,
+    .block-periods__mobile-bottom-rule--active,
+    .block-periods__mobile-summary--active {
+        display: none;
+    }
 }
 
 .block-periods__label {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './BlockPeriods.css';
 import x from '../assets/control_button/x.svg';
 
@@ -38,14 +38,16 @@ function BlockPeriodsPopup({
     currentPeriod,
     currentRange,
     onClose,
+    popupRef,
 }: {
     blockPeriods: { period: string; timeRange: string }[];
     currentPeriod: string;
     currentRange: string | undefined;
     onClose: () => void;
+    popupRef: React.RefObject<HTMLDivElement>;
 }) {
     return (
-        <div className="block-periods__popup">
+        <div ref={popupRef} className="block-periods__popup">
             <div className="block-periods__popup-header">
                 <div className="block-periods__popup-title">
                     Block Period: <span className="block-periods__period">{currentPeriod}</span>
@@ -80,6 +82,24 @@ export function BlockPeriods() {
     const currentPeriod = getBlockPeriod();
     const currentRange = blockPeriods.find((p) => p.period === currentPeriod)?.timeRange;
 
+    const mobileButtonRef = useRef<HTMLButtonElement | null>(null);
+    const popupRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (!isPopupVisible) return;
+
+        const onClick = (ev: PointerEvent) => {
+            if (window.innerWidth >= 900) return;
+            if (!popupRef.current || !mobileButtonRef.current) return;
+            if (!ev.composedPath().includes(popupRef.current) && !ev.composedPath().includes(mobileButtonRef.current)) {
+                setPopupVisible(false);
+            }
+        };
+
+        document.body.addEventListener('click', onClick);
+        return () => document.body.removeEventListener('click', onClick);
+    }, [isPopupVisible]);
+
     return (
         <>
             <div
@@ -95,6 +115,7 @@ export function BlockPeriods() {
 
                 {isPopupVisible && (
                     <BlockPeriodsPopup
+                        popupRef={popupRef}
                         blockPeriods={blockPeriods}
                         currentPeriod={currentPeriod}
                         currentRange={currentRange}
@@ -104,29 +125,31 @@ export function BlockPeriods() {
             </div>
 
             <div className="block-periods__mobile">
-                {!isPopupVisible && (
-                    <>
-                        <div className="block-periods__mobile-top-rule" />
-                        <button
-                            type="button"
-                            className="block-periods__mobile-summary"
-                            onClick={() => setPopupVisible((v) => !v)}
-                        >
-                            <span className="block-periods__label">Block Period:</span>
-                            <span className="block-periods__period">{currentPeriod}</span>
-                        </button>
-                    </>
-                )}
+                <div
+                    className={`block-periods__mobile-top-rule ${isPopupVisible ? 'block-periods__mobile-top-rule--active' : ''}`}
+                />
+                <button
+                    ref={mobileButtonRef}
+                    type="button"
+                    className={`block-periods__mobile-summary ${isPopupVisible ? 'block-periods__mobile-summary--active' : ''}`}
+                    onClick={() => setPopupVisible((v) => !v)}
+                >
+                    <span className="block-periods__label">Block Period:</span>
+                    <span className="block-periods__period">{currentPeriod}</span>
+                </button>
 
                 {isPopupVisible && (
                     <BlockPeriodsPopup
+                        popupRef={popupRef}
                         blockPeriods={blockPeriods}
                         currentPeriod={currentPeriod}
                         currentRange={currentRange}
                         onClose={() => setPopupVisible(false)}
                     />
                 )}
-                {!isPopupVisible && <div className="block-periods__mobile-bottom-rule" />}
+                <div
+                    className={`block-periods__mobile-bottom-rule ${isPopupVisible ? 'block-periods__mobile-bottom-rule--active' : ''}`}
+                />
             </div>
         </>
     );
