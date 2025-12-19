@@ -1,8 +1,9 @@
 .drawer-box {
-    --drawer-width: 600px;
+    --drawer-width: max(30vw, 500px);
     width: var(--drawer-width);
     background: var(--main-bg);
     height: 100%;
+    z-index: 999;
     box-shadow: -32px 0 80px rgba(0, 0, 0, 0.45);
     overflow-y: auto;
     scrollbar-width: thin;

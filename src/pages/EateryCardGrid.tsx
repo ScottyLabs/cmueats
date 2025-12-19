@@ -1,6 +1,5 @@
-import { Grid } from '@mui/material';
 import { useState } from 'react';
-import { ChevronDown, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import clsx from 'clsx';
 import EateryCard from '../components/EateryCard';
@@ -10,6 +9,7 @@ import { LocationState, IReadOnlyLocation_Combined } from '../types/locationType
 import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
 
+import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 
 const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
@@ -48,7 +48,7 @@ export default function EateryCardGrid({
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
-            <Grid container spacing={2}>
+            <div className={css.supergrid__grid}>
                 {Array(36)
                     .fill(null)
                     .map((_, index) => (
@@ -58,7 +58,7 @@ export default function EateryCardGrid({
                             index={index}
                         />
                     ))}
-            </Grid>
+            </div>
         );
     }
 
@@ -100,25 +100,28 @@ export default function EateryCardGrid({
                 <Info size={16} aria-hidden="true" />
                 <span>Tap or click on the cards to see more information!</span>
             </div>
-            <div className={css.supergrid__grid}>
-                <AnimatePresence>
-                    {[
-                        ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
-                        ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
-                    ].map(locationToCard)}
-                </AnimatePresence>
+            <div className={css.supergrid__section}>
+                <div className={css.supergrid__grid}>
+                    <AnimatePresence>
+                        {[
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
+                        ].map(locationToCard)}
+                    </AnimatePresence>
+                </div>
             </div>
 
             {hiddenLocations.length > 0 && (
-                <div className={css['supergrid__hidden-section']}>
+                <div className={css.supergrid__section}>
                     <button
                         type="button"
-                        className={`${css['dropdown-button']} ${showHiddenSection && css['dropdown-button--up']}`}
+                        className={css['hidden-section__toggle']}
+                        aria-expanded={showHiddenSection}
                         onClick={() => {
                             setShowHiddenSection(!showHiddenSection);
                         }}
                     >
-                        <ChevronDown size={18} />
+                        <DropdownArrow height={8} />
                         <span>
                             {showHiddenSection ? 'Hide' : 'Show'} hidden locations ({hiddenLocations.length})
                         </span>
@@ -138,6 +141,7 @@ export default function EateryCardGrid({
                             pointerEvents: showHiddenSection ? 'all' : 'none',
                             overflow: showHiddenSection ? 'visible' : 'hidden',
                         }}
+                        transition={{ ease: [0.25, 0.8, 0.25, 1], duration: 0.6 }}
                         aria-hidden={!showHiddenSection}
                     >
                         <div className={clsx(css.supergrid__grid, css['hidden-grid'])}>

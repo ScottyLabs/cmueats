@@ -1,6 +1,5 @@
 import { MapPin } from 'lucide-react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
-import { CardViewPreference } from '../util/storage';
 import css from './EateryCardContent.module.css';
 
 function EateryCardContent({

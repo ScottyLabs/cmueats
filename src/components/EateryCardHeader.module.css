@@ -72,8 +72,9 @@
             color: var(--black-300);
         }
     }
+    /* commenting out for now, since we'll probably go with a dropdown */
 
-    &::after {
+    /* &::after {
         content: attr(aria-label);
         z-index: 999;
         position: absolute;
@@ -91,12 +92,12 @@
             opacity 0.2s ease,
             visibility 0.2s ease;
         pointer-events: none;
-    }
-    &:hover::after {
+    } */
+    /* &:hover::after {
         opacity: 1;
-    }
+    } */
 
-    &::before {
+    /* &::before {
         content: '';
         position: absolute;
         bottom: 70%;
@@ -110,7 +111,7 @@
     }
     &:hover::before {
         opacity: 1;
-    }
+    } */
 
     .action-button__icon {
         width: 15px;

@@ -36,7 +36,6 @@
     --dialog-bg: var(--card-bg);
     --dialog-header-bg: var(--card-header-bg);
 
-    --footer-bg: #1e1e1e;
     --nav-border-top: #31373e;
     --nav-bg: #1e1e1e;
     --selected-tab-bg: #2b2f33;
@@ -73,6 +72,11 @@
 
     --logo-first-half: #dd3c18;
     --logo-second-half: #19b875;
+
+    --global-x-padding: 24px;
+    @media screen and (max-width: 900px) {
+        --global-x-padding: 15px;
+    }
 }
 
 body.miku {
@@ -207,7 +211,10 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
 .error-container {
     margin: 48px auto;
     text-align: center;
