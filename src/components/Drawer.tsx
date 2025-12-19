@@ -10,7 +10,6 @@ import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undefined }) {
     const { selectedConceptId, closeDrawer } = useDrawerAPIContext();
-    const drawerRef = useRef<HTMLDivElement | null>(null);
     const pickedLocation = locations?.find((loc) => loc.conceptId === selectedConceptId);
     // `esc` to close the drawer
     useEffect(() => {
@@ -38,14 +37,13 @@ function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undef
                     initial={{ opacity: 0, transform: 'translateX(30px)' }}
                     animate={{ opacity: 1, transform: 'translateX(0)' }}
                     exit={{ opacity: 0 }}
+                    className={css['drawer-box']}
                     // transition={{ duration: 10 }}
                 >
                     <DrawerContextProvider location={pickedLocation} key={pickedLocation.conceptId}>
-                        <div className={css['drawer-box']} ref={drawerRef}>
-                            <DrawerHeader />
-                            <DrawerTabNav />
-                            <DrawerTabContent />
-                        </div>
+                        <DrawerHeader />
+                        <DrawerTabNav />
+                        <DrawerTabContent />
                     </DrawerContextProvider>
                 </motion.div>
             )}

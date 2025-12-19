@@ -114,7 +114,6 @@ function ListPage({
                         </div>
                     </div>
                     <EateryCardGrid
-                        key={`${searchQuery}-${locationFilterQuery}`}
                         locations={filteredLocations}
                         shouldAnimateCards={shouldAnimateCards.current}
                         apiError={locations !== undefined && locations.length === 0}

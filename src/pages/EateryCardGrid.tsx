@@ -102,7 +102,7 @@ export default function EateryCardGrid({
             </div>
             <div className={css.supergrid__section}>
                 <div className={css.supergrid__grid}>
-                    <AnimatePresence>
+                    <AnimatePresence mode="popLayout">
                         {[
                             ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
                             ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
@@ -133,19 +133,17 @@ export default function EateryCardGrid({
                             height: showHiddenSection ? 'auto' : 0,
                             opacity: showHiddenSection ? 1 : 0,
                             pointerEvents: showHiddenSection ? 'all' : 'none',
-                            overflow: showHiddenSection ? 'visible' : 'hidden',
                         }}
                         animate={{
                             height: showHiddenSection ? 'auto' : 0,
                             opacity: showHiddenSection ? 1 : 0,
                             pointerEvents: showHiddenSection ? 'all' : 'none',
-                            overflow: showHiddenSection ? 'visible' : 'hidden',
                         }}
                         transition={{ ease: [0.25, 0.8, 0.25, 1], duration: 0.6 }}
                         aria-hidden={!showHiddenSection}
                     >
                         <div className={clsx(css.supergrid__grid, css['hidden-grid'])}>
-                            <AnimatePresence>{hiddenLocations.map(locationToCard)}</AnimatePresence>
+                            <AnimatePresence mode="popLayout">{hiddenLocations.map(locationToCard)}</AnimatePresence>
                         </div>
                     </motion.div>
                 </div>

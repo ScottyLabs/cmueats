@@ -100,7 +100,12 @@ function EateryCard({
             // whole card clickable
             role="button"
             tabIndex={0}
-            onClick={handleCardSelection}
+            onClick={(ev) => {
+                if (!ev.defaultPrevented) {
+                    handleCardSelection();
+                    ev.preventDefault();
+                }
+            }}
             onKeyDown={handleCardKeyDown}
         >
             <EateryCardHeader location={location} updateViewPreference={updateViewPreference} />

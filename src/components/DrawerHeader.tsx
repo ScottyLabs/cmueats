@@ -1,7 +1,6 @@
 import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
 import css from './DrawerHeader.module.css';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { useDrawerContext } from '../contexts/DrawerContext';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
