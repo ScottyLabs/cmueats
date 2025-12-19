@@ -33,6 +33,46 @@ function getBlockPeriod(): string {
     return 'Late Night';
 }
 
+function BlockPeriodsPopup({
+    blockPeriods,
+    currentPeriod,
+    currentRange,
+    onClose,
+}: {
+    blockPeriods: { period: string; timeRange: string }[];
+    currentPeriod: string;
+    currentRange: string | undefined;
+    onClose: () => void;
+}) {
+    return (
+        <div className="block-periods__popup">
+            <div className="block-periods__popup-header">
+                <div className="block-periods__popup-title">
+                    Block Period: <span className="block-periods__period">{currentPeriod}</span>
+                    <span className="block-periods__range"> ({currentRange})</span>
+                </div>
+                <button type="button" className="block-periods__popup-close" onClick={onClose}>
+                    <img src={x} alt="close icon" />
+                </button>
+            </div>
+
+            <div className="block-periods__popup-list">
+                {blockPeriods.map(({ period, timeRange }) => (
+                    <div
+                        key={period}
+                        className={
+                            'block-periods__row' + (period === currentPeriod ? ' block-periods__row--active' : '')
+                        }
+                    >
+                        <span className="block-periods__row-label">{period}</span>
+                        <span className="block-periods__row-time">{timeRange}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 export function BlockPeriods() {
     const [isPopupVisible, setPopupVisible] = useState(false);
 
@@ -41,58 +81,53 @@ export function BlockPeriods() {
     const currentRange = blockPeriods.find((p) => p.period === currentPeriod)?.timeRange;
 
     return (
-        <div className="block-periods__desktop">
-            <button type="button" className="block-periods__desktop-summary" onClick={() => setPopupVisible((v) => !v)}>
-                <span className="block-periods__label">Block Period:</span>
-                <span className="block-periods__period">{currentPeriod}</span>
-                <span className="block-periods__range">({currentRange})</span>
-            </button>
-
-            <div className="block-periods__mobile">
-                <div className="block-periods__mobile-top-rule" />
-                <button
-                    type="button"
-                    className="block-periods__mobile-summary"
-                    onClick={() => setPopupVisible((v) => !v)}
-                >
-                    <span className="block-periods__label">Block period:</span>
+        <>
+            <div
+                className="block-periods__desktop"
+                onMouseEnter={() => setPopupVisible(true)}
+                onMouseLeave={() => setPopupVisible(false)}
+            >
+                <button type="button" className="block-periods__desktop-summary">
+                    <span className="block-periods__label">Block Period:</span>
                     <span className="block-periods__period">{currentPeriod}</span>
+                    <span className="block-periods__range">({currentRange})</span>
                 </button>
-                <div className="block-periods__mobile-bottom-rule" />
+
+                {isPopupVisible && (
+                    <BlockPeriodsPopup
+                        blockPeriods={blockPeriods}
+                        currentPeriod={currentPeriod}
+                        currentRange={currentRange}
+                        onClose={() => setPopupVisible(false)}
+                    />
+                )}
             </div>
 
-            {isPopupVisible && (
-                <div className="block-periods__popup">
-                    <div className="block-periods__popup-header">
-                        <div className="block-periods__popup-title">
-                            Block Period: <span className="block-periods__period">{currentPeriod}</span>
-                            <span className="block-periods__range"> ({currentRange})</span>
-                        </div>
+            <div className="block-periods__mobile">
+                {!isPopupVisible && (
+                    <>
+                        <div className="block-periods__mobile-top-rule" />
                         <button
                             type="button"
-                            className="block-periods__popup-close"
-                            onClick={() => setPopupVisible(false)}
+                            className="block-periods__mobile-summary"
+                            onClick={() => setPopupVisible((v) => !v)}
                         >
-                            <img src={x} alt="close icon" />
+                            <span className="block-periods__label">Block Period:</span>
+                            <span className="block-periods__period">{currentPeriod}</span>
                         </button>
-                    </div>
+                    </>
+                )}
 
-                    <div className="block-periods__popup-list">
-                        {blockPeriods.map(({ period, timeRange }) => (
-                            <div
-                                key={period}
-                                className={
-                                    'block-periods__row' +
-                                    (period === currentPeriod ? ' block-periods__row--active' : '')
-                                }
-                            >
-                                <span className="block-periods__row-label">{period}</span>
-                                <span className="block-periods__row-time">{timeRange}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </div>
+                {isPopupVisible && (
+                    <BlockPeriodsPopup
+                        blockPeriods={blockPeriods}
+                        currentPeriod={currentPeriod}
+                        currentRange={currentRange}
+                        onClose={() => setPopupVisible(false)}
+                    />
+                )}
+                {!isPopupVisible && <div className="block-periods__mobile-bottom-rule" />}
+            </div>
+        </>
     );
 }

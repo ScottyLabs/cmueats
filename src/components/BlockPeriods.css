@@ -4,6 +4,12 @@
     color: var(--input-text);
 }
 
+@media screen and (max-width: 899px) {
+    .block-periods__desktop {
+        display: none;
+    }
+}
+
 @media screen and (min-width: 900px) {
     .block-periods__desktop-summary {
         cursor: pointer;
@@ -48,6 +54,7 @@
 
     .block-periods__mobile {
         width: 100%;
+        position: relative;
     }
 
     .block-periods__mobile-top-rule,
@@ -74,6 +81,16 @@
 
 .block-periods__label {
     color: #d1d5db;
+}
+
+@media screen and (max-width: 899px) {
+    .block-periods__label {
+        color: #d1d5db;
+        font-size: 16px;
+    }
+    .block-periods__period {
+        font-size: 16px;
+    }
 }
 
 .block-periods__period {
@@ -108,17 +125,30 @@
 }
 
 @media screen and (max-width: 899px) {
+    .block-periods__popup {
+        position: static;
+        width: 92%;
+        min-width: 0;
+        max-width: none;
+        border-radius: 0px;
+        box-shadow: none;
+        border: 1px solid #4b5563;
+        animation: open-close-popup 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
     .block-periods__popup .block-periods__range {
         display: block;
     }
 }
 
-@media screen and (max-width: 899px) {
-    .block-periods__popup {
-        position: absolute;
-        width: 90%;
-        min-width: 0;
-        max-width: none;
+@keyframes open-close-popup {
+    from {
+        opacity: 0;
+        clip-path: inset(0 0 100% 0);
+    }
+    to {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
     }
 }
 
@@ -133,14 +163,22 @@
     font-size: 17px;
 }
 
-.block-periods__popup-close {
-    border: none;
-    background: none;
-    color: #9ca3af;
-    font-size: 19px;
-    line-height: 1;
-    padding: 2px;
-    cursor: pointer;
+@media screen and (min-width: 900px) {
+    .block-periods__popup-close {
+        visibility: hidden;
+    }
+}
+
+@media screen and (max-width: 899px) {
+    .block-periods__popup-close {
+        border: none;
+        background: none;
+        color: #9ca3af;
+        font-size: 19px;
+        line-height: 1;
+        padding: 2px;
+        cursor: pointer;
+    }
 }
 
 .block-periods__popup-list {
