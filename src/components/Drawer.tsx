@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import DrawerHeader from './DrawerHeader';
@@ -13,7 +13,7 @@ function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undef
     const pickedLocation = locations?.find((loc) => loc.conceptId === selectedConceptId);
     // `esc` to close the drawer
     useEffect(() => {
-        if (selectedConceptId === null) return;
+        if (selectedConceptId === null) return () => {};
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;

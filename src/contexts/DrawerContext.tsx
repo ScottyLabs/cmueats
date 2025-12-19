@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 export type DrawerTabType = 'overview' | 'menu' | 'reviews' | 'specials';
