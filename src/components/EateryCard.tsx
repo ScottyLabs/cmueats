@@ -50,7 +50,7 @@ function EateryCard({
         if (isCardSelected && cardRef.current) {
             cardRef.current.scrollIntoView({
                 behavior: 'instant',
-                block: 'center',
+                block: 'nearest',
             });
         }
     }, [drawerContext.selectedConceptId]);

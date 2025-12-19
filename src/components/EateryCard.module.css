@@ -19,6 +19,8 @@
     }
 
     position: relative;
+    scroll-margin-top: 70px;
+    scroll-margin-bottom: 40px;
 }
 
 .card-active {
