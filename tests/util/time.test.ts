@@ -356,6 +356,7 @@ test('getNextTimeSlot', () => {
     expect(() => getNextTimeSlot([B, A], makeDateTime(3, 3, 3))).toThrow(); // [B,A] is improperly sorted
 });
 test('getTimeSlotsString', () => {
+    const today = makeDateTime(0, 0, 0); // Sunday at midnight as reference point
     const testCases: { input: ITimeRangeList; expected: string[] }[] = [
         {
             input: [
@@ -594,6 +595,6 @@ test('getTimeSlotsString', () => {
         },
     ];
     for (const testCase of testCases) {
-        expect(getTimeSlotsString(testCase.input)).toEqual(testCase.expected);
+        expect(getTimeSlotsString(testCase.input, today)).toEqual(testCase.expected);
     }
 });
