@@ -63,7 +63,7 @@ function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
                         allowWheelToZoom
                     >
                         {locations.map((location, locationIndex) => {
-                            if (!location.coordinates) return undefined;
+                            if (!location.coordinateLat || !location.coordinateLng) return undefined;
                             const bgColor = derivedRootColors.getPropertyValue(
                                 stripVarFromString(mapMarkerBackgroundColors[location.locationState]),
                             ); // mapkit doesn't accept css variables, so we'll go ahead and get the actual color value from :root first
@@ -73,8 +73,8 @@ function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
                             return (
                                 <Marker
                                     key={location.id}
-                                    latitude={location.coordinates.lat}
-                                    longitude={location.coordinates.lng}
+                                    latitude={location.coordinateLat}
+                                    longitude={location.coordinateLng}
                                     color={bgColor}
                                     glyphColor={textColor}
                                     glyphText={abbreviate(location.name)}

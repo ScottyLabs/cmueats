@@ -1,6 +1,5 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ExternalLink } from 'lucide-react';
-import { DateTime } from 'luxon';
 import { getTimeSlotsString } from '../util/time';
 import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerTabContent.module.css';
@@ -8,7 +7,7 @@ import { useCurrentTime } from '../contexts/NowContext';
 
 function DrawerTabContent() {
     const now = useCurrentTime();
-    const dayOffsetFromSunday = DateTime.now().weekday % 7; // literally will be refreshed every second because location status is. This is fine
+    const dayOffsetFromSunday = now.weekday % 7;
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const drawerContext = useContext(DrawerContext);
     const location = drawerContext.drawerLocation;
@@ -59,10 +58,10 @@ function DrawerTabContent() {
                 <h4 className={css['section-header']}>Today&apos;s Specials</h4>
                 <div>
                     {specials.concat(soups).map((item) => (
-                        <>
+                        <React.Fragment key={item.name}>
                             <div className={css['specials-item-title']}>{item.name}</div>
                             <div className={css['specials-item-dscrp']}>{item.description}</div>
-                        </>
+                        </React.Fragment>
                     ))}
                 </div>
             </>

@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import { DateTime } from 'luxon';
 import { motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
@@ -18,7 +16,6 @@ import useRefreshWhenBackOnline from './util/network';
 import { $api } from './api';
 import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function App() {
     const now = useCurrentTime();

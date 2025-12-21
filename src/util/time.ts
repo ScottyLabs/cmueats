@@ -2,10 +2,9 @@
  */
 
 import { DateTime } from 'luxon';
-import { ITimeRange, ITimeRangeList } from '../types/locationTypes';
+import { ITimeRangeList } from '../types/locationTypes';
 
 import assert from './assert';
-import bounded from './misc';
 
 /**
  *
@@ -81,7 +80,7 @@ export function getTimeSlotsString(times: ITimeRangeList, today: DateTime) {
             // cap `first` at midnight
             const midnightOfStart = startDate.endOf('day');
             brokenDownTimeSlots.push({ start: startDate, end: midnightOfStart });
-            timesAsDateTimes = [{ start: midnightOfStart.plus({ millisecond: 1 }), end: endDate }, ...rest];
+            timesAsDateTimes = [{ start: midnightOfStart.plus({ day: 1 }).startOf('day'), end: endDate }, ...rest];
         }
     }
     const nontrivialBrokenDownTimeSlots = brokenDownTimeSlots.filter(
@@ -92,7 +91,10 @@ export function getTimeSlotsString(times: ITimeRangeList, today: DateTime) {
     for (let ptrI = 0, day = 0; day < 7; day++) {
         const stringsForThatDay: string[] = [];
         const curDay = today.plus({ days: day });
-        while (ptrI < nontrivialBrokenDownTimeSlots.length && nontrivialBrokenDownTimeSlots[ptrI]!.start <= curDay) {
+        while (
+            ptrI < nontrivialBrokenDownTimeSlots.length &&
+            nontrivialBrokenDownTimeSlots[ptrI]!.start <= curDay.endOf('day')
+        ) {
             const curInterval = nontrivialBrokenDownTimeSlots[ptrI]!;
             if (curInterval.start.hasSame(curDay, 'day')) {
                 stringsForThatDay.push(timeIntervalToString(curInterval.start, curInterval.end));

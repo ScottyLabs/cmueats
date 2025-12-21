@@ -55,10 +55,8 @@ export interface ILocation_FromAPI {
     /** Menu link */
     menu: string | null;
     location: string;
-    coordinates?: {
-        lat: number;
-        lng: number;
-    };
+    coordinateLat: number | null;
+    coordinateLng: number | null;
     acceptsOnlineOrders: boolean;
     times: ITimeRange[];
     todaysSpecials: ISpecial[];
@@ -97,7 +95,7 @@ export type ILocation_ExtraData = ILocation_TimeStatusData & {
 
 /** we'll typically pass this into components for efficient look-up of extra data (like time until close) */
 export type ILocation_ExtraData_Map = {
-    [conceptId: number]: ILocation_ExtraData;
+    [id: number]: ILocation_ExtraData;
 };
 
 /** once we combine extraDataMap with our base api data */
