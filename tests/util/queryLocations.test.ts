@@ -1,15 +1,9 @@
 import { test, expect, describe } from 'vitest';
 import { getLocationStatus, getStatusMessage } from '../../src/util/queryLocations';
-import { ITimeSlot, LocationState } from '../../src/types/locationTypes';
-import makeDateTime from './helper';
-import { Interval } from 'luxon';
+import { LocationState } from '../../src/types/locationTypes';
+import makeDateTime, { timeSlotToMillis } from './helper';
 
-interface IGetStatusMessageTest {
-    isOpen: boolean;
-    nextTime: ITimeSlot;
-    now: ITimeSlot;
-    expectedString: string;
-}
+
 
 describe('queryLocations.ts', () => {
     describe('getLocationStatus', () => {
@@ -17,8 +11,8 @@ describe('queryLocations.ts', () => {
             const status = getLocationStatus(
                 [
                     {
-                        start: { day: 0, hour: 2, minute: 2 },
-                        end: { day: 0, hour: 3, minute: 0 },
+                        start: timeSlotToMillis({ day: 0, hour: 2, minute: 2 }),
+                        end: timeSlotToMillis({ day: 0, hour: 3, minute: 0 }),
                     },
                 ],
                 makeDateTime(0, 3, 0),
@@ -41,12 +35,12 @@ describe('queryLocations.ts', () => {
         });
         test('wrap-over for last time slot', () => {
             const A = {
-                start: { day: 2, hour: 0, minute: 0 }, // Tuesday 12AM
-                end: { day: 5, hour: 23, minute: 0 }, // Friday 11PM
+                start: timeSlotToMillis({ day: 2, hour: 0, minute: 0 }), // Tuesday 12AM
+                end: timeSlotToMillis({ day: 5, hour: 23, minute: 0 }), // Friday 11PM
             };
             const B = {
-                start: { day: 6, hour: 0, minute: 0 }, // Sat 12AM
-                end: { day: 0, hour: 0, minute: 0 }, // Sun 12AM
+                start: timeSlotToMillis({ day: 6, hour: 0, minute: 0 }), // Sat 12AM
+                end: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }), // Sun 12AM
             };
             expect(getLocationStatus([A, B], makeDateTime(0, 0, 0))).toEqual({
                 changesSoon: false,
@@ -114,7 +108,7 @@ describe('queryLocations.ts', () => {
             });
             expect(
                 getLocationStatus(
-                    [{ start: { day: 0, hour: 0, minute: 0 }, end: { day: 6, hour: 23, minute: 59 } }],
+                    [{ start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }), end: { day: 6, hour: 23, minute: 59 } }],
                     makeDateTime(0, 1, 0),
                 ),
             ).toEqual({
@@ -350,20 +344,10 @@ describe('queryLocations.ts', () => {
             const nowObj = now;
             const expectedStringText = expectedString;
 
-            const nowDateTime = makeDateTime(nowObj.day, nowObj.hour, nowObj.minute);
-            let nextTimeDateTime = makeDateTime(nextTimeObj.day, nextTimeObj.hour, nextTimeObj.minute);
-            
-            // If nextTime appears to be before or equal to now, it means it's next week
-            // But we need to be careful: if they're equal and isOpen is true, it means "closes now" which should be same time
-            if (nextTimeDateTime < nowDateTime || (nextTimeDateTime.equals(nowDateTime) && !isOpen)) {
-                nextTimeDateTime = nextTimeDateTime.plus({ weeks: 1 });
-            }
-            
-            const interval = Interval.fromDateTimes(nowDateTime, nextTimeDateTime);
-
             const locationString = getStatusMessage(
                 isOpenBool,
-                interval,
+                nextTimeObj,
+                makeDateTime(nowObj.day, nowObj.hour, nowObj.minute),
             );
 
             expect(locationString).toEqual(expectedStringText);

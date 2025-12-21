@@ -2,7 +2,7 @@
  */
 
 import { DateTime } from 'luxon';
-import { ITimeRange, ITimeRangeList, ITimeSlot } from '../types/locationTypes';
+import { ITimeRange, ITimeRangeList } from '../types/locationTypes';
 
 import assert from './assert';
 import bounded from './misc';
@@ -34,16 +34,11 @@ export function getApproximateTimeStringFromMinutes(minutes: number) {
  *
  * @param timeSlots
  * @returns Checks if timeslots are non-overlapping (so [a,b],[b,c] is invalid) and properly sorted.
- * Allows the last entry to wrap around (end < start).
  */
 export function isValidTimeSlotArray(timeSlots: ITimeRangeList) {
     for (let i = 0; i < timeSlots.length; i += 1) {
         const { start, end } = timeSlots[i]!;
-        const isLastEntry = i === timeSlots.length - 1;
-        
-        // Allow wrap-around only for the last entry
-        if (start > end && !isLastEntry) return false;
-        
+        if (start > end) return false;
         if (i > 0) {
             const prevEnd = timeSlots[i - 1]!.end;
             if (start <= prevEnd) return false;
@@ -121,81 +116,4 @@ export function getNextTimeSlot(times: ITimeRangeList, now: DateTime) {
     return times.find(
         (time) => (time.start <= now.toMillis() && now.toMillis() <= time.end) || now.toMillis() < time.start,
     );
-}
-
-/**
- * Checks if a time slot is valid (day 0-6, hour 0-23, minute 0-59)
- */
-export function isTimeSlot(time: ITimeSlot): boolean {
-    return (
-        Number.isInteger(time.day) &&
-        time.day >= 0 &&
-        time.day <= 6 &&
-        Number.isInteger(time.hour) &&
-        time.hour >= 0 &&
-        time.hour <= 23 &&
-        Number.isInteger(time.minute) &&
-        time.minute >= 0 &&
-        time.minute <= 59
-    );
-}
-
-/**
- * Checks if a time range (with start and end Unix timestamps) is valid
- * @param range Object with start and end timestamps
- * @param allowWrapAround If true, allows end to be before start (wrap-around case)
- */
-export function isTimeRange(range: { start: number; end: number }, allowWrapAround = false): boolean {
-    if (typeof range.start !== 'number' || typeof range.end !== 'number') {
-        return false;
-    }
-    if (allowWrapAround) {
-        return true; // Any combination is valid if wrap-around is allowed
-    }
-    return range.start <= range.end;
-}
-
-/**
- * Returns the number of minutes since the start of Sunday (00:00) for a DateTime object
- */
-export function minutesSinceStartOfSundayDateTime(time: DateTime): number {
-    const weekday = time.weekday === 7 ? 0 : time.weekday; // Convert Sunday from 7 to 0
-    return weekday * 24 * 60 + time.hour * 60 + time.minute;
-}
-
-/**
- * Converts a time slot to a 12-hour format string (e.g., "12:00 AM", "5:30 PM")
- */
-export function getTimeString(time: ITimeSlot): string {
-    if (!isTimeSlot(time)) {
-        throw new Error('Invalid time slot');
-    }
-    let hour = time.hour;
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12;
-    if (hour === 0) hour = 12;
-    const minuteStr = time.minute < 10 ? `0${time.minute}` : `${time.minute}`;
-    return `${hour}:${minuteStr} ${ampm}`;
-}
-
-/**
- * Checks if a location is currently open based on a time range and current time
- * @param timeRange Object with start and end timestamps (Unix milliseconds)
- * @param now Current DateTime
- */
-export function currentlyOpen(timeRange: { start: number; end: number }, now: DateTime): boolean {
-    if (!now.isValid) {
-        throw new Error('Invalid DateTime provided');
-    }
-    const nowMillis = now.toMillis();
-
-    // Handle wrap-around case (e.g., Friday 11 PM to Sunday 1 AM)
-    if (timeRange.start > timeRange.end) {
-        // If wrapped around, location is open if now is either:
-        // 1. After start time (before week end), or
-        // 2. Before end time (after week start)
-        return nowMillis >= timeRange.start || nowMillis <= timeRange.end;
-    }
-    // Normal case: location is open if now is between start and end (inclusive)
-    return nowMillis >= timeRange.start && nowMillis <= timeRange.end;
 }

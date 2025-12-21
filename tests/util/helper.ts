@@ -1,5 +1,4 @@
 import { DateTime, WeekdayNumbers } from "luxon";
-import { ITimeSlot } from "../../src/types/locationTypes";
 
 /**
  *
@@ -17,8 +16,8 @@ export default function makeDateTime(day: number, hour: number, minute: number) 
 }
 
 /**
- * Converts an ITimeSlot to Unix timestamp (milliseconds)
+ * Converts a time slot object to Unix timestamp (milliseconds)
  */
-export function timeSlotToMillis(timeSlot: ITimeSlot): number {
+export function timeSlotToMillis(timeSlot: { day: number; hour: number; minute: number }): number {
 	return makeDateTime(timeSlot.day, timeSlot.hour, timeSlot.minute).toMillis();
 }

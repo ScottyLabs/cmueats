@@ -11,18 +11,6 @@ export type RecursiveReadonly<T> = T extends object
     : T;
 
 /**
- * Represents a specific time within a week (for testing purposes)
- * day: 0-6 (0 is Sunday)
- * hour: 0-23
- * minute: 0-59
- */
-export interface ITimeSlot {
-    readonly day: number;
-    readonly hour: number;
-    readonly minute: number;
-}
-
-/**
  * Start and end are both inclusive in
  * denoting when a location is open. so [2AM today, 4AM today]
  * includes both 2AM and 4AM. So, [2AM Tue,2AM Tue] is inferred to be open at exactly 2AM.
