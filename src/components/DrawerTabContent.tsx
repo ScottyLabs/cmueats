@@ -4,8 +4,10 @@ import { DateTime } from 'luxon';
 import { getTimeSlotsString } from '../util/time';
 import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerTabContent.module.css';
+import { useCurrentTime } from '../contexts/NowContext';
 
 function DrawerTabContent() {
+    const now = useCurrentTime();
     const dayOffsetFromSunday = DateTime.now().weekday % 7; // literally will be refreshed every second because location status is. This is fine
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const drawerContext = useContext(DrawerContext);
@@ -15,7 +17,7 @@ function DrawerTabContent() {
         return <div className={css.container} />;
     }
 
-    const timeSlots = getTimeSlotsString(drawerContext.drawerLocation?.times ?? []);
+    const timeSlots = getTimeSlotsString(drawerContext.drawerLocation?.times ?? [], now);
     const specials = location.todaysSpecials ?? [];
     const soups = location.todaysSoups ?? [];
     const menu = location.menu ?? '';
@@ -30,20 +32,22 @@ function DrawerTabContent() {
                 <h4 className={css['section-header']}>Hours</h4>
 
                 <div className={css['hours-list']}>
-                    {daysStartingFromSunday.map((_, index) => {
-                        const realIndex = (index + dayOffsetFromSunday) % 7;
-                        const label = daysStartingFromSunday[realIndex];
-                        const isToday = realIndex === dayOffsetFromSunday;
-                        return (
-                            <div
-                                key={label}
-                                className={`${css['hours-row']} ${isToday ? css['hours-row-active'] : ''}`}
-                            >
-                                <span className={css['hours-day']}>{label}</span>
-                                <span className={css['hours-times']}>{timeSlots[realIndex]}</span>
-                            </div>
-                        );
-                    })}
+                    {Array(7)
+                        .fill(undefined)
+                        .map((_, index) => {
+                            const realIndex = (index + dayOffsetFromSunday) % 7;
+                            const label = daysStartingFromSunday[realIndex];
+                            const isToday = realIndex === dayOffsetFromSunday;
+                            return (
+                                <div
+                                    key={label}
+                                    className={`${css['hours-row']} ${isToday ? css['hours-row-active'] : ''}`}
+                                >
+                                    <span className={css['hours-day']}>{label}</span>
+                                    <span className={css['hours-times']}>{timeSlots[realIndex]}</span>
+                                </div>
+                            );
+                        })}
                 </div>
             </>
         );
@@ -56,7 +60,7 @@ function DrawerTabContent() {
                 <div>
                     {specials.concat(soups).map((item) => (
                         <>
-                            <div className={css['specials-item-title']}>{item.title}</div>
+                            <div className={css['specials-item-title']}>{item.name}</div>
                             <div className={css['specials-item-dscrp']}>{item.description}</div>
                         </>
                     ))}

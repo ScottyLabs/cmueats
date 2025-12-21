@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } fro
 import { DateTime } from 'luxon';
 
 import { getGreetings } from '../util/greeting';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
 import IS_MIKU_DAY from '../util/constants';
@@ -26,7 +26,7 @@ function ListPage({
     updateCardViewPreference,
     now,
 }: {
-    locations: IReadOnlyLocation_Combined[] | undefined;
+    locations: ILocation_Full[] | undefined;
     now: DateTime;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
@@ -88,7 +88,7 @@ function ListPage({
     }, []);
 
     const [isDrawerActive, setIsDrawerActive] = useState(false);
-    const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
+    const [drawerLocation, setDrawerLocation] = useState<ILocation_Full | null>(null);
     const [activeTab, setActiveTab] = useState<TabType>('overview');
     const isDrawerActiveRef = useRef(isDrawerActive);
     useEffect(() => {
@@ -98,10 +98,10 @@ function ListPage({
     // TODO: might buggy
     useEffect(() => {
         if (!isDrawerActiveRef.current || !drawerLocation || !locations) return;
-        const baseLocation = locations.find((loc) => loc.conceptId === drawerLocation.conceptId);
+        const baseLocation = locations.find((loc) => loc.id === drawerLocation.id);
         if (!baseLocation) return;
         setDrawerLocation(baseLocation);
-    }, [drawerLocation?.conceptId, locations]);
+    }, [drawerLocation?.id, locations]);
     const drawerContextValue = useMemo(
         () => ({
             isDrawerActive,

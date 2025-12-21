@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import clsx from 'clsx';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
 import EyeControlIcon from '../assets/control_buttons/x.svg?react';
@@ -11,7 +11,7 @@ function EateryCardHeader({
     location,
     updateViewPreference,
 }: {
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const dotRef = useRef<HTMLDivElement | null>(null);

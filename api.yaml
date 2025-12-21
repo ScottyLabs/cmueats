@@ -1,0 +1,178 @@
+openapi: 3.0.3
+tags: []
+info:
+  title: CMU Dining API
+  description: Development documentation
+  version: 2.0.0
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            text/plain:
+              schema:
+                examples:
+                  - ScottyLabs Dining API
+                type: string
+      operationId: getIndex
+  /api/v2/locations:
+    get:
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    times:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          start:
+                            examples:
+                              - 1766200995584
+                            type: number
+                          end:
+                            examples:
+                              - 1766200995584
+                            type: number
+                        required:
+                          - start
+                          - end
+                    todaysSoups:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          description:
+                            type: string
+                        required:
+                          - name
+                          - description
+                    todaysSpecials:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          description:
+                            type: string
+                        required:
+                          - name
+                          - description
+                    name:
+                      nullable: true
+                      anyOf:
+                        - examples:
+                            - Schatz
+                          type: string
+                        - type: "null"
+                    location:
+                      type: string
+                    shortDescription:
+                      nullable: true
+                      anyOf:
+                        - type: string
+                        - type: "null"
+                    description:
+                      type: string
+                    url:
+                      type: string
+                    menu:
+                      nullable: true
+                      anyOf:
+                        - type: string
+                        - type: "null"
+                    coordinateLat:
+                      nullable: true
+                      anyOf:
+                        - type: number
+                        - type: "null"
+                    coordinateLng:
+                      nullable: true
+                      anyOf:
+                        - type: number
+                        - type: "null"
+                    acceptsOnlineOrders:
+                      type: boolean
+                    id:
+                      type: string
+                  required:
+                    - times
+                    - todaysSoups
+                    - todaysSpecials
+                    - name
+                    - location
+                    - shortDescription
+                    - description
+                    - url
+                    - menu
+                    - coordinateLat
+                    - coordinateLng
+                    - acceptsOnlineOrders
+                    - id
+      operationId: getApiV2Locations
+  /api/emails:
+    get:
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      example:
+                        - Alice
+                      type: string
+                    email:
+                      example: alice72@andrew.cmu.edu
+                      type: string
+                  required:
+                    - name
+                    - email
+      operationId: getApiEmails
+  /api/sendSlackMessage:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+      operationId: postApiSendSlackMessage
+components:
+  schemas: {}

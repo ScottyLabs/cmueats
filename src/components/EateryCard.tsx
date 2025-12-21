@@ -1,7 +1,7 @@
 import { KeyboardEvent, useContext, useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import { CardViewPreference } from '../util/storage';
 import { DrawerContext } from '../contexts/DrawerContext';
 import EateryCardHeader from './EateryCardHeader';
@@ -14,14 +14,14 @@ function EateryCard({
     animate = false,
     updateViewPreference,
 }: {
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
     partOfMainGrid?: boolean;
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const drawerContext = useContext(DrawerContext);
     const { isDrawerActive, drawerLocation } = drawerContext;
-    const isCardActiveInDrawer = isDrawerActive && drawerLocation?.conceptId === location.conceptId;
+    const isCardActiveInDrawer = isDrawerActive && drawerLocation?.id === location.id;
     const cardRef = useRef<HTMLDivElement | null>(null);
     function handleCardSelection() {
         // open default tab "overview"
@@ -29,7 +29,7 @@ function EateryCard({
         // when the drawer is open, click other cards will open that
         // card's detail, instead of closing the drawer;
         // click on the same card will close the drawer.
-        if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
+        if (drawerContext.drawerLocation?.id === location.id) {
             drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
         } else {
             drawerContext.setDrawerLocation(location);
@@ -60,7 +60,7 @@ function EateryCard({
             // if click two cards very fast, will only scroll to the second card clicked
             if (timeoutId !== undefined) window.clearTimeout(timeoutId);
         };
-    }, [drawerLocation?.conceptId, isDrawerActive, location.conceptId]);
+    }, [drawerLocation?.id, isDrawerActive, location.id]);
 
     const cardClassName = useMemo(
         () =>

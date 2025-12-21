@@ -3,7 +3,7 @@ import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react'
 import { CSSTransition } from 'react-transition-group';
 import EateryCard from '../components/EateryCard';
 import './MapPage.css';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
 import env from '../env';
 
@@ -22,7 +22,7 @@ function abbreviate(longName: string) {
  */
 const stripVarFromString = (varString: string) => varString.match(/var\((.+)\)/)?.[1] ?? '';
 
-function MapPage({ locations }: { locations: IReadOnlyLocation_Combined[] | undefined }) {
+function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
     const [selectedLocationIndex, setSelectedLocationIndex] = useState<number>();
     const [isDrawerVisible, setDrawerVisible] = useState(false);
     const drawerRef = useRef(null);
@@ -72,7 +72,7 @@ function MapPage({ locations }: { locations: IReadOnlyLocation_Combined[] | unde
                             );
                             return (
                                 <Marker
-                                    key={location.conceptId}
+                                    key={location.id}
                                     latitude={location.coordinates.lat}
                                     longitude={location.coordinates.lng}
                                     color={bgColor}

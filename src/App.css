@@ -3,6 +3,7 @@ body,
 #root,
 .App {
     height: 100%;
+    padding-bottom: 0 !important; /* override tanstack dev tool styling */
 }
 
 html,

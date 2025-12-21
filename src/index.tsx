@@ -4,11 +4,15 @@ import './index.css';
 
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import App from './App';
 import { ThemeProvider } from './ThemeProvider';
 import env from './env';
 import notifySlack from './util/slack';
 import GlobalErrorBoundary from './ErrorFallback';
+import { NowContextProvider } from './contexts/NowContext';
+import { queryClient } from './api';
 
 posthog.init(env.VITE_POSTHOG_KEY || '', {
     person_profiles: 'identified_only',
@@ -30,9 +34,14 @@ if (rootElement) {
         <React.StrictMode>
             <GlobalErrorBoundary>
                 <PostHogProvider client={posthog}>
-                    <ThemeProvider>
-                        <App />
-                    </ThemeProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <ThemeProvider>
+                            <NowContextProvider>
+                                <App />
+                            </NowContextProvider>
+                        </ThemeProvider>
+                        <ReactQueryDevtools position="left" buttonPosition="bottom-left" />
+                    </QueryClientProvider>
                 </PostHogProvider>
             </GlobalErrorBoundary>
         </React.StrictMode>,

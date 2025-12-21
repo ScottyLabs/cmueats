@@ -11,18 +11,6 @@ export type RecursiveReadonly<T> = T extends object
     : T;
 
 /**
- * Describes either start or end time in any given ITimeSlot
- */
-export interface ITimeSlot {
-    /** 0-6 (0 is Sunday, 6 is Saturday) */
-    readonly day: number;
-    /** 0-23 - 0 means 12AM */
-    readonly hour: number;
-    /** 0-59 */
-    readonly minute: number;
-}
-
-/**
  * Start and end are both inclusive in
  * denoting when a location is open. so [2AM today, 4AM today]
  * includes both 2AM and 4AM. So, [2AM Tue,2AM Tue] is inferred to be open at exactly 2AM.
@@ -35,19 +23,17 @@ export interface ITimeSlot {
  * would be constrained to that day and possibly 12AM on the day after.
  */
 export interface ITimeRange {
-    readonly start: ITimeSlot;
-    readonly end: ITimeSlot;
+    readonly start: number;
+    readonly end: number;
 }
 
 /**
- * We expect this to be sorted (by start time), non-overlapping,
- * and not wrapping (aka end time found in minutesFromSunday is less than
- * start time) except for possibly the last entry
+ * We expect this to be sorted (by start time). bounds are inclusive and non-overlapping.
  */
-export type ITimeRangeList = ReadonlyArray<ITimeRange>;
+export type ITimeRangeList = ITimeRange[];
 
 interface ISpecial {
-    title: string;
+    name: string;
     description: string;
 }
 
@@ -60,19 +46,14 @@ export enum LocationState {
     CLOSED_LONG_TERM,
 }
 
-/**
- * Raw type directly from API - types below extend this
- * (note: if you're updating this, you should
- * update the Joi Schema in joiLocationTypes.ts as well)
- */
-interface ILocation_FromAPI_PreProcessed {
-    conceptId: number;
-    name?: string;
-    shortDescription?: string;
+export interface ILocation_FromAPI {
+    id: string;
+    name: string;
+    shortDescription: string | null;
     description: string;
     url: string;
     /** Menu link */
-    menu?: string;
+    menu: string | null;
     location: string;
     coordinates?: {
         lat: number;
@@ -80,12 +61,10 @@ interface ILocation_FromAPI_PreProcessed {
     };
     acceptsOnlineOrders: boolean;
     times: ITimeRange[];
-    todaysSpecials?: ISpecial[];
-    todaysSoups?: ISpecial[];
+    todaysSpecials: ISpecial[];
+    todaysSoups: ISpecial[];
 }
-interface ILocation_FromAPI_PostProcessed extends ILocation_FromAPI_PreProcessed {
-    name: string; // This field is now guaranteed to be defined
-}
+
 // All of the following are extended from the base API type
 
 // 'closedLongTerm' here refers to closed for the next 7 days (no timeslots available)
@@ -111,22 +90,15 @@ export type ILocation_TimeStatusData =
     | ILocation_TimeStateData_NotPermanentlyClosed
     | ILocation_TimeStatusData_PermanentlyClosed;
 
-/** What we get directly from the API (single location data) */
-export type IReadOnlyLocation_FromAPI_PreProcessed = RecursiveReadonly<ILocation_FromAPI_PreProcessed>;
-
-export type IReadOnlyLocation_FromAPI_PostProcessed = RecursiveReadonly<ILocation_FromAPI_PostProcessed>;
-
 /** Extra data derived from a single location */
-export type IReadOnlyLocation_ExtraData = RecursiveReadonly<
-    ILocation_TimeStatusData & {
-        cardViewPreference: CardViewPreference;
-    }
->;
+export type ILocation_ExtraData = ILocation_TimeStatusData & {
+    cardViewPreference: CardViewPreference;
+};
 
 /** we'll typically pass this into components for efficient look-up of extra data (like time until close) */
-export type IReadOnlyLocation_ExtraData_Map = {
-    [conceptId: number]: IReadOnlyLocation_ExtraData;
+export type ILocation_ExtraData_Map = {
+    [conceptId: number]: ILocation_ExtraData;
 };
 
 /** once we combine extraDataMap with our base api data */
-export type IReadOnlyLocation_Combined = IReadOnlyLocation_FromAPI_PostProcessed & IReadOnlyLocation_ExtraData;
+export type ILocation_Full = ILocation_FromAPI & ILocation_ExtraData;
