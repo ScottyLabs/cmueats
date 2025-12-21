@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { DateTime } from 'luxon';
 import { motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
@@ -18,26 +17,36 @@ import useRefreshWhenBackOnline from './util/network';
 import { $api } from './api';
 import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function App() {
     const now = useCurrentTime();
     // Load locations
     const { data } = $api.useQuery('get', '/api/v2/locations');
-    const locations = data?.map((location) => ({
-        ...location,
-        name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
-    })) satisfies ILocation_FromAPI[] | undefined;
+
+    // Memoize locations transformation (only depends on data)
+    const locations = useMemo(
+        () =>
+            data?.map((location) => ({
+                ...location,
+                name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
+            })) satisfies ILocation_FromAPI[] | undefined,
+        [data],
+    );
 
     const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
 
     useRefreshWhenBackOnline();
 
-    const fullLocationData: ILocation_Full[] | undefined = locations?.map((location) => ({
-        ...location,
-        ...getLocationStatus(location.times, now),
-        cardViewPreference: cardViewPreferences[location.id] ?? 'normal',
-    }));
+    // Memoize fullLocationData (depends on locations, now, and cardViewPreferences)
+    const fullLocationData: ILocation_Full[] | undefined = useMemo(
+        () =>
+            locations?.map((location) => ({
+                ...location,
+                ...getLocationStatus(location.times, now),
+                cardViewPreference: cardViewPreferences[location.id] ?? 'normal',
+            })),
+        [locations, now, cardViewPreferences],
+    );
 
     return (
         <React.StrictMode>
