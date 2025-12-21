@@ -10,15 +10,15 @@ import {
     getApproximateTimeStringFromMinutes,
     getTimeSlotsString,
 } from '../../src/util/time';
-import makeDateTime from './helper';
+import makeDateTime, { timeSlotToMillis } from './helper';
 
 describe('currentlyOpen', () => {
     test('wrap-around testing', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 0, hour: 0, minute: 0 },
-                    end: { day: 0, hour: 0, minute: 0 },
+                    start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
                 },
                 makeDateTime(1, 1, 1),
             ),
@@ -26,8 +26,8 @@ describe('currentlyOpen', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 0, hour: 0, minute: 0 },
-                    end: { day: 0, hour: 0, minute: 0 },
+                    start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
                 },
                 makeDateTime(0, 0, 0),
             ),
@@ -38,8 +38,8 @@ describe('currentlyOpen', () => {
                     expect(
                         currentlyOpen(
                             {
-                                start: { day: 1, hour: 8, minute: 0 },
-                                end: { day: 1, hour: 7, minute: 58 },
+                                start: timeSlotToMillis({ day: 1, hour: 8, minute: 0 }),
+                                end: timeSlotToMillis({ day: 1, hour: 7, minute: 58 }),
                             }, // basically every moment is open
                             makeDateTime(d, h, m),
                         ),
@@ -48,8 +48,8 @@ describe('currentlyOpen', () => {
     });
     test('closes Sat midnight', () => {
         const openSlot = {
-            start: { day: 6, hour: 10, minute: 0 },
-            end: { day: 0, hour: 0, minute: 0 },
+            start: timeSlotToMillis({ day: 6, hour: 10, minute: 0 }),
+            end: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
         };
         expect(currentlyOpen(openSlot, makeDateTime(2, 1, 1))).toBe(false);
         expect(currentlyOpen(openSlot, makeDateTime(6, 10, 0))).toBe(true);
@@ -62,8 +62,8 @@ describe('currentlyOpen', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 0, hour: 0, minute: 0 },
-                    end: { day: 0, hour: 0, minute: 1 },
+                    start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 0, minute: 1 }),
                 },
                 makeDateTime(0, 0, 1),
             ),
@@ -71,8 +71,8 @@ describe('currentlyOpen', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 0, hour: 0, minute: 0 },
-                    end: { day: 0, hour: 0, minute: 1 },
+                    start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 0, minute: 1 }),
                 },
                 makeDateTime(0, 0, 0),
             ),
@@ -80,8 +80,8 @@ describe('currentlyOpen', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 0, hour: 0, minute: 0 },
-                    end: { day: 0, hour: 0, minute: 1 },
+                    start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 0, minute: 1 }),
                 },
                 makeDateTime(0, 0, 2),
             ),
@@ -91,8 +91,8 @@ describe('currentlyOpen', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 1, hour: 8, minute: 0 },
-                    end: { day: 2, hour: 13, minute: 1 },
+                    start: timeSlotToMillis({ day: 1, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 2, hour: 13, minute: 1 }),
                 },
                 makeDateTime(1, 7, 1),
             ),
@@ -100,8 +100,8 @@ describe('currentlyOpen', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 1, hour: 8, minute: 0 },
-                    end: { day: 2, hour: 13, minute: 1 },
+                    start: timeSlotToMillis({ day: 1, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 2, hour: 13, minute: 1 }),
                 },
                 makeDateTime(2, 1, 1),
             ),
@@ -109,8 +109,8 @@ describe('currentlyOpen', () => {
         expect(
             currentlyOpen(
                 {
-                    start: { day: 1, hour: 8, minute: 0 },
-                    end: { day: 2, hour: 13, minute: 1 },
+                    start: timeSlotToMillis({ day: 1, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 2, hour: 13, minute: 1 }),
                 },
                 makeDateTime(1, 8, 2),
             ),
@@ -120,8 +120,8 @@ describe('currentlyOpen', () => {
         expect(() =>
             currentlyOpen(
                 {
-                    start: { day: 1, hour: 8, minute: 0 },
-                    end: { day: 2, hour: 13, minute: 1 },
+                    start: timeSlotToMillis({ day: 1, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 2, hour: 13, minute: 1 }),
                 },
                 makeDateTime(8, 1, 1), //invalid datetime
             ),
@@ -146,35 +146,35 @@ test('minutesSinceSundayDateTime', () => {
 test('isTimeSlot', () => {
     expect(
         isTimeRange({
-            start: { minute: 1, hour: 1, day: 1 },
-            end: { minute: 1, hour: 1, day: 1 },
+            start: timeSlotToMillis({ day: 1, hour: 1, minute: 1 }),
+            end: timeSlotToMillis({ day: 1, hour: 1, minute: 1 }),
         }),
     ).toEqual(true); // this doesn't count as wrap-around, so it's fine
     expect(
         isTimeRange({
-            start: { minute: 1, hour: 1, day: 1 },
-            end: { minute: 0, hour: 1, day: 1 },
+            start: timeSlotToMillis({ day: 1, hour: 1, minute: 1 }),
+            end: timeSlotToMillis({ day: 1, hour: 1, minute: 0 }),
         }),
     ).toEqual(false);
     expect(
         isTimeRange(
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 0, hour: 1, day: 1 },
+                start: timeSlotToMillis({ day: 1, hour: 1, minute: 1 }),
+                end: timeSlotToMillis({ day: 1, hour: 1, minute: 0 }),
             },
             true,
         ),
     ).toEqual(true);
     expect(
         isTimeRange({
-            start: { minute: 1, hour: 1, day: 1 },
-            end: { minute: 1, hour: 1, day: 2 },
+            start: timeSlotToMillis({ day: 1, hour: 1, minute: 1 }),
+            end: timeSlotToMillis({ day: 2, hour: 1, minute: 1 }),
         }),
     ).toEqual(true);
     expect(
         isTimeRange({
-            start: { minute: 1, hour: 1, day: 1 },
-            end: { minute: 1, hour: 1, day: 7 },
+            start: timeSlotToMillis({ day: 1, hour: 1, minute: 1 }),
+            end: timeSlotToMillis({ day: 7, hour: 1, minute: 1 }),
         }),
     ).toEqual(false);
 });
@@ -216,52 +216,52 @@ test('isValidTimeSlotArray', () => {
     expect(
         isValidTimeSlotArray([
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 2, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 2, hour: 1, day: 1 }),
             },
             {
-                start: { minute: 2, hour: 1, day: 1 },
-                end: { minute: 3, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 2, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 3, hour: 1, day: 1 }),
             },
         ]),
     ).toBe(false);
     expect(
         isValidTimeSlotArray([
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 2, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 2, hour: 1, day: 1 }),
             },
             {
-                start: { minute: 3, hour: 1, day: 1 },
-                end: { minute: 4, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 3, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 4, hour: 1, day: 1 }),
             },
         ]),
     ).toBe(true);
     expect(
         isValidTimeSlotArray([
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 2, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 2, hour: 1, day: 1 }),
             },
             {
-                start: { minute: 3, hour: 1, day: 1 },
-                end: { minute: 0, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 3, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 0, hour: 1, day: 1 }),
             },
         ]),
     ).toBe(true); // allow last entry wrap over
     expect(
         isValidTimeSlotArray([
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 2, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 2, hour: 1, day: 1 }),
             },
             {
-                start: { minute: 3, hour: 1, day: 1 },
-                end: { minute: 2, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 3, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 2, hour: 1, day: 1 }),
             },
             {
-                start: { minute: 3, hour: 1, day: 1 },
-                end: { minute: 4, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 3, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 4, hour: 1, day: 1 }),
             },
         ]),
     ).toBe(false); // don't allow wrap over for entries other than last one
@@ -269,48 +269,48 @@ test('isValidTimeSlotArray', () => {
     expect(
         isValidTimeSlotArray([
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 5, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 5, hour: 1, day: 1 }),
             },
             {
-                start: { minute: 3, hour: 1, day: 1 },
-                end: { minute: 6, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 3, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 6, hour: 1, day: 1 }),
             },
         ]),
     ).toBe(false);
     expect(
         isValidTimeSlotArray([
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 1, hour: 1, day: 3 },
+                start: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 1, hour: 1, day: 3 }),
             },
             {
-                start: { minute: 2, hour: 1, day: 3 },
-                end: { minute: 1, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 2, hour: 1, day: 3 }),
+                end: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
             },
         ]),
     ).toBe(false); // wrap-around time should not overlap first time
     expect(
         isValidTimeSlotArray([
             {
-                start: { minute: 1, hour: 1, day: 1 },
-                end: { minute: 1, hour: 1, day: 3 },
+                start: timeSlotToMillis({ minute: 1, hour: 1, day: 1 }),
+                end: timeSlotToMillis({ minute: 1, hour: 1, day: 3 }),
             },
             {
-                start: { minute: 2, hour: 1, day: 3 },
-                end: { minute: 0, hour: 1, day: 1 },
+                start: timeSlotToMillis({ minute: 2, hour: 1, day: 3 }),
+                end: timeSlotToMillis({ minute: 0, hour: 1, day: 1 }),
             },
         ]),
     ).toBe(true); // wrap-around time does not overlap first time. good.
 });
 test('getNextTimeSlot', () => {
     const A = {
-        start: { day: 1, hour: 1, minute: 1 },
-        end: { day: 3, hour: 0, minute: 0 },
+        start: timeSlotToMillis({ day: 1, hour: 1, minute: 1 }),
+        end: timeSlotToMillis({ day: 3, hour: 0, minute: 0 }),
     };
     const B = {
-        start: { day: 3, hour: 1, minute: 2 },
-        end: { day: 0, hour: 0, minute: 0 },
+        start: timeSlotToMillis({ day: 3, hour: 1, minute: 2 }),
+        end: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
     }; // B wraps around
     expect(getNextTimeSlot([A, B], makeDateTime(3, 3, 3))).toEqual(B);
     expect(getNextTimeSlot([A, B], makeDateTime(3, 1, 2))).toEqual(B);
@@ -321,37 +321,37 @@ test('getNextTimeSlot', () => {
     expect(getNextTimeSlot([A, B], makeDateTime(2, 0, 0))).toEqual(A);
     expect(getNextTimeSlot([A, B], makeDateTime(1, 1, 1))).toEqual(A);
     expect(getNextTimeSlot([A, B], makeDateTime(0, 0, 0))).toEqual(A);
-    expect(getNextTimeSlot([], makeDateTime(0, 0, 0))).toEqual(null);
+    expect(getNextTimeSlot([], makeDateTime(0, 0, 0))).toEqual(undefined);
     expect(getNextTimeSlot([A], makeDateTime(6, 0, 0))).toEqual(A);
     expect(
         getNextTimeSlot(
             [
                 {
-                    start: {
+                    start: timeSlotToMillis({
                         day: 6,
                         hour: 0,
                         minute: 0,
-                    },
-                    end: {
+                    }),
+                    end: timeSlotToMillis({
                         day: 1,
                         hour: 23,
                         minute: 59,
-                    },
+                    }),
                 },
             ],
             makeDateTime(6, 0, 0),
         ),
     ).toEqual({
-        start: {
+        start: timeSlotToMillis({
             day: 6,
             hour: 0,
             minute: 0,
-        },
-        end: {
+        }),
+        end: timeSlotToMillis({
             day: 1,
             hour: 23,
             minute: 59,
-        },
+        }),
     });
     expect(() => getNextTimeSlot([B, A], makeDateTime(3, 3, 3))).toThrow(); // [B,A] is improperly sorted
 });
@@ -360,16 +360,8 @@ test('getTimeSlotsString', () => {
         {
             input: [
                 {
-                    start: {
-                        day: 0,
-                        hour: 0,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 3,
-                        hour: 0,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 3, hour: 0, minute: 0 }),
                 },
             ],
             // semantically, Wednesday should have 12AM - 12AM, but that doesn't make too much sense
@@ -378,16 +370,8 @@ test('getTimeSlotsString', () => {
         {
             input: [
                 {
-                    start: {
-                        day: 0,
-                        hour: 0,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 2,
-                        hour: 23,
-                        minute: 59,
-                    },
+                    start: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 2, hour: 23, minute: 59 }),
                 },
             ],
             expected: ['Open 24 hours', 'Open 24 hours', 'Open 24 hours', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'],
@@ -396,16 +380,8 @@ test('getTimeSlotsString', () => {
             // splitting with uneven edges
             input: [
                 {
-                    start: {
-                        day: 0,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 3,
-                        hour: 7,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 0, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 3, hour: 7, minute: 0 }),
                 },
             ],
             expected: [
@@ -422,16 +398,8 @@ test('getTimeSlotsString', () => {
             // don't split if interval duration is under 24 hours
             input: [
                 {
-                    start: {
-                        day: 2,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 3,
-                        hour: 6,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 2, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 3, hour: 6, minute: 0 }),
                 },
             ],
             expected: ['CLOSED', 'CLOSED', '7:00 AM - 6:00 AM', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'],
@@ -440,16 +408,8 @@ test('getTimeSlotsString', () => {
             // split if interval duration is over (or at) 24 hours
             input: [
                 {
-                    start: {
-                        day: 2,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 3,
-                        hour: 7,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 2, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 3, hour: 7, minute: 0 }),
                 },
             ],
             expected: ['CLOSED', 'CLOSED', '7:00 AM - 11:59 PM', '12:00 AM - 7:00 AM', 'CLOSED', 'CLOSED', 'CLOSED'],
@@ -458,16 +418,8 @@ test('getTimeSlotsString', () => {
             // wrap-around breaking (under 24 hrs)
             input: [
                 {
-                    start: {
-                        day: 6,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 0,
-                        hour: 3,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 3, minute: 0 }),
                 },
             ],
             expected: ['CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', '7:00 AM - 3:00 AM'],
@@ -476,16 +428,8 @@ test('getTimeSlotsString', () => {
             // wrap-around breaking (over 24 hrs)
             input: [
                 {
-                    start: {
-                        day: 6,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 0,
-                        hour: 9,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 9, minute: 0 }),
                 },
             ],
             expected: ['12:00 AM - 9:00 AM', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', '7:00 AM - 11:59 PM'],
@@ -494,16 +438,8 @@ test('getTimeSlotsString', () => {
             // wrap-around breaking (over 48 hrs)
             input: [
                 {
-                    start: {
-                        day: 6,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 1,
-                        hour: 9,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 1, hour: 9, minute: 0 }),
                 },
             ],
             expected: [
@@ -520,16 +456,8 @@ test('getTimeSlotsString', () => {
             // wrap-around breaking (over 48 hrs)
             input: [
                 {
-                    start: {
-                        day: 6,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 0,
-                        hour: 0,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
                 },
             ],
             expected: ['CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', '7:00 AM - 12:00 AM'],
@@ -538,16 +466,8 @@ test('getTimeSlotsString', () => {
             // wrap-around breaking (over 48 hrs)
             input: [
                 {
-                    start: {
-                        day: 6,
-                        hour: 0,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 0,
-                        hour: 0,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 0, hour: 0, minute: 0 }),
                 },
             ],
             expected: ['CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'Open 24 hours'],
@@ -556,16 +476,8 @@ test('getTimeSlotsString', () => {
             // wrap-around breaking (over 48 hrs)
             input: [
                 {
-                    start: {
-                        day: 6,
-                        hour: 0,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 5,
-                        hour: 23,
-                        minute: 59,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 5, hour: 23, minute: 59 }),
                 },
             ],
             expected: [
@@ -582,40 +494,16 @@ test('getTimeSlotsString', () => {
             // stress-test
             input: [
                 {
-                    start: {
-                        day: 1,
-                        hour: 10,
-                        minute: 2,
-                    },
-                    end: {
-                        day: 2,
-                        hour: 8,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 1, hour: 10, minute: 2 }),
+                    end: timeSlotToMillis({ day: 2, hour: 8, minute: 0 }),
                 },
                 {
-                    start: {
-                        day: 2,
-                        hour: 9,
-                        minute: 2,
-                    },
-                    end: {
-                        day: 2,
-                        hour: 12,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 2, hour: 9, minute: 2 }),
+                    end: timeSlotToMillis({ day: 2, hour: 12, minute: 0 }),
                 },
                 {
-                    start: {
-                        day: 6,
-                        hour: 7,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 1,
-                        hour: 9,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 7, minute: 0 }),
+                    end: timeSlotToMillis({ day: 1, hour: 9, minute: 0 }),
                 },
             ],
             expected: [
@@ -632,64 +520,24 @@ test('getTimeSlotsString', () => {
             // normal test
             input: [
                 {
-                    start: {
-                        day: 1,
-                        hour: 8,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 1,
-                        hour: 16,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 1, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 1, hour: 16, minute: 0 }),
                 },
                 {
-                    start: {
-                        day: 2,
-                        hour: 8,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 2,
-                        hour: 16,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 2, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 2, hour: 16, minute: 0 }),
                 },
                 {
-                    start: {
-                        day: 3,
-                        hour: 8,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 3,
-                        hour: 16,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 3, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 3, hour: 16, minute: 0 }),
                 },
                 {
-                    start: {
-                        day: 4,
-                        hour: 8,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 4,
-                        hour: 16,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 4, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 4, hour: 16, minute: 0 }),
                 },
                 {
-                    start: {
-                        day: 5,
-                        hour: 8,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 5,
-                        hour: 16,
-                        minute: 0,
-                    },
+                    start: timeSlotToMillis({ day: 5, hour: 8, minute: 0 }),
+                    end: timeSlotToMillis({ day: 5, hour: 16, minute: 0 }),
                 },
             ],
             expected: [
@@ -705,64 +553,24 @@ test('getTimeSlotsString', () => {
         {
             input: [
                 {
-                    start: {
-                        day: 1,
-                        hour: 11,
-                        minute: 30,
-                    },
-                    end: {
-                        day: 1,
-                        hour: 13,
-                        minute: 30,
-                    },
+                    start: timeSlotToMillis({ day: 1, hour: 11, minute: 30 }),
+                    end: timeSlotToMillis({ day: 1, hour: 13, minute: 30 }),
                 },
                 {
-                    start: {
-                        day: 2,
-                        hour: 11,
-                        minute: 30,
-                    },
-                    end: {
-                        day: 2,
-                        hour: 13,
-                        minute: 30,
-                    },
+                    start: timeSlotToMillis({ day: 2, hour: 11, minute: 30 }),
+                    end: timeSlotToMillis({ day: 2, hour: 13, minute: 30 }),
                 },
                 {
-                    start: {
-                        day: 3,
-                        hour: 11,
-                        minute: 30,
-                    },
-                    end: {
-                        day: 3,
-                        hour: 13,
-                        minute: 30,
-                    },
+                    start: timeSlotToMillis({ day: 3, hour: 11, minute: 30 }),
+                    end: timeSlotToMillis({ day: 3, hour: 13, minute: 30 }),
                 },
                 {
-                    start: {
-                        day: 4,
-                        hour: 11,
-                        minute: 30,
-                    },
-                    end: {
-                        day: 4,
-                        hour: 13,
-                        minute: 30,
-                    },
+                    start: timeSlotToMillis({ day: 4, hour: 11, minute: 30 }),
+                    end: timeSlotToMillis({ day: 4, hour: 13, minute: 30 }),
                 },
                 {
-                    start: {
-                        day: 5,
-                        hour: 11,
-                        minute: 30,
-                    },
-                    end: {
-                        day: 5,
-                        hour: 13,
-                        minute: 30,
-                    },
+                    start: timeSlotToMillis({ day: 5, hour: 11, minute: 30 }),
+                    end: timeSlotToMillis({ day: 5, hour: 13, minute: 30 }),
                 },
             ],
             expected: [
@@ -778,16 +586,8 @@ test('getTimeSlotsString', () => {
         {
             input: [
                 {
-                    start: {
-                        day: 6,
-                        hour: 0,
-                        minute: 0,
-                    },
-                    end: {
-                        day: 1,
-                        hour: 23,
-                        minute: 59,
-                    },
+                    start: timeSlotToMillis({ day: 6, hour: 0, minute: 0 }),
+                    end: timeSlotToMillis({ day: 1, hour: 23, minute: 59 }),
                 },
             ],
             expected: ['Open 24 hours', 'Open 24 hours', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'Open 24 hours'],

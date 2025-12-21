@@ -2,6 +2,7 @@ import { test, expect, describe } from 'vitest';
 import { getLocationStatus, getStatusMessage } from '../../src/util/queryLocations';
 import { ITimeSlot, LocationState } from '../../src/types/locationTypes';
 import makeDateTime from './helper';
+import { Interval } from 'luxon';
 
 interface IGetStatusMessageTest {
     isOpen: boolean;
@@ -349,10 +350,20 @@ describe('queryLocations.ts', () => {
             const nowObj = now;
             const expectedStringText = expectedString;
 
+            const nowDateTime = makeDateTime(nowObj.day, nowObj.hour, nowObj.minute);
+            let nextTimeDateTime = makeDateTime(nextTimeObj.day, nextTimeObj.hour, nextTimeObj.minute);
+            
+            // If nextTime appears to be before or equal to now, it means it's next week
+            // But we need to be careful: if they're equal and isOpen is true, it means "closes now" which should be same time
+            if (nextTimeDateTime < nowDateTime || (nextTimeDateTime.equals(nowDateTime) && !isOpen)) {
+                nextTimeDateTime = nextTimeDateTime.plus({ weeks: 1 });
+            }
+            
+            const interval = Interval.fromDateTimes(nowDateTime, nextTimeDateTime);
+
             const locationString = getStatusMessage(
                 isOpenBool,
-                nextTimeObj,
-                makeDateTime(nowObj.day, nowObj.hour, nowObj.minute),
+                interval,
             );
 
             expect(locationString).toEqual(expectedStringText);
