@@ -34,11 +34,16 @@ export function getApproximateTimeStringFromMinutes(minutes: number) {
  *
  * @param timeSlots
  * @returns Checks if timeslots are non-overlapping (so [a,b],[b,c] is invalid) and properly sorted.
+ * Allows the last entry to wrap around (end < start).
  */
 export function isValidTimeSlotArray(timeSlots: ITimeRangeList) {
     for (let i = 0; i < timeSlots.length; i += 1) {
         const { start, end } = timeSlots[i]!;
-        if (start > end) return false;
+        const isLastEntry = i === timeSlots.length - 1;
+        
+        // Allow wrap-around only for the last entry
+        if (start > end && !isLastEntry) return false;
+        
         if (i > 0) {
             const prevEnd = timeSlots[i - 1]!.end;
             if (start <= prevEnd) return false;

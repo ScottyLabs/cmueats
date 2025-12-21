@@ -14,13 +14,30 @@ const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
  */
 export function getStatusMessage(isOpen: boolean, interval: Interval): string {
     if (!interval.isValid || !interval.end) return 'Who knows lmao';
-    const daysSpanned = interval.count('day');
     const time = interval.end.toLocaleString(DateTime.TIME_SIMPLE);
 
     const action = isOpen ? 'Closes' : 'Opens';
-    const day = daysSpanned === 1 ? 'today' : daysSpanned === 2 ? 'tomorrow' : WEEKDAYS[interval.end.weekday % 7];
+    
+    // Determine if it's today, tomorrow, or a specific day of the week
+    let day: string;
+    if (interval.start && interval.end.hasSame(interval.start, 'day')) {
+        day = 'today';
+    } else {
+        const daysDiff = Math.floor(interval.length('days'));
+        if (daysDiff === 0) {
+            // Less than 24 hours but on a different calendar day = tomorrow
+            day = 'tomorrow';
+        } else if (daysDiff === 1) {
+            day = 'tomorrow';
+        } else {
+            day = WEEKDAYS[interval.end.weekday % 7];
+        }
+    }
+    
     const humanReadableIntervalDuration = getApproximateTimeStringFromMinutes(Math.floor(interval.length('minute')));
-    if (interval.length('day') > 6) return 'Open 24/7';
+    
+    // Only return "Open 24/7" if the location is currently open and closes in more than a week
+    if (isOpen && interval.length('day') > 6) return 'Open 24/7';
 
     if (humanReadableIntervalDuration === '0 minutes') {
         return `${action} now (${day} at ${time})`;
