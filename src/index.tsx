@@ -17,6 +17,7 @@ import { queryClient } from './api';
 posthog.init(env.VITE_POSTHOG_KEY || '', {
     person_profiles: 'identified_only',
 });
+
 // error handling
 // catches synchronous errors
 window.addEventListener('error', (event) => {

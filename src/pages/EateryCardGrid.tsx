@@ -25,9 +25,9 @@ const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) 
         return location1.name.localeCompare(location2.name);
     }
     if (state1 === LocationState.OPEN || state1 === LocationState.CLOSES_SOON) {
-        return location2.timeUntil - location1.timeUntil;
+        return location2.minutesUntil - location1.minutesUntil;
     }
-    return location1.timeUntil - location2.timeUntil;
+    return location1.minutesUntil - location2.minutesUntil;
 };
 
 export default function EateryCardGrid({

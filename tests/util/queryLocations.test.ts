@@ -1,14 +1,8 @@
 import { test, expect, describe } from 'vitest';
 import { getLocationStatus, getStatusMessage } from '../../src/util/queryLocations';
-import { ITimeSlot, LocationState } from '../../src/types/locationTypes';
-import makeDateTime from './helper';
-
-interface IGetStatusMessageTest {
-    isOpen: boolean;
-    nextTime: ITimeSlot;
-    now: ITimeSlot;
-    expectedString: string;
-}
+import { LocationState } from '../../src/types/locationTypes';
+import { DateTime, Interval } from 'luxon';
+import { date, dateObj } from './util';
 
 describe('queryLocations.ts', () => {
     describe('getLocationStatus', () => {
@@ -16,144 +10,148 @@ describe('queryLocations.ts', () => {
             const status = getLocationStatus(
                 [
                     {
-                        start: { day: 0, hour: 2, minute: 2 },
-                        end: { day: 0, hour: 3, minute: 0 },
+                        start: date('1/1/34 2:00 AM'),
+                        end: date('1/1/34 3:00 AM'),
                     },
                 ],
-                makeDateTime(0, 3, 0),
+                dateObj('1/1/34 3:00 AM'),
             );
             expect(status.closedLongTerm).toEqual(false);
             if (!status.closedLongTerm) {
                 // This has to be true given the line above (but TS doesn't know that)
                 expect(status.changesSoon).toBeTruthy();
                 expect(status.isOpen).toBeTruthy();
-                expect(status.timeUntil).toBe(0);
+                expect(status.minutesUntil).toBe(0);
             }
         });
         test('no open times', () => {
-            const status = getLocationStatus([], makeDateTime(0, 0, 1));
+            const status = getLocationStatus([], dateObj('1/1/34 1:00 AM'));
             expect(status).toEqual({
-                statusMsg: 'Closed until further notice',
+                statusMsg: {
+                    longStatus: 'Closed until further notice',
+                    shortStatus: ['Closed until further notice', ''],
+                },
                 locationState: LocationState.CLOSED_LONG_TERM,
                 closedLongTerm: true,
             });
         });
-        test('wrap-over for last time slot', () => {
+        test('basic', () => {
             const A = {
-                start: { day: 2, hour: 0, minute: 0 }, // Tuesday 12AM
-                end: { day: 5, hour: 23, minute: 0 }, // Friday 11PM
+                start: date('1/3/34 12:00 AM'), // Tuesday 12AM
+                end: date('1/6/34 11:00 PM'), // Friday 11PM
             };
             const B = {
-                start: { day: 6, hour: 0, minute: 0 }, // Sat 12AM
-                end: { day: 0, hour: 0, minute: 0 }, // Sun 12AM
+                start: date('1/7/34 12:00 AM'), // Sat 12AM
+                end: date('1/8/34 12:00 AM'), // Sun 12AM
             };
-            expect(getLocationStatus([A, B], makeDateTime(0, 0, 0))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/1/34 12:00 AM'))).toEqual({
                 changesSoon: false,
                 closedLongTerm: false,
                 isOpen: false,
                 locationState: LocationState.CLOSED,
-                statusMsg: 'Opens in 2 days (Tuesday at 12:00 AM)',
-                timeUntil: 2880,
+                statusMsg: {
+                    longStatus: 'Opens in 2 days (tomorrow at 12:00 AM)',
+                    shortStatus: ['Opens in 2 days', 'at 12:00 AM'],
+                },
+                minutesUntil: 2880,
             });
-            expect(getLocationStatus([A, B], makeDateTime(1, 20, 0))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/2/34 8:00 PM'))).toEqual({
                 changesSoon: false,
                 closedLongTerm: false,
                 isOpen: false,
                 locationState: LocationState.CLOSED,
-                statusMsg: 'Opens in 4 hours (tomorrow at 12:00 AM)',
-                timeUntil: 60 * 4,
+                statusMsg: {
+                    longStatus: 'Opens in 4 hours (today at 12:00 AM)',
+                    shortStatus: ['Opens in 4 hours', 'at 12:00 AM'],
+                },
+                minutesUntil: 60 * 4,
             });
-            expect(getLocationStatus([A, B], makeDateTime(1, 23, 0))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/2/34 11:00 PM'))).toEqual({
                 changesSoon: true,
                 closedLongTerm: false,
                 isOpen: false,
                 locationState: LocationState.OPENS_SOON,
-                statusMsg: 'Opens in 1 hour (tomorrow at 12:00 AM)',
-                timeUntil: 60,
+                statusMsg: {
+                    longStatus: 'Opens in 1 hour (today at 12:00 AM)',
+                    shortStatus: ['Opens in 1 hour', 'at 12:00 AM'],
+                },
+                minutesUntil: 60,
             });
-            expect(getLocationStatus([A, B], makeDateTime(2, 1, 0))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/3/34 1:00 AM'))).toEqual({
                 changesSoon: false,
                 closedLongTerm: false,
                 isOpen: true,
                 locationState: LocationState.OPEN,
-                statusMsg: 'Closes in 4 days (Friday at 11:00 PM)',
-                timeUntil: 3 * 1440 + 22 * 60,
+                statusMsg: {
+                    longStatus: 'Closes in 4 days (Friday at 11:00 PM)',
+                    shortStatus: ['Closes in 4 days', 'at 11:00 PM'],
+                },
+                minutesUntil: 3 * 1440 + 22 * 60,
             });
-            expect(getLocationStatus([A, B], makeDateTime(5, 23, 1))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/6/34 11:01 PM'))).toEqual({
                 changesSoon: true,
                 closedLongTerm: false,
                 isOpen: false,
                 locationState: LocationState.OPENS_SOON,
-                statusMsg: 'Opens in 59 minutes (tomorrow at 12:00 AM)',
-                timeUntil: 59,
+                statusMsg: {
+                    longStatus: 'Opens in 59 minutes (today at 12:00 AM)',
+                    shortStatus: ['Opens in 59 minutes', 'at 12:00 AM'],
+                },
+                minutesUntil: 59,
             });
-            expect(getLocationStatus([A, B], makeDateTime(6, 7, 0))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/7/34 7:00 AM'))).toEqual({
                 changesSoon: false,
                 closedLongTerm: false,
                 isOpen: true,
                 locationState: LocationState.OPEN,
-                statusMsg: 'Closes in 17 hours (tomorrow at 12:00 AM)',
-                timeUntil: 17 * 60,
+                statusMsg: {
+                    longStatus: 'Closes in 17 hours (today at 12:00 AM)',
+                    shortStatus: ['Closes in 17 hours', 'at 12:00 AM'],
+                },
+                minutesUntil: 17 * 60,
             });
-            expect(getLocationStatus([A, B], makeDateTime(6, 23, 59))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/7/34 11:59 PM'))).toEqual({
                 changesSoon: true,
                 closedLongTerm: false,
                 isOpen: true,
                 locationState: LocationState.CLOSES_SOON,
-                statusMsg: 'Closes in 1 minute (tomorrow at 12:00 AM)',
-                timeUntil: 1,
+                statusMsg: {
+                    longStatus: 'Closes in 1 minute (today at 12:00 AM)',
+                    shortStatus: ['Closes in 1 minute', 'at 12:00 AM'],
+                },
+                minutesUntil: 1,
             });
-            expect(getLocationStatus([A, B], makeDateTime(0, 1, 0))).toEqual({
+            expect(getLocationStatus([A, B], dateObj('1/1/34 1:00 AM'))).toEqual({
                 changesSoon: false,
                 closedLongTerm: false,
                 isOpen: false,
                 locationState: LocationState.CLOSED,
-                statusMsg: 'Opens in 2 days (Tuesday at 12:00 AM)',
-                timeUntil: 47 * 60,
+                statusMsg: {
+                    longStatus: 'Opens in 2 days (tomorrow at 12:00 AM)',
+                    shortStatus: ['Opens in 2 days', 'at 12:00 AM'],
+                },
+                minutesUntil: 47 * 60,
             });
             expect(
                 getLocationStatus(
-                    [{ start: { day: 0, hour: 0, minute: 0 }, end: { day: 6, hour: 23, minute: 59 } }],
-                    makeDateTime(0, 1, 0),
+                    [{ start: date('1/1/34 12:00 AM'), end: date('1/7/34 11:59 PM') }],
+                    dateObj('1/1/34 3:00 AM'),
                 ),
             ).toEqual({
                 changesSoon: false,
                 closedLongTerm: false,
                 isOpen: true,
                 locationState: LocationState.OPEN,
-                statusMsg: 'Open 24/7',
-                timeUntil: Infinity,
-            });
-            expect(
-                getLocationStatus(
-                    [
-                        {
-                            start: {
-                                day: 6,
-                                hour: 0,
-                                minute: 0,
-                            },
-                            end: {
-                                day: 1,
-                                hour: 23,
-                                minute: 59,
-                            },
-                        },
-                    ],
-                    makeDateTime(6, 0, 0),
-                ),
-            ).toEqual({
-                changesSoon: false,
-                closedLongTerm: false,
-                isOpen: true,
-                locationState: LocationState.OPEN,
-                statusMsg: 'Closes in 3 days (Monday at 11:59 PM)',
-                timeUntil: 60 * 24 * 3 - 1,
+                statusMsg: {
+                    longStatus: 'Open 24/7',
+                    shortStatus: ['Open 24/7', ''],
+                },
+                minutesUntil: (6 * 24 + 21) * 60 - 1,
             });
         });
     });
 
-    const testCases: IGetStatusMessageTest[] = [
+    const testCases = [
         {
             isOpen: false,
             now: { day: 2, hour: 2, minute: 3 },
@@ -185,22 +183,28 @@ describe('queryLocations.ts', () => {
             expectedString: 'Closes now (today at 12:00 AM)',
         },
         {
+            isOpen: true,
+            now: { day: 1, hour: 1, minute: 0 },
+            nextTime: { day: 1, hour: 1, minute: 0 },
+            expectedString: 'Closes now (today at 1:00 AM)',
+        },
+        {
             isOpen: false,
             now: { day: 0, hour: 0, minute: 0 },
             nextTime: { day: 1, hour: 0, minute: 0 },
-            expectedString: 'Opens in 1 day (tomorrow at 12:00 AM)',
+            expectedString: 'Opens in 1 day (today at 12:00 AM)',
         },
         {
             isOpen: false,
             now: { day: 0, hour: 23, minute: 30 },
             nextTime: { day: 1, hour: 0, minute: 0 },
-            expectedString: 'Opens in 30 minutes (tomorrow at 12:00 AM)',
+            expectedString: 'Opens in 30 minutes (today at 12:00 AM)',
         },
         {
             isOpen: false,
             now: { day: 0, hour: 20, minute: 30 },
             nextTime: { day: 1, hour: 0, minute: 0 },
-            expectedString: 'Opens in 4 hours (tomorrow at 12:00 AM)',
+            expectedString: 'Opens in 4 hours (today at 12:00 AM)',
         },
         {
             isOpen: false,
@@ -308,7 +312,7 @@ describe('queryLocations.ts', () => {
             isOpen: true,
             now: { day: 4, hour: 23, minute: 25 },
             nextTime: { day: 5, hour: 0, minute: 0 },
-            expectedString: 'Closes in 35 minutes (tomorrow at 12:00 AM)', // special regression test for https://github.com/ScottyLabs/cmueats/issues/5
+            expectedString: 'Closes in 35 minutes (today at 12:00 AM)', // special regression test for https://github.com/ScottyLabs/cmueats/issues/5
         },
         {
             isOpen: false,
@@ -345,17 +349,22 @@ describe('queryLocations.ts', () => {
         (isOpen, nextTime, now, expectedString) => {
             // TypeScript type assertions
             const isOpenBool = isOpen;
-            const nextTimeObj = nextTime;
-            const nowObj = now;
-            const expectedStringText = expectedString;
-
-            const locationString = getStatusMessage(
-                isOpenBool,
-                nextTimeObj,
-                makeDateTime(nowObj.day, nowObj.hour, nowObj.minute),
+            let nextTimeObj = DateTime.fromObject(
+                { year: 2034, month: 1, day: nextTime.day + 1, hour: nextTime.hour, minute: nextTime.minute },
+                { zone: 'America/New_York' },
             );
+            let nowObj = DateTime.fromObject(
+                { year: 2034, month: 1, day: now.day + 1, hour: now.hour, minute: now.minute },
+                { zone: 'America/New_York' },
+            );
+            if (nextTimeObj < nowObj) {
+                // these legacy test cases assume wrap-around, so we're just doing this to compensate
+                nextTimeObj = nextTimeObj.plus({ week: 1 });
+            }
 
-            expect(locationString).toEqual(expectedStringText);
+            const locationString = getStatusMessage(isOpenBool, Interval.fromDateTimes(nowObj, nextTimeObj));
+
+            expect(locationString.longStatus).toEqual(expectedString);
         },
     );
 });

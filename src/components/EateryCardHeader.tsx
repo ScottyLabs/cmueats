@@ -32,18 +32,6 @@ function EateryCardHeader({
     });
 
     const { statusMsg } = location;
-    let relativeTime = 'Status unavailable';
-    let absoluteTime = '';
-    if (statusMsg) {
-        const start = statusMsg.indexOf('(');
-        const end = statusMsg.lastIndexOf(')');
-        if (start >= 0 && end >= 0 && end > start) {
-            relativeTime = statusMsg.slice(0, start).trim();
-            absoluteTime = statusMsg.slice(statusMsg.indexOf('at'), end).trim();
-        } else {
-            relativeTime = statusMsg;
-        }
-    }
 
     return (
         <div
@@ -57,8 +45,8 @@ function EateryCardHeader({
             />
 
             <div className={css['time-container']}>
-                <span className={css['card-header-relative-time-text']}>{relativeTime}</span>
-                <span className={css['card-header-absolute-time-text']}>{absoluteTime}</span>
+                <span className={css['card-header-relative-time-text']}>{statusMsg.shortStatus[0]}</span>
+                <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
             </div>
             <div className={css['button-container']}>
                 {/* <button

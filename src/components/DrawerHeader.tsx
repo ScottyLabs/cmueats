@@ -8,12 +8,12 @@ function DrawerHeader() {
     const drawerContext = useContext(DrawerContext);
     const location = drawerContext.drawerLocation;
     if (!location) return null;
-    const { name, statusMsg, location: physicalLocation, url } = location;
+    const { name, location: physicalLocation, url } = location;
 
     return (
         <div className={css['drawer-header-container']}>
             <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
-                {statusMsg}
+                {location.statusMsg.longStatus}
             </div>
             <div className={css.header__title}>
                 <h3 className={css.title__text}>

@@ -62,20 +62,23 @@ export interface ILocation_FromAPI {
     todaysSpecials: ISpecial[];
     todaysSoups: ISpecial[];
 }
-
+export interface IStatusMessage {
+    shortStatus: [string, string];
+    longStatus: string;
+}
 // All of the following are extended from the base API type
 
 // 'closedLongTerm' here refers to closed for the next 7 days (no timeslots available)
 interface ILocation_TimeStatusData_Base {
     /** No forseeable opening times after *now* */
     closedLongTerm: boolean;
-    statusMsg: string;
+    statusMsg: IStatusMessage;
     locationState: LocationState;
 }
 interface ILocation_TimeStateData_NotPermanentlyClosed extends ILocation_TimeStatusData_Base {
     closedLongTerm: false;
     isOpen: boolean;
-    timeUntil: number;
+    minutesUntil: number;
     changesSoon: boolean;
     locationState: Exclude<LocationState, LocationState.CLOSED_LONG_TERM>;
 }

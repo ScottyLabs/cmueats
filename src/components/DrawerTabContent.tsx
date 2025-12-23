@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ExternalLink } from 'lucide-react';
-import { getTimeSlotsString } from '../util/time';
+import { next7DaysReadableString } from '../util/time';
 import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerTabContent.module.css';
 import { useCurrentTime } from '../contexts/NowContext';
@@ -16,7 +16,7 @@ function DrawerTabContent() {
         return <div className={css.container} />;
     }
 
-    const timeSlots = getTimeSlotsString(drawerContext.drawerLocation?.times ?? [], now);
+    const timeSlots = next7DaysReadableString(drawerContext.drawerLocation?.times ?? [], now);
     const specials = location.todaysSpecials ?? [];
     const soups = location.todaysSoups ?? [];
     const menu = location.menu ?? '';
