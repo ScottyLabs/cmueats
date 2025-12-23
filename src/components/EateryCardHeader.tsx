@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { MoreHorizontal, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 import clsx from 'clsx';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
-import EyeControlIcon from '../assets/control_buttons/x.svg?react';
-import EyeOffControlIcon from '../assets/control_buttons/restore.svg?react';
 import { CardViewPreference } from '../util/storage';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
@@ -17,6 +17,7 @@ function EateryCardHeader({
 }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
+    const isPinned = location.cardViewPreference === 'pinned';
     const isHidden = location.cardViewPreference === 'hidden';
     const { closeDrawer, selectedConceptId } = useDrawerAPIContext();
     useEffect(() => {
@@ -46,6 +47,118 @@ function EateryCardHeader({
         }
     }
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+    const moreButtonRef = useRef<HTMLButtonElement | null>(null);
+    const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+    const menuId = useId();
+
+    function handleToggleMenu() {
+        if (isMenuOpen) {
+            setIsMenuOpen(false);
+            return;
+        }
+
+        if (moreButtonRef.current) {
+            const rect = moreButtonRef.current.getBoundingClientRect();
+            setMenuPosition({
+                top: rect.bottom + window.scrollY,
+                left: rect.right + window.scrollX,
+            });
+        }
+
+        setIsMenuOpen(true);
+    }
+
+    function renderMenu() {
+        return createPortal(
+            <div
+                ref={menuRef}
+                className={css.menu}
+                style={{ top: `${menuPosition.top}px`, left: `${menuPosition.left}px` }}
+                id={menuId}
+            >
+                <button
+                    type="button"
+                    className={css['menu-button']}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        updateViewPreference(isPinned ? 'normal' : 'pinned');
+                        setIsMenuOpen(false);
+                    }}
+                >
+                    {isPinned ? (
+                        <>
+                            <PinOff size={16} />
+                            <div>Unpin Card</div>
+                        </>
+                    ) : (
+                        <>
+                            <Pin size={16} />
+                            <div>Pin Card</div>
+                        </>
+                    )}
+                </button>
+
+                <button
+                    type="button"
+                    className={css['menu-button']}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        updateViewPreference(isHidden ? 'normal' : 'hidden');
+                        setIsMenuOpen(false);
+                        if (!isHidden && location.conceptId === selectedConceptId) closeDrawer();
+                    }}
+                >
+                    {isHidden ? (
+                        <>
+                            <Eye size={16} />
+                            <div>Show Card</div>
+                        </>
+                    ) : (
+                        <>
+                            <EyeOff size={16} />
+                            <div>Hide Card</div>
+                        </>
+                    )}
+                </button>
+            </div>,
+            document.body,
+        );
+    }
+
+    useEffect(() => {
+        if (!isMenuOpen) return undefined;
+
+        const handlePointerDown = (event: PointerEvent) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target as Node) &&
+                !moreButtonRef.current?.contains(event.target as Node)
+            ) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') setIsMenuOpen(false);
+        };
+
+        const handleWindowChange = () => setIsMenuOpen(false);
+
+        document.addEventListener('pointerdown', handlePointerDown, true);
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('resize', handleWindowChange);
+        window.addEventListener('scroll', handleWindowChange, true);
+
+        return () => {
+            document.removeEventListener('pointerdown', handlePointerDown, true);
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('resize', handleWindowChange);
+            window.removeEventListener('scroll', handleWindowChange, true);
+        };
+    }, [isMenuOpen]);
+
     return (
         <div
             className={css['card-header-container']}
@@ -62,38 +175,18 @@ function EateryCardHeader({
                 <span className={css['card-header-absolute-time-text']}>{absoluteTime}</span>
             </div>
             <div className={css['button-container']}>
-                {/* <button
-                    type="button"
-                    className={css['action-button']}
-                    aria-label={isPinned ? 'Unpin Card' : 'Pin Card'}
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        updateViewPreference(isPinned ? 'normal' : 'pinned');
-                    }}
-                >
-                    {isPinned ? (
-                        <PinnedControlIcon className={css['action-button__icon']} />
-                    ) : (
-                        <UnpinnedControlIcon className={css['action-button__icon']} />
-                    )}
-                </button> */}
-
                 <button
                     type="button"
-                    className={css['action-button']}
-                    aria-label={isHidden ? 'Show Card' : 'Hide Card'}
-                    onClick={(event) => {
-                        event.preventDefault();
-                        updateViewPreference(isHidden ? 'normal' : 'hidden');
-                        if (!isHidden && location.conceptId === selectedConceptId) closeDrawer();
+                    className={css['more-button']}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleMenu();
                     }}
+                    ref={moreButtonRef}
                 >
-                    {isHidden ? (
-                        <EyeOffControlIcon className={css['action-button__icon']} />
-                    ) : (
-                        <EyeControlIcon className={css['action-button__icon']} />
-                    )}
+                    <MoreHorizontal size={13} />
                 </button>
+                {isMenuOpen && renderMenu()}
             </div>
         </div>
     );

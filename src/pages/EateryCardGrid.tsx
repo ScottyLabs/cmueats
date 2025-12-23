@@ -9,7 +9,7 @@ import { LocationState, IReadOnlyLocation_Combined } from '../types/locationType
 import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
 
-import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
+import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 
 const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {

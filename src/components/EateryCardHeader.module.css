@@ -55,68 +55,39 @@
     margin-right: -3px;
 }
 
-.action-button {
+.more-button {
+    color: var(--text-primary);
     border: none;
     border-radius: 5px;
     background: transparent;
-    color: var(--text-primary);
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    padding: 5px;
-    margin-left: -3px;
 
     &:hover {
         color: var(--hover-accent-color);
         background-color: rgba(255, 255, 255, 0.08);
-        .action-button__icon {
-            color: var(--black-300);
-        }
     }
-    /* commenting out for now, since we'll probably go with a dropdown */
+}
 
-    /* &::after {
-        content: attr(aria-label);
-        z-index: 999;
-        position: absolute;
-        bottom: 115%;
-        left: -100%;
-        font-size: 12px;
-        background-color: var(--main-bg);
-        color: var(--text-primary);
-        text-align: center;
-        border-radius: 5px;
-        padding: 5px 8px;
-        white-space: nowrap;
-        opacity: 0;
-        transition:
-            opacity 0.2s ease,
-            visibility 0.2s ease;
-        pointer-events: none;
-    } */
-    /* &:hover::after {
-        opacity: 1;
-    } */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    position: absolute;
+    transform: translateX(-100%);
+    z-index: 999;
+    border-radius: 5px;
+    border: 1px solid var(--card-border-color);
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    padding: 5px 8px;
+}
 
-    /* &::before {
-        content: '';
-        position: absolute;
-        bottom: 70%;
-        border-width: 8px;
-        border-style: solid;
-        border-color: var(--main-bg) transparent transparent transparent;
-        opacity: 0;
-        transition:
-            opacity 0.2s ease,
-            visibility 0.2s ease;
-    }
-    &:hover::before {
-        opacity: 1;
-    } */
-
-    .action-button__icon {
-        width: 15px;
-        height: 13px;
-        color: var(--black-800);
-        vertical-align: middle;
-    }
+.menu-button {
+    display: inline-flex;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
 }
