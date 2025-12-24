@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { motion } from 'motion/react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { CardViewPreference } from '../util/storage';
-import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
+import { useDrawerOpennessContext } from '../contexts/DrawerOpennessContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 import css from './EateryCard.module.css';
@@ -19,7 +19,7 @@ function EateryCard({
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
-    const drawerContext = useDrawerAPIContext();
+    const drawerContext = useDrawerOpennessContext();
     const prevDrawerSelectedIdRef = useRef<number | null>(null);
     useEffect(() => {
         prevDrawerSelectedIdRef.current = drawerContext.selectedConceptId ?? null;

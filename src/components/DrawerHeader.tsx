@@ -1,12 +1,12 @@
 import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
 import css from './DrawerHeader.module.css';
-import { useDrawerContext } from '../contexts/DrawerContext';
-import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
+import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
+import { useDrawerOpennessContext } from '../contexts/DrawerOpennessContext';
 
 function DrawerHeader() {
-    const { location } = useDrawerContext();
-    const { closeDrawer } = useDrawerAPIContext();
+    const { location } = useDrawerTabsContext();
+    const { closeDrawer } = useDrawerOpennessContext();
     const { name, statusMsg, location: physicalLocation, url } = location;
 
     return (
