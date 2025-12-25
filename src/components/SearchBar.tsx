@@ -13,7 +13,7 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
     }, [searchQuery]);
     useEffect(() => {
         if (pendingQuery === searchQuery) {
-            return;
+            return () => {};
         }
         const timeoutId = window.setTimeout(() => {
             setSearchQuery(pendingQuery);
