@@ -6,6 +6,7 @@ import css from './EateryCardHeader.module.css';
 import EyeControlIcon from '../assets/control_buttons/x.svg?react';
 import EyeOffControlIcon from '../assets/control_buttons/restore.svg?react';
 import { CardViewPreference } from '../util/storage';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function EateryCardHeader({
     location,
@@ -17,7 +18,7 @@ function EateryCardHeader({
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isHidden = location.cardViewPreference === 'hidden';
-
+    const { closeDrawer, selectedConceptId } = useDrawerAPIContext();
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
         if (!statusChangesSoon) {
@@ -48,11 +49,11 @@ function EateryCardHeader({
     return (
         <div
             className={css['card-header-container']}
-            style={{ '--status-color': highlightColors[location.locationState] }}
+            style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
         >
             <div
                 className={clsx(css['card-header-dot'], statusChangesSoon && css['card-header-dot--blinking'])}
-                style={{ '--status-color': highlightColors[location.locationState] }}
+                style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
                 ref={dotRef}
             />
 
@@ -82,8 +83,9 @@ function EateryCardHeader({
                     className={css['action-button']}
                     aria-label={isHidden ? 'Show Card' : 'Hide Card'}
                     onClick={(event) => {
-                        event.stopPropagation();
+                        event.preventDefault();
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
+                        if (!isHidden && location.conceptId === selectedConceptId) closeDrawer();
                     }}
                 >
                     {isHidden ? (

@@ -19,42 +19,18 @@
     }
 
     position: relative;
-}
-
-.card-animated {
-    opacity: 0;
-    --card-show-delay: 0s;
-    --card-fade-in-animation: fade-in 0.7s cubic-bezier(0.08, 0.67, 0.64, 1.01) var(--card-show-delay) forwards;
-    animation: var(--card-fade-in-animation);
-
-    &:hover {
-        animation: var(--card-fade-in-animation), var(--card-glow-animation);
-    }
+    scroll-margin-top: 70px;
+    scroll-margin-bottom: 40px;
 }
 
 .card-active {
-    box-shadow:
+    /* box-shadow:
         0 0 2px var(--hover-accent-color),
-        0 0 25px var(--hover-accent-color);
-}
-
-.card-animated.card-active {
-    box-shadow:
-        0 0 2px var(--hover-accent-color),
-        0 0 25px var(--hover-accent-color);
-
-    &:hover {
-        box-shadow:
-            0 0 2px var(--hover-accent-color),
-            0 0 25px var(--hover-accent-color);
-        animation:
-            var(--card-fade-in-animation),
-            glow-animation-reverse 1.5s ease 0s infinite;
-    }
+        0 0 25px var(--hover-accent-color); */
+    outline: 2px solid white;
 }
 
 .card-pinned {
-    border: var(--card-border-width) solid var(--hover-accent-color);
 }
 
 .card__pin-container {

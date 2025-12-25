@@ -10,7 +10,7 @@ import IS_MIKU_DAY from '../util/constants';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import Drawer from '../components/Drawer';
-import { DrawerContext, TabType } from '../contexts/DrawerContext';
+import { DrawerAPIContextProvider } from '../contexts/DrawerAPIContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
@@ -35,18 +35,15 @@ function ListPage({
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
     // re-animating in when filter gets cleared
-    const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>((_, newState) => {
+    const [searchQuery, setSearchQuery] = useReducer<string, [string]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
     }, '');
 
-    const [locationFilterQuery, setLocationFilterQuery] = useReducer<(_: string, x: string) => string>(
-        (_, newState) => {
-            shouldAnimateCards.current = false;
-            return newState;
-        },
-        '',
-    );
+    const [locationFilterQuery, setLocationFilterQuery] = useReducer<string, [string]>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, '');
     const mainContainerRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         mainContainerRef.current?.focus();
@@ -87,42 +84,8 @@ function ListPage({
         };
     }, []);
 
-    const [isDrawerActive, setIsDrawerActive] = useState(false);
-    const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
-    const [activeTab, setActiveTab] = useState<TabType>('overview');
-    const isDrawerActiveRef = useRef(isDrawerActive);
-    useEffect(() => {
-        isDrawerActiveRef.current = isDrawerActive;
-    }, [isDrawerActive]);
-    // if drawer if open, update the drawer's content whenever extraLocationData gets updated
-    // TODO: might buggy
-    useEffect(() => {
-        if (!isDrawerActiveRef.current || !drawerLocation || !locations) return;
-        const baseLocation = locations.find((loc) => loc.conceptId === drawerLocation.conceptId);
-        if (!baseLocation) return;
-        setDrawerLocation(baseLocation);
-    }, [drawerLocation?.conceptId, locations]);
-    const drawerContextValue = useMemo(
-        () => ({
-            isDrawerActive,
-            setIsDrawerActive: (active: boolean) => {
-                setIsDrawerActive(active);
-                // ensure drawer content don't change before fully exited
-                setTimeout(() => {
-                    // ensure drawerLocation is null if it is inactive
-                    if (!isDrawerActiveRef.current) setDrawerLocation(null);
-                }, 500);
-            },
-            drawerLocation,
-            setDrawerLocation,
-            activeTab,
-            setActiveTab,
-        }),
-        [isDrawerActive, drawerLocation, activeTab],
-    );
-
     return (
-        <DrawerContext.Provider value={drawerContextValue}>
+        <DrawerAPIContextProvider>
             <div className="list-page-container" ref={mainContainerRef}>
                 {/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
@@ -148,7 +111,6 @@ function ListPage({
                         </div>
                     </div>
                     <EateryCardGrid
-                        key={`${searchQuery}-${locationFilterQuery}`}
                         locations={filteredLocations}
                         shouldAnimateCards={shouldAnimateCards.current}
                         apiError={locations !== undefined && locations.length === 0}
@@ -160,10 +122,11 @@ function ListPage({
                     />
                     <Footer now={now} />
                 </div>
-                <Drawer />
+
+                <Drawer locations={locations} />
                 <link rel="prefetch" href={mikuBgUrl} />
             </div>
-        </DrawerContext.Provider>
+        </DrawerAPIContextProvider>
     );
 }
 

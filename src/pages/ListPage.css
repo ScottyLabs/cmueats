@@ -6,6 +6,12 @@
 }
 .list-box {
     flex: 1;
+    /* useful for making sure the contact info footer stays on the bottom */
+    display: flex;
+    flex-direction: column;
+    & > * {
+        flex-shrink: 0;
+    }
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;

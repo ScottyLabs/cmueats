@@ -17,8 +17,7 @@
 }
 
 .location-link {
-    font-size: 26px;
-    display: inline-flex;
+    font-size: 24px;
     align-items: center;
     gap: 10px;
     color: inherit;
@@ -27,10 +26,15 @@
     &:hover {
         text-decoration: underline;
     }
+    & svg {
+        height: 17px;
+    }
 }
 
-.title__close-button {
-    display: inline-flex;
+.header__close-button {
+    margin-left: auto;
+    margin-bottom: -30px;
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 30px;
