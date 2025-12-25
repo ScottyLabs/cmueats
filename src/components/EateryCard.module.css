@@ -16,7 +16,6 @@
 
     &:hover {
         animation: var(--card-glow-animation);
-        filter: brightness(100.1);
     }
 
     position: relative;
