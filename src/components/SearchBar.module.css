@@ -68,9 +68,3 @@
 .locations-search:not(:placeholder-shown) + .locations-search-hint {
     opacity: 0;
 }
-
-@media (max-width: 600px) {
-    .locations-search {
-        padding: 0.75rem 0.85rem;
-    }
-}

@@ -61,9 +61,10 @@
         display: none
     }
     .card-content-container {
-        padding: 14px 19px;
+        padding: 10px 19px;
     }
     .physical-location-text {
+        margin-top: 10px;
         font-size: 14px;
     }
     .location-name-text {
