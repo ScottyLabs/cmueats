@@ -19,7 +19,7 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
             setSearchQuery(pendingQuery);
         }, 150);
         return () => window.clearTimeout(timeoutId);
-    }, [pendingQuery, searchQuery, setSearchQuery]);
+    }, [pendingQuery, searchQuery]);
 
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
