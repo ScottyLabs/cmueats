@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useDrawerOpennessContext } from '../contexts/DrawerOpennessContext';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
@@ -10,7 +10,7 @@ import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
 function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
-    const { selectedConceptId, closeDrawer } = useDrawerOpennessContext();
+    const { selectedConceptId, closeDrawer } = useDrawerAPIContext();
     const pickedLocation = locations?.find((loc) => loc.conceptId === selectedConceptId);
     // `esc` to close the drawer
     useEffect(() => {
@@ -45,7 +45,6 @@ function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undef
                     exit={{ opacity: 0 }}
                     className={css['drawer-box']}
                     ref={drawerRef}
-                    // transition={{ duration: 10 }}
                 >
                     <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.conceptId}>
                         <DrawerHeader />

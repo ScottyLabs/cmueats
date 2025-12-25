@@ -1,3 +1,6 @@
+// Differences between DrawerAPIContext:
+// Per-drawer view interaction: holds tab selection and location data for currently open drawer
+
 import { createContext, useContext, useMemo, useState } from 'react';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 

@@ -10,7 +10,7 @@ import IS_MIKU_DAY from '../util/constants';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from './EateryCardGrid';
 import Drawer from '../components/Drawer';
-import { DrawerOpennessContextProvider } from '../contexts/DrawerOpennessContext';
+import { DrawerAPIContextProvider } from '../contexts/DrawerAPIContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
@@ -85,7 +85,7 @@ function ListPage({
     }, []);
 
     return (
-        <DrawerOpennessContextProvider>
+        <DrawerAPIContextProvider>
             <div className="list-page-container" ref={mainContainerRef}>
                 {/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
@@ -126,7 +126,7 @@ function ListPage({
                 <Drawer locations={locations} />
                 <link rel="prefetch" href={mikuBgUrl} />
             </div>
-        </DrawerOpennessContextProvider>
+        </DrawerAPIContextProvider>
     );
 }
 

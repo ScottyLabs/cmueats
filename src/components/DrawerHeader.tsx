@@ -2,11 +2,11 @@ import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
 import css from './DrawerHeader.module.css';
 import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
-import { useDrawerOpennessContext } from '../contexts/DrawerOpennessContext';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function DrawerHeader() {
     const { location } = useDrawerTabsContext();
-    const { closeDrawer } = useDrawerOpennessContext();
+    const { closeDrawer } = useDrawerAPIContext();
     const { name, statusMsg, location: physicalLocation, url } = location;
 
     return (
@@ -25,7 +25,7 @@ function DrawerHeader() {
             <div className={css.header__title}>
                 <h3 className={css.title__text}>
                     <a className={css['location-link']} href={url} target="_blank" rel="noreferrer">
-                        <span>{name} </span>
+                        <span>{name}</span>
                         <ExternalLink size={22} strokeWidth={3} aria-hidden />
                     </a>
                 </h3>

@@ -6,7 +6,7 @@ import css from './EateryCardHeader.module.css';
 import EyeControlIcon from '../assets/control_buttons/x.svg?react';
 import EyeOffControlIcon from '../assets/control_buttons/restore.svg?react';
 import { CardViewPreference } from '../util/storage';
-import { useDrawerOpennessContext } from '../contexts/DrawerOpennessContext';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function EateryCardHeader({
     location,
@@ -18,7 +18,7 @@ function EateryCardHeader({
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isHidden = location.cardViewPreference === 'hidden';
-    const { closeDrawer, selectedConceptId } = useDrawerOpennessContext();
+    const { closeDrawer, selectedConceptId } = useDrawerAPIContext();
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
         if (!statusChangesSoon) {
