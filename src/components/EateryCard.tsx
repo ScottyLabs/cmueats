@@ -23,7 +23,7 @@ function EateryCard({
     const prevDrawerSelectedIdRef = useRef<number | null>(null);
     useEffect(() => {
         prevDrawerSelectedIdRef.current = drawerContext.selectedConceptId ?? null;
-    }, [drawerContext]);
+    }, [drawerContext.selectedConceptId]);
 
     const isCardSelected = drawerContext.selectedConceptId === location.conceptId;
     const cardRef = useRef<HTMLDivElement | null>(null);
@@ -66,7 +66,7 @@ function EateryCard({
         [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
     );
     const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === (drawerContext.selectedConceptId ?? null); // aka change was not triggered by a drawer select/unselect
-
+    console.log(prevDrawerSelectedIdRef.current, drawerContext.selectedConceptId);
     return (
         <motion.div
             layout

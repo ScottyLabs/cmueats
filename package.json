@@ -43,7 +43,7 @@
         "zod": "^4.2.1"
     },
     "scripts": {
-        "start": "vite --host",
+        "start": "vite preview  --host",
         "dev": "vite --host",
         "build": "tsc && vite build",
         "typecheck": "tsc",
