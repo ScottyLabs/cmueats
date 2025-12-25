@@ -47,7 +47,7 @@ function EateryCardHeader({
 
     return (
         <div
-            className = {css['card-header-bar']}
+            className = {css['card-header-container']}
             style={{ '--status-color': highlightColors[location.locationState] }}
         >
             <div

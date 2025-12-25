@@ -65,7 +65,6 @@
     }
     .physical-location-text {
         font-size: 14px;
-        color: var(--black-300, #CBCFD3);
     }
     .location-name-text {
         font-size: 20px;

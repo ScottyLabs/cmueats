@@ -63,3 +63,13 @@
 .hidden-grid {
     opacity: 60%;
 }
+
+@media (max-width: 600px) {
+    .supergrid__help-text {
+        gap: 4px;
+    }
+
+    .supergrid__grid {
+        padding: 12px var(--global-x-padding) 10px;
+    }
+}

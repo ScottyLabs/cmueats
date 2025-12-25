@@ -40,11 +40,6 @@
 .time-container {
 }
 
-.time-container {
-    display: flex;
-    align-items: baseline;
-}
-
 .card-header-relative-time-text {
     font-size: 14px;
     margin-right: 4px;
@@ -126,23 +121,6 @@
     }
 }
 
-.card-header-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid var(--status-color);
-    padding-inline: 10px;
-    background: var(--card-header-bg);
-    text-wrap-mode: nowrap;
-}
-
-.card-header-buttons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    color: var(--card-text-muted);
-}
-
 @media (max-width: 600px) {
     .card-header-dot {
         width: 8px;
@@ -151,11 +129,7 @@
     .card-header-relative-time-text {
         font-size: 0.9rem;
     }   
-
-    .card-header-container {
-        height: 2.4em;
-    }
-
+    
     .desktop {
         display: none
     }
