@@ -19,22 +19,22 @@ function EateryCard({
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
-    const drawerContext = useDrawerAPIContext();
+    const drawerAPIContext = useDrawerAPIContext();
     const prevDrawerSelectedIdRef = useRef<number | null>(null);
     useEffect(() => {
-        prevDrawerSelectedIdRef.current = drawerContext.selectedConceptId ?? null;
-    }, [drawerContext.selectedConceptId]);
+        prevDrawerSelectedIdRef.current = drawerAPIContext.selectedConceptId ?? null;
+    }, [drawerAPIContext.selectedConceptId]);
 
-    const isCardSelected = drawerContext.selectedConceptId === location.conceptId;
+    const isCardSelected = drawerAPIContext.selectedConceptId === location.conceptId;
     const cardRef = useRef<HTMLDivElement | null>(null);
     function handleCardSelection() {
         // when the drawer is open, click other cards will open that
         // card's detail, instead of closing the drawer;
         // click on the same card will close the drawer.
-        if (drawerContext.selectedConceptId === location.conceptId) {
-            drawerContext.closeDrawer();
+        if (drawerAPIContext.selectedConceptId === location.conceptId) {
+            drawerAPIContext.closeDrawer();
         } else {
-            drawerContext.setDrawerConceptId(location.conceptId);
+            drawerAPIContext.setDrawerConceptId(location.conceptId);
         }
     }
 
@@ -53,7 +53,7 @@ function EateryCard({
                 block: 'nearest',
             });
         }
-    }, [drawerContext.selectedConceptId]);
+    }, [drawerAPIContext.selectedConceptId]);
 
     const cardClassName = useMemo(
         () =>
@@ -65,8 +65,8 @@ function EateryCard({
             ),
         [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
     );
-    const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === (drawerContext.selectedConceptId ?? null); // aka change was not triggered by a drawer select/unselect
-    console.log(prevDrawerSelectedIdRef.current, drawerContext.selectedConceptId);
+    const shouldAnimatePositionChange =
+        prevDrawerSelectedIdRef.current === (drawerAPIContext.selectedConceptId ?? null); // aka change was not triggered by a drawer select/unselect
     return (
         <motion.div
             layout
