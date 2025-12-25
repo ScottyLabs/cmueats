@@ -58,7 +58,7 @@
     @container (width<1000px) {
         max-width: initial;
     }
-    @container (width<600px) {
+    @container (width<601px) {
         grid-template-columns: 1fr;
     }
 }
