@@ -2,10 +2,13 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 6px 27px;
-    background: var(--main-bg-accent);
+    padding: 16px 27px;
+    background: var(--black-1000);
+    border-top: 3px solid var(--black-900);
     overflow-x: auto;
     scrollbar-width: thin;
+    position: sticky;
+    top: 0;
 }
 
 .tab-button {

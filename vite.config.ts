@@ -4,8 +4,11 @@ import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa';
 import react from '@vitejs/plugin-react-swc';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import { z } from 'zod';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const jwt = require('jsonwebtoken');
 const preInitEnvSchema = z.object({
     MAPKIT_JS_TEAM_ID: z.string(),
     MAPKIT_JS_KEY_ID: z.string(),
@@ -103,19 +106,22 @@ export default defineConfig(({ command, mode }) => {
             viteTsconfigPaths(),
             svgrPlugin(),
             VitePWA({
-                // WARNING! Removing this library means that all clients with the VitePWA service worker installed *will never have it uninstalled*. (see https://github.com/ScottyLabs/cmueats/pull/642 for more details)
                 manifest: manifestForPlugin,
                 registerType: 'autoUpdate',
-                // Enables autoupdate (uses new version after user quits and reloads app)
                 workbox: {
                     cleanupOutdatedCaches: true,
                     skipWaiting: true,
                 },
-                selfDestroying: true, // remove previously-registered service worker (if it exists)
+                selfDestroying: true,
             }),
             checker({
                 typescript: true,
             }),
         ],
+        build: {
+            rollupOptions: {
+                external: ['jsonwebtoken'],
+            },
+        },
     };
 });

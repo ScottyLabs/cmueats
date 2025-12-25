@@ -36,9 +36,13 @@ body {
 }
 
 .MainContent {
-    overflow-y: auto;
-    overflow-x: hidden;
     flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    &:focus {
+        outline: none;
+    }
 }
 
 .App-header {
@@ -55,33 +59,6 @@ body {
 .App-link {
     color: #61dafb;
 }
-
-.footer {
-    background-color: var(--footer-bg);
-    padding: 40px;
-    min-height: 130px;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-    &:has(.footer__miku) {
-        min-height: 530px;
-        /* we create a new stacking context so miku doesn't go below the bg */
-        isolation: isolate;
-    }
-}
-.footer__miku {
-    position: absolute;
-    right: 20px;
-    top: -56px;
-    height: 100%;
-    z-index: -1;
-    @media screen and (max-width: 900px) {
-        & {
-            top: 0;
-        }
-    }
-}
-
 .MuiCard-root {
     display: flex;
     flex-direction: column;
@@ -89,7 +66,7 @@ body {
 }
 
 .announcement {
-    padding: 1rem;
+    padding: 16px;
     font-size: 1.2em;
     color: white;
     text-align: center;
@@ -98,10 +75,10 @@ body {
 
 .AdBanner {
     /* display: none; */
-    padding: 1rem;
-    font-size: 1.3rem;
+    padding: 16px;
+    font-size: 20.8px;
     @media (max-width: 386px) {
-        font-size: 1.1rem;
+        font-size: 17.6px;
     }
     color: white;
     text-align: center;
@@ -149,7 +126,7 @@ body {
         isolation: isolate;
         align-self: stretch;
         position: relative;
-        font-size: 1.25rem;
+        font-size: 20px;
         width: fit-content;
         display: flex;
         align-items: center;

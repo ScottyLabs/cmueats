@@ -92,23 +92,6 @@
     fill: rgba(255, 255, 120, 0.18);
 }
 
-@keyframes fade-in {
-    0% {
-        opacity: 0;
-        transform: translate(-10px, 0);
-        filter: blur(3px);
-    }
-    55% {
-        filter: blur(0);
-    }
-
-    100% {
-        transform: translate(0, 0);
-        opacity: 1;
-        filter: blur(0);
-    }
-}
-
 @keyframes glow-animation {
     0% {
         box-shadow: 0 0 5px var(--hover-accent-color);

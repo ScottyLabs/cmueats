@@ -1,21 +1,35 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import clsx from 'clsx';
 import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
-import { CardStatus } from '../types/cardTypes';
-import { Pin, PinOff, Eye, EyeOff } from 'lucide-react';
+import EyeControlIcon from '../assets/control_buttons/x.svg?react';
+import EyeOffControlIcon from '../assets/control_buttons/restore.svg?react';
+import { CardViewPreference } from '../util/storage';
 
-function EateryCardHeader({ 
+function EateryCardHeader({
     location,
-    currentStatus,
-    updateStatus,
-}: { 
-    location: IReadOnlyLocation_Combined,
-    currentStatus: CardStatus;
-    updateStatus: (newStatus: CardStatus) => void;
- }) {
+    updateViewPreference,
+}: {
+    location: IReadOnlyLocation_Combined;
+    updateViewPreference: (newViewPreference: CardViewPreference) => void;
+}) {
     const dotRef = useRef<HTMLDivElement | null>(null);
-    const isMobile = window.innerWidth <= 600;
+    const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
+    const isHidden = location.cardViewPreference === 'hidden';
+
+    useEffect(() => {
+        const dotAnimation = dotRef.current?.getAnimations()[0];
+        if (!statusChangesSoon) {
+            dotAnimation?.cancel(); // delete any dot blinking animation (if it exists)
+        } else {
+            // eslint-disable-next-line no-lonely-if
+            if (dotAnimation !== undefined) {
+                dotAnimation.startTime = 0;
+                dotAnimation.play(); // keeps the flashing dots between cards in-sync
+            }
+        }
+    });
 
     const { statusMsg } = location;
     let relativeTime = 'Status unavailable';
@@ -37,50 +51,49 @@ function EateryCardHeader({
             style={{ '--status-color': highlightColors[location.locationState] }}
         >
             <div
-                className={css['card-header-container']}
-            >
-                <div
-                    className={css['card-header-dot']}
-                    style={{ '--status-color': highlightColors[location.locationState] }}
-                    ref={dotRef}
-                />
-                <div className={css['time-container']}>
-                    <div className={css['card-header-relative-time-text']}>{relativeTime}</div>
-                    <div className={css['card-header-absolute-time-text']}>{absoluteTime}</div>
-                </div>
-            </div>
-            {
-                isMobile &&
-                (
-                    <div className={css['card-header-buttons']}>
-                        <div
-                            onClick={() => {
-                                updateStatus(currentStatus === CardStatus.PINNED ? CardStatus.NORMAL : CardStatus.PINNED);
-                            }}
-                        >
-                            {currentStatus === CardStatus.PINNED ? (
-                                <Pin size={20} color={"#F6CC5D"}/>
-                            ) : (
-                                <Pin size={20}/>
-                            )}
-                        </div>
+                className={clsx(css['card-header-dot'], statusChangesSoon && css['card-header-dot--blinking'])}
+                style={{ '--status-color': highlightColors[location.locationState] }}
+                ref={dotRef}
+            />
 
-                        <div
-                            className={css['menu-button']}
-                            onClick={() => {
-                                updateStatus(currentStatus === CardStatus.HIDDEN ? CardStatus.NORMAL : CardStatus.HIDDEN);
-                            }}
-                        >
-                            {currentStatus === CardStatus.HIDDEN ? (
-                                <EyeOff size={20} />
-                            ) : (
-                                <Eye size={20} />
-                            )}
-                        </div>
-                    </div>
-                )
-            }
+            <div className={css['time-container']}>
+                <span className={css['card-header-relative-time-text']}>{relativeTime}</span>
+                <span className={css['card-header-absolute-time-text']}>{absoluteTime}</span>
             </div>
+            <div className={css['button-container']}>
+                {/* <button
+                    type="button"
+                    className={css['action-button']}
+                    aria-label={isPinned ? 'Unpin Card' : 'Pin Card'}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        updateViewPreference(isPinned ? 'normal' : 'pinned');
+                    }}
+                >
+                    {isPinned ? (
+                        <PinnedControlIcon className={css['action-button__icon']} />
+                    ) : (
+                        <UnpinnedControlIcon className={css['action-button__icon']} />
+                    )}
+                </button> */}
+
+                <button
+                    type="button"
+                    className={css['action-button']}
+                    aria-label={isHidden ? 'Show Card' : 'Hide Card'}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        updateViewPreference(isHidden ? 'normal' : 'hidden');
+                    }}
+                >
+                    {isHidden ? (
+                        <EyeOffControlIcon className={css['action-button__icon']} />
+                    ) : (
+                        <EyeControlIcon className={css['action-button__icon']} />
+                    )}
+                </button>
+            </div>
+        </div>
     );
 }
 

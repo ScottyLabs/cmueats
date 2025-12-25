@@ -57,11 +57,11 @@ For displaying custom api data without starting up the backend, you can change `
 
 ## Accessing historical API data
 
-https://web.archive.org/web/20250000000000*/https://dining.apis.scottylabs.org/locations
+<https://web.archive.org/web/20250000000000*/https://dining.apis.scottylabs.org/locations>
 (Thanks @GhostOf0days)
 
-Archives of the official dining site can be found on https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/.
-Individual concept pages are also scraped (ex. https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/113), although accuracy may vary since the dining site sometimes glitches and returns a CLOSED status for a day that has opening times.
+Archives of the official dining site can be found on <https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/>.
+Individual concept pages are also scraped (ex. <https://web.archive.org/web/20250000000000*/https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/113>), although accuracy may vary since the dining site sometimes glitches and returns a CLOSED status for a day that has opening times.
 
 ## CSS, the way it was meant to be written™
 
@@ -70,6 +70,18 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 ![image](https://github.com/user-attachments/assets/6292992f-c599-4203-ae0c-9983599d6bde)
 
 ## Local Development
+
+### Method 1: use dummy data
+
+In `.env`, change the field `VITE_API_URL` to be `locations.json`.
+This will use the file at `public/locations.json` as the data.
+E.g.:
+
+```txt
+VITE_API_URL=locations.json
+```
+
+### Method 2: setup backend server
 
 1. Start the dining-api backend:
 
@@ -82,9 +94,11 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
     This runs the dining-api server on port 5010.
 
 2. Start the frontend:
+
     ```
     pnpm run dev
     ```
+
     This runs the Vite dev server on port 5173.
 
 ## Production/Deployment
@@ -92,6 +106,7 @@ CMUEats is in the process of transitioning from CSS-in-JS components to pure CSS
 - Set `DATABASE_URL` in your dining-api Railway project's environment variables.
 
 - Deploy dining-api to Railway with the start command:
+
     ```
     pnpm run start
     ```

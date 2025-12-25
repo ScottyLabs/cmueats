@@ -1,18 +1,17 @@
 .drawer-header-container {
-    padding: 15px 27px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    padding: 25px 27px 20px;
+    background-color: var(--black-1000);
 }
 
-.header {
+.header__title {
+    margin-top: 15px;
     display: flex;
     justify-content: space-between;
 }
 
-.drawer-loction-text {
+.title__text {
     font-family: var(--text-primary-font);
-    color: var(--text-primary);
+    color: var(--black-100);
     font-size: 2rem;
     margin: 0;
 }
@@ -30,7 +29,7 @@
     }
 }
 
-.close-button {
+.title__close-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -51,14 +50,9 @@
     }
 }
 
-.status-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.header__status {
     gap: 10px;
-}
 
-.status-text {
     font-size: 15px;
     color: var(--status-color);
     border: 2px solid var(--status-color);
@@ -68,7 +62,8 @@
     font-weight: 700;
 }
 
-.location-text {
+.header__location {
+    margin-top: 10px;
     font-size: 14px;
     display: inline-flex;
     align-items: center;
