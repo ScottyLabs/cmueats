@@ -133,4 +133,20 @@
     .desktop {
         display: none
     }
+
+    .action-button {
+        padding: 0px;
+
+        .action-button__icon {
+            width: 15px;
+            height: 18px;
+            color: var(--black-800);
+            vertical-align: middle;
+        }
+    }
+
+    .button-container {
+        display: flex;
+        gap: 15px;
+    }
 }
