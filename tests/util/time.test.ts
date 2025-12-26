@@ -27,6 +27,7 @@ describe('getApproximateTimeStringFromMinutes', () => {
         [60 * 24 * 2, '2 days'],
         [60 * 24 * 5, '5 days'],
         [60 * 24 * 9.2, 'a week'],
+        [60 * 24 * 10.4, 'a week'],
         [60 * 24 * 10.5, '2 weeks'],
         [60 * 24 * 365, '52 weeks'],
     ])('basic testing test %#', (minutes: number, expected: string) => {
