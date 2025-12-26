@@ -24,12 +24,10 @@ const StyledAlert = styled(Alert)({
 function ListPage({
     locations,
     updateCardViewPreference,
-    now,
     error,
 }: {
     locations: ILocation_Full[] | undefined;
     error: boolean;
-    now: DateTime;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const shouldAnimateCards = useRef(true);
@@ -122,7 +120,7 @@ function ListPage({
                             updateCardViewPreference(id, preference);
                         }}
                     />
-                    <Footer now={now} />
+                    <Footer />
                 </div>
 
                 <Drawer locations={locations} />

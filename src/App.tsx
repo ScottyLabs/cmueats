@@ -56,7 +56,6 @@ function App() {
                                             const newPreferences = { ...cardViewPreferences, [id]: preference };
                                             setCardViewPreferences(newPreferences);
                                         }}
-                                        now={now}
                                         error={error !== null}
                                     />
                                 }

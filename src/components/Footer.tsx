@@ -4,8 +4,10 @@ import SponsorCarousel from './SponsorCarousel';
 import { useThemeContext } from '../ThemeProvider';
 import footerMikuUrl from '../assets/miku/miku2.png';
 import { $api } from '../api';
+import { useCurrentTime } from '../contexts/NowContext';
 
-export default function Footer({ now }: { now: DateTime }) {
+export default function Footer() {
+    const now = useCurrentTime();
     const { theme } = useThemeContext();
     const { data: emails } = $api.useQuery('get', '/api/emails');
     const nowString = now.toLocaleString({
