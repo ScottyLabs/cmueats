@@ -1,18 +1,20 @@
-import { useContext, useEffect, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
+import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
+import { IReadOnlyLocation_Combined } from '../types/locationTypes';
 
-function Drawer() {
-    const { isDrawerActive, setIsDrawerActive } = useContext(DrawerContext);
+function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
-
+    const { selectedConceptId, closeDrawer } = useDrawerAPIContext();
+    const pickedLocation = locations?.find((loc) => loc.conceptId === selectedConceptId);
     // `esc` to close the drawer
     useEffect(() => {
-        if (!isDrawerActive) return () => {};
+        if (selectedConceptId === null) return () => {};
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;
@@ -22,34 +24,36 @@ function Drawer() {
 
             if (isTyping) return;
 
-            setIsDrawerActive(false);
+            closeDrawer();
         }
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isDrawerActive, setIsDrawerActive]);
+    }, [selectedConceptId]);
+
+    // reset scroll when selected location changes
+    useEffect(() => {
+        drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+    }, [pickedLocation?.conceptId]);
 
     return (
-        <CSSTransition
-            in={isDrawerActive}
-            timeout={300}
-            mountOnEnter
-            unmountOnExit
-            nodeRef={drawerRef}
-            classNames={{
-                enter: css['drawer-enter'],
-                enterActive: css['drawer-enter-active'],
-                enterDone: css['drawer-enter-done'],
-                exit: css['drawer-exit'],
-                exitActive: css['drawer-exit-active'],
-            }}
-        >
-            <div className={css['drawer-box']} ref={drawerRef}>
-                <DrawerHeader />
-                <DrawerTabNav />
-                <DrawerTabContent />
-            </div>
-        </CSSTransition>
+        <AnimatePresence mode="popLayout">
+            {pickedLocation !== undefined && (
+                <motion.div
+                    initial={{ opacity: 0, transform: 'translateX(30px)' }}
+                    animate={{ opacity: 1, transform: 'translateX(0)' }}
+                    exit={{ opacity: 0 }}
+                    className={css['drawer-box']}
+                    ref={drawerRef}
+                >
+                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.conceptId}>
+                        <DrawerHeader />
+                        <DrawerTabNav />
+                        <DrawerTabContent />
+                    </DrawerTabsContextProvider>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 
