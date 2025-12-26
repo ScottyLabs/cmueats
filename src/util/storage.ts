@@ -34,9 +34,8 @@ export function useUserCardViewPreferences() {
                         // this was a concept id
                         const replacementId = locationData.find((loc) => loc.conceptId === id)?.id;
                         return [replacementId ?? id, preference]; // use id as fallback if location is missing
-                    } else {
-                        return [id, preference];
                     }
+                    return [id, preference];
                 }),
             );
             setPreferences(migratedPreferences);

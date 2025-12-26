@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from 'react';
+import { useMemo } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
 import { ILocation_Full } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
