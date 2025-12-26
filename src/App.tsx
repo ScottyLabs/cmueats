@@ -27,13 +27,13 @@ function App() {
     })) satisfies ILocation_FromAPI[] | undefined;
 
     const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
-
     useRefreshWhenBackOnline();
 
     const fullLocationData: ILocation_Full[] | undefined = locations?.map((location) => ({
         ...location,
         ...getLocationStatus(location.times, now),
-        cardViewPreference: cardViewPreferences[location.id] ?? 'normal',
+        cardViewPreference:
+            cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
     }));
 
     return (
