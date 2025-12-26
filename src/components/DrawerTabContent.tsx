@@ -40,6 +40,7 @@ function DrawerTabContent() {
                                 className={`${css['hours-row']} ${isToday ? css['hours-row-active'] : ''}`}
                             >
                                 <span className={css['hours-day']}>{label}</span>
+                                <div className={css['hours-line']} />
                                 <span className={css['hours-times']}>{slot}</span>
                             </div>
                         );
