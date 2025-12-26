@@ -164,14 +164,6 @@
     }
 }
 
-.locations__error-text {
-    color: var(--text-primary);
-    font-family: var(--text-primary-font);
-    font-size: 24px;
-    width: fit-content;
-    word-break: break-word;
-}
-
 .skeleton-card--animated {
     opacity: 0;
     --oscillate-delay: 0s;

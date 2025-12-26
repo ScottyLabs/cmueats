@@ -31,22 +31,19 @@ function DrawerTabContent() {
                 <h4 className={css['section-header']}>Hours</h4>
 
                 <div className={css['hours-list']}>
-                    {Array(7)
-                        .fill(undefined)
-                        .map((_, index) => {
-                            const realIndex = (index + dayOffsetFromSunday) % 7;
-                            const label = daysStartingFromSunday[realIndex];
-                            const isToday = realIndex === dayOffsetFromSunday;
-                            return (
-                                <div
-                                    key={label}
-                                    className={`${css['hours-row']} ${isToday ? css['hours-row-active'] : ''}`}
-                                >
-                                    <span className={css['hours-day']}>{label}</span>
-                                    <span className={css['hours-times']}>{timeSlots[realIndex]}</span>
-                                </div>
-                            );
-                        })}
+                    {timeSlots.map((slot, index) => {
+                        const label = daysStartingFromSunday[(index + dayOffsetFromSunday) % 7];
+                        const isToday = index === 0;
+                        return (
+                            <div
+                                key={label}
+                                className={`${css['hours-row']} ${isToday ? css['hours-row-active'] : ''}`}
+                            >
+                                <span className={css['hours-day']}>{label}</span>
+                                <span className={css['hours-times']}>{slot}</span>
+                            </div>
+                        );
+                    })}
                 </div>
             </>
         );

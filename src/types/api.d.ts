@@ -117,9 +117,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1766200995584 */
+                            /** @example 1766524810697 */
                             start: number;
-                            /** @example 1766200995584 */
+                            /** @example 1766524810697 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -140,6 +140,7 @@ export interface operations {
                         coordinateLng: (number | null) | null;
                         acceptsOnlineOrders: boolean;
                         id: string;
+                        conceptId: (string | null) | null;
                     }[];
                 };
             };

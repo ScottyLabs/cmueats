@@ -45,6 +45,17 @@ export default function EateryCardGrid({
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
 
+    if (apiError)
+        return (
+            <p className={css['locations__error-text']}>
+                Oops! We received an invalid API response (or no data at all). If this problem persists, please visit
+                GrubHub or{' '}
+                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
+                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
+                </a>{' '}
+                for now
+            </p>
+        );
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
@@ -61,18 +72,6 @@ export default function EateryCardGrid({
             </div>
         );
     }
-
-    if (apiError)
-        return (
-            <p className="locations__error-text">
-                Oops! We received an invalid API response (or no data at all). If this problem persists, please visit
-                GrubHub or{' '}
-                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
-                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
-                </a>{' '}
-                for now
-            </p>
-        );
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 

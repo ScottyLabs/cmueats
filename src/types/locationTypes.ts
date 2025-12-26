@@ -61,6 +61,8 @@ export interface ILocation_FromAPI {
     times: ITimeRange[];
     todaysSpecials: ISpecial[];
     todaysSoups: ISpecial[];
+    /** The id provided on the dining services website */
+    conceptId: string | null;
 }
 export interface IStatusMessage {
     shortStatus: [string, string];

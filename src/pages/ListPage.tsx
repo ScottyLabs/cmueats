@@ -25,8 +25,10 @@ function ListPage({
     locations,
     updateCardViewPreference,
     now,
+    error,
 }: {
     locations: ILocation_Full[] | undefined;
+    error: boolean;
     now: DateTime;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
@@ -151,7 +153,7 @@ function ListPage({
                         key={`${searchQuery}-${locationFilterQuery}`}
                         locations={filteredLocations}
                         shouldAnimateCards={shouldAnimateCards.current}
-                        apiError={locations !== undefined && locations.length === 0}
+                        apiError={error}
                         setSearchQuery={setSearchQuery}
                         updateCardViewPreference={(id, preference) => {
                             shouldAnimateCards.current = false;

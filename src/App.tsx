@@ -20,7 +20,7 @@ import { useCurrentTime } from './contexts/NowContext';
 function App() {
     const now = useCurrentTime();
     // Load locations
-    const { data } = $api.useQuery('get', '/api/v2/locations');
+    const { data, error } = $api.useQuery('get', '/api/v2/locations');
     const locations = data?.map((location) => ({
         ...location,
         name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
@@ -57,6 +57,7 @@ function App() {
                                             setCardViewPreferences(newPreferences);
                                         }}
                                         now={now}
+                                        error={error !== null}
                                     />
                                 }
                             />

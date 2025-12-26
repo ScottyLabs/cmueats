@@ -116,5 +116,5 @@ VITE_API_URL=locations.json
 Update the `api.yaml` file, and run
 
 ```shell
-pnpx openapi-typescript api.yaml -o src/api.d.ts
+pnpx openapi-typescript api.yaml -o src/types/api.d.ts
 ```
