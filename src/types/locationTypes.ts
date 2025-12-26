@@ -47,6 +47,7 @@ export enum LocationState {
 }
 
 export interface ILocation_FromAPI {
+    /** unique identifier for this location */
     id: string;
     name: string;
     shortDescription: string | null;

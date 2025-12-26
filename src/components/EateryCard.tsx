@@ -25,7 +25,7 @@ function EateryCard({
         prevDrawerSelectedIdRef.current = drawerAPIContext.selectedId ?? null;
     }, [drawerAPIContext.selectedId]);
 
-    const isCardSelected = drawerAPIContext.selectedId === location.conceptId;
+    const isCardSelected = drawerAPIContext.selectedId === location.id;
     const cardRef = useRef<HTMLDivElement | null>(null);
     function handleCardSelection() {
         // when the drawer is open, click other cards will open that

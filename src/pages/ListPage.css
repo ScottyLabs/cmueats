@@ -56,7 +56,7 @@
     padding: 0 var(--global-x-padding);
     display: grid;
     grid-template-columns: minmax(0, 1fr) 230px;
-    max-width: 500px;
+    max-width: 550px;
     margin-left: auto;
     gap: 0.6rem;
     align-items: center;

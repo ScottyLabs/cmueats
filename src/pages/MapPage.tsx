@@ -1,11 +1,11 @@
 import { useMemo, useState, useRef } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
-import { CSSTransition } from 'react-transition-group';
-import EateryCard from '../components/EateryCard';
-import './MapPage.css';
 import { ILocation_Full } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
 import env from '../env';
+import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
+import Drawer from '../components/Drawer';
+import css from './MapPage.module.css';
 
 function abbreviate(longName: string) {
     const importantPart = longName.split(/(-|\(|'|&| at )/i)[0]!.trim();
@@ -22,11 +22,8 @@ function abbreviate(longName: string) {
  */
 const stripVarFromString = (varString: string) => varString.match(/var\((.+)\)/)?.[1] ?? '';
 
-function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
-    const [selectedLocationIndex, setSelectedLocationIndex] = useState<number>();
-    const [isDrawerVisible, setDrawerVisible] = useState(false);
-    const drawerRef = useRef(null);
-
+function MapSection({ locations }: { locations: ILocation_Full[] }) {
+    const { setDrawerActiveId, closeDrawer, selectedId } = useDrawerAPIContext();
     const cameraBoundary = useMemo(
         () => ({
             centerLatitude: 40.444,
@@ -48,69 +45,58 @@ function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
     );
     const derivedRootColors = useMemo(() => window.getComputedStyle(document.body), []);
     return (
-        <div className="MapPage">
-            {locations && (
-                <>
-                    <Map
-                        token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
-                        colorScheme={ColorScheme.Dark}
-                        initialRegion={initialRegion}
-                        excludedPOICategories={[PointOfInterestCategory.Restaurant]}
-                        cameraBoundary={cameraBoundary}
-                        minCameraDistance={10}
-                        maxCameraDistance={1000}
-                        showsUserLocationControl
-                        allowWheelToZoom
-                    >
-                        {locations.map((location, locationIndex) => {
-                            if (!location.coordinateLat || !location.coordinateLng) return undefined;
-                            const bgColor = derivedRootColors.getPropertyValue(
-                                stripVarFromString(mapMarkerBackgroundColors[location.locationState]),
-                            ); // mapkit doesn't accept css variables, so we'll go ahead and get the actual color value from :root first
-                            const textColor = derivedRootColors.getPropertyValue(
-                                stripVarFromString(mapMarkerTextColors[location.locationState]),
-                            );
-                            return (
-                                <Marker
-                                    key={location.id}
-                                    latitude={location.coordinateLat}
-                                    longitude={location.coordinateLng}
-                                    color={bgColor}
-                                    glyphColor={textColor}
-                                    glyphText={abbreviate(location.name)}
-                                    onSelect={() => {
-                                        setSelectedLocationIndex(locationIndex);
-                                        setDrawerVisible(true);
-                                    }}
-                                    onDeselect={() => {
-                                        if (selectedLocationIndex === locationIndex) {
-                                            setDrawerVisible(false);
-                                        }
-                                    }}
-                                />
-                            );
-                        })}
-                    </Map>
-                    <CSSTransition
-                        classNames="DrawerTransition"
-                        timeout={300}
-                        in={isDrawerVisible}
-                        mountOnEnter
-                        unmountOnExit
-                        nodeRef={drawerRef}
-                    >
-                        <div className="MapDrawer" ref={drawerRef}>
-                            {selectedLocationIndex !== undefined && (
-                                <EateryCard
-                                    location={locations[selectedLocationIndex]!}
-                                    updateViewPreference={() => {}}
-                                />
-                            )}
-                        </div>
-                    </CSSTransition>
-                </>
-            )}
-        </div>
+        <Map
+            token={env.VITE_AUTO_GENERATED_MAPKITJS_TOKEN}
+            colorScheme={ColorScheme.Dark}
+            initialRegion={initialRegion}
+            excludedPOICategories={[PointOfInterestCategory.Restaurant]}
+            cameraBoundary={cameraBoundary}
+            minCameraDistance={10}
+            maxCameraDistance={1000}
+            showsUserLocationControl
+            allowWheelToZoom
+        >
+            {locations.map((location) => {
+                if (!location.coordinateLat || !location.coordinateLng) return undefined;
+                const bgColor = derivedRootColors.getPropertyValue(
+                    stripVarFromString(mapMarkerBackgroundColors[location.locationState]),
+                ); // mapkit doesn't accept css variables, so we'll go ahead and get the actual color value from :root first
+                const textColor = derivedRootColors.getPropertyValue(
+                    stripVarFromString(mapMarkerTextColors[location.locationState]),
+                );
+                return (
+                    <Marker
+                        key={location.id}
+                        latitude={location.coordinateLat}
+                        longitude={location.coordinateLng}
+                        color={bgColor}
+                        glyphColor={textColor}
+                        glyphText={abbreviate(location.name)}
+                        onSelect={() => {
+                            setDrawerActiveId(location.id);
+                        }}
+                        onDeselect={() => {
+                            closeDrawer();
+                        }}
+                        selected={selectedId === location.id}
+                    />
+                );
+            })}
+        </Map>
+    );
+}
+function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
+    return (
+        <DrawerAPIContextProvider>
+            <div className={css['map-page']}>
+                {locations && (
+                    <div className={css['map-page__map-container']}>
+                        <MapSection locations={locations} />
+                    </div>
+                )}
+                <Drawer locations={locations} />
+            </div>
+        </DrawerAPIContextProvider>
     );
 }
 

@@ -18,7 +18,7 @@ function EateryCardHeader({
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isHidden = location.cardViewPreference === 'hidden';
-    const { closeDrawer, selectedConceptId } = useDrawerAPIContext();
+    const { closeDrawer, selectedId } = useDrawerAPIContext();
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
         if (!statusChangesSoon) {
@@ -73,7 +73,7 @@ function EateryCardHeader({
                     onClick={(event) => {
                         event.preventDefault();
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
-                        if (!isHidden && location.conceptId === selectedConceptId) closeDrawer();
+                        if (!isHidden && location.id === selectedId) closeDrawer();
                     }}
                 >
                     {isHidden ? (
