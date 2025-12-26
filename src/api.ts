@@ -8,7 +8,7 @@ import notifySlack from './util/slack';
 const BACKEND_LOCATIONS_URL = env.VITE_API_URL === 'local' ? '/' : `${env.VITE_API_URL}`;
 
 const fetchClient = createFetchClient<paths>({
-    baseUrl: BACKEND_LOCATIONS_URL,
+    baseUrl: 'https://dining-api-staging.up.railway.app', // force staging url for now so that when we push this code to prod we'll have time to migrate the backend to prod without disturbing uptime
 });
 export const queryClient = new QueryClient({
     defaultOptions: { queries: { staleTime: 120 * 1000 } },
