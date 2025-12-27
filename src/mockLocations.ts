@@ -5,7 +5,7 @@ const earliestSunday = now.minus({ days: now.weekday % 7 }).startOf('day');
 function toTimeSlotThisWeek({ day, hour, minute }: { day: number; hour: number; minute: number }) {
     return earliestSunday.plus({ day, hour, minute }).toMillis();
 }
-export default const locations = [
+const locations = [
     {
         id: 82,
         name: 'TAHINI',
@@ -758,3 +758,4 @@ export default const locations = [
     coordinateLng: loc.coordinates.lng,
     times: loc.times.map(({ start, end }) => ({ start: toTimeSlotThisWeek(start), end: toTimeSlotThisWeek(end) })),
 }));
+export default locations;
