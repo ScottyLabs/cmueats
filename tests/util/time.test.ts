@@ -1,3 +1,5 @@
+import { expect, test, describe } from 'vitest';
+
 import { DateTime } from 'luxon';
 import {
     isValidTimeSlotArray,
