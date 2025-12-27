@@ -48,7 +48,7 @@ function getExactTimeStringFromMinutes(minutes: number) {
  * for any point x, we want to find the closest vertical line
  */
 export function getApproximateTimeStringFromMinutes(totalMinutes: number) {
-    assert(totalMinutes >= 0, 'Minutes must be positive!');
+    assert(totalMinutes >= 0, 'Minutes must be non-negative!');
     let roundedMinutes = totalMinutes;
     // we have upper bounds because we don't want rounding errors to accumulate, like 35.8 hrs -> 36 hrs -> 2 days (it should be 1 day)
     roundedMinutes = round(roundedMinutes, { unit: 1, lowerBound: 0, upperBound: 60 }); // nearest minute
@@ -79,7 +79,8 @@ function timeIntervalToString(start: DateTime, end: DateTime) {
     const startStr = start.toLocaleString(DateTime.TIME_SIMPLE);
     const endStr = end.toLocaleString(DateTime.TIME_SIMPLE);
     const fullStr = `${startStr} - ${endStr}`;
-    return fullStr === '12:00 AM - 11:59 PM' ? 'Open 24 hours' : fullStr; // just some friendly human conversion
+    const isFullDay = +start.hour === 0 && start.minute === 0 && end.hour === 23 && end.minute === 59;
+    return isFullDay ? 'Open 24 hours' : fullStr; // just some friendly human conversion
 }
 /**
  * Converts an sorted time slot array to an array of human-readable strings (12-hour time)

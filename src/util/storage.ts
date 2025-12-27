@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import z from 'zod';
 import { safeGetItem, safeSetItem, safeRemoveItem } from './safeStorage';
 import { $api } from '../api';
@@ -26,8 +26,9 @@ function upgradeToCardStateMapFromOldFormat(oldPreferences: OldCardViewPreferenc
 export function useUserCardViewPreferences() {
     const { data: locationData } = $api.useQuery('get', '/api/v2/locations');
     const [preferences, setPreferences] = useState(() => getPreferences());
+    const migrationCompleted = useRef(false);
     useEffect(() => {
-        if (locationData?.length) {
+        if (locationData?.length && !migrationCompleted.current) {
             const migratedPreferences = Object.fromEntries(
                 Object.entries(preferences).map(([id, preference]) => {
                     if (id.length <= 4) {
@@ -40,6 +41,7 @@ export function useUserCardViewPreferences() {
             );
             setPreferences(migratedPreferences);
             safeSetItem('eateryStates', JSON.stringify(migratedPreferences));
+            migrationCompleted.current = true;
         }
     }, [locationData]);
     return [
