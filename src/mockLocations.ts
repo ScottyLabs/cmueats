@@ -5,7 +5,7 @@ const earliestSunday = now.minus({ days: now.weekday % 7 }).startOf('day');
 function toTimeSlotThisWeek({ day, hour, minute }: { day: number; hour: number; minute: number }) {
     return earliestSunday.plus({ day, hour, minute }).toMillis();
 }
-export const locations = [
+export default const locations = [
     {
         id: 82,
         name: 'TAHINI',

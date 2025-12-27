@@ -35,7 +35,7 @@ describe('queryLocations.ts', () => {
                 closedLongTerm: true,
             });
         });
-        test('basic', () => {
+        test('more basic', () => {
             const A = {
                 start: date('1/3/34 12:00 AM'), // Tuesday 12AM
                 end: date('1/6/34 11:00 PM'), // Friday 11PM

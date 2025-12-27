@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import css from './Footer.module.css';
 import SponsorCarousel from './SponsorCarousel';
 import { useThemeContext } from '../ThemeProvider';
