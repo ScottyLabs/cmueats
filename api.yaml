@@ -17,7 +17,7 @@ paths:
                   - ScottyLabs Dining API
                 type: string
       operationId: getIndex
-  /api/v2/locations:
+  /v2/locations:
     get:
       responses:
         "200":
@@ -36,11 +36,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1766524810697
+                              - 1766871477842
                             type: number
                           end:
                             examples:
-                              - 1766524810697
+                              - 1766871477842
                             type: number
                         required:
                           - start
@@ -126,8 +126,8 @@ paths:
                     - acceptsOnlineOrders
                     - id
                     - conceptId
-      operationId: getApiV2Locations
-  /api/emails:
+      operationId: getV2Locations
+  /emails:
     get:
       responses:
         "200":
@@ -149,8 +149,8 @@ paths:
                   required:
                     - name
                     - email
-      operationId: getApiEmails
-  /api/sendSlackMessage:
+      operationId: getEmails
+  /sendSlackMessage:
     post:
       requestBody:
         required: true
@@ -179,6 +179,6 @@ paths:
                   type: string
               required:
                 - message
-      operationId: postApiSendSlackMessage
+      operationId: postSendSlackMessage
 components:
   schemas: {}

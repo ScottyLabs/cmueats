@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v2/locations": {
+    "/v2/locations": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getApiV2Locations"];
+        get: operations["getV2Locations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,14 +36,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/emails": {
+    "/emails": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getApiEmails"];
+        get: operations["getEmails"];
         put?: never;
         post?: never;
         delete?: never;
@@ -52,7 +52,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/sendSlackMessage": {
+    "/sendSlackMessage": {
         parameters: {
             query?: never;
             header?: never;
@@ -61,7 +61,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["postApiSendSlackMessage"];
+        post: operations["postSendSlackMessage"];
         delete?: never;
         options?: never;
         head?: never;
@@ -100,7 +100,7 @@ export interface operations {
             };
         };
     };
-    getApiV2Locations: {
+    getV2Locations: {
         parameters: {
             query?: never;
             header?: never;
@@ -117,9 +117,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1766524810697 */
+                            /** @example 1766871477842 */
                             start: number;
-                            /** @example 1766524810697 */
+                            /** @example 1766871477842 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -146,7 +146,7 @@ export interface operations {
             };
         };
     };
-    getApiEmails: {
+    getEmails: {
         parameters: {
             query?: never;
             header?: never;
@@ -175,7 +175,7 @@ export interface operations {
             };
         };
     };
-    postApiSendSlackMessage: {
+    postSendSlackMessage: {
         parameters: {
             query?: never;
             header?: never;

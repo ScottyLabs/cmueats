@@ -8,7 +8,7 @@ import { useCurrentTime } from '../contexts/NowContext';
 export default function Footer() {
     const now = useCurrentTime();
     const { theme } = useThemeContext();
-    const { data: emails } = $api.useQuery('get', '/api/emails');
+    const { data: emails } = $api.useQuery('get', '/emails');
     const nowString = now.toLocaleString({
         weekday: 'short',
         month: 'short',

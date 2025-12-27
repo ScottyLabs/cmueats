@@ -24,7 +24,7 @@ function upgradeToCardStateMapFromOldFormat(oldPreferences: OldCardViewPreferenc
     return Object.fromEntries(oldPreferences.map((id) => [id, 'pinned']));
 }
 export function useUserCardViewPreferences() {
-    const { data: locationData } = $api.useQuery('get', '/api/v2/locations');
+    const { data: locationData } = $api.useQuery('get', '/v2/locations');
     const [preferences, setPreferences] = useState(() => getPreferences());
     const migrationCompleted = useRef(false);
     useEffect(() => {
