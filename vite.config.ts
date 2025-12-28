@@ -20,7 +20,7 @@ const preInitEnvSchema = z.object({
         .transform((origins) =>
             process.env.VERCEL_URL !== undefined ? origins + ',' + process.env.VERCEL_URL : origins,
         ),
-    BACKEND_URL: z.url().transform((url) => {
+    VITE_API_URL: z.url().transform((url) => {
         const urlObj = new URL(url);
         return `${urlObj.protocol}//${urlObj.host}`;
     }),
@@ -131,7 +131,7 @@ export default defineConfig(({ command, mode }) => {
         server: {
             proxy: {
                 '/api': {
-                    target: env.BACKEND_URL,
+                    target: env.VITE_API_URL,
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/api/, ''),
                     xfwd: true,
