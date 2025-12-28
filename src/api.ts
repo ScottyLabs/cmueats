@@ -13,10 +13,10 @@ const fetchClient = createFetchClient<paths>({
     fetch:
         env.VITE_API_URL === 'local'
             ? async (req) => {
-                  if (!req.url.endsWith('/api/v2/locations')) return Response.json({}, { status: 404 });
+                  if (!req.url.endsWith('/v2/locations')) return Response.json({}, { status: 404 });
                   return Response.json(locations, { status: 200 });
               }
-            : undefined,
+            : (req) => fetch(req, { credentials: 'include' }),
 });
 export const queryClient = new QueryClient({
     defaultOptions: { queries: { staleTime: 120 * 1000 } },
@@ -28,3 +28,9 @@ export const queryClient = new QueryClient({
 });
 
 export const $api = createClient(fetchClient);
+export const login = () => {
+    window.location.href = `${env.VITE_API_URL}/login?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
+};
+export const logout = () => {
+    window.location.href = `${env.VITE_API_URL}/logout?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
+};

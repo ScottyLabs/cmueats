@@ -36,11 +36,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1766879611819
+                              - 1766943627983
                             type: number
                           end:
                             examples:
-                              - 1766879611819
+                              - 1766943627983
                             type: number
                         required:
                           - start
@@ -182,7 +182,28 @@ paths:
       operationId: postSendSlackMessage
   /login:
     get:
+      parameters:
+        - name: redirectURL
+          in: query
+          required: true
+          schema:
+            nullable: true
+            anyOf:
+              - type: string
+              - type: "null"
       operationId: getLogin
+  /logout:
+    get:
+      parameters:
+        - name: redirectURL
+          in: query
+          required: true
+          schema:
+            nullable: true
+            anyOf:
+              - type: string
+              - type: "null"
+      operationId: getLogout
   /whoami:
     get:
       responses:

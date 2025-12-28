@@ -1,7 +1,13 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-    VITE_API_URL: z.any().transform(() => '/api'),
+    VITE_API_URL: z
+        .url()
+        .transform((url) => {
+            const urlObj = new URL(url);
+            return `${urlObj.protocol}//${urlObj.host}`;
+        })
+        .or(z.literal('local')),
     VITE_POSTHOG_KEY: z.string().optional(),
     VITE_AUTO_GENERATED_MAPKITJS_TOKEN: z.string(),
 });

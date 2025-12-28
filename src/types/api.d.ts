@@ -84,6 +84,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getLogout"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/whoami": {
         parameters: {
             query?: never;
@@ -165,9 +181,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1766879611819 */
+                            /** @example 1766943627983 */
                             start: number;
-                            /** @example 1766879611819 */
+                            /** @example 1766943627983 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -247,7 +263,21 @@ export interface operations {
     };
     getLogin: {
         parameters: {
-            query?: never;
+            query: {
+                redirectURL: (string | null) | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: never;
+    };
+    getLogout: {
+        parameters: {
+            query: {
+                redirectURL: (string | null) | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;

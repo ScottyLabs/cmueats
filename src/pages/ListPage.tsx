@@ -14,7 +14,7 @@ import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
-import { $api } from '../api';
+import { $api, login, logout } from '../api';
 
 const StyledAlert = styled(Alert)({
     backgroundColor: 'var(--main-bg-accent)',
@@ -107,11 +107,9 @@ function ListPage({
                         {isLoading ? (
                             'loading'
                         ) : userLoggedInData && userLoggedInData.sub !== null ? (
-                            <button onClick={() => (location.href = '/api/logout')}>
-                                sign out (sub:{userLoggedInData.sub})
-                            </button>
+                            <button onClick={logout}>sign out (sub:{userLoggedInData.sub})</button>
                         ) : (
-                            <button onClick={() => (location.href = '/api/login')}>sign in</button>
+                            <button onClick={login}>sign in</button>
                         )}
                     </header>
                     <div className="list-controls-container">
