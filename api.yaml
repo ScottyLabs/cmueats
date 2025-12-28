@@ -36,11 +36,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1766871477842
+                              - 1766879611819
                             type: number
                           end:
                             examples:
-                              - 1766871477842
+                              - 1766879611819
                             type: number
                         required:
                           - start
@@ -180,5 +180,36 @@ paths:
               required:
                 - message
       operationId: postSendSlackMessage
+  /login:
+    get:
+      operationId: getLogin
+  /whoami:
+    get:
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sub:
+                    nullable: true
+                    anyOf:
+                      - type: string
+                      - type: "null"
+                required:
+                  - sub
+                additionalProperties: false
+      operationId: getWhoami
+  /code-exchange:
+    get:
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      operationId: getCode-exchange
 components:
   schemas: {}

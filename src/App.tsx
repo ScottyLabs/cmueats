@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { motion } from 'motion/react';
 import Navbar from './components/Navbar';
@@ -18,6 +18,9 @@ import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
 
 function App() {
+    useEffect(() => {
+        fetch('/api/whoami');
+    }, []);
     const now = useCurrentTime();
     // Load locations
     const { data, error } = $api.useQuery('get', '/v2/locations');

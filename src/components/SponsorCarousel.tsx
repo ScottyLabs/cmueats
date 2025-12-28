@@ -37,8 +37,8 @@ function SponsorCarousel({ darkMode, openByDefault }: { darkMode: boolean; openB
                 </button>
                 <div className={css.carousel}>
                     <ul className={css.carousel__track}>
-                        {doubleLogos.map((logo) => (
-                            <li className={css.carousel__item} key={logo.alt}>
+                        {doubleLogos.map((logo, i) => (
+                            <li className={css.carousel__item} key={i}>
                                 <img src={logo.src} alt={logo.alt} className={css.carousel__image} />
                             </li>
                         ))}

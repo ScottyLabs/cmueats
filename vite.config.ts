@@ -20,6 +20,10 @@ const preInitEnvSchema = z.object({
         .transform((origins) =>
             process.env.VERCEL_URL !== undefined ? origins + ',' + process.env.VERCEL_URL : origins,
         ),
+    BACKEND_URL: z.url().transform((url) => {
+        const urlObj = new URL(url);
+        return `${urlObj.protocol}//${urlObj.host}`;
+    }),
 });
 const manifestForPlugin: Partial<VitePWAOptions> = {
     registerType: 'prompt',
@@ -121,6 +125,17 @@ export default defineConfig(({ command, mode }) => {
         build: {
             rollupOptions: {
                 external: ['jsonwebtoken'],
+            },
+        },
+        logLevel: 'info',
+        server: {
+            proxy: {
+                '/api': {
+                    target: env.BACKEND_URL,
+                    changeOrigin: true,
+                    rewrite: (path) => path.replace(/^\/api/, ''),
+                    xfwd: true,
+                },
             },
         },
     };

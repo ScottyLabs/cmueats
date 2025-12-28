@@ -14,6 +14,7 @@ import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
+import { $api } from '../api';
 
 const StyledAlert = styled(Alert)({
     backgroundColor: 'var(--main-bg-accent)',
@@ -30,6 +31,7 @@ function ListPage({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const shouldAnimateCards = useRef(true);
+    const { data: userLoggedInData, isLoading } = $api.useQuery('get', '/whoami');
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -102,6 +104,15 @@ function ListPage({
                     <header className="list-header">
                         <h3 className="list-header__greeting list-header__greeting--desktop">{desktopGreeting}</h3>
                         <h3 className="list-header__greeting list-header__greeting--mobile">{mobileGreeting}</h3>
+                        {isLoading ? (
+                            'loading'
+                        ) : userLoggedInData && userLoggedInData.sub !== null ? (
+                            <button onClick={() => (location.href = '/api/logout')}>
+                                sign out (sub:{userLoggedInData.sub})
+                            </button>
+                        ) : (
+                            <button onClick={() => (location.href = '/api/login')}>sign in</button>
+                        )}
                     </header>
                     <div className="list-controls-container">
                         <div className="list-controls-layout">
