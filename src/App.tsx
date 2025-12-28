@@ -18,9 +18,7 @@ import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
 
 function App() {
-    useEffect(() => {
-        fetch('/api/whoami');
-    }, []);
+
     const now = useCurrentTime();
     // Load locations
     const { data, error } = $api.useQuery('get', '/v2/locations');
