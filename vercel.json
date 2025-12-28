@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://dining-api-staging.up.railway.app/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
