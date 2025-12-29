@@ -1,6 +1,6 @@
 .banner {
     background-color: var(--red-600);
-    padding: 10px 25px;
+    padding: 15px var(--global-x-padding);
     font-family: var(--text-secondary-font);
     font-size: 16px;
     font-weight: bold;
