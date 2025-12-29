@@ -4,6 +4,54 @@
  */
 
 export interface paths {
+    "/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getLogin"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getLogout"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/code-exchange": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getCode-exchange"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/": {
         parameters: {
             query?: never;
@@ -68,38 +116,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getLogin"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getLogout"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/whoami": {
         parameters: {
             query?: never;
@@ -108,22 +124,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["getWhoami"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/code-exchange": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getCode-exchange"];
         put?: never;
         post?: never;
         delete?: never;
@@ -144,6 +144,42 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getLogin: {
+        parameters: {
+            query: {
+                redirectURL: (string | null) | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: never;
+    };
+    getLogout: {
+        parameters: {
+            query: {
+                redirectURL: (string | null) | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: never;
+    };
+    "getCode-exchange": {
+        parameters: {
+            query: {
+                code: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: never;
+    };
     getIndex: {
         parameters: {
             query?: never;
@@ -181,9 +217,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1766943627983 */
+                            /** @example 1766976342183 */
                             start: number;
-                            /** @example 1766943627983 */
+                            /** @example 1766976342183 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -261,30 +297,6 @@ export interface operations {
         };
         responses: never;
     };
-    getLogin: {
-        parameters: {
-            query: {
-                redirectURL: (string | null) | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: never;
-    };
-    getLogout: {
-        parameters: {
-            query: {
-                redirectURL: (string | null) | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: never;
-    };
     getWhoami: {
         parameters: {
             query?: never;
@@ -301,22 +313,17 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        sub: (string | null) | null;
+                        user: ({
+                            googleId: string;
+                            id: number;
+                            email: string;
+                            firstName: (string | null) | null;
+                            lastName: (string | null) | null;
+                            pictureUrl: (string | null) | null;
+                        } | null) | null;
                     };
                 };
             };
         };
-    };
-    "getCode-exchange": {
-        parameters: {
-            query: {
-                code: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: never;
     };
 }

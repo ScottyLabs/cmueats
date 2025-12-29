@@ -5,6 +5,39 @@ info:
   description: Development documentation
   version: 2.0.0
 paths:
+  /login:
+    get:
+      parameters:
+        - name: redirectURL
+          in: query
+          required: true
+          schema:
+            nullable: true
+            anyOf:
+              - type: string
+              - type: "null"
+      operationId: getLogin
+  /logout:
+    get:
+      parameters:
+        - name: redirectURL
+          in: query
+          required: true
+          schema:
+            nullable: true
+            anyOf:
+              - type: string
+              - type: "null"
+      operationId: getLogout
+  /code-exchange:
+    get:
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      operationId: getCode-exchange
   /:
     get:
       responses:
@@ -36,11 +69,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1766943627983
+                              - 1766976342183
                             type: number
                           end:
                             examples:
-                              - 1766943627983
+                              - 1766976342183
                             type: number
                         required:
                           - start
@@ -180,30 +213,6 @@ paths:
               required:
                 - message
       operationId: postSendSlackMessage
-  /login:
-    get:
-      parameters:
-        - name: redirectURL
-          in: query
-          required: true
-          schema:
-            nullable: true
-            anyOf:
-              - type: string
-              - type: "null"
-      operationId: getLogin
-  /logout:
-    get:
-      parameters:
-        - name: redirectURL
-          in: query
-          required: true
-          schema:
-            nullable: true
-            anyOf:
-              - type: string
-              - type: "null"
-      operationId: getLogout
   /whoami:
     get:
       responses:
@@ -214,23 +223,43 @@ paths:
               schema:
                 type: object
                 properties:
-                  sub:
+                  user:
                     nullable: true
                     anyOf:
-                      - type: string
+                      - type: object
+                        properties:
+                          googleId:
+                            type: string
+                          id:
+                            type: number
+                          email:
+                            type: string
+                          firstName:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                          lastName:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                          pictureUrl:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                        required:
+                          - googleId
+                          - id
+                          - email
+                          - firstName
+                          - lastName
+                          - pictureUrl
                       - type: "null"
                 required:
-                  - sub
+                  - user
                 additionalProperties: false
       operationId: getWhoami
-  /code-exchange:
-    get:
-      parameters:
-        - name: code
-          in: query
-          required: true
-          schema:
-            type: string
-      operationId: getCode-exchange
 components:
   schemas: {}

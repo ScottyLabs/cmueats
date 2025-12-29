@@ -1,13 +1,11 @@
 import { Alert, styled } from '@mui/material';
-import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react';
 
-import { getGreetings } from '../util/greeting';
 import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
-import IS_MIKU_DAY from '../util/constants';
 import mikuBgUrl from '../assets/miku/miku.jpg';
-import EateryCardGrid from './EateryCardGrid';
+import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider } from '../contexts/DrawerAPIContext';
 import useFilteredLocations from './useFilteredLocations';
@@ -15,6 +13,7 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import { $api, login, logout } from '../api';
+import ListPageHeader from '../components/ListPageHeader';
 
 const StyledAlert = styled(Alert)({
     backgroundColor: 'var(--main-bg-accent)',
@@ -31,7 +30,6 @@ function ListPage({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const shouldAnimateCards = useRef(true);
-    const { data: userLoggedInData, isLoading } = $api.useQuery('get', '/whoami');
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -50,11 +48,6 @@ function ListPage({
         mainContainerRef.current?.focus();
     }, []);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
-
-    const { mobileGreeting, desktopGreeting } = useMemo(
-        () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
-        [],
-    );
 
     const filteredLocations = useFilteredLocations({
         locations,
@@ -101,17 +94,7 @@ function ListPage({
                 )}
 
                 <div className="list-box">
-                    <header className="list-header">
-                        <h3 className="list-header__greeting list-header__greeting--desktop">{desktopGreeting}</h3>
-                        <h3 className="list-header__greeting list-header__greeting--mobile">{mobileGreeting}</h3>
-                        {isLoading ? (
-                            'loading'
-                        ) : userLoggedInData && userLoggedInData.sub !== null ? (
-                            <button onClick={logout}>sign out (sub:{userLoggedInData.sub})</button>
-                        ) : (
-                            <button onClick={login}>sign in</button>
-                        )}
-                    </header>
+                    <ListPageHeader />
                     <div className="list-controls-container">
                         <div className="list-controls-layout">
                             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
