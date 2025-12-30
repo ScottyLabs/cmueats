@@ -3,9 +3,10 @@ import styles from "./BottomSheet.module.css";
 
 type BottomSheetProps = {
   children: ReactNode;
+  onHide?: () => void;
 };
 
-export default function BottomSheet({ children }: BottomSheetProps) {
+export default function BottomSheet({ children, onHide }: BottomSheetProps) {
   const windowHeight = window.innerHeight;
   const [FULL, HALF, COLLAPSED, HIDDEN] = [
     0,
@@ -62,6 +63,12 @@ export default function BottomSheet({ children }: BottomSheetProps) {
       window.removeEventListener("touchend", onEnd);
     };
   }, [dragging, y, snapPoints, FULL, HIDDEN]);
+
+    useEffect(() => {
+        if (y === HIDDEN && onHide) {
+        onHide();
+        }
+    }, [y, onHide, HIDDEN]);
 
   function startDrag(
     e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>

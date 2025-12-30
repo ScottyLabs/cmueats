@@ -5,10 +5,13 @@ import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
+import BottomSheet from './BottomSheet';
 
 function Drawer() {
     const { isDrawerActive, setIsDrawerActive } = useContext(DrawerContext);
     const drawerRef = useRef<HTMLDivElement | null>(null);
+
+    const isMobile = window.innerWidth <= 600;
 
     // `esc` to close the drawer
     useEffect(() => {
@@ -44,11 +47,18 @@ function Drawer() {
                 exitActive: css['drawer-exit-active'],
             }}
         >
+            {isMobile ?
+                <BottomSheet onHide={() => setIsDrawerActive(false)}>
+                    <DrawerHeader />
+                    <DrawerTabNav />
+                    <DrawerTabContent />
+                </ BottomSheet>
+            : 
             <div className={css['drawer-box']} ref={drawerRef}>
                 <DrawerHeader />
                 <DrawerTabNav />
                 <DrawerTabContent />
-            </div>
+            </div>}
         </CSSTransition>
     );
 }
