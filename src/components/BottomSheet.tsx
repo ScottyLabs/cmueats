@@ -8,20 +8,24 @@ type BottomSheetProps = {
 
 export default function BottomSheet({ children, onHide }: BottomSheetProps) {
   const windowHeight = window.innerHeight;
-  const [FULL, HALF, COLLAPSED, HIDDEN] = [
-    0,
-    windowHeight * 0.4,
-    windowHeight * 0.7,
-    windowHeight,
-  ];
 
-  const [y, setY] = useState<number>(COLLAPSED);
+const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [
+  0,                        
+  windowHeight * 0.25, 
+  windowHeight * 0.33,    
+  windowHeight * 0.5,    
+  windowHeight * 0.66,         
+  windowHeight               
+];
+
+const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
+
+
+  const [y, setY] = useState<number>(HALF);
   const [dragging, setDragging] = useState<boolean>(false);
   const startY = useRef<number>(0);
   const startTranslate = useRef<number>(0);
   const handleRef = useRef<HTMLDivElement | null>(null);
-
-  const snapPoints = [FULL, HALF, COLLAPSED, HIDDEN];
 
   useEffect(() => {
     function onMove(e: MouseEvent | TouchEvent) {
