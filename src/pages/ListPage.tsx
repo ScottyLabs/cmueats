@@ -37,18 +37,15 @@ function ListPage({
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
     // re-animating in when filter gets cleared
-    const [searchQuery, setSearchQuery] = useReducer<(_: string, updated: string) => string>((_, newState) => {
+    const [searchQuery, setSearchQuery] = useReducer<string, [string]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
     }, '');
 
-    const [locationFilterQuery, setLocationFilterQuery] = useReducer<(_: string, x: string) => string>(
-        (_, newState) => {
-            shouldAnimateCards.current = false;
-            return newState;
-        },
-        '',
-    );
+    const [locationFilterQuery, setLocationFilterQuery] = useReducer<string, [string]>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, '');
     const mainContainerRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         mainContainerRef.current?.focus();
