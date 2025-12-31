@@ -56,10 +56,10 @@ function DrawerTabContent() {
                 <h4 className={css['section-header']}>Today&apos;s Specials</h4>
                 <div>
                     {specials.concat(soups).map((item) => (
-                        <React.Fragment key={item.name}>
-                            <div className={css['specials-item-title']}>{item.name}</div>
-                            <div className={css['specials-item-dscrp']}>{item.description}</div>
-                        </React.Fragment>
+                        <div className={css.special} key={item.name}>
+                            <div className={css['special__title']}>{item.name}</div>
+                            <div className={css['special__desc']}>{item.description}</div>
+                        </div>
                     ))}
                 </div>
             </>
