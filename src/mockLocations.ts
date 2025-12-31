@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-const now = DateTime.now();
+const now = DateTime.now().setZone('America/New_York');
 const earliestSunday = now.minus({ days: now.weekday % 7 }).startOf('day');
 function toTimeSlotThisWeek({ day, hour, minute }: { day: number; hour: number; minute: number }) {
     return earliestSunday.plus({ day, hour, minute }).toMillis();
