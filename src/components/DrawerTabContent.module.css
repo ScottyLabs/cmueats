@@ -24,7 +24,7 @@
         background: linear-gradient(
             90deg,
             rgba(255, 255, 255, 0.6) 0%,
-            rgba(255, 255, 255, 0.1) 30%,
+            rgba(255, 255, 255, 0.1) 80%,
             rgba(255, 255, 255, 0) 100%
         );
     }
@@ -38,38 +38,32 @@
 
 .hours-row {
     display: flex;
-    align-items: center;
+    gap: 12px;
+    align-items: flex-start;
     justify-content: space-between;
     color: var(--text-muted);
 }
 
 .hours-day {
-    display: flex;
-    align-items: center;
+}
+.hours-line {
     flex: 1;
-
-    &::after {
-        content: '';
-        flex: 1;
-        margin-inline: 12px;
-        border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
-    }
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+    align-self: center;
 }
 
 .hours-row-active {
     color: var(--text-primary);
     font-weight: 600;
 
-    & .hours-day::after {
-        content: '';
-        flex: 1;
-        margin-inline: 12px;
-        border-bottom: 1px dashed var(--text-muted);
+    .hours-line {
+        border-color: var(--text-muted);
     }
 }
 
-.hours-time {
+.hours-times {
     text-align: right;
+    line-height: 1.5;
 }
 
 .specials-item-title {

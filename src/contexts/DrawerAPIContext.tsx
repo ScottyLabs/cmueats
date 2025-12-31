@@ -4,21 +4,20 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 
 type DrawerAPIContextValue = {
-    selectedConceptId: number | null;
-    setDrawerConceptId: (conceptId: number) => void;
+    selectedId: string | null;
+    setDrawerActiveId: (id: string) => void;
     closeDrawer: () => void;
 };
 
 const DrawerAPIContext = createContext<DrawerAPIContextValue | undefined>(undefined);
 
 export function DrawerAPIContextProvider({ children }: { children: React.ReactNode }) {
-    const [drawerConceptId, setDrawerConceptId] = useState<number | null>(null);
-
+    const [drawerConceptId, setDrawerConceptId] = useState<string | null>(null);
     const drawerContextValue = useMemo(
         () => ({
             closeDrawer: () => setDrawerConceptId(null),
-            selectedConceptId: drawerConceptId,
-            setDrawerConceptId,
+            selectedId: drawerConceptId,
+            setDrawerActiveId: setDrawerConceptId,
         }),
         [drawerConceptId],
     );

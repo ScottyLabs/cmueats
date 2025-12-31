@@ -1,7 +1,7 @@
 import { KeyboardEvent, useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import { CardViewPreference } from '../util/storage';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import EateryCardHeader from './EateryCardHeader';
@@ -14,27 +14,27 @@ function EateryCard({
     animate = false,
     updateViewPreference,
 }: {
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
     partOfMainGrid?: boolean;
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const drawerAPIContext = useDrawerAPIContext();
-    const prevDrawerSelectedIdRef = useRef<number | null>(null);
+    const prevDrawerSelectedIdRef = useRef<string | null>(null);
     useEffect(() => {
-        prevDrawerSelectedIdRef.current = drawerAPIContext.selectedConceptId ?? null;
-    }, [drawerAPIContext.selectedConceptId]);
+        prevDrawerSelectedIdRef.current = drawerAPIContext.selectedId ?? null;
+    }, [drawerAPIContext.selectedId]);
 
-    const isCardSelected = drawerAPIContext.selectedConceptId === location.conceptId;
+    const isCardSelected = drawerAPIContext.selectedId === location.id;
     const cardRef = useRef<HTMLDivElement | null>(null);
     function handleCardSelection() {
         // when the drawer is open, click other cards will open that
         // card's detail, instead of closing the drawer;
         // click on the same card will close the drawer.
-        if (drawerAPIContext.selectedConceptId === location.conceptId) {
+        if (drawerAPIContext.selectedId === location.id) {
             drawerAPIContext.closeDrawer();
         } else {
-            drawerAPIContext.setDrawerConceptId(location.conceptId);
+            drawerAPIContext.setDrawerActiveId(location.id);
         }
     }
 
@@ -53,7 +53,7 @@ function EateryCard({
                 block: 'nearest',
             });
         }
-    }, [drawerAPIContext.selectedConceptId]);
+    }, [isCardSelected]);
 
     const cardClassName = useMemo(
         () =>
@@ -65,8 +65,7 @@ function EateryCard({
             ),
         [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
     );
-    const shouldAnimatePositionChange =
-        prevDrawerSelectedIdRef.current === (drawerAPIContext.selectedConceptId ?? null); // aka change was not triggered by a drawer select/unselect
+    const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === (drawerAPIContext.selectedId ?? null); // aka change was not triggered by a drawer select/unselect
     return (
         <motion.div
             layout

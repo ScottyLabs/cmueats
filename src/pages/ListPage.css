@@ -56,7 +56,7 @@
     padding: 0 var(--global-x-padding);
     display: grid;
     grid-template-columns: minmax(0, 1fr) 230px;
-    max-width: 500px;
+    max-width: 550px;
     margin-left: auto;
     gap: 0.6rem;
     align-items: center;
@@ -168,14 +168,6 @@
         grid-template-columns: 1fr 300px;
         align-items: center;
     }
-}
-
-.locations__error-text {
-    color: var(--text-primary);
-    font-family: var(--text-primary-font);
-    font-size: 24px;
-    width: fit-content;
-    word-break: break-word;
 }
 
 .skeleton-card--animated {

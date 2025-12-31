@@ -5,14 +5,14 @@ import clsx from 'clsx';
 import EateryCard from '../components/EateryCard';
 import EateryCardSkeleton from '../components/EateryCardSkeleton';
 import NoResultsError from '../components/NoResultsError';
-import { LocationState, IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { LocationState, ILocation_Full } from '../types/locationTypes';
 import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
 
 import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 
-const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IReadOnlyLocation_Combined) => {
+const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) => {
     const state1 = location1.locationState;
     const state2 = location2.locationState;
 
@@ -25,9 +25,9 @@ const compareLocations = (location1: IReadOnlyLocation_Combined, location2: IRea
         return location1.name.localeCompare(location2.name);
     }
     if (state1 === LocationState.OPEN || state1 === LocationState.CLOSES_SOON) {
-        return location2.timeUntil - location1.timeUntil;
+        return location2.minutesUntil - location1.minutesUntil;
     }
-    return location1.timeUntil - location2.timeUntil;
+    return location1.minutesUntil - location2.minutesUntil;
 };
 
 export default function EateryCardGrid({
@@ -37,7 +37,7 @@ export default function EateryCardGrid({
     apiError,
     updateCardViewPreference,
 }: {
-    locations: IReadOnlyLocation_Combined[] | undefined;
+    locations: ILocation_Full[] | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
@@ -45,6 +45,17 @@ export default function EateryCardGrid({
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
 
+    if (apiError)
+        return (
+            <p className={css['locations__error-text']}>
+                Oops! We received an invalid API response (or no data at all). If this problem persists, please visit
+                GrubHub or{' '}
+                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
+                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
+                </a>{' '}
+                for now
+            </p>
+        );
     if (locations === undefined) {
         // Display skeleton cards while loading
         return (
@@ -62,31 +73,19 @@ export default function EateryCardGrid({
         );
     }
 
-    if (apiError)
-        return (
-            <p className="locations__error-text">
-                Oops! We received an invalid API response (or no data at all). If this problem persists, please visit
-                GrubHub or{' '}
-                <a href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" target="_blank" rel="noreferrer">
-                    https://apps.studentaffairs.cmu.edu/dining/conceptinfo/
-                </a>{' '}
-                for now
-            </p>
-        );
-
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
     const sortedLocations = [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
 
-    function locationToCard(location: IReadOnlyLocation_Combined) {
+    function locationToCard(location: ILocation_Full) {
         return (
             <EateryCard
                 location={location}
-                key={location.conceptId}
+                key={location.id}
                 animate={shouldAnimateCards}
                 partOfMainGrid
                 updateViewPreference={(newPreference: CardViewPreference) => {
-                    updateCardViewPreference(location.conceptId.toString(), newPreference);
+                    updateCardViewPreference(location.id, newPreference);
                 }}
             />
         );

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import clsx from 'clsx';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
 import EyeControlIcon from '../assets/control_buttons/x.svg?react';
@@ -12,13 +12,13 @@ function EateryCardHeader({
     location,
     updateViewPreference,
 }: {
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isHidden = location.cardViewPreference === 'hidden';
-    const { closeDrawer, selectedConceptId } = useDrawerAPIContext();
+    const { closeDrawer, selectedId } = useDrawerAPIContext();
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
         if (!statusChangesSoon) {
@@ -33,18 +33,6 @@ function EateryCardHeader({
     });
 
     const { statusMsg } = location;
-    let relativeTime = 'Status unavailable';
-    let absoluteTime = '';
-    if (statusMsg) {
-        const start = statusMsg.indexOf('(');
-        const end = statusMsg.lastIndexOf(')');
-        if (start >= 0 && end >= 0 && end > start) {
-            relativeTime = statusMsg.slice(0, start).trim();
-            absoluteTime = statusMsg.slice(statusMsg.indexOf('at'), end).trim();
-        } else {
-            relativeTime = statusMsg;
-        }
-    }
 
     return (
         <div
@@ -58,8 +46,8 @@ function EateryCardHeader({
             />
 
             <div className={css['time-container']}>
-                <span className={css['card-header-relative-time-text']}>{relativeTime}</span>
-                <span className={css['card-header-absolute-time-text']}>{absoluteTime}</span>
+                <span className={css['card-header-relative-time-text']}>{statusMsg.shortStatus[0]}</span>
+                <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
             </div>
             <div className={css['button-container']}>
                 {/* <button
@@ -85,7 +73,7 @@ function EateryCardHeader({
                     onClick={(event) => {
                         event.preventDefault();
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
-                        if (!isHidden && location.conceptId === selectedConceptId) closeDrawer();
+                        if (!isHidden && location.id === selectedId) closeDrawer();
                     }}
                 >
                     {isHidden ? (

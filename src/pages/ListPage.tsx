@@ -1,9 +1,8 @@
 import { Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { DateTime } from 'luxon';
 
 import { getGreetings } from '../util/greeting';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
 import IS_MIKU_DAY from '../util/constants';
@@ -24,10 +23,10 @@ const StyledAlert = styled(Alert)({
 function ListPage({
     locations,
     updateCardViewPreference,
-    now,
+    error,
 }: {
-    locations: IReadOnlyLocation_Combined[] | undefined;
-    now: DateTime;
+    locations: ILocation_Full[] | undefined;
+    error: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const shouldAnimateCards = useRef(true);
@@ -113,14 +112,14 @@ function ListPage({
                     <EateryCardGrid
                         locations={filteredLocations}
                         shouldAnimateCards={shouldAnimateCards.current}
-                        apiError={locations !== undefined && locations.length === 0}
+                        apiError={error}
                         setSearchQuery={setSearchQuery}
                         updateCardViewPreference={(id, preference) => {
                             shouldAnimateCards.current = false;
                             updateCardViewPreference(id, preference);
                         }}
                     />
-                    <Footer now={now} />
+                    <Footer />
                 </div>
 
                 <Drawer locations={locations} />

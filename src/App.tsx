@@ -1,46 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import { DateTime } from 'luxon';
 import { motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
-import { queryLocations, getLocationStatus } from './util/queryLocations';
+import { getLocationStatus } from './util/queryLocations';
 import './App.css';
-import { IReadOnlyLocation_FromAPI_PostProcessed, IReadOnlyLocation_Combined } from './types/locationTypes';
+import { ILocation_FromAPI, ILocation_Full } from './types/locationTypes';
 import { useUserCardViewPreferences } from './util/storage';
-import env from './env';
 import scottyDog from './assets/banner/scotty-dog.svg';
 import closeButton from './assets/banner/close-button.svg';
 import useLocalStorage from './util/localStorage';
 import useRefreshWhenBackOnline from './util/network';
-
-const BACKEND_LOCATIONS_URL =
-    env.VITE_API_URL === 'locations.json' ? '/locations.json' : `${env.VITE_API_URL}/locations`;
+import { $api } from './api';
+import toTitleCase from './util/string';
+import { useCurrentTime } from './contexts/NowContext';
 
 function App() {
+    const now = useCurrentTime();
     // Load locations
-    const [locations, setLocations] = useState<IReadOnlyLocation_FromAPI_PostProcessed[]>();
-    const [now, setNow] = useState(DateTime.now().setZone('America/New_York'));
-    const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
+    const { data, error } = $api.useQuery('get', '/v2/locations');
+    const locations = data?.map((location) => ({
+        ...location,
+        name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
+    })) satisfies ILocation_FromAPI[] | undefined;
 
+    const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
     useRefreshWhenBackOnline();
 
-    useEffect(() => {
-        queryLocations(BACKEND_LOCATIONS_URL).then(setLocations);
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => setNow(DateTime.now().setZone('America/New_York')), 1000);
-        return () => clearInterval(intervalId);
-    }, []);
-
-    const fullLocationData: IReadOnlyLocation_Combined[] | undefined = locations?.map((location) => ({
+    const fullLocationData: ILocation_Full[] | undefined = locations?.map((location) => ({
         ...location,
         ...getLocationStatus(location.times, now),
-        cardViewPreference: cardViewPreferences[location.conceptId] ?? 'normal',
+        cardViewPreference:
+            cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
     }));
 
     return (
@@ -63,7 +56,7 @@ function App() {
                                             const newPreferences = { ...cardViewPreferences, [id]: preference };
                                             setCardViewPreferences(newPreferences);
                                         }}
-                                        now={now}
+                                        error={error !== null}
                                     />
                                 }
                             />

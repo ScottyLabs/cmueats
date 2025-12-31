@@ -1,0 +1,10 @@
+.map-page {
+    background-color: var(--main-bg);
+    display: flex;
+    height: 100%;
+    overflow-x: hidden;
+}
+.map-page__map-container {
+    height: 100%;
+    flex-grow: 1;
+}

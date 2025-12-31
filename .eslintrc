@@ -22,7 +22,8 @@
         "react/require-default-props": "off", // we don't use prop-types for prop validation https://stackoverflow.com/a/64041197/13171687
         "no-console": ["warn", { "allow": ["warn"] }],
         "prettier/prettier": ["warn"],
-        "@typescript-eslint/no-use-before-define": ["error", { "functions": false, "classes": false }]
+        "@typescript-eslint/no-use-before-define": ["error", { "functions": false, "classes": false }],
+        "no-plusplus": "off"
     },
 
     "settings": {

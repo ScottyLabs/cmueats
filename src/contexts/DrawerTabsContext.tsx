@@ -2,14 +2,14 @@
 // Per-drawer view interaction: holds tab selection and location data for currently open drawer
 
 import { createContext, useContext, useMemo, useState } from 'react';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 
 export type DrawerTabType = 'overview' | 'menu' | 'reviews' | 'specials';
 
 export type DrawerTabsContextValue = {
     activeTab: DrawerTabType;
     setActiveTab: (tab: DrawerTabType) => void;
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
 };
 
 const DrawerTabsContext = createContext<DrawerTabsContextValue | undefined>(undefined);
@@ -19,7 +19,7 @@ export function DrawerTabsContextProvider({
     location,
 }: {
     children: React.ReactNode;
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
 }) {
     const [activeTab, setActiveTab] = useState<DrawerTabType>('overview');
     const drawerTabsContextValue = useMemo(
