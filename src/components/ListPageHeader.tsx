@@ -8,7 +8,7 @@ import SignOut from '../assets/control_buttons/signOut.svg?react';
 export default function ListPageHeader() {
     const { data: userLoggedInData, isLoading, error } = $api.useQuery('get', '/whoami');
     const { mobileGreeting, desktopGreeting } = useMemo(() => getGreetings(new Date().getHours()), []);
-    // const []
+
     return (
         <header className={css['list-header']}>
             <h3 className={css['list-header__greeting']}>

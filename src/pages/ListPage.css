@@ -21,7 +21,6 @@
 }
 
 .list-controls-container {
-    background-color: var(--main-bg);
     position: sticky;
     top: -10px;
     z-index: 727;
