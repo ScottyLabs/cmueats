@@ -70,3 +70,25 @@
     color: var(--text-muted);
     gap: 5px;
 }
+
+@media (max-width: 600px) {
+    .drawer-header-container {
+        padding: 0px 27px 20px;
+    }
+    .header__title {
+        margin-top: 0px;
+    }
+
+    .location-link { 
+        font-size: 25px;
+    }
+
+    .header__status {
+        margin-top:5px;
+        font-size: 14px;
+        color: var(--status-color);
+        border: none;
+        padding: 0px;
+        font-weight: 500;
+    }
+}

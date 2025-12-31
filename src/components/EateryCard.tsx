@@ -19,8 +19,6 @@ function EateryCard({
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
-    const isMobile = window.innerWidth <= 600;
-
     const drawerContext = useContext(DrawerContext);
     const { isDrawerActive, drawerLocation } = drawerContext;
     const isCardActiveInDrawer = isDrawerActive && drawerLocation?.conceptId === location.conceptId;

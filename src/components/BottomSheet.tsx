@@ -98,7 +98,9 @@ const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
       className={`${styles.bottomSheet} ${y === HIDDEN ? styles.hidden : ""}`}
       style={{ transform: `translateY(${y}px)`, transition: dragging ? "none" : undefined }}
     >
-      <div ref={handleRef} className={styles.handle} />
+      <div className={styles.handleContainer}>
+        <div ref={handleRef} className={styles.handle} />
+      </div>
 
       <div style={{
     height: `calc(100vh - ${y}px - 50px)`, // 50px = handle + buttons
