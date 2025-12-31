@@ -9,8 +9,12 @@ type BottomSheetProps = {
 export default function BottomSheet({ children, onHide }: BottomSheetProps) {
   const windowHeight = window.innerHeight;
 
-const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [
-  0,                        
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+    const moved = useRef(false);
+
+const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [ 
+  windowHeight*0.15,                 
   windowHeight * 0.25, 
   windowHeight * 0.33,    
   windowHeight * 0.5,    
@@ -74,6 +78,85 @@ const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
         }
     }, [y, onHide, HIDDEN]);
 
+    useEffect(() => {
+  function onDown(e: MouseEvent | TouchEvent) {
+    if (!sheetRef.current) return;
+
+    const point =
+      "touches" in e && e.touches.length > 0
+        ? e.touches[0]
+        : "clientX" in e
+        ? e
+        : null;
+
+    if (!point) return;
+
+    pointerStart.current = {
+      x: point.clientX,
+      y: point.clientY
+    };
+    moved.current = false;
+  }
+
+  function onMove(e: MouseEvent | TouchEvent) {
+    if (!pointerStart.current) return;
+
+    const point =
+      "touches" in e && e.touches.length > 0
+        ? e.touches[0]
+        : "clientX" in e
+        ? e
+        : null;
+
+    if (!point) return;
+
+    const dx = Math.abs(point.clientX - pointerStart.current.x);
+    const dy = Math.abs(point.clientY - pointerStart.current.y);
+
+    if (dx > 5 || dy > 5) {
+      moved.current = true;
+    }
+  }
+
+  function onUp(e: MouseEvent | TouchEvent) {
+    if (!sheetRef.current) return;
+    if (!pointerStart.current) return;
+
+    // If user dragged → allow scroll, do nothing
+    if (moved.current) {
+      pointerStart.current = null;
+      return;
+    }
+
+    const target = e.target as Node;
+
+    // Tap outside sheet → close
+    if (!sheetRef.current.contains(target)) {
+      setY(HIDDEN);
+    }
+
+    pointerStart.current = null;
+  }
+
+  document.addEventListener("mousedown", onDown);
+  document.addEventListener("mousemove", onMove);
+  document.addEventListener("mouseup", onUp);
+
+  document.addEventListener("touchstart", onDown);
+  document.addEventListener("touchmove", onMove);
+  document.addEventListener("touchend", onUp);
+
+  return () => {
+    document.removeEventListener("mousedown", onDown);
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onUp);
+
+    document.removeEventListener("touchstart", onDown);
+    document.removeEventListener("touchmove", onMove);
+    document.removeEventListener("touchend", onUp);
+  };
+}, [HIDDEN]);
+
   function startDrag(
     e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
   ) {
@@ -92,20 +175,29 @@ const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
   }
 
   return (
-    <div
-      onMouseDown={startDrag}
-      onTouchStart={startDrag}
-      className={`${styles.bottomSheet} ${y === HIDDEN ? styles.hidden : ""}`}
-      style={{ transform: `translateY(${y}px)`, transition: dragging ? "none" : undefined }}
-    >
-      <div ref={handleRef} className={styles.handleContainer}>
-        <div className={styles.handle} />
-      </div>
+    <>
+        {y !== HIDDEN && (
+            <div
+                className={styles.dim}
+                aria-hidden
+            />
+        )}
+        <div
+        ref={sheetRef}
+        onMouseDown={startDrag}
+        onTouchStart={startDrag}
+        className={`${styles.bottomSheet} ${y === HIDDEN ? styles.hidden : ""}`}
+        style={{ transform: `translateY(${y}px)`, transition: dragging ? "none" : undefined }}
+        >
+        <div ref={handleRef} className={styles.handleContainer}>
+            <div ref={handleRef} className={styles.handle} />
+        </div>
 
-      <div style={{
-    height: `calc(100vh - ${y}px - 50px)`, // 50px = handle + buttons
-    overflowY: "auto"
-  }}>{children}</div>
-    </div>
+        <div style={{
+        height: `calc(100vh - ${y}px - 41px)`, // 41px = handle 
+        overflowY: "auto"
+    }}>{children}</div>
+        </div>
+    </>
   );
 }

@@ -39,3 +39,11 @@
     background:var(--black-1000);
     padding:10px 0px;
 }
+
+.dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none; /* KEY LINE */
+  z-index: 998;
+}
