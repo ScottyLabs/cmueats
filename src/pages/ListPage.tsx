@@ -12,7 +12,6 @@ import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
-import { $api, login, logout } from '../api';
 import ListPageHeader from '../components/ListPageHeader';
 
 const StyledAlert = styled(Alert)({

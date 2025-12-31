@@ -15,7 +15,7 @@ export default function AuthBanner() {
         shouldDisplay && (
             <div className={css.banner}>
                 Failed to log in! Did you use your CMU email?
-                <button onClick={() => setShouldDisplay(false)}>
+                <button onClick={() => setShouldDisplay(false)} type="button">
                     <XIcon />
                 </button>
             </div>

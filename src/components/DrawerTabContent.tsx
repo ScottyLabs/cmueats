@@ -57,8 +57,8 @@ function DrawerTabContent() {
                 <div>
                     {specials.concat(soups).map((item) => (
                         <div className={css.special} key={item.name}>
-                            <div className={css['special__title']}>{item.name}</div>
-                            <div className={css['special__desc']}>{item.description}</div>
+                            <div className={css.special__title}>{item.name}</div>
+                            <div className={css.special__desc}>{item.description}</div>
                         </div>
                     ))}
                 </div>

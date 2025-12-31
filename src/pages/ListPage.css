@@ -20,7 +20,6 @@
     height: 100%;
 }
 
-/* solely for the purpose of a container query */
 .list-controls-container {
     background-color: var(--main-bg);
     position: sticky;
@@ -31,8 +30,7 @@
 }
 .list-controls-layout {
     margin-left: auto;
-    padding: 27px var(--global-x-padding) 15px 25px;
-    border-bottom-left-radius: 20px;
+    padding: 27px var(--global-x-padding) 15px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 230px;
     max-width: 550px;

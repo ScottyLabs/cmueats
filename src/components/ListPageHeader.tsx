@@ -24,7 +24,7 @@ export default function ListPageHeader() {
             </h3>
             {error !== null ? (
                 <button disabled type="button" className={css.button__error}>
-                    Failed to fetch login!
+                    Failed to fetch login info!
                 </button>
             ) : isLoading ? (
                 <button disabled type="button">
