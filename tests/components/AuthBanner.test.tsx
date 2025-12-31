@@ -1,34 +1,36 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import AuthBanner from '../../src/components/AuthBanner';
 
 describe('AuthBanner', () => {
-    const originalLocation = window.location;
     const mockReplaceState = vi.fn();
+
+    // Helper function to set up the test environment with a specific URL
+    const setupTestEnvironment = (search: string, pathname = '/') => {
+        const mockLocation = {
+            href: `http://localhost:3000${pathname}${search}`,
+            search,
+            pathname,
+        };
+        vi.stubGlobal('location', mockLocation);
+        
+        vi.stubGlobal('history', {
+            replaceState: mockReplaceState,
+        });
+    };
 
     beforeEach(() => {
         // Reset mocks before each test
         mockReplaceState.mockClear();
-        
-        // Mock window.history.replaceState
-        Object.defineProperty(window, 'history', {
-            writable: true,
-            value: {
-                replaceState: mockReplaceState,
-            },
-        });
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
     });
 
     test('displays banner when AUTH_FAILED query parameter is present', async () => {
-        // Set up URL with AUTH_FAILED parameter
-        delete (window as any).location;
-        window.location = {
-            ...originalLocation,
-            href: 'http://localhost:3000/?AUTH_FAILED',
-            search: '?AUTH_FAILED',
-            pathname: '/',
-        } as Location;
+        setupTestEnvironment('?AUTH_FAILED');
 
         render(<AuthBanner />);
 
@@ -42,14 +44,7 @@ describe('AuthBanner', () => {
     });
 
     test('does not display banner when AUTH_FAILED query parameter is absent', () => {
-        // Set up URL without AUTH_FAILED parameter
-        delete (window as any).location;
-        window.location = {
-            ...originalLocation,
-            href: 'http://localhost:3000/',
-            search: '',
-            pathname: '/',
-        } as Location;
+        setupTestEnvironment('');
 
         render(<AuthBanner />);
 
@@ -58,14 +53,7 @@ describe('AuthBanner', () => {
     });
 
     test('removes AUTH_FAILED query parameter from URL when banner is displayed', async () => {
-        // Set up URL with AUTH_FAILED parameter
-        delete (window as any).location;
-        window.location = {
-            ...originalLocation,
-            href: 'http://localhost:3000/?AUTH_FAILED',
-            search: '?AUTH_FAILED',
-            pathname: '/',
-        } as Location;
+        setupTestEnvironment('?AUTH_FAILED');
 
         render(<AuthBanner />);
 
@@ -84,15 +72,7 @@ describe('AuthBanner', () => {
 
     test('can dismiss banner by clicking close button', async () => {
         const user = userEvent.setup();
-
-        // Set up URL with AUTH_FAILED parameter
-        delete (window as any).location;
-        window.location = {
-            ...originalLocation,
-            href: 'http://localhost:3000/?AUTH_FAILED',
-            search: '?AUTH_FAILED',
-            pathname: '/',
-        } as Location;
+        setupTestEnvironment('?AUTH_FAILED');
 
         render(<AuthBanner />);
 
@@ -113,15 +93,7 @@ describe('AuthBanner', () => {
 
     test('banner persists through re-renders until dismissed', async () => {
         const user = userEvent.setup();
-
-        // Set up URL with AUTH_FAILED parameter
-        delete (window as any).location;
-        window.location = {
-            ...originalLocation,
-            href: 'http://localhost:3000/?AUTH_FAILED',
-            search: '?AUTH_FAILED',
-            pathname: '/',
-        } as Location;
+        setupTestEnvironment('?AUTH_FAILED');
 
         const { rerender } = render(<AuthBanner />);
 
