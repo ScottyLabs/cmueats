@@ -12,6 +12,8 @@ export default function BottomSheet({ children, onHide }: BottomSheetProps) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
     const moved = useRef(false);
+    const dragStartTime = useRef<number>(0);
+const dragStartY = useRef<number>(0);
 
 const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [ 
   windowHeight*0.15,                 
@@ -48,16 +50,45 @@ const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
       setY(next);
     }
 
-    function onEnd() {
+    function onEnd(e: MouseEvent | TouchEvent) {
       if (!dragging) return;
       setDragging(false);
 
-      const nearest = snapPoints.reduce((a, b) =>
-        Math.abs(b - y) < Math.abs(a - y) ? b : a
-      );
+      const clientY =
+        "changedTouches" in e && e.changedTouches.length > 0
+          ? e.changedTouches[0]!.clientY
+          : "clientY" in e
+          ? e.clientY
+          : startY.current;
 
-      setY(nearest);
+      const endTime = Date.now();
+      const dt = endTime - dragStartTime.current;
+      const dy = clientY - dragStartY.current;
+
+      const velocity = dy / dt; // px per ms
+      const FLICK_THRESHOLD = 0.6;
+
+      let target: number;
+
+      if (Math.abs(velocity) > FLICK_THRESHOLD) {
+        if (velocity > 0) {
+          // flick down → next lower snap
+          target = snapPoints.find(p => p > y) ?? HIDDEN;
+        } else {
+          // flick up → next higher snap
+          target =
+            [...snapPoints].reverse().find(p => p < y) ?? QUARTER;
+        }
+      } else {
+        // slow drag → nearest snap
+        target = snapPoints.reduce((a, b) =>
+          Math.abs(b - y) < Math.abs(a - y) ? b : a
+        );
+      }
+
+      setY(target);
     }
+
 
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onEnd);
@@ -158,21 +189,25 @@ const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
 }, [HIDDEN]);
 
   function startDrag(
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  ) {
-    if (handleRef.current && e.target !== handleRef.current) return;
-    setDragging(true);
+  e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+) {
+  if (handleRef.current && e.target !== handleRef.current) return;
 
-    const clientY =
-      "touches" in e && e.touches.length > 0
-        ? e.touches[0]!.clientY
-        : "clientY" in e
-        ? e.clientY
-        : 0;
+  setDragging(true);
 
-    startY.current = clientY;
-    startTranslate.current = y;
-  }
+  const clientY =
+    "touches" in e && e.touches.length > 0
+      ? e.touches[0]!.clientY
+      : "clientY" in e
+      ? e.clientY
+      : 0;
+
+  startY.current = clientY;
+  startTranslate.current = y;
+
+  dragStartTime.current = Date.now();
+  dragStartY.current = clientY;
+}
 
   return (
     <>
