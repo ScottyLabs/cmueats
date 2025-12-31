@@ -23,7 +23,8 @@
         "no-console": ["warn", { "allow": ["warn"] }],
         "prettier/prettier": ["warn"],
         "@typescript-eslint/no-use-before-define": ["error", { "functions": false, "classes": false }],
-        "no-plusplus": "off"
+        "no-plusplus": "off",
+        "no-nested-ternary": "off"
     },
 
     "settings": {

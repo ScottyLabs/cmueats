@@ -21,7 +21,6 @@
     --red-600: #d04425;
     --red-800: #8a250f;
 
-    --main-bg: hsl(214, 7%, 19%);
     --main-bg-accent: #23272a;
     --text-primary: white;
     --text-greeting: white;
@@ -213,7 +212,10 @@ body {
 }
 button {
     font-family: inherit;
-    cursor: pointer;
+    font-size: inherit;
+    &:not(:disabled) {
+        cursor: pointer;
+    }
 }
 .error-container {
     margin: 48px auto;

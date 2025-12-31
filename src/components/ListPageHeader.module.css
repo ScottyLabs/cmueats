@@ -1,1 +1,112 @@
+.list-header {
+    display: flex;
+    padding: 26px var(--global-x-padding) 20px calc(var(--global-x-padding) + 2px);
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    position: relative;
+    background-color: var(--black-1000);
+    @container (max-width: 1100px) {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 10px;
+        & {
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+    }
+    & .list-header__greeting--desktop {
+        display: none;
+    }
 
+    @container (min-width: 600px) {
+        & .list-header__greeting--desktop {
+            display: block;
+        }
+        & .list-header__greeting--mobile {
+            display: none;
+        }
+    }
+}
+/* we need this to properly animate the mask gradient */
+@property --right-cutoff {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+.list-header__greeting {
+    color: var(--text-greeting);
+    margin: 0;
+    font-family: var(--text-primary-font);
+    font-weight: 800;
+    font-size: 32px;
+
+    --right-cutoff: 100%;
+    width: fit-content;
+    animation: slide-in 1.2s forwards;
+    animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
+    /* we add a delay so it doesn't look jittery on page load */
+    animation-delay: 0.2s;
+    opacity: 0;
+
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) var(--right-cutoff),
+        rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
+    );
+    &.list-header__greeting--mobile {
+        font-size: 30px;
+    }
+}
+@keyframes slide-in {
+    0% {
+        opacity: 0;
+        /* clip-path: inset(0px 100% 0px 0px); */
+        transform: translate(-10px, 0);
+        --right-cutoff: 0%;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0);
+        --right-cutoff: 100%;
+    }
+}
+
+.list-header button {
+    background-color: transparent;
+    border: 2px solid var(--black-900);
+    padding: 10px 20px;
+    font-weight: 500;
+    border-radius: 15px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: var(--black-400);
+
+    svg {
+        opacity: 0.7;
+        height: 17px;
+    }
+
+    &:hover:not(:disabled) {
+        svg {
+            opacity: 1;
+        }
+        color: var(--black-200);
+        background-color: var(--black-950);
+        &:active {
+            background-color: var(--black-900);
+        }
+    }
+    &.button__error {
+        color: var(--red-300);
+        border-color: var(--red-300);
+    }
+}
