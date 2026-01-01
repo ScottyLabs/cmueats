@@ -21,6 +21,7 @@ function EateryCard({
 }) {
     const drawerAPIContext = useDrawerAPIContext();
     const prevDrawerSelectedIdRef = useRef<string | null>(null);
+    const cardWasPreviouslySelected = useRef(false);
     useEffect(() => {
         prevDrawerSelectedIdRef.current = drawerAPIContext.selectedId ?? null;
     }, [drawerAPIContext.selectedId]);
@@ -47,12 +48,17 @@ function EateryCard({
     };
 
     useEffect(() => {
-        if (isCardSelected && cardRef.current) {
+        if (
+            (isCardSelected || (cardWasPreviouslySelected.current && drawerAPIContext.selectedId === null)) &&
+            cardRef.current
+        ) {
+            // on deselect, scroll to approximate location as well
             cardRef.current.scrollIntoView({
                 behavior: 'instant',
                 block: 'nearest',
             });
         }
+        cardWasPreviouslySelected.current = isCardSelected;
     }, [isCardSelected]);
 
     const cardClassName = useMemo(

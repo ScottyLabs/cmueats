@@ -1,7 +1,7 @@
 // Differences between DrawerTabsContext:
 // Global drawer interaction: tracks which concept id is selected and exposes helpers to open/close it across the list page
 
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 type DrawerAPIContextValue = {
     selectedId: string | null;
@@ -12,15 +12,41 @@ type DrawerAPIContextValue = {
 const DrawerAPIContext = createContext<DrawerAPIContextValue | undefined>(undefined);
 
 export function DrawerAPIContextProvider({ children }: { children: React.ReactNode }) {
-    const [drawerConceptId, setDrawerConceptId] = useState<string | null>(null);
+    const [drawerConceptId, setDrawerConceptId] = useState<string | null>(() => {
+        const activeId = new URL(window.location.href).searchParams.get('active_id');
+        return activeId;
+    });
+    useLayoutEffect(() => {
+        // prevent the card list from being scrolled on mobile, kind of works...
+        document.body.style.overflow = drawerConceptId === null ? 'visible' : 'hidden';
+    }, [drawerConceptId]);
     const drawerContextValue = useMemo(
         () => ({
-            closeDrawer: () => setDrawerConceptId(null),
+            closeDrawer: () => {
+                const newURL = new URL(window.location.href);
+                newURL.searchParams.delete('active_id');
+                window.history.pushState({}, '', newURL.href);
+                setDrawerConceptId(null);
+            },
             selectedId: drawerConceptId,
-            setDrawerActiveId: setDrawerConceptId,
+            setDrawerActiveId: (id: string) => {
+                const newURL = new URL(window.location.href);
+                newURL.searchParams.set('active_id', id);
+                window.history.pushState({}, '', newURL.href);
+                setDrawerConceptId(id);
+            },
         }),
         [drawerConceptId],
     );
+    useEffect(() => {
+        const popStateEventListener = () => {
+            console.log(window.location.href);
+            const activeId = new URL(window.location.href).searchParams.get('active_id');
+            setDrawerConceptId(activeId);
+        };
+        window.addEventListener('popstate', popStateEventListener);
+        return () => window.removeEventListener('popstate', popStateEventListener);
+    }, []);
     return <DrawerAPIContext.Provider value={drawerContextValue}>{children}</DrawerAPIContext.Provider>;
 }
 

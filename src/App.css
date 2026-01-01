@@ -44,6 +44,11 @@ body {
     &:focus {
         outline: none;
     }
+    @media screen and (max-width: 900px) {
+        /* allow natural scroll on mobile */
+        min-height: auto;
+        overflow-y: visible;
+    }
 }
 
 .App-header {

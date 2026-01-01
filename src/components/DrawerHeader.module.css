@@ -1,5 +1,5 @@
 .drawer-header-container {
-    padding: 25px 27px 20px;
+    padding: 25px var(--drawer-x-padding) 20px;
     background-color: var(--black-1000);
 }
 

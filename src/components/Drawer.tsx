@@ -41,8 +41,8 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
             {pickedLocation !== undefined && (
                 <motion.div
                     initial={{ opacity: 0, transform: 'translateX(3px)' }}
-                    animate={{ opacity: 1, transform: 'translateX(0)' }}
-                    exit={{ opacity: 0 }}
+                    animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
+                    exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
                     className={css['drawer-box']}
                     ref={drawerRef}
                 >
