@@ -4,7 +4,7 @@
     gap: 0px;
     color: var(--status-color);
     border-bottom: 2px solid var(--status-color);
-    padding: 6px 13px 7px;
+    padding: 3px 13px 4px;
     box-sizing: content-box;
     background: var(--card-header-bg);
 }
