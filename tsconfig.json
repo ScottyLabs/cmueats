@@ -22,6 +22,8 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true, // this should honestly be the default, since you're not guaranteed to get a value when you key into an object
+
+    "types":["@testing-library/dom"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

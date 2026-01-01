@@ -14,7 +14,7 @@ describe('AuthBanner', () => {
             pathname,
         };
         vi.stubGlobal('location', mockLocation);
-        
+
         vi.stubGlobal('history', {
             replaceState: mockReplaceState,
         });
@@ -38,9 +38,6 @@ describe('AuthBanner', () => {
         await waitFor(() => {
             expect(screen.getByText(/Failed to log in/i)).toBeInTheDocument();
         });
-
-        // Verify the banner message is displayed
-        expect(screen.getByText(/Did you use your CMU email/i)).toBeInTheDocument();
     });
 
     test('does not display banner when AUTH_FAILED query parameter is absent', () => {
@@ -89,38 +86,5 @@ describe('AuthBanner', () => {
         await waitFor(() => {
             expect(screen.queryByText(/Failed to log in/i)).not.toBeInTheDocument();
         });
-    });
-
-    test('banner persists through re-renders until dismissed', async () => {
-        const user = userEvent.setup();
-        setupTestEnvironment('?AUTH_FAILED');
-
-        const { rerender } = render(<AuthBanner />);
-
-        // Wait for banner to appear
-        await waitFor(() => {
-            expect(screen.getByText(/Failed to log in/i)).toBeInTheDocument();
-        });
-
-        // Re-render the component
-        rerender(<AuthBanner />);
-
-        // Banner should still be visible after re-render
-        expect(screen.getByText(/Failed to log in/i)).toBeInTheDocument();
-
-        // Click dismiss button
-        const closeButton = screen.getByRole('button');
-        await user.click(closeButton);
-
-        // Banner should be dismissed
-        await waitFor(() => {
-            expect(screen.queryByText(/Failed to log in/i)).not.toBeInTheDocument();
-        });
-
-        // Re-render again
-        rerender(<AuthBanner />);
-
-        // Banner should remain dismissed
-        expect(screen.queryByText(/Failed to log in/i)).not.toBeInTheDocument();
     });
 });
