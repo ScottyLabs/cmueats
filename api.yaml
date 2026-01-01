@@ -5,6 +5,39 @@ info:
   description: Development documentation
   version: 2.0.0
 paths:
+  /login:
+    get:
+      parameters:
+        - name: redirectURL
+          in: query
+          required: true
+          schema:
+            nullable: true
+            anyOf:
+              - type: string
+              - type: "null"
+      operationId: getLogin
+  /logout:
+    get:
+      parameters:
+        - name: redirectURL
+          in: query
+          required: true
+          schema:
+            nullable: true
+            anyOf:
+              - type: string
+              - type: "null"
+      operationId: getLogout
+  /code-exchange:
+    get:
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      operationId: getCode-exchange
   /:
     get:
       responses:
@@ -36,11 +69,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1766871477842
+                              - 1766976342183
                             type: number
                           end:
                             examples:
-                              - 1766871477842
+                              - 1766976342183
                             type: number
                         required:
                           - start
@@ -180,5 +213,53 @@ paths:
               required:
                 - message
       operationId: postSendSlackMessage
+  /whoami:
+    get:
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    nullable: true
+                    anyOf:
+                      - type: object
+                        properties:
+                          googleId:
+                            type: string
+                          id:
+                            type: number
+                          email:
+                            type: string
+                          firstName:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                          lastName:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                          pictureUrl:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                        required:
+                          - googleId
+                          - id
+                          - email
+                          - firstName
+                          - lastName
+                          - pictureUrl
+                      - type: "null"
+                required:
+                  - user
+                additionalProperties: false
+      operationId: getWhoami
 components:
   schemas: {}

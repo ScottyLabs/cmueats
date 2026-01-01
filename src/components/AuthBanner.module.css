@@ -1,0 +1,18 @@
+.banner {
+    background-color: var(--red-600);
+    padding: 15px var(--global-x-padding);
+    font-family: var(--text-secondary-font);
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    button {
+        margin-left: auto;
+        background-color: transparent;
+        border: transparent;
+        svg {
+            height: 13px;
+            display: block;
+        }
+    }
+}

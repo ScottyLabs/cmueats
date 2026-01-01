@@ -5,6 +5,9 @@
     height: 100%;
 }
 .list-box {
+    /* so that media queries can be done against the width of this side of the screen instead of the width of the entire window */
+    container-type: inline-size;
+
     flex: 1;
     /* useful for making sure the contact info footer stays on the bottom */
     display: flex;
@@ -16,53 +19,26 @@
     overflow-x: hidden;
     height: 100%;
 }
-.list-header {
-    display: flex;
-    flex-direction: column;
-    padding: 36px var(--global-x-padding) 20px calc(var(--global-x-padding) + 2px);
-    position: relative;
-    background-color: var(--black-1000);
-    @media screen and (max-width: 900px) {
-        & {
-            padding-top: 16px;
-            padding-bottom: 16px;
-        }
-    }
-    container-type: inline-size;
-    & .list-header__greeting--desktop {
-        display: none;
-    }
-    /* 600px is the approximate width of the location dropdown selector (we are also assuming that the desktop greeting is less than 600px wide) */
-    @container (min-width: 600px) {
-        & .list-header__greeting--desktop {
-            display: block;
-        }
-        & .list-header__greeting--mobile {
-            display: none;
-        }
-    }
-}
 
-/* solely for the purpose of a container query */
 .list-controls-container {
-    container-type: inline-size;
     position: sticky;
-    top: 0;
+    top: -10px;
     z-index: 727;
-    background-color: var(--main-bg);
+    background-color: var(--black-950);
+    margin-bottom: 10px;
 }
 .list-controls-layout {
-    margin: 25px 0 25px;
-    padding: 0 var(--global-x-padding);
+    margin-left: auto;
+    padding: 27px var(--global-x-padding) 15px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 230px;
     max-width: 550px;
-    margin-left: auto;
     gap: 0.6rem;
     align-items: center;
 
     @container (width<1000px) {
         max-width: initial;
+        padding: 20px var(--global-x-padding) 15px;
     }
     @container (width<600px) {
         grid-template-columns: 1fr;
@@ -116,53 +92,7 @@
         transform: rotate(-1deg);
     }
 }
-/* we need this to properly animate the mask gradient */
-@property --right-cutoff {
-    syntax: '<percentage>';
-    inherits: false;
-    initial-value: 0%;
-}
-.list-header__greeting {
-    color: var(--text-greeting);
-    margin: 0;
-    font-family: var(--text-primary-font);
-    font-weight: 800;
-    font-size: 40px;
 
-    --right-cutoff: 100%;
-    width: fit-content;
-    animation: slide-in 1.2s forwards;
-    animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
-    /* we add a delay so it doesn't look jittery on page load */
-    animation-delay: 0.1s;
-    opacity: 0;
-
-    mask-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 1) 0%,
-        rgba(0, 0, 0, 1) var(--right-cutoff),
-        rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
-    );
-    &.list-header__greeting--mobile {
-        font-size: 30px;
-    }
-}
-@keyframes slide-in {
-    0% {
-        opacity: 0;
-        /* clip-path: inset(0px 100% 0px 0px); */
-        transform: translate(-10px, 0);
-        --right-cutoff: 0%;
-    }
-    20% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-        transform: translate(0, 0);
-        --right-cutoff: 100%;
-    }
-}
 @media screen and (min-width: 900px) {
     .Locations-header {
         grid-template-columns: 1fr 300px;

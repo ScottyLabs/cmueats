@@ -79,7 +79,7 @@ function timeIntervalToString(start: DateTime, end: DateTime) {
     const startStr = start.toLocaleString(DateTime.TIME_SIMPLE);
     const endStr = end.toLocaleString(DateTime.TIME_SIMPLE);
     const fullStr = `${startStr} - ${endStr}`;
-    const isFullDay = +start.hour === 0 && start.minute === 0 && end.hour === 23 && end.minute === 59;
+    const isFullDay = start.hour === 0 && start.minute === 0 && end.hour === 23 && end.minute === 59;
     return isFullDay ? 'Open 24 hours' : fullStr; // just some friendly human conversion
 }
 /**
@@ -122,10 +122,13 @@ export function next7DaysReadableString(times: ITimeRangeList, today: DateTime) 
             // cap `first` at midnight
             const midnightOfStart = startDate.endOf('day');
             brokenDownTimeSlots.push({ start: startDate, end: midnightOfStart });
-            timesAsDateTimes = [{ start: midnightOfStart.plus({ day: 1 }).startOf('day'), end: endDate }, ...rest];
+            timesAsDateTimes = [{ start: midnightOfStart.plus({ milliseconds: 1 }), end: endDate }, ...rest];
         }
     }
-    brokenDownTimeSlots = brokenDownTimeSlots.filter(({ start, end }) => start.toMillis() !== end.toMillis());
+    brokenDownTimeSlots = brokenDownTimeSlots.filter(
+        ({ start, end }) =>
+            start.toLocaleString(DateTime.DATETIME_SHORT) !== end.toLocaleString(DateTime.DATETIME_SHORT),
+    ); // removes intervals like 10:00 AM - 10:00 AM, for instance
     const listByDate = [];
 
     for (let ptrI = 0, day = 0; day < 7; day++) {
@@ -139,7 +142,7 @@ export function next7DaysReadableString(times: ITimeRangeList, today: DateTime) 
             ptrI++;
         }
         listByDate.push(stringsForThatDay.join(', ') || 'CLOSED');
-    }
+    } // this works because `brokenDownTimeSlots` is sorted
 
     return listByDate;
 }

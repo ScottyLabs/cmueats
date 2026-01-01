@@ -65,16 +65,17 @@
     text-align: right;
     line-height: 1.5;
 }
-
-.specials-item-title {
-    color: var(--text-primary);
-    font-weight: 600;
-    margin-bottom: 5px;
+.special {
+    margin-bottom: 20px;
+}
+.special__title {
+    color: var(--black-100);
+    font-weight: 500;
 }
 
-.specials-item-dscrp {
-    color: var(--text-muted);
-    margin-bottom: 15px;
+.special__desc {
+    color: var(--black-500);
+    margin-top: 8px;
 }
 
 .inline-link {

@@ -466,6 +466,13 @@ test.each([
     },
     {
         input: {
+            times: [{ start: date('10/31/26 1:40 AM'), end: 1793514600000 }], // Sun Nov 01 2026 01:30:00 GMT-0500 (Eastern Standard Time)
+            now: dateObj('10/31/26 11:59 PM'),
+        },
+        expected: ['1:40 AM - 11:59 PM', '12:00 AM - 1:30 AM', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'], // looks like it should be only one timeslot, but it really doesn't because the 1:30 AM is really 2:30 AM in GMT-4
+    },
+    {
+        input: {
             times: [
                 { start: date('10/31/26 1:30 AM'), end: date('11/1/26 9:30 AM') },
                 { start: date('11/1/26 10:30 AM'), end: date('11/2/26 9:30 AM') },
@@ -491,6 +498,14 @@ test.each([
             now: dateObj('10/30/26 11:59 PM'),
         },
         expected: ['CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'], // removes trivial time slots
+    },
+    {
+        input: {
+            times: [{ start: date('1/1/26 11:59 PM'), end: date('1/2/26 11:59 PM') }],
+
+            now: dateObj('1/1/26 11:59 PM'),
+        },
+        expected: ['CLOSED', 'Open 24 hours', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED', 'CLOSED'], // removes trivial time slots
     },
 ])('getTimeSlotsString, new cases %#', ({ input, expected }) => {
     expect(next7DaysReadableString(input.times, input.now)).toEqual(expected);

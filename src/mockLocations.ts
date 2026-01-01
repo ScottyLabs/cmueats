@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-const now = DateTime.now();
+const now = DateTime.now().setZone('America/New_York');
 const earliestSunday = now.minus({ days: now.weekday % 7 }).startOf('day');
 function toTimeSlotThisWeek({ day, hour, minute }: { day: number; hour: number; minute: number }) {
     return earliestSunday.plus({ day, hour, minute }).toMillis();
@@ -87,13 +87,13 @@ const locations = [
             { start: { day: 6, hour: 10, minute: 0 }, end: { day: 6, hour: 14, minute: 30 } },
         ],
         todaysSpecials: [
-            { title: 'Chicken Finger Monday', description: 'with Macaroni and Cheese' },
+            { name: 'Chicken Finger Monday', description: 'with Macaroni and Cheese' },
             {
-                title: 'Cavatappi Pasta in a Mild Garlic Cream Sauce with a Medley of Vegetables',
+                name: 'Cavatappi Pasta in a Mild Garlic Cream Sauce with a Medley of Vegetables',
                 description: 'Meatless Monday Pasta',
             },
         ],
-        todaysSoups: [{ title: 'Tomato Soup', description: 'Great with Chicken fingers or Mac and Cheese' }],
+        todaysSoups: [{ name: 'Tomato Soup', description: 'Great with Chicken fingers or Mac and Cheese' }],
     },
     {
         id: 94,
@@ -386,6 +386,14 @@ const locations = [
         coordinates: { lat: 40.44618769931711, lng: -79.95093385349946 },
         acceptsOnlineOrders: false,
         times: [{ start: { day: 0, hour: 0, minute: 0 }, end: { day: 6, hour: 23, minute: 59 } }],
+        todaysSpecials: [
+            { name: 'Chicken Finger Monday', description: 'with Macaroni and Cheese' },
+            {
+                name: 'Cavatappi Pasta in a Mild Garlic Cream Sauce with a Medley of Vegetables',
+                description: 'Meatless Monday Pasta',
+            },
+        ],
+        todaysSoups: [{ name: 'Tomato Soup', description: 'Great with Chicken fingers or Mac and Cheese' }],
     },
     {
         id: 154,
