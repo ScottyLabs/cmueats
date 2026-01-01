@@ -45,6 +45,7 @@ body {
         outline: none;
     }
     @media screen and (max-width: 900px) {
+        /* important! this breakpoint should match the mobile drawer breakpoint */
         /* allow natural scroll on mobile */
         min-height: auto;
         overflow-y: visible;
