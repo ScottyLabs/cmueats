@@ -8,9 +8,9 @@
     width: 100%;
     /* stays at the top when greeting text wraps */
     align-self: start;
-    padding: 12.8px 16px;
-    padding-left: 48px;
-    border-radius: 16px;
+    padding: 10.4px 13.6px;
+    padding-left: 41.6px;
+    border-radius: 14.4px;
     background: var(--input-bg);
     outline: none;
     border: 1px solid transparent;
@@ -23,7 +23,7 @@
     background-size: 20px;
     background-repeat: no-repeat;
     background-position: 16px center;
-    color: var(--input-text);
+    color: var(--black-200);
     font-weight: 500;
     &::-webkit-search-decoration {
         display: none;
@@ -45,7 +45,8 @@
     inset: 0;
     left: calc(48px + 1px);
     align-items: center;
-    color: var(--input-text-placeholder);
+    color: var(--black-400);
+    font-weight: 500;
     pointer-events: none;
     opacity: 1;
     transition: opacity 0.2s ease-in;

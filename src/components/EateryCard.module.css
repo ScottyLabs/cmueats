@@ -1,0 +1,93 @@
+.card {
+    --card-glow-animation: glow-animation 1.5s ease 0s infinite;
+
+    box-sizing: border-box;
+    height: 100%;
+
+    background-color: var(--card-bg);
+    border: var(--card-border-width) solid var(--card-border-color);
+    border-radius: 7px;
+
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+        animation: var(--card-glow-animation);
+    }
+
+    position: relative;
+    scroll-margin-top: 70px;
+    scroll-margin-bottom: 40px;
+}
+
+.card-active {
+    /* box-shadow:
+        0 0 2px var(--hover-accent-color),
+        0 0 25px var(--hover-accent-color); */
+    outline: 2px solid white;
+}
+
+.card-pinned {
+}
+
+.card__pin-container {
+    position: absolute;
+    bottom: 16px;
+    right: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.card__pin-button {
+    border-radius: 100%;
+    min-width: 4px;
+    min-height: 36px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card__pin-button--pinned svg {
+    stroke: #ffd700;
+}
+
+.card__pin-button:not(.card__pin-button--pinned) svg {
+    stroke: #efeaea;
+}
+
+.card__pin-button:hover {
+    background: rgba(255, 255, 0, 0.08);
+    outline: none;
+    fill: rgba(255, 255, 120, 0.18);
+}
+
+@keyframes glow-animation {
+    0% {
+        box-shadow: 0 0 5px var(--hover-accent-color);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--hover-accent-color);
+    }
+    100% {
+        box-shadow: 0 0 5px var(--hover-accent-color);
+    }
+}
+
+@keyframes glow-animation-reverse {
+    0% {
+        box-shadow: 0 0 20px var(--hover-accent-color);
+    }
+    50% {
+        box-shadow: 0 0 5px var(--hover-accent-color);
+    }
+    100% {
+        box-shadow: 0 0 20px var(--hover-accent-color);
+    }
+}

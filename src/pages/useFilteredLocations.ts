@@ -1,8 +1,8 @@
 import Fuse, { IFuseOptions } from 'fuse.js';
 import { useMemo } from 'react';
-import { IReadOnlyLocation_Combined, IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 
-const FUSE_OPTIONS: IFuseOptions<IReadOnlyLocation_FromAPI_PostProcessed> = {
+const FUSE_OPTIONS: IFuseOptions<ILocation_Full> = {
     // keys to perform the search on
     keys: ['name', 'location', 'shortDescription', 'description'],
     ignoreLocation: true,
@@ -14,7 +14,7 @@ export default function useFilteredLocations({
     searchQuery,
     locationFilterQuery,
 }: {
-    locations: IReadOnlyLocation_Combined[] | undefined;
+    locations: ILocation_Full[] | undefined;
     searchQuery: string;
     locationFilterQuery: string;
 }) {

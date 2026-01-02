@@ -1,5 +1,6 @@
 import { vi } from 'vitest';
 import { safeGetItem, safeSetItem, safeRemoveItem, isStorageAvailable } from '../../src/util/safeStorage';
+import { expect, test, describe, beforeEach, afterEach } from 'vitest';
 
 // Mock console.warn to avoid noise in test output
 const originalWarn = console.warn;

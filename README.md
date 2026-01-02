@@ -110,3 +110,11 @@ VITE_API_URL=locations.json
     ```
     pnpm run start
     ```
+
+## Updating the OpenAPI spec types
+
+Update the `api.yaml` file, and run
+
+```shell
+pnpx openapi-typescript api.yaml -o src/types/api.d.ts
+```

@@ -2,11 +2,10 @@
     appearance: none;
     cursor: pointer;
     display: block;
-    min-width: 500px;
-    width: fit-content;
+    width: 100%;
 
-    padding: 12.8px 14.4px;
-    border-radius: 16px;
+    padding: 10.4px 13.6px;
+    border-radius: 14.4px;
     background: var(--input-bg) url(../assets/select.svg) no-repeat calc(100% - 10px) 50%;
     outline: none;
     border: 1px solid transparent;
@@ -14,13 +13,8 @@
     transition: all 0.2s;
     font-family: inherit;
     font-size: 16px;
-    color: var(--input-text);
+    color: var(--black-400);
     font-weight: 500;
-    animation: slide-in 1.2s forwards;
-    animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
-    /* we add a delay so it doesn't look jittery on page load */
-    animation-delay: 0.1s;
-    opacity: 0;
 }
 
 .select:hover {
