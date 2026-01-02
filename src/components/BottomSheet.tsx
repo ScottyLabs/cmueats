@@ -8,30 +8,27 @@ type BottomSheetProps = {
 
 export default function BottomSheet({ children, onHide }: BottomSheetProps) {
   const windowHeight = window.innerHeight;
+  const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [ 
+    windowHeight*0.15,                 
+    windowHeight * 0.25, 
+    windowHeight * 0.33,    
+    windowHeight * 0.5,    
+    windowHeight * 0.66,         
+    windowHeight               
+  ];
+  const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
 
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
-    const moved = useRef(false);
-    const dragStartTime = useRef<number>(0);
-const dragStartY = useRef<number>(0);
-
-const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [ 
-  windowHeight*0.15,                 
-  windowHeight * 0.25, 
-  windowHeight * 0.33,    
-  windowHeight * 0.5,    
-  windowHeight * 0.66,         
-  windowHeight               
-];
-
-const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
-
-
-  const [y, setY] = useState<number>(HALF);
-  const [dragging, setDragging] = useState<boolean>(false);
+  const moved = useRef(false);
+  const dragStartTime = useRef<number>(0);
+  const dragStartY = useRef<number>(0);
   const startY = useRef<number>(0);
   const startTranslate = useRef<number>(0);
   const handleRef = useRef<HTMLDivElement | null>(null);
+
+  const [y, setY] = useState<number>(windowHeight*0.99); //useEffect on HIDDEN, need to start slightly below
+  const [dragging, setDragging] = useState<boolean>(false);
 
   useEffect(() => {
     function onMove(e: MouseEvent | TouchEvent) {
@@ -89,7 +86,6 @@ const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
       setY(target);
     }
 
-
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onEnd);
     window.addEventListener("touchmove", onMove);
@@ -103,111 +99,116 @@ const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
     };
   }, [dragging, y, snapPoints, FULL, HIDDEN]);
 
-    useEffect(() => {
-        if (y === HIDDEN && onHide) {
+  useEffect(() => {
+      if (y === HIDDEN && onHide) {
         onHide();
-        }
-    }, [y, onHide, HIDDEN]);
+      }
+  }, [y, onHide, HIDDEN]);
 
-    useEffect(() => {
-  function onDown(e: MouseEvent | TouchEvent) {
-    if (!sheetRef.current) return;
+  useEffect(() => {
+    function onDown(e: MouseEvent | TouchEvent) {
+      if (!sheetRef.current) return;
 
-    const point =
-      "touches" in e && e.touches.length > 0
-        ? e.touches[0]
-        : "clientX" in e
-        ? e
-        : null;
+      const point =
+        "touches" in e && e.touches.length > 0
+          ? e.touches[0]
+          : "clientX" in e
+          ? e
+          : null;
 
-    if (!point) return;
+      if (!point) return;
 
-    pointerStart.current = {
-      x: point.clientX,
-      y: point.clientY
-    };
-    moved.current = false;
-  }
-
-  function onMove(e: MouseEvent | TouchEvent) {
-    if (!pointerStart.current) return;
-
-    const point =
-      "touches" in e && e.touches.length > 0
-        ? e.touches[0]
-        : "clientX" in e
-        ? e
-        : null;
-
-    if (!point) return;
-
-    const dx = Math.abs(point.clientX - pointerStart.current.x);
-    const dy = Math.abs(point.clientY - pointerStart.current.y);
-
-    if (dx > 5 || dy > 5) {
-      moved.current = true;
+      pointerStart.current = {
+        x: point.clientX,
+        y: point.clientY
+      };
+      moved.current = false;
     }
-  }
 
-  function onUp(e: MouseEvent | TouchEvent) {
-    if (!sheetRef.current) return;
-    if (!pointerStart.current) return;
+    function onMove(e: MouseEvent | TouchEvent) {
+      if (!pointerStart.current) return;
 
-    // If user dragged → allow scroll, do nothing
-    if (moved.current) {
+      const point =
+        "touches" in e && e.touches.length > 0
+          ? e.touches[0]
+          : "clientX" in e
+          ? e
+          : null;
+
+      if (!point) return;
+
+      const dx = Math.abs(point.clientX - pointerStart.current.x);
+      const dy = Math.abs(point.clientY - pointerStart.current.y);
+
+      if (dx > 5 || dy > 5) {
+        moved.current = true;
+      }
+    }
+
+    function onUp(e: MouseEvent | TouchEvent) {
+      if (!sheetRef.current) return;
+      if (!pointerStart.current) return;
+
+      if (moved.current) {
+        pointerStart.current = null;
+        return;
+      }
+
+      const target = e.target as Node;
+
+      // Tap outside sheet → close
+      if (!sheetRef.current.contains(target)) {
+        setY(HIDDEN);
+      }
+
       pointerStart.current = null;
-      return;
     }
 
-    const target = e.target as Node;
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
 
-    // Tap outside sheet → close
-    if (!sheetRef.current.contains(target)) {
-      setY(HIDDEN);
-    }
+    document.addEventListener("touchstart", onDown);
+    document.addEventListener("touchmove", onMove);
+    document.addEventListener("touchend", onUp);
 
-    pointerStart.current = null;
-  }
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
 
-  document.addEventListener("mousedown", onDown);
-  document.addEventListener("mousemove", onMove);
-  document.addEventListener("mouseup", onUp);
+      document.removeEventListener("touchstart", onDown);
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("touchend", onUp);
+    };
+  }, [HIDDEN]);
 
-  document.addEventListener("touchstart", onDown);
-  document.addEventListener("touchmove", onMove);
-  document.addEventListener("touchend", onUp);
-
-  return () => {
-    document.removeEventListener("mousedown", onDown);
-    document.removeEventListener("mousemove", onMove);
-    document.removeEventListener("mouseup", onUp);
-
-    document.removeEventListener("touchstart", onDown);
-    document.removeEventListener("touchmove", onMove);
-    document.removeEventListener("touchend", onUp);
-  };
-}, [HIDDEN]);
-
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setY(HALF); 
+    });
+  }, [HALF]);
+  
   function startDrag(
-  e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-) {
-  if (handleRef.current && e.target !== handleRef.current) return;
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) {
+    if (handleRef.current && e.target !== handleRef.current) return;
 
-  setDragging(true);
+    setDragging(true);
 
-  const clientY =
-    "touches" in e && e.touches.length > 0
-      ? e.touches[0]!.clientY
-      : "clientY" in e
-      ? e.clientY
-      : 0;
+    const clientY =
+      "touches" in e && e.touches.length > 0
+        ? e.touches[0]!.clientY
+        : "clientY" in e
+        ? e.clientY
+        : 0;
 
-  startY.current = clientY;
-  startTranslate.current = y;
+    startY.current = clientY;
+    startTranslate.current = y;
 
-  dragStartTime.current = Date.now();
-  dragStartY.current = clientY;
-}
+    dragStartTime.current = Date.now();
+    dragStartY.current = clientY;
+  }
 
   return (
     <>
