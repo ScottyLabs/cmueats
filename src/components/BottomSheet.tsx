@@ -16,7 +16,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     windowHeight * 0.33,    
     windowHeight * 0.5,  
     windowHeight * 0.66,         
-    windowHeight               
+    windowHeight * 1.25               
   ];
   const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
 
@@ -30,6 +30,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
   const handleRef = useRef<HTMLDivElement | null>(null);
 
   const [y, setY] = useState<number>(HIDDEN); 
+  const [show, setShow] = useState<boolean>(false); 
   const [dragging, setDragging] = useState<boolean>(false);
 
   useEffect(() => {
@@ -64,22 +65,19 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
       const dt = endTime - dragStartTime.current;
       const dy = clientY - dragStartY.current;
 
-      const velocity = dy / dt; // px per ms
+      const velocity = dy / dt; 
       const FLICK_THRESHOLD = 0.6;
 
       let target: number;
 
       if (Math.abs(velocity) > FLICK_THRESHOLD) {
         if (velocity > 0) {
-          // flick down → next lower snap
           target = snapPoints.find(p => p > y) ?? HIDDEN;
         } else {
-          // flick up → next higher snap
           target =
             [...snapPoints].reverse().find(p => p < y) ?? QUARTER;
         }
       } else {
-        // slow drag → nearest snap
         target = snapPoints.reduce((a, b) =>
           Math.abs(b - y) < Math.abs(a - y) ? b : a
         );
@@ -103,14 +101,23 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
   useEffect(() => {
     if (active) {
-        requestAnimationFrame(() => {
-        setY(windowHeight*0.625); 
-      });
+        setShow(true);
+        const timeout = setTimeout(() => {
+          requestAnimationFrame(() => {
+            setY(windowHeight*0.625); 
+          });
+        }, DELAY); 
+        return () => clearTimeout(timeout);
     }
     else {
+        const timeout = setTimeout(() => {
+           setShow(false);
+        }, DELAY); 
         requestAnimationFrame(() => {
           setY(HIDDEN); 
         });
+       
+        return () => clearTimeout(timeout);
     }
   }, [active, HIDDEN]);
 
@@ -165,7 +172,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
       const target = e.target as Node;
 
-      // Tap outside sheet → close
       if (!sheetRef.current.contains(target)) {
         if (onHide) {
           onHide();
@@ -229,7 +235,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             />
         )}
 
-        <div
+        {show && <div
           ref={sheetRef}
           onMouseDown={startDrag}
           onTouchStart={startDrag}
@@ -246,7 +252,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
           }}>
             {children}
           </div>
-        </div>
+        </div>}
     </>
   );
 }
