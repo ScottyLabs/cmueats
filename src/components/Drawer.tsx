@@ -32,34 +32,41 @@ function Drawer() {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [isDrawerActive, setIsDrawerActive]);
 
+    useEffect(() => {
+        console.log(isDrawerActive)
+    }, [isDrawerActive]);
     return (
-        <CSSTransition
-            in={isDrawerActive}
-            timeout={300}
-            mountOnEnter
-            unmountOnExit
-            nodeRef={drawerRef}
-            classNames={{
-                enter: css['drawer-enter'],
-                enterActive: css['drawer-enter-active'],
-                enterDone: css['drawer-enter-done'],
-                exit: css['drawer-exit'],
-                exitActive: css['drawer-exit-active'],
-            }}
-        >
-            {isMobile ?
-                <BottomSheet onHide={() => setIsDrawerActive(false)}>
-                    <DrawerHeader />
-                    <DrawerTabNav />
-                    <DrawerTabContent />
-                </ BottomSheet>
-            : 
-            <div className={css['drawer-box']} ref={drawerRef}>
+        <>
+        {isMobile ?
+            <BottomSheet active={isDrawerActive} onHide={() => setIsDrawerActive(false)}>
                 <DrawerHeader />
                 <DrawerTabNav />
                 <DrawerTabContent />
-            </div>}
-        </CSSTransition>
+            </ BottomSheet>
+                : 
+            <CSSTransition
+                in={isDrawerActive}
+                timeout={300}
+                mountOnEnter
+                unmountOnExit
+                nodeRef={drawerRef}
+                classNames={{
+                    enter: css['drawer-enter'],
+                    enterActive: css['drawer-enter-active'],
+                    enterDone: css['drawer-enter-done'],
+                    exit: css['drawer-exit'],
+                    exitActive: css['drawer-exit-active'],
+                }}
+            >
+                
+                <div className={css['drawer-box']} ref={drawerRef}>
+                    <DrawerHeader />
+                    <DrawerTabNav />
+                    <DrawerTabContent />
+                </div>
+            </CSSTransition>
+        }
+        </>
     );
 }
 

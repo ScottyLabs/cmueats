@@ -3,16 +3,18 @@ import styles from "./BottomSheet.module.css";
 
 type BottomSheetProps = {
   children: ReactNode;
+  active: boolean;
   onHide?: () => void;
 };
 
-export default function BottomSheet({ children, onHide }: BottomSheetProps) {
+export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
+  const DELAY = 200;
   const windowHeight = window.innerHeight;
   const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [ 
     windowHeight*0.15,                 
     windowHeight * 0.25, 
     windowHeight * 0.33,    
-    windowHeight * 0.5,    
+    windowHeight * 0.5,  
     windowHeight * 0.66,         
     windowHeight               
   ];
@@ -27,7 +29,7 @@ export default function BottomSheet({ children, onHide }: BottomSheetProps) {
   const startTranslate = useRef<number>(0);
   const handleRef = useRef<HTMLDivElement | null>(null);
 
-  const [y, setY] = useState<number>(windowHeight*0.99); //useEffect on HIDDEN, need to start slightly below
+  const [y, setY] = useState<number>(HIDDEN); 
   const [dragging, setDragging] = useState<boolean>(false);
 
   useEffect(() => {
@@ -100,10 +102,17 @@ export default function BottomSheet({ children, onHide }: BottomSheetProps) {
   }, [dragging, y, snapPoints, FULL, HIDDEN]);
 
   useEffect(() => {
-      if (y === HIDDEN && onHide) {
-        onHide();
-      }
-  }, [y, onHide, HIDDEN]);
+    if (active) {
+        requestAnimationFrame(() => {
+        setY(windowHeight*0.625); 
+      });
+    }
+    else {
+        requestAnimationFrame(() => {
+          setY(HIDDEN); 
+        });
+    }
+  }, [active, HIDDEN]);
 
   useEffect(() => {
     function onDown(e: MouseEvent | TouchEvent) {
@@ -158,7 +167,13 @@ export default function BottomSheet({ children, onHide }: BottomSheetProps) {
 
       // Tap outside sheet → close
       if (!sheetRef.current.contains(target)) {
-        setY(HIDDEN);
+        if (onHide) {
+          onHide();
+        }
+        
+          requestAnimationFrame(() => {
+            setY(HIDDEN); 
+          });
       }
 
       pointerStart.current = null;
@@ -180,14 +195,9 @@ export default function BottomSheet({ children, onHide }: BottomSheetProps) {
       document.removeEventListener("touchstart", onDown);
       document.removeEventListener("touchmove", onMove);
       document.removeEventListener("touchend", onUp);
+      
     };
   }, [HIDDEN]);
-
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      setY(HALF); 
-    });
-  }, [HALF]);
   
   function startDrag(
     e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
@@ -212,27 +222,30 @@ export default function BottomSheet({ children, onHide }: BottomSheetProps) {
 
   return (
     <>
-        {y !== HIDDEN && (
+        {y !== HIDDEN && active &&  (
             <div
                 className={styles.dim}
                 aria-hidden
             />
         )}
-        <div
-        ref={sheetRef}
-        onMouseDown={startDrag}
-        onTouchStart={startDrag}
-        className={`${styles.bottomSheet} ${y === HIDDEN ? styles.hidden : ""}`}
-        style={{ transform: `translateY(${y}px)`, transition: dragging ? "none" : undefined }}
-        >
-        <div ref={handleRef} className={styles.handleContainer}>
-            <div ref={handleRef} className={styles.handle} />
-        </div>
 
-        <div style={{
-        height: `calc(100vh - ${y}px - 41px)`, // 41px = handle 
-        overflowY: "auto"
-    }}>{children}</div>
+        <div
+          ref={sheetRef}
+          onMouseDown={startDrag}
+          onTouchStart={startDrag}
+          className={`${styles.bottomSheet} `}
+          style={{ transform: `translateY(${y}px)`, transition: dragging ? "none" : "transform 300ms cubic-bezier(0.22, 1, 0.36, 1)" }}
+          >
+          <div ref={handleRef} className={styles.handleContainer}>
+              <div ref={handleRef} className={styles.handle} />
+          </div>
+
+          <div style={{
+            height: `calc(100vh - ${y}px - 41px)`, // 41px = handle 
+            overflowY: "auto"
+          }}>
+            {children}
+          </div>
         </div>
     </>
   );
