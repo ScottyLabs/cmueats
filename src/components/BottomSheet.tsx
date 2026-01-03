@@ -27,7 +27,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const dragStartY = useRef<number>(0);
     const startY = useRef<number>(0);
     const startTranslate = useRef<number>(0);
-    const handleRef = useRef<HTMLDivElement | null>(null);
+    const handleRef = useRef<HTMLButtonElement | null>(null);
 
     const [y, setY] = useState<number>(HIDDEN);
     const [show, setShow] = useState<boolean>(false);
@@ -77,6 +77,11 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             }
 
             setY(target);
+            if (target === HIDDEN) {
+                if (onHide) {
+                    onHide();
+                }
+            }
         }
 
         window.addEventListener('mousemove', onMove);
@@ -101,16 +106,15 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                 });
             }, DELAY);
             return () => clearTimeout(timeout);
-        } else {
-            const timeout = setTimeout(() => {
-                setShow(false);
-            }, DELAY);
-            requestAnimationFrame(() => {
-                setY(HIDDEN);
-            });
-
-            return () => clearTimeout(timeout);
         }
+        const timeout = setTimeout(() => {
+            setShow(false);
+        }, DELAY);
+        requestAnimationFrame(() => {
+            setY(HIDDEN);
+        });
+
+        return () => clearTimeout(timeout);
     }, [active, HIDDEN]);
 
     useEffect(() => {
@@ -186,7 +190,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         };
     }, [HIDDEN]);
 
-    function startDrag(e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) {
+    function startDrag(e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
         if (handleRef.current && e.target !== handleRef.current) return;
 
         setDragging(true);
@@ -206,18 +210,24 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
             {show && (
                 <div
+                    role="dialog"
                     ref={sheetRef}
-                    onMouseDown={startDrag}
-                    onTouchStart={startDrag}
                     className={`${styles.bottomSheet} `}
                     style={{
                         transform: `translateY(${y}px)`,
                         transition: dragging ? 'none' : 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1)',
                     }}
                 >
-                    <div ref={handleRef} className={styles.handleContainer}>
-                        <div ref={handleRef} className={styles.handle} />
-                    </div>
+                    <button
+                        type="button"
+                        ref={handleRef}
+                        className={styles.handleContainer}
+                        onMouseDown={startDrag}
+                        onTouchStart={startDrag}
+                        aria-label="Drag bottom sheet"
+                    >
+                        <div className={styles.handle} />
+                    </button>
 
                     <div
                         style={{

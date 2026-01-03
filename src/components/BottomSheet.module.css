@@ -38,6 +38,7 @@
 .handleContainer {
     background: var(--black-1000);
     padding: 10px 0px;
+    border:none;
 }
 
 .dim {
@@ -56,3 +57,4 @@
     opacity: 1;
     pointer-events: auto;
 }
+
