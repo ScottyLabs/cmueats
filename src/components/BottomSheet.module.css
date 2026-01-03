@@ -6,7 +6,7 @@
   right: 0;
   bottom: 0;
   height: 100vh;
-  background: var(--main-bg);
+  background: var(--black-950);
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   box-shadow: 0 -10px 30px black;
@@ -44,7 +44,15 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
-  pointer-events: none; /* KEY LINE */
   z-index: 998;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 200ms ease;
 }
 
+.dimVisible {
+  opacity: 1;
+  pointer-events: auto;
+}

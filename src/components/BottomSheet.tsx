@@ -228,12 +228,12 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
   return (
     <>
-        {y !== HIDDEN && active &&  (
-            <div
-                className={styles.dim}
-                aria-hidden
-            />
-        )}
+        <div
+          className={`${styles.dim} ${
+            show && y !== HIDDEN ? styles.dimVisible : ""
+          }`}
+          aria-hidden
+        />
 
         {show && <div
           ref={sheetRef}

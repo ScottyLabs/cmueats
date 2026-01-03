@@ -5,7 +5,6 @@ import css from './EateryCardContent.module.css';
 function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_Full; partOfMainGrid: boolean }) {
     const { location: physicalLocation, name } = location;
     const isMobile = window.innerWidth <= 600;
-    const mobileLocation = physicalLocation.split(',').slice(0,1).join(",");
 
     return (
         <div className={css['card-content-container']}>
@@ -13,7 +12,7 @@ function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_F
 
             <span className={css['physical-location-text']}>
                 <MapPin size={isMobile ? 12 : 13} />
-                {isMobile ? mobileLocation : physicalLocation}
+                {physicalLocation}
             </span>
 
             {partOfMainGrid && !isMobile && (

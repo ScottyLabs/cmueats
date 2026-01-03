@@ -12,14 +12,14 @@ function DrawerHeader() {
 
     return (
         <div className={css['drawer-header-container']}>
-            <button
+            {!isMobile && <button
                 type="button"
                 onClick={() => closeDrawer()}
                 className={css['header__close-button']}
                 aria-label="Close location drawer"
             >
                 <X size={36} />
-            </button>
+            </button>}
             <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
                 {location.statusMsg.longStatus}
             </div>
@@ -31,10 +31,6 @@ function DrawerHeader() {
                     </a>
                 </h3>
             </div>
-
-            {isMobile && <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
-                {statusMsg}
-            </div>}
             <div className={css.header__location}>
                 <MapPin size={16} />
                 <span>{physicalLocation}</span>
