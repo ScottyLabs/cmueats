@@ -13,3 +13,4 @@
 /build
 /dist
 /tests
+src/types/api.d.ts

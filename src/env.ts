@@ -7,7 +7,7 @@ const envSchema = z.object({
             const urlObj = new URL(url);
             return `${urlObj.protocol}//${urlObj.host}`;
         })
-        .or(z.string('locations.json')),
+        .or(z.literal('local')),
     VITE_POSTHOG_KEY: z.string().optional(),
     VITE_AUTO_GENERATED_MAPKITJS_TOKEN: z.string(),
 });

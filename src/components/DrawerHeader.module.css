@@ -1,5 +1,5 @@
 .drawer-header-container {
-    padding: 25px 27px 20px;
+    padding: 25px var(--drawer-x-padding) 20px;
     background-color: var(--black-1000);
 }
 
@@ -17,9 +17,7 @@
 }
 
 .location-link {
-    font-size: 26px;
-    display: inline-flex;
-    align-items: center;
+    font-size: 24px;
     gap: 10px;
     color: inherit;
     text-decoration: none;
@@ -27,10 +25,16 @@
     &:hover {
         text-decoration: underline;
     }
+    & svg {
+        transform: translateY(2px);
+        height: 17px;
+    }
 }
 
-.title__close-button {
-    display: inline-flex;
+.header__close-button {
+    margin-left: auto;
+    margin-bottom: -30px;
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 30px;

@@ -1,21 +1,23 @@
-import { useContext, useEffect, useRef } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
+import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
+import { ILocation_Full } from '../types/locationTypes';
 import BottomSheet from './BottomSheet';
 
-function Drawer() {
-    const { isDrawerActive, setIsDrawerActive } = useContext(DrawerContext);
+function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
-
+    const { selectedId, closeDrawer } = useDrawerAPIContext();
+    const pickedLocation = locations?.find((loc) => loc.id === selectedId);
     const isMobile = window.innerWidth <= 600;
 
     // `esc` to close the drawer
     useEffect(() => {
-        if (!isDrawerActive) return () => {};
+        if (selectedId === null) return () => {};
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;
@@ -25,48 +27,39 @@ function Drawer() {
 
             if (isTyping) return;
 
-            setIsDrawerActive(false);
+            closeDrawer();
         }
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isDrawerActive, setIsDrawerActive]);
+    }, [selectedId]);
+
+    // reset scroll when selected location changes
+    useEffect(() => {
+        drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+    }, [pickedLocation?.id]);
 
     useEffect(() => {
         console.log(isDrawerActive)
     }, [isDrawerActive]);
     return (
-        <>
-        {isMobile ?
-            <BottomSheet active={isDrawerActive} onHide={() => setIsDrawerActive(false)}>
-                <DrawerHeader />
-                <DrawerTabNav />
-                <DrawerTabContent />
-            </ BottomSheet>
-                : 
-            <CSSTransition
-                in={isDrawerActive}
-                timeout={300}
-                mountOnEnter
-                unmountOnExit
-                nodeRef={drawerRef}
-                classNames={{
-                    enter: css['drawer-enter'],
-                    enterActive: css['drawer-enter-active'],
-                    enterDone: css['drawer-enter-done'],
-                    exit: css['drawer-exit'],
-                    exitActive: css['drawer-exit-active'],
-                }}
-            >
-                
-                <div className={css['drawer-box']} ref={drawerRef}>
-                    <DrawerHeader />
-                    <DrawerTabNav />
-                    <DrawerTabContent />
-                </div>
-            </CSSTransition>
-        }
-        </>
+        <AnimatePresence mode="popLayout">
+            {pickedLocation !== undefined && (
+                <motion.div
+                    initial={{ opacity: 0, transform: 'translateX(3px)' }}
+                    animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
+                    exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
+                    className={css['drawer-box']}
+                    ref={drawerRef}
+                >
+                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                        <DrawerHeader />
+                        <DrawerTabNav />
+                        <DrawerTabContent />
+                    </DrawerTabsContextProvider>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 

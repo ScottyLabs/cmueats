@@ -15,7 +15,12 @@
     --black-1050: hsla(210, 10%, 12%, 1);
     --black-1100: hsla(200, 7%, 8%, 1);
 
-    --main-bg: hsl(214, 7%, 19%);
+    --red-300: #ee785e;
+    --red-400: #e63e19;
+    --red-500: #dd3c18;
+    --red-600: #d04425;
+    --red-800: #8a250f;
+
     --main-bg-accent: #23272a;
     --text-primary: white;
     --text-greeting: white;
@@ -186,13 +191,7 @@ body.miku {
             background: linear-gradient(to bottom, hsla(180, 70%, 30%, 0.5) 70%, hsla(0, 0%, 0%, 0));
         }
     }
-    .locations__error-text {
-        position: relative;
-        background-color: hsla(180, 4%, 22%, 0.837);
-        backdrop-filter: blur(12px);
-        padding: 10px;
-        border-radius: 10px;
-    }
+
     .card-in-main-grid {
         backdrop-filter: blur(3px) brightness(70%);
     }
@@ -213,7 +212,10 @@ body {
 }
 button {
     font-family: inherit;
-    cursor: pointer;
+    font-size: inherit;
+    &:not(:disabled) {
+        cursor: pointer;
+    }
 }
 .error-container {
     margin: 48px auto;

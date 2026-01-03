@@ -1,36 +1,35 @@
-import { useContext } from 'react';
 import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
-import { DrawerContext } from '../contexts/DrawerContext';
 import css from './DrawerHeader.module.css';
+import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function DrawerHeader() {
     const isMobile = window.innerWidth <= 600;
-    const drawerContext = useContext(DrawerContext);
-    const location = drawerContext.drawerLocation;
-    if (!location) return null;
-    const { name, statusMsg, location: physicalLocation, url } = location;
+    const { location } = useDrawerTabsContext();
+    const { closeDrawer } = useDrawerAPIContext();
+    const { name, location: physicalLocation, url } = location;
 
     return (
         <div className={css['drawer-header-container']}>
-            {!isMobile && <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
-                {statusMsg}
-            </div>}
+            <button
+                type="button"
+                onClick={() => closeDrawer()}
+                className={css['header__close-button']}
+                aria-label="Close location drawer"
+            >
+                <X size={36} />
+            </button>
+            <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
+                {location.statusMsg.longStatus}
+            </div>
             <div className={css.header__title}>
                 <h3 className={css.title__text}>
                     <a className={css['location-link']} href={url} target="_blank" rel="noreferrer">
-                        <span>{name}</span>
+                        <span>{name} </span>
                         <ExternalLink size={22} strokeWidth={3} aria-hidden />
                     </a>
                 </h3>
-                {!isMobile && <button
-                    type="button"
-                    onClick={() => drawerContext.setIsDrawerActive(false)}
-                    className={css['title__close-button']}
-                    aria-label="Close location drawer"
-                >
-                    <X size={36} />
-                </button>}
             </div>
 
             {isMobile && <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>

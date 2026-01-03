@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 16px 27px;
+    padding: 16px var(--drawer-x-padding);
     background: var(--black-1000);
     border-top: 3px solid var(--black-900);
     overflow-x: auto;

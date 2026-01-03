@@ -23,7 +23,7 @@
     background-size: 20px;
     background-repeat: no-repeat;
     background-position: 16px center;
-    color: var(--input-text);
+    color: var(--black-200);
     font-weight: 500;
     &::-webkit-search-decoration {
         display: none;
@@ -45,7 +45,8 @@
     inset: 0;
     left: calc(48px + 1px);
     align-items: center;
-    color: var(--input-text-placeholder);
+    color: var(--black-400);
+    font-weight: 500;
     pointer-events: none;
     opacity: 1;
     transition: opacity 0.2s ease-in;

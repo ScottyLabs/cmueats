@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
 import clsx from 'clsx';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
 import EyeControlIcon from '../assets/control_buttons/x.svg?react';
 import EyeOffControlIcon from '../assets/control_buttons/restore.svg?react';
 import { CardViewPreference } from '../util/storage';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import PinnedControlIcon from '../assets/control_buttons/pinned.svg?react';
 import UnpinnedControlIcon from '../assets/control_buttons/unpinned.svg?react';
 
@@ -13,13 +14,13 @@ function EateryCardHeader({
     location,
     updateViewPreference,
 }: {
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isHidden = location.cardViewPreference === 'hidden';
-    const isPinned = location.cardViewPreference === 'pinned';
+    const { closeDrawer, selectedId } = useDrawerAPIContext();    const isPinned = location.cardViewPreference === 'pinned';
 
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
@@ -35,34 +36,22 @@ function EateryCardHeader({
     });
 
     const { statusMsg } = location;
-    let relativeTime = 'Status unavailable';
-    let absoluteTime = '';
-    if (statusMsg) {
-        const start = statusMsg.indexOf('(');
-        const end = statusMsg.lastIndexOf(')');
-        if (start >= 0 && end >= 0 && end > start) {
-            relativeTime = statusMsg.slice(0, start).trim();
-            absoluteTime = statusMsg.slice(statusMsg.indexOf('at'), end).trim();
-        } else {
-            relativeTime = statusMsg;
-        }
-    }
 
     const isMobile = window.innerWidth <= 600;
     return (
         <div
-            className = {css['card-header-container']}
-            style={{ '--status-color': highlightColors[location.locationState] }}
+            className={css['card-header-container']}
+            style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
         >
             <div
                 className={clsx(css['card-header-dot'], statusChangesSoon && css['card-header-dot--blinking'])}
-                style={{ '--status-color': highlightColors[location.locationState] }}
+                style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
                 ref={dotRef}
             />
 
             <div className={css['time-container']}>
-                <span className={css['card-header-relative-time-text']}>{relativeTime}</span>
-                <span className={css['card-header-absolute-time-text']}>{absoluteTime}</span>
+                <span className={css['card-header-relative-time-text']}>{statusMsg.shortStatus[0]}</span>
+                <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
             </div>
             <div className={css['button-container']}>
                 {isMobile && <button
@@ -86,8 +75,9 @@ function EateryCardHeader({
                     className={css['action-button']}
                     aria-label={isHidden ? 'Show Card' : 'Hide Card'}
                     onClick={(event) => {
-                        event.stopPropagation();
+                        event.preventDefault();
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
+                        if (!isHidden && location.id === selectedId) closeDrawer();
                     }}
                 >
                     {isHidden ? (

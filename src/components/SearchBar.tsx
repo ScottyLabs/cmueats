@@ -1,10 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import css from './SearchBar.module.css';
 
 function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSearchQuery: React.Dispatch<string> }) {
     const inputRef = useRef<HTMLInputElement>(null);
     const isDesktop = window.innerWidth >= 900;
     const isMac = navigator.platform.includes('Mac');
+
+    // delay query to prevent performance issue
+    const [pendingQuery, setPendingQuery] = useState(searchQuery);
+    useEffect(() => {
+        setPendingQuery(searchQuery);
+    }, [searchQuery]);
+    useEffect(() => {
+        if (pendingQuery === searchQuery) {
+            return () => {};
+        }
+        const timeoutId = window.setTimeout(() => {
+            setSearchQuery(pendingQuery);
+        }, 150);
+        return () => window.clearTimeout(timeoutId);
+    }, [pendingQuery, searchQuery]);
 
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
@@ -40,8 +55,8 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
                 ref={inputRef}
                 className={css['locations-search']}
                 type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={pendingQuery}
+                onChange={(e) => setPendingQuery(e.target.value)}
                 placeholder=" "
                 // this needs to be nonempty for the :placeholder-shown css to work
             />

@@ -1,14 +1,8 @@
 import { MapPin } from 'lucide-react';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
 
-function EateryCardContent({
-    location,
-    partOfMainGrid,
-}: {
-    location: IReadOnlyLocation_Combined;
-    partOfMainGrid: boolean;
-}) {
+function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_Full; partOfMainGrid: boolean }) {
     const { location: physicalLocation, name } = location;
     const isMobile = window.innerWidth <= 600;
     const mobileLocation = physicalLocation.split(',').slice(0,1).join(",");

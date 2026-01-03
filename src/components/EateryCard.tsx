@@ -1,9 +1,9 @@
-import { KeyboardEvent, useContext, useEffect, useMemo, useRef } from 'react';
+import { KeyboardEvent, useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import { CardViewPreference } from '../util/storage';
-import { DrawerContext } from '../contexts/DrawerContext';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 import css from './EateryCard.module.css';
@@ -14,26 +14,28 @@ function EateryCard({
     animate = false,
     updateViewPreference,
 }: {
-    location: IReadOnlyLocation_Combined;
+    location: ILocation_Full;
     partOfMainGrid?: boolean;
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
-    const drawerContext = useContext(DrawerContext);
-    const { isDrawerActive, drawerLocation } = drawerContext;
-    const isCardActiveInDrawer = isDrawerActive && drawerLocation?.conceptId === location.conceptId;
+    const drawerAPIContext = useDrawerAPIContext();
+    const prevDrawerSelectedIdRef = useRef<string | null>(null);
+    const cardWasPreviouslySelected = useRef(false);
+    useEffect(() => {
+        prevDrawerSelectedIdRef.current = drawerAPIContext.selectedId ?? null;
+    }, [drawerAPIContext.selectedId]);
+
+    const isCardSelected = drawerAPIContext.selectedId === location.id;
     const cardRef = useRef<HTMLDivElement | null>(null);
     function handleCardSelection() {
-        // open default tab "overview"
-        drawerContext.setActiveTab('overview');
         // when the drawer is open, click other cards will open that
         // card's detail, instead of closing the drawer;
         // click on the same card will close the drawer.
-        if (drawerContext.drawerLocation?.conceptId === location.conceptId) {
-            drawerContext.setIsDrawerActive(!drawerContext.isDrawerActive);
+        if (drawerAPIContext.selectedId === location.id) {
+            drawerAPIContext.closeDrawer();
         } else {
-            drawerContext.setDrawerLocation(location);
-            drawerContext.setIsDrawerActive(true);
+            drawerAPIContext.setDrawerActiveId(location.id);
         }
     }
 
@@ -46,37 +48,33 @@ function EateryCard({
     };
 
     useEffect(() => {
-        let timeoutId: number | undefined;
-        if (isCardActiveInDrawer && cardRef.current) {
-            timeoutId = window.setTimeout(() => {
-                cardRef.current!.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                });
-            }, 400);
+        if (
+            (isCardSelected || (cardWasPreviouslySelected.current && drawerAPIContext.selectedId === null)) &&
+            cardRef.current
+        ) {
+            // on deselect, scroll to approximate location as well
+            cardRef.current.scrollIntoView({
+                behavior: 'instant',
+                block: 'nearest',
+            });
         }
-
-        return () => {
-            // if click two cards very fast, will only scroll to the second card clicked
-            if (timeoutId !== undefined) window.clearTimeout(timeoutId);
-        };
-    }, [drawerLocation?.conceptId, isDrawerActive, location.conceptId]);
+        cardWasPreviouslySelected.current = isCardSelected;
+    }, [isCardSelected]);
 
     const cardClassName = useMemo(
         () =>
             clsx(
                 css.card,
-                // animate ? css['card-animated'] : '',
-                isCardActiveInDrawer ? css['card-active'] : '',
+                isCardSelected ? css['card-active'] : '',
                 partOfMainGrid ? css['card-in-main-grid'] : '',
                 location.cardViewPreference === 'pinned' ? css['card-pinned'] : '',
             ),
-        [animate, isCardActiveInDrawer, partOfMainGrid, location.cardViewPreference],
+        [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
     );
-
+    const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === (drawerAPIContext.selectedId ?? null); // aka change was not triggered by a drawer select/unselect
     return (
         <motion.div
-            layout="position"
+            layout
             className={cardClassName}
             initial={
                 animate
@@ -95,10 +93,24 @@ function EateryCard({
             }}
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
             ref={cardRef}
+            transition={
+                shouldAnimatePositionChange
+                    ? undefined // default transition animation
+                    : {
+                          layout: {
+                              type: false,
+                          },
+                      }
+            }
             // whole card clickable
             role="button"
             tabIndex={0}
-            onClick={handleCardSelection}
+            onClick={(ev) => {
+                if (!ev.defaultPrevented) {
+                    handleCardSelection();
+                    ev.preventDefault();
+                }
+            }}
             onKeyDown={handleCardKeyDown}
         >
             <EateryCardHeader location={location} updateViewPreference={updateViewPreference} />

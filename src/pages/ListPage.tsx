@@ -1,20 +1,18 @@
 import { Alert, styled } from '@mui/material';
-import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { DateTime } from 'luxon';
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react';
 
-import { getGreetings } from '../util/greeting';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
-import IS_MIKU_DAY from '../util/constants';
 import mikuBgUrl from '../assets/miku/miku.jpg';
-import EateryCardGrid from './EateryCardGrid';
+import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
-import { DrawerContext, TabType } from '../contexts/DrawerContext';
+import { DrawerAPIContextProvider } from '../contexts/DrawerAPIContext';
 import useFilteredLocations from './useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
+import ListPageHeader from '../components/ListPageHeader';
 
 const StyledAlert = styled(Alert)({
     backgroundColor: 'var(--main-bg-accent)',
@@ -24,10 +22,10 @@ const StyledAlert = styled(Alert)({
 function ListPage({
     locations,
     updateCardViewPreference,
-    now,
+    error,
 }: {
-    locations: IReadOnlyLocation_Combined[] | undefined;
-    now: DateTime;
+    locations: ILocation_Full[] | undefined;
+    error: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const shouldAnimateCards = useRef(true);
@@ -51,11 +49,6 @@ function ListPage({
         mainContainerRef.current?.focus();
     }, []);
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
-
-    const { mobileGreeting, desktopGreeting } = useMemo(
-        () => getGreetings(new Date().getHours(), { isMikuDay: IS_MIKU_DAY }),
-        [],
-    );
 
     const filteredLocations = useFilteredLocations({
         locations,
@@ -86,42 +79,8 @@ function ListPage({
         };
     }, []);
 
-    const [isDrawerActive, setIsDrawerActive] = useState(false);
-    const [drawerLocation, setDrawerLocation] = useState<IReadOnlyLocation_Combined | null>(null);
-    const [activeTab, setActiveTab] = useState<TabType>('overview');
-    const isDrawerActiveRef = useRef(isDrawerActive);
-    useEffect(() => {
-        isDrawerActiveRef.current = isDrawerActive;
-    }, [isDrawerActive]);
-    // if drawer if open, update the drawer's content whenever extraLocationData gets updated
-    // TODO: might buggy
-    useEffect(() => {
-        if (!isDrawerActiveRef.current || !drawerLocation || !locations) return;
-        const baseLocation = locations.find((loc) => loc.conceptId === drawerLocation.conceptId);
-        if (!baseLocation) return;
-        setDrawerLocation(baseLocation);
-    }, [drawerLocation?.conceptId, locations]);
-    const drawerContextValue = useMemo(
-        () => ({
-            isDrawerActive,
-            setIsDrawerActive: (active: boolean) => {
-                setIsDrawerActive(active);
-                // ensure drawer content don't change before fully exited
-                setTimeout(() => {
-                    // ensure drawerLocation is null if it is inactive
-                    if (!isDrawerActiveRef.current) setDrawerLocation(null);
-                }, 500);
-            },
-            drawerLocation,
-            setDrawerLocation,
-            activeTab,
-            setActiveTab,
-        }),
-        [isDrawerActive, drawerLocation, activeTab],
-    );
-
     return (
-        <DrawerContext.Provider value={drawerContextValue}>
+        <DrawerAPIContextProvider>
             <div className="list-page-container" ref={mainContainerRef}>
                 {/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
@@ -136,10 +95,7 @@ function ListPage({
                 )}
 
                 <div className="list-box">
-                    <header className="list-header">
-                        <h3 className="list-header__greeting list-header__greeting--desktop">{desktopGreeting}</h3>
-                        <h3 className="list-header__greeting list-header__greeting--mobile">{mobileGreeting}</h3>
-                    </header>
+                    <ListPageHeader />
                     <div className="list-controls-container">
                         <div className="list-controls-layout">
                             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -147,22 +103,22 @@ function ListPage({
                         </div>
                     </div>
                     <EateryCardGrid
-                        key={`${searchQuery}-${locationFilterQuery}`}
                         locations={filteredLocations}
                         shouldAnimateCards={shouldAnimateCards.current}
-                        apiError={locations !== undefined && locations.length === 0}
+                        apiError={error}
                         setSearchQuery={setSearchQuery}
                         updateCardViewPreference={(id, preference) => {
                             shouldAnimateCards.current = false;
                             updateCardViewPreference(id, preference);
                         }}
                     />
-                    <Footer now={now} />
+                    <Footer />
                 </div>
-                <Drawer />
+
+                <Drawer locations={locations} />
                 <link rel="prefetch" href={mikuBgUrl} />
             </div>
-        </DrawerContext.Provider>
+        </DrawerAPIContextProvider>
     );
 }
 
