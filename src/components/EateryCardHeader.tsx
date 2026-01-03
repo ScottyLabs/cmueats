@@ -20,7 +20,8 @@ function EateryCardHeader({
     const dotRef = useRef<HTMLDivElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isHidden = location.cardViewPreference === 'hidden';
-    const { closeDrawer, selectedId } = useDrawerAPIContext();    const isPinned = location.cardViewPreference === 'pinned';
+    const { closeDrawer, selectedId } = useDrawerAPIContext();
+    const isPinned = location.cardViewPreference === 'pinned';
 
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
@@ -54,21 +55,23 @@ function EateryCardHeader({
                 <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
             </div>
             <div className={css['button-container']}>
-                {isMobile && <button
-                    type="button"
-                    className={css['action-button']}
-                    aria-label={isPinned ? 'Unpin Card' : 'Pin Card'}
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        updateViewPreference(isPinned ? 'normal' : 'pinned');
-                    }}
-                >
-                    {isPinned ? (
-                        <PinnedControlIcon className={css['action-button__icon']}/>
-                    ) : (
-                        <UnpinnedControlIcon className={css['action-button__icon']}/>
-                    )}
-                </button>}
+                {isMobile && (
+                    <button
+                        type="button"
+                        className={css['action-button']}
+                        aria-label={isPinned ? 'Unpin Card' : 'Pin Card'}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            updateViewPreference(isPinned ? 'normal' : 'pinned');
+                        }}
+                    >
+                        {isPinned ? (
+                            <PinnedControlIcon className={css['action-button__icon']} />
+                        ) : (
+                            <UnpinnedControlIcon className={css['action-button__icon']} />
+                        )}
+                    </button>
+                )}
 
                 <button
                     type="button"

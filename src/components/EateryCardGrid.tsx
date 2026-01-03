@@ -94,12 +94,14 @@ export default function EateryCardGrid({
     const hiddenLocations = sortedLocations.filter((location) => location.cardViewPreference === 'hidden');
 
     const isMobile = window.innerWidth <= 600;
-    
+
     return (
         <div className={css.supergrid}>
             <div className={css['supergrid__help-text']}>
                 <Info size={16} aria-hidden="true" />
-                <span>{isMobile ? "Tap on a card for more details": "Tap or click on the cards to see more information!"}</span>
+                <span>
+                    {isMobile ? 'Tap on a card for more details' : 'Tap or click on the cards to see more information!'}
+                </span>
             </div>
             <div className={css.supergrid__section}>
                 <div className={css.supergrid__grid}>

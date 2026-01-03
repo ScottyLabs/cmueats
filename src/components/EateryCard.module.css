@@ -94,6 +94,6 @@
 
 @media (max-width: 600px) {
     .desktop {
-        display: none
+        display: none;
     }
 }

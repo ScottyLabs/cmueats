@@ -41,8 +41,8 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
 
     return (
         <>
-            {isMobile ? 
-                <BottomSheet 
+            {isMobile ? (
+                <BottomSheet
                     active={pickedLocation !== undefined}
                     onHide={() => {
                         setTimeout(() => {
@@ -50,36 +50,37 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
                                 closeDrawer();
                             });
                         }, 200);
-                    }
-                    }>
+                    }}
+                >
                     <div className={css['drawer-box-mobile']}>
-                        {pickedLocation !== undefined && 
-                        <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                        {pickedLocation !== undefined && (
+                            <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
                                 <DrawerHeader />
                                 <DrawerTabNav />
                                 <DrawerTabContent />
-                        </DrawerTabsContextProvider>}
+                            </DrawerTabsContextProvider>
+                        )}
                     </div>
                 </BottomSheet>
-            :
-            
-            <AnimatePresence mode="popLayout">
-                {pickedLocation !== undefined && (
-                    <motion.div
-                        initial={{ opacity: 0, transform: 'translateX(3px)' }}
-                        animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
-                        exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
-                        className={css['drawer-box']}
-                        ref={drawerRef}
-                    >
-                        <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
-                            <DrawerHeader />
-                            <DrawerTabNav />
-                            <DrawerTabContent />
-                        </DrawerTabsContextProvider>
-                    </motion.div>
-                )}
-            </AnimatePresence>}
+            ) : (
+                <AnimatePresence mode="popLayout">
+                    {pickedLocation !== undefined && (
+                        <motion.div
+                            initial={{ opacity: 0, transform: 'translateX(3px)' }}
+                            animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
+                            exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
+                            className={css['drawer-box']}
+                            ref={drawerRef}
+                        >
+                            <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                                <DrawerHeader />
+                                <DrawerTabNav />
+                                <DrawerTabContent />
+                            </DrawerTabsContextProvider>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
         </>
     );
 }

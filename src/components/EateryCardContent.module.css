@@ -55,10 +55,9 @@
     padding: 5px 8px;
 }
 
-
 @media (max-width: 600px) {
     .desktop {
-        display: none
+        display: none;
     }
     .card-content-container {
         padding: 10px 13px;
