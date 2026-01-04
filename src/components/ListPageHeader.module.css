@@ -10,19 +10,11 @@
         flex-direction: column-reverse;
         align-items: flex-start;
         gap: 10px;
-        & {
-            padding-top: 16px;
-            padding-bottom: 16px;
-        }
+        padding-top: 16px;
+        padding-bottom: 16px;
     }
     @container (max-width: 600px) {
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        gap: 10px;
-        & {
-            padding-top: 20px;
-            padding-bottom: 16px;
-        }
+        padding-top: 20px;
     }
     & .list-header__greeting--desktop {
         display: none;
@@ -120,7 +112,7 @@
 @media (max-width: 600px) {
     .list-header__greeting {
         font-weight: 700;
-        font-style: Bold;
+        font-style: bold;
         font-size: 27px;
         line-height: 100%;
         letter-spacing: 0%;
