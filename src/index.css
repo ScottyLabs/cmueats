@@ -15,6 +15,19 @@
     --black-1050: hsla(210, 10%, 12%, 1);
     --black-1100: hsla(200, 7%, 8%, 1);
 
+    --yellow-100: #fef9ec;
+    --yellow-200: #fcebc0;
+    --yellow-300: #f9dc8e;
+    --yellow-400: #f6cc5d;
+    --yellow-500: #dbb653;
+    --yellow-600: #bc9c47;
+
+    --red-300: #ee785e;
+    --red-400: #e63e19;
+    --red-500: #dd3c18;
+    --red-600: #d04425;
+    --red-800: #8a250f;
+
     --main-bg: hsl(214, 7%, 19%);
     --main-bg-accent: #23272a;
     --text-primary: white;

@@ -74,7 +74,6 @@
 .menu {
     display: flex;
     flex-direction: column;
-    gap: 3px;
     position: absolute;
     transform: translateX(-100%);
     z-index: 999;
@@ -89,5 +88,21 @@
     display: inline-flex;
     font-size: 14px;
     align-items: center;
-    justify-content: center;
+    gap: 5px;
+    border: none;
+    background-color: var(--card-bg);
+    border-radius: 5px;
+    height: 25px;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+}
+
+.pin-button {
+    color: var(--yellow-400);
+}
+
+.hide-button {
+    color: var(--red-300);
 }

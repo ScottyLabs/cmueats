@@ -80,7 +80,7 @@ function EateryCardHeader({
             >
                 <button
                     type="button"
-                    className={css['menu-button']}
+                    className={clsx(css['menu-button'], css['pin-button'])}
                     onClick={(e) => {
                         e.stopPropagation();
                         updateViewPreference(isPinned ? 'normal' : 'pinned');
@@ -102,7 +102,7 @@ function EateryCardHeader({
 
                 <button
                     type="button"
-                    className={css['menu-button']}
+                    className={clsx(css['menu-button'], css['hide-button'])}
                     onClick={(e) => {
                         e.stopPropagation();
                         updateViewPreference(isHidden ? 'normal' : 'hidden');

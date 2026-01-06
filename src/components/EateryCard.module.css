@@ -32,6 +32,8 @@
 }
 
 .card-pinned {
+    border: var(--card-border-width) solid var(--yellow-400);
+    border-radius: 7px;
 }
 
 .card__pin-container {
