@@ -72,6 +72,8 @@ function EateryCardHeader({
 
     function renderMenu() {
         return createPortal(
+            // disable linter since this is not a button
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <div
                 ref={menuRef}
                 className={css.menu}
