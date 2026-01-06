@@ -37,46 +37,58 @@ function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
     const greenRectCount = Math.floor(upvotePercent / 10);
 
     return (
-        <>
-            <div className={css.tag__percent}>{upvotePercent}%</div>
-            <div
-                className={clsx(css['tag__bar-indicator'], tag.totalVotes === 0 && css['tag__bar-indicator--inactive'])}
-            >
-                {Array(greenRectCount)
-                    .fill(undefined)
-                    .map((_, i) => (
-                        <div className={css['bar-indicator__bar']} aria-selected />
-                    ))}
-                {Array(10 - greenRectCount)
-                    .fill(undefined)
-                    .map((_, i) => (
-                        <div className={css['bar-indicator__bar']} />
-                    ))}
-            </div>
-            <div className={css.tag__name}>{tag.name}</div>
-            <button
-                aria-pressed={tag.myReview?.vote === true}
-                className={clsx(css.tag__vote, css.tag__like)}
-                onClick={() => toggleVote(true)}
-                type="button"
-            >
-                <LikeIcon />
-                {tag.totalLikes}
-            </button>
-            <button
-                className={clsx(css.tag__vote, css.tag__dislike)}
-                onClick={() => toggleVote(false)}
-                type="button"
-                aria-pressed={tag.myReview?.vote === false}
-            >
-                <DislikeIcon />
-                {tag.totalVotes - tag.totalLikes}
-            </button>
-            <button className={css['tag__review-button']}>
-                <PencilIcon />
-                Review
-            </button>
-        </>
+        <tr className={css['tag-list__tag']}>
+            <td className={css.tag__percent}>{upvotePercent}%</td>
+            <td>
+                <div
+                    className={clsx(
+                        css['tag__bar-indicator'],
+                        tag.totalVotes === 0 && css['tag__bar-indicator--inactive'],
+                    )}
+                >
+                    {Array(greenRectCount)
+                        .fill(undefined)
+                        .map((_, i) => (
+                            <div className={css['bar-indicator__bar']} aria-selected />
+                        ))}
+                    {Array(10 - greenRectCount)
+                        .fill(undefined)
+                        .map((_, i) => (
+                            <div className={css['bar-indicator__bar']} />
+                        ))}
+                </div>
+            </td>
+
+            <td className={css.tag__name}>{tag.name}</td>
+            <td>
+                <button
+                    aria-pressed={tag.myReview?.vote === true}
+                    className={clsx(css.tag__vote, css.tag__like)}
+                    onClick={() => toggleVote(true)}
+                    type="button"
+                >
+                    <LikeIcon />
+                    {tag.totalLikes}
+                </button>
+            </td>
+            <td>
+                <button
+                    className={clsx(css.tag__vote, css.tag__dislike)}
+                    onClick={() => toggleVote(false)}
+                    type="button"
+                    aria-pressed={tag.myReview?.vote === false}
+                >
+                    <DislikeIcon />
+                    {tag.totalVotes - tag.totalLikes}
+                </button>
+            </td>
+            <td>
+                <button className={css['tag__review-button']}>
+                    <PencilIcon />
+                    Review
+                </button>
+            </td>
+        </tr>
     );
 }
 
@@ -100,11 +112,11 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                 </div>
             </section>
             <section className={css['tag-section']}>
-                <ul className={css['tag-list']}>
+                <table className={css['tag-list']}>
                     {reviewSummary?.tagData.map((tag) => (
                         <Tag tag={tag} key={tag.id} locationId={locationId} />
                     ))}
-                </ul>
+                </table>
             </section>
         </div>
     );

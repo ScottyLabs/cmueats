@@ -1,23 +1,22 @@
 .tag-list {
     padding: 0;
     margin: 0;
-    display: grid;
-    grid-auto-rows: 43px;
-    grid-template-columns: min-content 1fr min-content min-content min-content;
+    /* display: grid; */
+    /* grid-auto-rows: 43px; */
+    /* grid-template-columns: min-content 1fr min-content min-content min-content; */
 
     align-items: center;
+    table-layout: fixed;
+    border-collapse: collapse;
 }
 .tag-list__tag {
-    list-style: none;
     height: 43px;
     border-top: 1px solid var(--black-800);
-    display: flex;
     align-items: center;
     font-family: var(--text-secondary-font);
 }
 .tag__percent {
     display: none;
-    width: 5ex;
     text-align: right;
     margin-right: 4px;
     font-weight: 500;
@@ -52,7 +51,7 @@
     }
 }
 .tag__name {
-    flex-grow: 1;
+    width: 100%;
     text-wrap: nowrap;
     overflow: hidden;
 }
