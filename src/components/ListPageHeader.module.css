@@ -15,6 +15,9 @@
     }
     @container (max-width: 600px) {
         padding-top: 20px;
+        & .list-header__greeting--mobile {
+            font-size: 27px;
+        }
     }
     & .list-header__greeting--desktop {
         display: none;
@@ -106,15 +109,5 @@
     &.button__error {
         color: var(--red-300);
         border-color: var(--red-300);
-    }
-}
-
-@media (max-width: 600px) {
-    .list-header__greeting {
-        font-weight: 700;
-        font-style: bold;
-        font-size: 27px;
-        line-height: 100%;
-        letter-spacing: 0%;
     }
 }
