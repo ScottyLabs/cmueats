@@ -77,6 +77,7 @@ function EateryCardHeader({
                 className={css.menu}
                 style={{ top: `${menuPosition.top}px`, left: `${menuPosition.left}px` }}
                 id={menuId}
+                onClick={(e) => e.preventDefault()}
             >
                 <button
                     type="button"
