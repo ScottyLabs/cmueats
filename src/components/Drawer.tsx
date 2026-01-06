@@ -8,12 +8,13 @@ import css from './Drawer.module.css';
 import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
 import { ILocation_Full } from '../types/locationTypes';
 import BottomSheet from './BottomSheet';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
     const { selectedId, closeDrawer } = useDrawerAPIContext();
     const pickedLocation = locations?.find((loc) => loc.id === selectedId);
-    const isMobile = window.innerWidth <= 600;
+    const isMobile = useIsMobileContext();
 
     // `esc` to close the drawer
     useEffect(() => {

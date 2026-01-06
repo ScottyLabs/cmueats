@@ -3,9 +3,10 @@ import { highlightColors } from '../constants/colors';
 import css from './DrawerHeader.module.css';
 import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 function DrawerHeader() {
-    const isMobile = window.innerWidth <= 600;
+    const isMobile = useIsMobileContext();
     const { location } = useDrawerTabsContext();
     const { closeDrawer } = useDrawerAPIContext();
     const { name, location: physicalLocation, url } = location;

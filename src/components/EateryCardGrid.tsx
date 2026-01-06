@@ -11,6 +11,7 @@ import css from './EateryCardGrid.module.css';
 
 import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) => {
     const state1 = location1.locationState;
@@ -93,7 +94,7 @@ export default function EateryCardGrid({
 
     const hiddenLocations = sortedLocations.filter((location) => location.cardViewPreference === 'hidden');
 
-    const isMobile = window.innerWidth <= 600;
+    const isMobile = useIsMobileContext();
 
     return (
         <div className={css.supergrid}>

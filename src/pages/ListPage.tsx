@@ -13,6 +13,7 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 const StyledAlert = styled(Alert)({
     backgroundColor: 'var(--main-bg-accent)',
@@ -30,7 +31,7 @@ function ListPage({
 }) {
     const shouldAnimateCards = useRef(true);
 
-    const isMobile = window.innerWidth <= 600;
+    const isMobile = useIsMobileContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)

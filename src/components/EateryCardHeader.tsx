@@ -9,6 +9,7 @@ import { CardViewPreference } from '../util/storage';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import PinnedControlIcon from '../assets/control_buttons/pinned.svg?react';
 import UnpinnedControlIcon from '../assets/control_buttons/unpinned.svg?react';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 function EateryCardHeader({
     location,
@@ -38,7 +39,8 @@ function EateryCardHeader({
 
     const { statusMsg } = location;
 
-    const isMobile = window.innerWidth <= 600;
+    const isMobile = useIsMobileContext();
+;
     return (
         <div
             className={css['card-header-container']}

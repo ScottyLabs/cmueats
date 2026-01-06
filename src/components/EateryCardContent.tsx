@@ -1,10 +1,11 @@
 import { MapPin } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_Full; partOfMainGrid: boolean }) {
     const { location: physicalLocation, name } = location;
-    const isMobile = window.innerWidth <= 600;
+    const isMobile = useIsMobileContext();
 
     return (
         <div className={css['card-content-container']}>
