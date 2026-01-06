@@ -133,9 +133,11 @@
     .desktop {
         display: none;
     }
-
+    .card-header-container {
+        padding: 3px 13px 5px;
+    }
     .action-button {
-        padding: 0px;
+        padding: 5px;
 
         .action-button__icon {
             width: 15px;
