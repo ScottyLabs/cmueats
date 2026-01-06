@@ -1,0 +1,96 @@
+.tag-list {
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-auto-rows: 43px;
+    grid-template-columns: min-content 1fr min-content min-content min-content;
+
+    align-items: center;
+}
+.tag-list__tag {
+    list-style: none;
+    height: 43px;
+    border-top: 1px solid var(--black-800);
+    display: flex;
+    align-items: center;
+    font-family: var(--text-secondary-font);
+}
+.tag__percent {
+    display: none;
+    width: 5ex;
+    text-align: right;
+    margin-right: 4px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+.tag__bar-indicator {
+    display: flex;
+    gap: 2px;
+    height: 1.7ex;
+    margin-right: 7px;
+
+    .bar-indicator__bar {
+        width: 6px;
+        height: 100%;
+        background-color: var(--red-600);
+        &[aria-selected] {
+            background-color: var(--green-500);
+        }
+        &:first-child {
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        &:last-child {
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+    }
+    &.tag__bar-indicator--inactive {
+        .bar-indicator__bar {
+            background-color: var(--black-800) !important;
+        }
+    }
+}
+.tag__name {
+    flex-grow: 1;
+    text-wrap: nowrap;
+    overflow: hidden;
+}
+.tag__vote {
+    background-color: transparent;
+    border: none;
+    color: var(--black-600);
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    svg {
+        transition: 0.1s all;
+        display: block;
+        width: 18px;
+    }
+    &:hover {
+        color: var(--black-400);
+        &:active {
+            color: var(--black-200);
+        }
+    }
+    &.tag__like[aria-pressed='true'] {
+        color: var(--green-500);
+        font-weight: bold;
+    }
+    &.tag__dislike[aria-pressed='true'] {
+        color: var(--red-500);
+        font-weight: bold;
+    }
+}
+.tag__review-button {
+    background-color: transparent;
+    border: none;
+    text-wrap: nowrap;
+    color: var(--black-800);
+    margin-left: 5px;
+    svg {
+        margin-right: 5px;
+    }
+}

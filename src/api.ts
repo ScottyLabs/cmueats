@@ -8,7 +8,7 @@ import locations from './mockLocations';
 
 const BACKEND_LOCATIONS_URL = env.VITE_API_URL === 'local' ? '/' : `${env.VITE_API_URL}`;
 
-const fetchClient = createFetchClient<paths>({
+export const fetchClient = createFetchClient<paths>({
     baseUrl: BACKEND_LOCATIONS_URL,
     fetch:
         env.VITE_API_URL === 'local'

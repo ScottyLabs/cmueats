@@ -4,6 +4,7 @@ import { next7DaysReadableString } from '../util/time';
 import { useCurrentTime } from '../contexts/NowContext';
 import css from './DrawerTabContent.module.css';
 import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
+import ReviewPage from './ReviewPage';
 
 function DrawerTabContent() {
     const now = useCurrentTime();
@@ -107,7 +108,7 @@ function DrawerTabContent() {
                 </>
             )}
             {drawerContext.activeTab === 'menu' && renderMenu()}
-            {drawerContext.activeTab === 'reviews' && <p>reviews</p>}
+            {drawerContext.activeTab === 'reviews' && <ReviewPage locationId={location.id} />}
         </div>
     );
 }
