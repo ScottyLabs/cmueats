@@ -9,10 +9,15 @@ export function IsMobileContextProvider({
 }) {
     const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 600);
 
-    window.addEventListener("resize", function () {
-        setIsMobile(window.innerWidth <= 600);
-    });
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 600);
+        };
 
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+    
     return <isMobileContext.Provider value={isMobile}>{children}</isMobileContext.Provider>;
 }
 

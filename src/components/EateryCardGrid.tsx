@@ -45,7 +45,7 @@ export default function EateryCardGrid({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
-
+    const isMobile = useIsMobileContext();
     if (apiError)
         return (
             <p className={css['locations__error-text']}>
@@ -93,8 +93,6 @@ export default function EateryCardGrid({
     }
 
     const hiddenLocations = sortedLocations.filter((location) => location.cardViewPreference === 'hidden');
-
-    const isMobile = useIsMobileContext();
 
     return (
         <div className={css.supergrid}>
