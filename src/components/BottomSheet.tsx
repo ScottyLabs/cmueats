@@ -8,7 +8,7 @@ type BottomSheetProps = {
 };
 
 export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
-    const DELAY = 200;
+    const DELAY = 100;
     const windowHeight = window.innerHeight;
     const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [
         windowHeight * 0.15,

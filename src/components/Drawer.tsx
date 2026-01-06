@@ -48,7 +48,7 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
                     requestAnimationFrame(() => {
                         closeDrawer();
                     });
-                }, 200);
+                }, 100);
             }}
         >
             <div className={css['drawer-box-mobile']}>
