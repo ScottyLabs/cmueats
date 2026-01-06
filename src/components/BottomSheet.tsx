@@ -8,6 +8,7 @@ type BottomSheetProps = {
 };
 
 export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
+    const contentRef = useRef<HTMLDivElement | null>(null);
     const DELAY = 100;
     const windowHeight = window.innerHeight;
     const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [
@@ -70,7 +71,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                 if (velocity > 0) {
                     target = snapPoints.find((p) => p > y) ?? HIDDEN;
                 } else {
-                    target = [...snapPoints].reverse().find((p) => p < y) ?? QUARTER;
+                    target = [...snapPoints].reverse().find((p) => p < y) ?? FULL;
                 }
             } else {
                 target = snapPoints.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a));
@@ -191,8 +192,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }, [HIDDEN]);
 
     function startDrag(e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
-        if (handleRef.current && e.target !== handleRef.current) return;
-
         setDragging(true);
 
         const clientY = 'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
@@ -204,6 +203,32 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         dragStartY.current = clientY;
     }
 
+    useEffect(() => {
+        if (y <= FULL) return;
+        const sheet = sheetRef.current;
+        if (!sheet) return;
+
+        const handleTouchStart = (e: TouchEvent) => {
+            // Start drag
+            startDrag(e as any);
+            if (!dragging) return;
+            e.preventDefault(); // Prevent scrolling behind
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            if (!dragging) return;
+            e.preventDefault(); // Prevent scrolling behind
+        };
+
+        sheet.addEventListener('touchstart', handleTouchStart, { passive: false });
+        sheet.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+        return () => {
+            sheet.removeEventListener('touchstart', handleTouchStart);
+            sheet.removeEventListener('touchmove', handleTouchMove);
+        };
+    }, [dragging]);
+
     return (
         <>
             <div className={`${styles.dim} ${show && y !== HIDDEN ? styles.dimVisible : ''}`} aria-hidden />
@@ -213,6 +238,8 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                     role="dialog"
                     ref={sheetRef}
                     className={`${styles.bottomSheet} `}
+                    onMouseDown={y<=FULL ? ()=>{} : startDrag}
+                    onTouchStart={y<=FULL ? ()=>{} : startDrag}
                     style={{
                         transform: `translateY(${y}px)`,
                         transition: dragging ? 'none' : 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1)',
@@ -222,17 +249,18 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                         type="button"
                         ref={handleRef}
                         className={styles.handleContainer}
-                        onMouseDown={startDrag}
-                        onTouchStart={startDrag}
+                        onMouseDown={y<=FULL ? startDrag : ()=>{}}
+                        onTouchStart={y<=FULL ? startDrag : ()=>{}}
                         aria-label="Drag bottom sheet"
                     >
                         <div className={styles.handle} />
                     </button>
 
                     <div
+                        ref={contentRef}
                         style={{
                             height: `calc(100vh - ${y}px - 41px)`, // 41px = handle
-                            overflowY: 'auto',
+                            overflowY: 'auto'
                         }}
                     >
                         {children}
