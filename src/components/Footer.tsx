@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { DateTime } from 'luxon';
-import env from '../env';
 import css from './Footer.module.css';
 import SponsorCarousel from './SponsorCarousel';
 import { useThemeContext } from '../ThemeProvider';
 import footerMikuUrl from '../assets/miku/miku2.png';
+import { $api } from '../api';
+import { useCurrentTime } from '../contexts/NowContext';
 
-export default function Footer({ now }: { now: DateTime }) {
-    const [emails, setEmails] = useState<{ name: string; email: string }[]>([]);
+export default function Footer() {
+    const now = useCurrentTime();
     const { theme } = useThemeContext();
+    const { data: emails } = $api.useQuery('get', '/emails');
     const nowString = now.toLocaleString({
         weekday: 'short',
         month: 'short',
@@ -18,19 +18,6 @@ export default function Footer({ now }: { now: DateTime }) {
         second: '2-digit',
     });
 
-    // Fetch emails on mount
-    useEffect(() => {
-        async function fetchEmails() {
-            try {
-                const res = await fetch(`${env.VITE_API_URL}/api/emails`);
-                const json = await res.json();
-                setEmails(json);
-            } catch (err) {
-                console.error('Failed to fetch emails:', err);
-            }
-        }
-        fetchEmails();
-    }, []);
     return (
         <footer className={css.footer}>
             <div className={css['footer__text-section']}>
@@ -52,7 +39,7 @@ export default function Footer({ now }: { now: DateTime }) {
                         </p>
                         <p>
                             Otherwise, reach out to{' '}
-                            {emails.length > 0 ? (
+                            {emails && emails.length > 0 ? (
                                 emails.map((person, idx) => (
                                     <span key={person.email}>
                                         <a href={`mailto:${person.email}`} style={{ color: 'white' }}>

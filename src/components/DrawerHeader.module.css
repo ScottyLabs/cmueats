@@ -1,5 +1,5 @@
 .drawer-header-container {
-    padding: 25px 27px 20px;
+    padding: 25px var(--drawer-x-padding) 20px;
     background-color: var(--black-1000);
 }
 
@@ -18,7 +18,6 @@
 
 .location-link {
     font-size: 24px;
-    align-items: center;
     gap: 10px;
     color: inherit;
     text-decoration: none;
@@ -27,6 +26,7 @@
         text-decoration: underline;
     }
     & svg {
+        transform: translateY(2px);
         height: 17px;
     }
 }

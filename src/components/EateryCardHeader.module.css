@@ -4,7 +4,7 @@
     gap: 0px;
     color: var(--status-color);
     border-bottom: 2px solid var(--status-color);
-    padding: 6px 13px 7px;
+    padding: 3px 13px 4px;
     box-sizing: content-box;
     background: var(--card-header-bg);
 }
@@ -79,10 +79,10 @@
     z-index: 999;
     width: max-content;
     border-radius: 5px;
-    border: 1px solid var(--card-border-color);
+    border: 2px solid var(--black-900);
     background-color: var(--card-bg);
     color: var(--text-primary);
-    padding: 5px 8px;
+    padding: 6px 8px;
 }
 
 .menu-button {

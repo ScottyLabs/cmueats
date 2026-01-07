@@ -1,3 +1,14 @@
+.locations__error-text {
+    color: var(--text-primary);
+    font-family: var(--text-primary-font);
+    font-size: 20px;
+    width: fit-content;
+    word-break: break-word;
+    padding-left: calc(var(--global-x-padding) + 2px);
+    padding-right: 20px;
+    margin-bottom: 100px;
+    line-height: 1.6;
+}
 .hidden-section__toggle {
     margin-top: 30px;
     margin-left: var(--global-x-padding);

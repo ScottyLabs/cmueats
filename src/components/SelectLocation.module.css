@@ -13,13 +13,8 @@
     transition: all 0.2s;
     font-family: inherit;
     font-size: 16px;
-    color: var(--input-text);
+    color: var(--black-400);
     font-weight: 500;
-    animation: slide-in 1.2s forwards;
-    animation-timing-function: cubic-bezier(0.04, 0.34, 0.5, 1.02);
-    /* we add a delay so it doesn't look jittery on page load */
-    animation-delay: 0.1s;
-    opacity: 0;
 }
 
 .select:hover {
@@ -36,22 +31,5 @@
         animation: none;
         width: 100%;
         min-width: 0;
-    }
-}
-
-@keyframes slide-in {
-    0% {
-        opacity: 0;
-        /* clip-path: inset(0px 100% 0px 0px); */
-        transform: translate(-10px, 0);
-        --right-cutoff: 0%;
-    }
-    20% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 1;
-        transform: translate(0, 0);
-        --right-cutoff: 100%;
     }
 }

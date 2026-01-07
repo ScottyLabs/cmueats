@@ -1,7 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    padding: 15px 27px 40px;
+    padding: 15px var(--drawer-x-padding) 40px;
 }
 
 .description {
@@ -17,14 +17,14 @@
     &::after {
         content: '';
         display: block;
-        width: calc(100% + 54px);
+        width: 100%;
         height: 1px;
         margin-top: 10px;
         margin-left: -27px;
         background: linear-gradient(
             90deg,
             rgba(255, 255, 255, 0.6) 0%,
-            rgba(255, 255, 255, 0.1) 30%,
+            rgba(255, 255, 255, 0.1) 80%,
             rgba(255, 255, 255, 0) 100%
         );
     }
@@ -38,49 +38,44 @@
 
 .hours-row {
     display: flex;
-    align-items: center;
+    gap: 12px;
+    align-items: flex-start;
     justify-content: space-between;
     color: var(--text-muted);
 }
 
 .hours-day {
-    display: flex;
-    align-items: center;
+}
+.hours-line {
     flex: 1;
-
-    &::after {
-        content: '';
-        flex: 1;
-        margin-inline: 12px;
-        border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
-    }
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+    align-self: center;
 }
 
 .hours-row-active {
     color: var(--text-primary);
     font-weight: 600;
 
-    & .hours-day::after {
-        content: '';
-        flex: 1;
-        margin-inline: 12px;
-        border-bottom: 1px dashed var(--text-muted);
+    .hours-line {
+        border-color: var(--text-muted);
     }
 }
 
-.hours-time {
+.hours-times {
     text-align: right;
+    line-height: 1.5;
+}
+.special {
+    margin-bottom: 20px;
+}
+.special__title {
+    color: var(--black-100);
+    font-weight: 500;
 }
 
-.specials-item-title {
-    color: var(--text-primary);
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.specials-item-dscrp {
-    color: var(--text-muted);
-    margin-bottom: 15px;
+.special__desc {
+    color: var(--black-500);
+    margin-top: 8px;
 }
 
 .inline-link {

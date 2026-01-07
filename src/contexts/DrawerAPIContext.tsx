@@ -1,29 +1,57 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+// Differences between DrawerTabsContext:
+// Global drawer interaction: tracks which concept id is selected and exposes helpers to open/close it across the list page
+
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 type DrawerAPIContextValue = {
-    selectedConceptId: number | null;
-    setDrawerConceptId: (conceptId: number) => void;
+    selectedId: string | null;
+    setDrawerActiveId: (id: string) => void;
     closeDrawer: () => void;
 };
 
-const DrawerContext = createContext<DrawerAPIContextValue | undefined>(undefined);
+const DrawerAPIContext = createContext<DrawerAPIContextValue | undefined>(undefined);
 
 export function DrawerAPIContextProvider({ children }: { children: React.ReactNode }) {
-    const [drawerConceptId, setDrawerConceptId] = useState<number | null>(null);
-
+    const [drawerConceptId, setDrawerConceptId] = useState<string | null>(() => {
+        const activeId = new URL(window.location.href).searchParams.get('active_id');
+        return activeId;
+    });
+    useLayoutEffect(() => {
+        // prevent the card list from being scrolled on mobile, kind of works...
+        document.body.style.overflow = drawerConceptId === null ? 'visible' : 'hidden';
+    }, [drawerConceptId]);
     const drawerContextValue = useMemo(
         () => ({
-            closeDrawer: () => setDrawerConceptId(null),
-            selectedConceptId: drawerConceptId,
-            setDrawerConceptId,
+            closeDrawer: () => {
+                const newURL = new URL(window.location.href);
+                newURL.searchParams.delete('active_id');
+                window.history.pushState({}, '', newURL.href);
+                setDrawerConceptId(null);
+            },
+            selectedId: drawerConceptId,
+            setDrawerActiveId: (id: string) => {
+                const newURL = new URL(window.location.href);
+                newURL.searchParams.set('active_id', id);
+                window.history.pushState({}, '', newURL.href);
+                setDrawerConceptId(id);
+            },
         }),
         [drawerConceptId],
     );
-    return <DrawerContext.Provider value={drawerContextValue}>{children}</DrawerContext.Provider>;
+    useEffect(() => {
+        const popStateEventListener = () => {
+            console.log(window.location.href);
+            const activeId = new URL(window.location.href).searchParams.get('active_id');
+            setDrawerConceptId(activeId);
+        };
+        window.addEventListener('popstate', popStateEventListener);
+        return () => window.removeEventListener('popstate', popStateEventListener);
+    }, []);
+    return <DrawerAPIContext.Provider value={drawerContextValue}>{children}</DrawerAPIContext.Provider>;
 }
 
 export const useDrawerAPIContext = () => {
-    const context = useContext(DrawerContext);
-    if (context === undefined) throw new Error('Cannot use drawer context outside of provider!');
+    const context = useContext(DrawerAPIContext);
+    if (context === undefined) throw new Error('Cannot use drawer api context outside of provider!');
     return context;
 };

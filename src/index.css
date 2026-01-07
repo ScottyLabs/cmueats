@@ -199,13 +199,7 @@ body.miku {
             background: linear-gradient(to bottom, hsla(180, 70%, 30%, 0.5) 70%, hsla(0, 0%, 0%, 0));
         }
     }
-    .locations__error-text {
-        position: relative;
-        background-color: hsla(180, 4%, 22%, 0.837);
-        backdrop-filter: blur(12px);
-        padding: 10px;
-        border-radius: 10px;
-    }
+
     .card-in-main-grid {
         backdrop-filter: blur(3px) brightness(70%);
     }
@@ -226,7 +220,10 @@ body {
 }
 button {
     font-family: inherit;
-    cursor: pointer;
+    font-size: inherit;
+    &:not(:disabled) {
+        cursor: pointer;
+    }
 }
 .error-container {
     margin: 48px auto;

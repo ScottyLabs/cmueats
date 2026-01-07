@@ -5,16 +5,16 @@ import DrawerHeader from './DrawerHeader';
 import DrawerTabNav from './DrawerTabNav';
 import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
-import { DrawerContextProvider } from '../contexts/DrawerContext';
-import { IReadOnlyLocation_Combined } from '../types/locationTypes';
+import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
+import { ILocation_Full } from '../types/locationTypes';
 
-function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undefined }) {
+function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
-    const { selectedConceptId, closeDrawer } = useDrawerAPIContext();
-    const pickedLocation = locations?.find((loc) => loc.conceptId === selectedConceptId);
+    const { selectedId, closeDrawer } = useDrawerAPIContext();
+    const pickedLocation = locations?.find((loc) => loc.id === selectedId);
     // `esc` to close the drawer
     useEffect(() => {
-        if (selectedConceptId === null) return () => {};
+        if (selectedId === null) return () => {};
 
         function handleKeyDown(event: KeyboardEvent) {
             if (event.key !== 'Escape') return;
@@ -29,29 +29,28 @@ function Drawer({ locations }: { locations: IReadOnlyLocation_Combined[] | undef
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [selectedConceptId]);
+    }, [selectedId]);
 
     // reset scroll when selected location changes
     useEffect(() => {
         drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
-    }, [pickedLocation?.conceptId]);
+    }, [pickedLocation?.id]);
 
     return (
         <AnimatePresence mode="popLayout">
             {pickedLocation !== undefined && (
                 <motion.div
-                    initial={{ opacity: 0, transform: 'translateX(30px)' }}
-                    animate={{ opacity: 1, transform: 'translateX(0)' }}
-                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0, transform: 'translateX(3px)' }}
+                    animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
+                    exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
                     className={css['drawer-box']}
                     ref={drawerRef}
-                    // transition={{ duration: 10 }}
                 >
-                    <DrawerContextProvider location={pickedLocation} key={pickedLocation.conceptId}>
+                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
                         <DrawerHeader />
                         <DrawerTabNav />
                         <DrawerTabContent />
-                    </DrawerContextProvider>
+                    </DrawerTabsContextProvider>
                 </motion.div>
             )}
         </AnimatePresence>

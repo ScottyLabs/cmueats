@@ -1,13 +1,13 @@
 import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
 import css from './DrawerHeader.module.css';
-import { useDrawerContext } from '../contexts/DrawerContext';
+import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function DrawerHeader() {
-    const { location } = useDrawerContext();
+    const { location } = useDrawerTabsContext();
     const { closeDrawer } = useDrawerAPIContext();
-    const { name, statusMsg, location: physicalLocation, url } = location;
+    const { name, location: physicalLocation, url } = location;
 
     return (
         <div className={css['drawer-header-container']}>
@@ -20,7 +20,7 @@ function DrawerHeader() {
                 <X size={36} />
             </button>
             <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
-                {statusMsg}
+                {location.statusMsg.longStatus}
             </div>
             <div className={css.header__title}>
                 <h3 className={css.title__text}>

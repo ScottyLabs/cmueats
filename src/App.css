@@ -3,6 +3,7 @@ body,
 #root,
 .App {
     height: 100%;
+    padding-bottom: 0 !important; /* override tanstack dev tool styling */
 }
 
 html,
@@ -26,7 +27,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
-    background: var(--main-bg);
+    background: var(--black-950);
 }
 
 .App {
@@ -42,6 +43,12 @@ body {
     overflow-y: auto;
     &:focus {
         outline: none;
+    }
+    @media screen and (max-width: 900px) {
+        /* important! this breakpoint should match the mobile drawer breakpoint */
+        /* allow natural scroll on mobile */
+        min-height: auto;
+        overflow-y: visible;
     }
 }
 

@@ -1,10 +1,9 @@
-import { IReadOnlyLocation_FromAPI_PostProcessed } from '../types/locationTypes';
-
+import { ILocation_Full } from '../types/locationTypes';
 import css from './SelectLocation.module.css';
 
 type SelectLocationProps = {
     setLocationFilterQuery: React.Dispatch<string>;
-    locations: IReadOnlyLocation_FromAPI_PostProcessed[] | undefined;
+    locations: ILocation_Full[] | undefined;
 };
 
 function getPrimaryLocation(locationString: string) {

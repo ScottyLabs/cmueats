@@ -1,9 +1,9 @@
 import { BookOpen, Star, TextAlignStart } from 'lucide-react';
 import css from './DrawerTabNav.module.css';
-import { useDrawerContext } from '../contexts/DrawerContext';
+import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 
 function DrawerTabNav() {
-    const { activeTab, setActiveTab } = useDrawerContext();
+    const { activeTab, setActiveTab } = useDrawerTabsContext();
     return (
         <div className={css['drawer-tab-nav']}>
             <button

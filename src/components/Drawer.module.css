@@ -1,19 +1,21 @@
 .drawer-box {
     --drawer-width: max(30vw, 500px);
+    --drawer-x-padding: 27px;
     width: var(--drawer-width);
-    background: var(--main-bg);
     height: 100%;
     z-index: 999;
     box-shadow: -32px 0 80px rgba(0, 0, 0, 0.45);
     overflow-y: auto;
     scrollbar-width: thin;
+    background-color: var(--black-950);
 
     @media screen and (max-width: 900px) {
         & {
             --drawer-width: 100%;
-            position: absolute;
+            --drawer-x-padding: 15px;
+
+            position: fixed;
             overflow-y: auto;
-            height: 100%;
             inset: 0;
         }
     }
