@@ -250,3 +250,9 @@ button {
         background-color: var(--button-bg--hover);
     }
 }
+.toast {
+    background-color: var(--black-900) !important;
+    border: 2px solid var(--black-800);
+    color: var(--black-200) !important;
+    font-family: var(--text-secondary-font);
+}

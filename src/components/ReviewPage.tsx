@@ -1,5 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { $api, fetchClient } from '../api';
 import css from './ReviewPage.module.css';
 import LikeIcon from '../assets/control_buttons/like.svg?react';
@@ -18,77 +20,212 @@ interface Tag {
         updatedAt: number;
     } | null;
 }
-function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
-    const queryClient = useQueryClient();
-    const toggleVote = (voteUp: boolean) =>
-        fetchClient
-            .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
-                params: { path: { locationId, tagId: tag.id.toString() } },
-                body: { voteUp: tag.myReview?.vote === voteUp ? undefined : voteUp },
-            })
-            .then(() => {
-                queryClient.refetchQueries(
-                    $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-                        params: { path: { locationId } },
-                    }),
-                );
-            });
-    const upvotePercent = (tag.totalLikes / tag.totalVotes) * 100 || 0; // in case of divsion by 0
+const MIN_INPUT_HEIGHT_PX = 100;
+function BarIndicator({ upvotePercent, inactive }: { upvotePercent: number; inactive: boolean }) {
     const greenRectCount = Math.floor(upvotePercent / 10);
 
     return (
-        <tr className={css['tag-list__tag']}>
-            <td className={css.tag__percent}>{upvotePercent}%</td>
-            <td>
-                <div
-                    className={clsx(
-                        css['tag__bar-indicator'],
-                        tag.totalVotes === 0 && css['tag__bar-indicator--inactive'],
-                    )}
-                >
-                    {Array(greenRectCount)
-                        .fill(undefined)
-                        .map((_, i) => (
-                            <div className={css['bar-indicator__bar']} aria-selected />
-                        ))}
-                    {Array(10 - greenRectCount)
-                        .fill(undefined)
-                        .map((_, i) => (
-                            <div className={css['bar-indicator__bar']} />
-                        ))}
-                </div>
-            </td>
+        <div className={clsx(css['tag__bar-indicator'], inactive && css['tag__bar-indicator--inactive'])}>
+            {Array(greenRectCount)
+                .fill(undefined)
+                .map((_, i) => (
+                    <div className={css['bar-indicator__bar']} aria-selected key={i} />
+                ))}
+            {Array(10 - greenRectCount)
+                .fill(undefined)
+                .map((_, i) => (
+                    <div className={css['bar-indicator__bar']} key={i} />
+                ))}
+        </div>
+    );
+}
+function ReviewSection({
+    currentReview,
+    openForEditing,
+    saveNewReview,
+    closeDraft,
+    deleteReview,
+}: {
+    currentReview: string | null;
+    openForEditing: boolean;
+    saveNewReview: (text: string) => void;
+    closeDraft: () => void;
+    deleteReview: () => void;
+}) {
+    const [inputBoxHeight, setInputBoxHeight] = useState(0);
+    const [draftText, setDraftText] = useState('');
+    const inputBoxRef = useRef<HTMLTextAreaElement | null>(null);
 
-            <td className={css.tag__name}>{tag.name}</td>
-            <td>
-                <button
-                    aria-pressed={tag.myReview?.vote === true}
-                    className={clsx(css.tag__vote, css.tag__like)}
-                    onClick={() => toggleVote(true)}
-                    type="button"
-                >
-                    <LikeIcon />
-                    {tag.totalLikes}
+    // listen for `cmd/ctrl` + `enter` for textarea submission
+    useEffect(() => {
+        function handleKeyDown(event: KeyboardEvent) {
+            if (event.defaultPrevented) return;
+            const isMac = navigator.platform.includes('Mac');
+            if (
+                ((isMac && event.metaKey) || (!isMac && event.ctrlKey)) &&
+                event.key === 'Enter' &&
+                document.activeElement === inputBoxRef.current
+            ) {
+                event.preventDefault();
+                saveNewReview(draftText);
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [draftText]);
+
+    useLayoutEffect(() => {
+        setDraftText(currentReview ?? '');
+        setInputBoxHeight(0); // recalibrate
+    }, [openForEditing]);
+
+    useLayoutEffect(() => {
+        if (inputBoxRef.current) {
+            setInputBoxHeight(Math.max(MIN_INPUT_HEIGHT_PX, inputBoxRef.current.scrollHeight + 2)); // the +2 is to account for the border
+        }
+    }, [draftText, openForEditing]); // we need `openForEditing` for sizing on initial input box load
+    if (currentReview === null && !openForEditing) return undefined;
+    return openForEditing ? (
+        <div className={clsx(css['tag__review-container'], css['tag__review-container--edit'])}>
+            <textarea
+                className={css.review}
+                value={draftText}
+                onChange={(ev) => {
+                    setDraftText(ev.target.value);
+                    setInputBoxHeight(0); // recalibrate
+                }}
+                placeholder="Your review here"
+                style={{ height: inputBoxHeight }}
+                ref={inputBoxRef}
+            />
+            <div className={css['review-control-buttons']}>
+                {currentReview && (
+                    <button className={css['review-control-buttons__delete']} type="button" onClick={deleteReview}>
+                        Delete
+                    </button>
+                )}
+                <button type="button" onClick={closeDraft}>
+                    Cancel
                 </button>
-            </td>
-            <td>
-                <button
-                    className={clsx(css.tag__vote, css.tag__dislike)}
-                    onClick={() => toggleVote(false)}
-                    type="button"
-                    aria-pressed={tag.myReview?.vote === false}
-                >
-                    <DislikeIcon />
-                    {tag.totalVotes - tag.totalLikes}
+                <button type="button" onClick={() => saveNewReview(draftText)} disabled={draftText === ''}>
+                    Save
                 </button>
-            </td>
-            <td>
-                <button className={css['tag__review-button']}>
-                    <PencilIcon />
-                    Review
-                </button>
-            </td>
-        </tr>
+            </div>
+        </div>
+    ) : (
+        <div className={css['tag__review-container']}>
+            <div className={css.review}>{currentReview}</div>
+        </div>
+    );
+}
+function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
+    const queryClient = useQueryClient();
+    const [isDraftingReview, setIsDraftingReview] = useState(false);
+
+    const toggleVote = async (voteUp: boolean) => {
+        const removeExistingVote = tag.myReview?.vote === voteUp;
+        if (removeExistingVote && tag.myReview?.text) {
+            toast.error('Please delete your written review before unvoting!');
+            return;
+        }
+        const { error } = await fetchClient
+            .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
+                params: { path: { locationId, tagId: tag.id.toString() } },
+                body: {
+                    voteUp: removeExistingVote ? undefined : voteUp,
+                    text: tag.myReview?.text ?? undefined,
+                },
+            })
+            .catch((er) => ({ error: er }));
+
+        if (error) {
+            toast.error('Failed to vote! Are you logged in?');
+        } else {
+            await queryClient.refetchQueries(
+                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                    params: { path: { locationId } },
+                }),
+            );
+        }
+    };
+    const updateReview = async (review: string | undefined) => {
+        const { error } = await fetchClient
+            .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
+                params: { path: { locationId, tagId: tag.id.toString() } },
+                body: { voteUp: tag.myReview?.vote, text: review },
+            })
+            .catch((e) => ({ error: e }));
+        if (error) {
+            toast.error(`Failed to ${review === undefined ? 'delete' : 'save'} review!`);
+        } else {
+            await queryClient.refetchQueries(
+                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                    params: { path: { locationId } },
+                }),
+            );
+            setIsDraftingReview(false);
+        }
+    };
+    const upvotePercent = (tag.totalLikes / tag.totalVotes) * 100 || 0; // in case of divsion by 0
+
+    return (
+        <>
+            <tr className={css.tag}>
+                <td className={css.tag__percent}>{upvotePercent}%</td>
+                <td>
+                    <BarIndicator upvotePercent={upvotePercent} inactive={tag.totalVotes === 0} />
+                </td>
+
+                <td className={css.tag__name}>{tag.name}</td>
+                <td>
+                    <button
+                        aria-pressed={tag.myReview?.vote === true}
+                        className={clsx(css.tag__vote, css.tag__like)}
+                        onClick={() => toggleVote(true)}
+                        type="button"
+                    >
+                        <LikeIcon />
+                        {tag.totalLikes}
+                    </button>
+                </td>
+                <td>
+                    <button
+                        className={clsx(css.tag__vote, css.tag__dislike)}
+                        onClick={() => toggleVote(false)}
+                        type="button"
+                        aria-pressed={tag.myReview?.vote === false}
+                    >
+                        <DislikeIcon />
+                        {tag.totalVotes - tag.totalLikes}
+                    </button>
+                </td>
+                <td>
+                    <button
+                        className={css['tag__review-button']}
+                        disabled={tag.myReview === null}
+                        type="button"
+                        onClick={() => setIsDraftingReview(true)}
+                    >
+                        <PencilIcon />
+                        {tag.myReview?.text ? 'Edit' : 'Review'}
+                    </button>
+                </td>
+            </tr>
+            <tr className={css['tag__review-row']}>
+                <td colSpan={5} className={css.tag__review}>
+                    <ReviewSection
+                        currentReview={tag.myReview?.text ?? null}
+                        openForEditing={isDraftingReview}
+                        saveNewReview={updateReview}
+                        closeDraft={() => setIsDraftingReview(false)}
+                        deleteReview={() => {
+                            updateReview(undefined);
+                        }}
+                    />
+                </td>
+            </tr>
+        </>
     );
 }
 
@@ -113,9 +250,11 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
             </section>
             <section className={css['tag-section']}>
                 <table className={css['tag-list']}>
-                    {reviewSummary?.tagData.map((tag) => (
-                        <Tag tag={tag} key={tag.id} locationId={locationId} />
-                    ))}
+                    <tbody>
+                        {reviewSummary?.tagData.map((tag) => (
+                            <Tag tag={tag} key={tag.id} locationId={locationId} />
+                        ))}
+                    </tbody>
                 </table>
             </section>
         </div>
