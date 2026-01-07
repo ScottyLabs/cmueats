@@ -103,12 +103,8 @@ export default function EateryCardGrid({
                 <div className={css.supergrid__grid}>
                     <AnimatePresence mode="popLayout">
                         {[
-                            // FIXME: removing pinning functionality for now, since we don't have a dropdown yet
-                            ...sortedLocations.filter(
-                                (location) =>
-                                    location.cardViewPreference === 'normal' ||
-                                    location.cardViewPreference === 'pinned',
-                            ),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
                         ].map(locationToCard)}
                     </AnimatePresence>
                 </div>
