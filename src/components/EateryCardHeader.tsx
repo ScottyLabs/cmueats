@@ -98,7 +98,7 @@ function EateryCardHeader({
                         e.stopPropagation();
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
                         setIsMenuOpen(false);
-                        if (!isHidden && location.conceptId === selectedId) closeDrawer();
+                        if (!isHidden && location.id === selectedId) closeDrawer();
                     }}
                 >
                     {isHidden ? (
@@ -170,7 +170,6 @@ function EateryCardHeader({
                     type="button"
                     className={css['more-button']}
                     onClick={(e) => {
-                        // e.stopPropagation();
                         e.preventDefault();
                         handleToggleMenu();
                     }}
