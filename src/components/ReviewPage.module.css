@@ -50,8 +50,10 @@
     }
 }
 .tag__name {
-    width: 100%;
+    width: 0;
+    min-width: 100%;
     text-wrap: nowrap;
+    text-overflow: ellipsis;
     overflow: hidden;
     color: var(--black-200);
 }
@@ -95,10 +97,15 @@
     &:disabled {
         color: var(--black-800);
     }
+    @container (width<=388px) {
+        .tag__review-button__text {
+            display: none;
+        }
+    }
 }
 
 .tag__review-container {
-    margin: 3px -4px 15px;
+    margin: 3px -4px 40px;
     position: relative;
     .review {
         width: 100%;

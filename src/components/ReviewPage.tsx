@@ -53,12 +53,13 @@ function ReviewSection({
     closeDraft: () => void;
     deleteReview: () => void;
 }) {
-    const [inputBoxHeight, setInputBoxHeight] = useState(0);
+    const [inputBoxHeight, setInputBoxHeight] = useState(MIN_INPUT_HEIGHT_PX);
     const [draftText, setDraftText] = useState('');
     const inputBoxRef = useRef<HTMLTextAreaElement | null>(null);
 
     // listen for `cmd/ctrl` + `enter` for textarea submission
     useEffect(() => {
+        if (!openForEditing) return () => {};
         function handleKeyDown(event: KeyboardEvent) {
             if (event.defaultPrevented) return;
             const isMac = navigator.platform.includes('Mac');
@@ -77,15 +78,34 @@ function ReviewSection({
     }, [draftText]);
 
     useLayoutEffect(() => {
-        setDraftText(currentReview ?? '');
-        setInputBoxHeight(0); // recalibrate
+        if (openForEditing) {
+            // this conditional is important, since we don't want to early-update draft text when the textbox doesn't exist yet
+            setDraftText(currentReview ?? '');
+        }
     }, [openForEditing]);
 
     useLayoutEffect(() => {
-        if (inputBoxRef.current) {
+        if (openForEditing) {
+            // so is this one
+            setInputBoxHeight(0); // recalibrate
+        }
+    }, [draftText]);
+
+    // focus cursor at end of textarea on input box open
+    useEffect(() => {
+        if (openForEditing && inputBoxRef.current) {
+            inputBoxRef.current.focus();
+            inputBoxRef.current.selectionStart = inputBoxRef.current.value.length;
+        }
+    }, [openForEditing]);
+
+    // the actual height calibration one
+    useLayoutEffect(() => {
+        if (inputBoxHeight === 0 && inputBoxRef.current) {
             setInputBoxHeight(Math.max(MIN_INPUT_HEIGHT_PX, inputBoxRef.current.scrollHeight + 2)); // the +2 is to account for the border
         }
-    }, [draftText, openForEditing]); // we need `openForEditing` for sizing on initial input box load
+    }, [inputBoxHeight]); // we 'trigger' a recalibration by setting height to 0
+
     if (currentReview === null && !openForEditing) return undefined;
     return openForEditing ? (
         <div className={clsx(css['tag__review-container'], css['tag__review-container--edit'])}>
@@ -151,6 +171,7 @@ function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
         }
     };
     const updateReview = async (review: string | undefined) => {
+        if (review?.length === 0) return;
         const { error } = await fetchClient
             .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
                 params: { path: { locationId, tagId: tag.id.toString() } },
@@ -187,7 +208,9 @@ function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
                     </div>
                 </td>
 
-                <td className={css.tag__name}>{tag.name}</td>
+                <td style={{ width: '100%' }}>
+                    <div className={css.tag__name}>{tag.name}</div>
+                </td>
                 <td>
                     <button
                         aria-pressed={tag.myReview?.vote === true}
@@ -218,7 +241,9 @@ function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
                         onClick={() => setIsDraftingReview(true)}
                     >
                         <PencilIcon />
-                        {tag.myReview?.text ? 'Edit' : 'Review'}
+                        <span className={css['tag__review-button__text']}>
+                            {tag.myReview?.text ? 'Edit' : 'Review'}
+                        </span>
                     </button>
                 </td>
             </tr>
