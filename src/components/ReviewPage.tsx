@@ -7,6 +7,7 @@ import css from './ReviewPage.module.css';
 import LikeIcon from '../assets/control_buttons/like.svg?react';
 import DislikeIcon from '../assets/control_buttons/dislike.svg?react';
 import PencilIcon from '../assets/control_buttons/pencil.svg?react';
+import { redToGreenInterpolation } from '../util/color';
 
 interface Tag {
     id: number;
@@ -168,13 +169,22 @@ function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
         }
     };
     const upvotePercent = (tag.totalLikes / tag.totalVotes) * 100 || 0; // in case of divsion by 0
-
     return (
         <>
             <tr className={css.tag}>
-                <td className={css.tag__percent}>{upvotePercent}%</td>
                 <td>
                     <BarIndicator upvotePercent={upvotePercent} inactive={tag.totalVotes === 0} />
+                </td>
+                <td>
+                    <div
+                        className={css.tag__percent}
+                        style={{
+                            color:
+                                tag.totalVotes > 0 ? redToGreenInterpolation(upvotePercent / 100) : `var(--black-500)`,
+                        }}
+                    >
+                        {upvotePercent}%
+                    </div>
                 </td>
 
                 <td className={css.tag__name}>{tag.name}</td>
@@ -213,7 +223,7 @@ function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
                 </td>
             </tr>
             <tr className={css['tag__review-row']}>
-                <td colSpan={5} className={css.tag__review}>
+                <td colSpan={6} className={css.tag__review}>
                     <ReviewSection
                         currentReview={tag.myReview?.text ?? null}
                         openForEditing={isDraftingReview}
