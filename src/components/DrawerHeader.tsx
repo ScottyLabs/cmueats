@@ -5,20 +5,23 @@ import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function DrawerHeader() {
+    const isMobile = window.innerWidth <= 600;
     const { location } = useDrawerTabsContext();
     const { closeDrawer } = useDrawerAPIContext();
     const { name, location: physicalLocation, url } = location;
 
     return (
         <div className={css['drawer-header-container']}>
-            <button
-                type="button"
-                onClick={() => closeDrawer()}
-                className={css['header__close-button']}
-                aria-label="Close location drawer"
-            >
-                <X size={36} />
-            </button>
+            {!isMobile && (
+                <button
+                    type="button"
+                    onClick={() => closeDrawer()}
+                    className={css['header__close-button']}
+                    aria-label="Close location drawer"
+                >
+                    <X size={36} />
+                </button>
+            )}
             <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
                 {location.statusMsg.longStatus}
             </div>
@@ -30,7 +33,6 @@ function DrawerHeader() {
                     </a>
                 </h3>
             </div>
-
             <div className={css.header__location}>
                 <MapPin size={16} />
                 <span>{physicalLocation}</span>

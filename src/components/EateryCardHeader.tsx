@@ -7,6 +7,8 @@ import EyeControlIcon from '../assets/control_buttons/x.svg?react';
 import EyeOffControlIcon from '../assets/control_buttons/restore.svg?react';
 import { CardViewPreference } from '../util/storage';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
+import PinnedControlIcon from '../assets/control_buttons/pinned.svg?react';
+import UnpinnedControlIcon from '../assets/control_buttons/unpinned.svg?react';
 
 function EateryCardHeader({
     location,
@@ -19,6 +21,8 @@ function EateryCardHeader({
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isHidden = location.cardViewPreference === 'hidden';
     const { closeDrawer, selectedId } = useDrawerAPIContext();
+    const isPinned = location.cardViewPreference === 'pinned';
+
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
         if (!statusChangesSoon) {
@@ -34,6 +38,7 @@ function EateryCardHeader({
 
     const { statusMsg } = location;
 
+    const isMobile = window.innerWidth <= 600;
     return (
         <div
             className={css['card-header-container']}
@@ -50,21 +55,23 @@ function EateryCardHeader({
                 <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
             </div>
             <div className={css['button-container']}>
-                {/* <button
-                    type="button"
-                    className={css['action-button']}
-                    aria-label={isPinned ? 'Unpin Card' : 'Pin Card'}
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        updateViewPreference(isPinned ? 'normal' : 'pinned');
-                    }}
-                >
-                    {isPinned ? (
-                        <PinnedControlIcon className={css['action-button__icon']} />
-                    ) : (
-                        <UnpinnedControlIcon className={css['action-button__icon']} />
-                    )}
-                </button> */}
+                {isMobile && (
+                    <button
+                        type="button"
+                        className={css['action-button']}
+                        aria-label={isPinned ? 'Unpin Card' : 'Pin Card'}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            updateViewPreference(isPinned ? 'normal' : 'pinned');
+                        }}
+                    >
+                        {isPinned ? (
+                            <PinnedControlIcon className={css['action-button__icon']} />
+                        ) : (
+                            <UnpinnedControlIcon className={css['action-button__icon']} />
+                        )}
+                    </button>
+                )}
 
                 <button
                     type="button"

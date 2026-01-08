@@ -120,3 +120,35 @@
         vertical-align: middle;
     }
 }
+
+@media (max-width: 600px) {
+    .card-header-dot {
+        width: 8px;
+        height: 8px;
+    }
+    .card-header-relative-time-text {
+        font-size: 0.9rem;
+    }
+
+    .desktop {
+        display: none;
+    }
+    .card-header-container {
+        padding: 3px 13px 5px;
+    }
+    .action-button {
+        padding: 5px;
+
+        .action-button__icon {
+            width: 15px;
+            height: 18px;
+            color: var(--black-800);
+            vertical-align: middle;
+        }
+    }
+
+    .button-container {
+        display: flex;
+        gap: 15px;
+    }
+}

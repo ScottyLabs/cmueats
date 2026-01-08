@@ -7,11 +7,14 @@ import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
 import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
 import { ILocation_Full } from '../types/locationTypes';
+import BottomSheet from './BottomSheet';
 
 function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
     const { selectedId, closeDrawer } = useDrawerAPIContext();
     const pickedLocation = locations?.find((loc) => loc.id === selectedId);
+    const isMobile = window.innerWidth <= 600;
+
     // `esc` to close the drawer
     useEffect(() => {
         if (selectedId === null) return () => {};
@@ -36,7 +39,28 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
         drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
     }, [pickedLocation?.id]);
 
-    return (
+    return isMobile ? (
+        <BottomSheet
+            active={pickedLocation !== undefined}
+            onHide={() => {
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        closeDrawer();
+                    });
+                }, 200);
+            }}
+        >
+            <div className={css['drawer-box-mobile']}>
+                {pickedLocation !== undefined && (
+                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                        <DrawerHeader />
+                        <DrawerTabNav />
+                        <DrawerTabContent />
+                    </DrawerTabsContextProvider>
+                )}
+            </div>
+        </BottomSheet>
+    ) : (
         <AnimatePresence mode="popLayout">
             {pickedLocation !== undefined && (
                 <motion.div

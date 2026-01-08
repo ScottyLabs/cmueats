@@ -30,6 +30,8 @@ function ListPage({
 }) {
     const shouldAnimateCards = useRef(true);
 
+    const isMobile = window.innerWidth <= 600;
+
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
     // re-animating in when filter gets cleared
@@ -97,7 +99,7 @@ function ListPage({
                     <div className="list-controls-container">
                         <div className="list-controls-layout">
                             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                            <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                            {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
                         </div>
                     </div>
                     <EateryCardGrid

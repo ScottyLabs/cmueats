@@ -54,3 +54,19 @@
     color: var(--text-primary);
     padding: 5px 8px;
 }
+
+@media (max-width: 600px) {
+    .desktop {
+        display: none;
+    }
+    .card-content-container {
+        padding: 10px 13px 14px;
+    }
+    .physical-location-text {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    .location-name-text {
+        font-size: 20px;
+    }
+}

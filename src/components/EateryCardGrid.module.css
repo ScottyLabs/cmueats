@@ -38,6 +38,15 @@
     }
 }
 
+.grid-tooltip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--card-text-muted);
+    font-size: 14px;
+    cursor: help;
+}
+
 .supergrid__help-text {
     display: flex;
     align-items: center;
@@ -65,4 +74,14 @@
 }
 .hidden-grid {
     opacity: 60%;
+}
+
+@media (max-width: 600px) {
+    .supergrid__help-text {
+        gap: 4px;
+    }
+
+    .supergrid__grid {
+        padding: 12px var(--global-x-padding) 10px;
+    }
 }
