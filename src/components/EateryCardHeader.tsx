@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { MoreHorizontal, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
+import { MoreHorizontal, Pin, PinOff, ChevronsUp, X } from 'lucide-react';
 import clsx from 'clsx';
 import { ILocation_Full } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
@@ -91,7 +91,7 @@ function EateryCardHeader({
 
                 <button
                     type="button"
-                    className={clsx(css['menu-button'], css['hide-button'])}
+                    className={clsx(css['menu-button'], isHidden ? css['hide-button_show'] : css['hide-button_hide'])}
                     onClick={(e) => {
                         e.stopPropagation();
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
@@ -101,12 +101,12 @@ function EateryCardHeader({
                 >
                     {isHidden ? (
                         <>
-                            <Eye size={16} />
+                            <ChevronsUp size={16} />
                             <div>Show Card</div>
                         </>
                     ) : (
                         <>
-                            <EyeOff size={16} />
+                            <X size={16} />
                             <div>Hide Card</div>
                         </>
                     )}

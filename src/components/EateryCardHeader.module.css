@@ -104,6 +104,10 @@
     color: var(--yellow-400);
 }
 
-.hide-button {
+.hide-button_hide {
     color: var(--red-300);
+}
+
+.hide-button_show {
+    color: var(--green-500);
 }

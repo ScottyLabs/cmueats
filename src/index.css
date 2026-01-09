@@ -28,6 +28,13 @@
     --red-600: #d04425;
     --red-800: #8a250f;
 
+    --green-400: #4fe3a3;
+    --green-500: #1db875;
+    --green-550: #1fad70;
+    --green-600: #33996d;
+    --green-800: #0e5838;
+    --green-900: #072c1c;
+
     --main-bg: hsl(214, 7%, 19%);
     --main-bg-accent: #23272a;
     --text-primary: white;
