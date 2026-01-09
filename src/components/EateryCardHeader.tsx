@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MoreHorizontal, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 import clsx from 'clsx';
@@ -39,7 +39,6 @@ function EateryCardHeader({
     const menuRef = useRef<HTMLDivElement | null>(null);
     const moreButtonRef = useRef<HTMLButtonElement | null>(null);
     const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
-    const menuId = useId();
 
     function handleToggleMenu() {
         if (isMenuOpen) {
@@ -66,7 +65,6 @@ function EateryCardHeader({
                 ref={menuRef}
                 className={css.menu}
                 style={{ top: `${menuPosition.top}px`, left: `${menuPosition.left}px` }}
-                id={menuId}
                 onClick={(e) => e.preventDefault()}
             >
                 <button
