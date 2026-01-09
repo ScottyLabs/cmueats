@@ -2,25 +2,18 @@ import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { MethodResponse } from 'openapi-react-query';
 import { $api, fetchClient } from '../api';
 import css from './ReviewPage.module.css';
 import LikeIcon from '../assets/control_buttons/like.svg?react';
 import DislikeIcon from '../assets/control_buttons/dislike.svg?react';
+import EmptyStarIcon from '../assets/control_buttons/starEmpty.svg?react';
+import FilledStarIcon from '../assets/control_buttons/starFilled.svg?react';
 import PencilIcon from '../assets/control_buttons/pencil.svg?react';
 import { redToGreenInterpolation } from '../util/color';
 
-interface Tag {
-    id: number;
-    name: string;
-    totalVotes: number;
-    totalLikes: number;
-    myReview: {
-        vote: boolean;
-        text: string | null;
-        createdAt: number;
-        updatedAt: number;
-    } | null;
-}
+type APISummaryType = MethodResponse<typeof $api, 'get', '/v2/locations/{locationId}/reviews/summary'>;
+
 const MIN_INPUT_HEIGHT_PX = 100;
 function BarIndicator({ upvotePercent, inactive }: { upvotePercent: number; inactive: boolean }) {
     const greenRectCount = Math.floor(upvotePercent / 10);
@@ -37,6 +30,117 @@ function BarIndicator({ upvotePercent, inactive }: { upvotePercent: number; inac
                 .map((_, i) => (
                     <div className={css['bar-indicator__bar']} key={i} />
                 ))}
+        </div>
+    );
+}
+function StarDisplay({
+    starRating,
+    setNewRating,
+    starHeight,
+    starGap,
+}: {
+    starRating: number | null;
+    setNewRating?: (rating: number) => void;
+    starHeight: number;
+    starGap: number;
+}) {
+    const [hoverCount, setHoverCount] = useState<number>(); // ranges from 1-10
+    const findStarCutoffPercent = () => {
+        const percent = (hoverCount !== undefined ? hoverCount / 10 : starRating !== null ? starRating / 5 : 0) * 100;
+        const gapsCovered = Math.floor((percent - 0.00001) / 20);
+        // raw percentage includes the 4 gaps, so we'll need to subtract off 4*STAR_GAP*percentage to get real total star width. we then add on the gaps
+        return `calc(${percent}% - ${(4 * starGap * percent) / 100}px + ${gapsCovered * starGap}px)`;
+    };
+    return (
+        <div
+            className={css['star-outer-container']}
+            style={{ '--star-gap': `${starGap}px`, '--star-height': `${starHeight}px` }}
+            onMouseLeave={() => setHoverCount(undefined)}
+        >
+            <div className={css['empty-star-container']}>
+                {Array(5)
+                    .fill(undefined)
+                    .map((_, i) => (
+                        <EmptyStarIcon key={i} />
+                    ))}
+            </div>
+            <div
+                className={css['filled-star-container']}
+                style={{
+                    '--star-cutoff': `${findStarCutoffPercent()}`,
+                }}
+            >
+                {Array(5)
+                    .fill(undefined)
+                    .map((_, i) => (
+                        <FilledStarIcon key={i} />
+                    ))}
+            </div>
+            {setNewRating && (
+                <div className={css['invisible-button-container']}>
+                    {Array(10)
+                        .fill(undefined)
+                        .map((_, i) => (
+                            <button
+                                key={i}
+                                onMouseEnter={() => setHoverCount(i + 1)}
+                                onClick={() => setNewRating((i + 1) / 2)}
+                            />
+                        ))}
+                </div>
+            )}
+        </div>
+    );
+}
+function StarDistribution({ distribution }: { distribution: number[] }) {
+    return (
+        <div className={css['star-distribution']}>
+            {distribution.map((d, i) => (
+                <div className={css['star-distribution__bar']} key={i} style={{ flexGrow: d }} />
+            ))}
+        </div>
+    );
+}
+function Ratings({ starData, locationId }: { starData: APISummaryType['starData']; locationId: string }) {
+    const queryClient = useQueryClient();
+    return (
+        <div className={css.stars}>
+            <div className={css['stars__global-rating']}>
+                <span
+                    className={clsx(
+                        css['global-rating__number'],
+                        starData.avg === null && css['global-rating__number--inactive'],
+                    )}
+                >
+                    {starData.avg?.toFixed(1) ?? 'N/A'}
+                </span>
+                <StarDisplay starRating={starData.avg} starHeight={25} starGap={5} />
+            </div>
+            <div className={css['stars__personal-rating']}>
+                <span className={css['personal-rating__text']}>Your rating: </span>
+                <StarDisplay
+                    starRating={starData.personalRating}
+                    starHeight={20}
+                    starGap={5}
+                    setNewRating={async (stars) => {
+                        const { error } = await fetchClient
+                            .PUT('/v2/locations/{locationId}/reviews/stars/me', {
+                                params: { path: { locationId } },
+                                body: { stars },
+                            })
+                            .catch((e) => ({ error: e }));
+                        if (error) {
+                            toast.error('Failed to set rating!');
+                        } else {
+                            await queryClient.refetchQueries(
+                                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                                    params: { path: { locationId } },
+                                }),
+                            );
+                        }
+                    }}
+                />
+            </div>
         </div>
     );
 }
@@ -140,7 +244,7 @@ function ReviewSection({
         </div>
     );
 }
-function Tag({ tag, locationId }: { tag: Tag; locationId: string }) {
+function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationId: string }) {
     const queryClient = useQueryClient();
     const [isDraftingReview, setIsDraftingReview] = useState(false);
 
@@ -273,15 +377,12 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
         params: { path: { locationId } },
     });
     if (error) return <div>Failed to load reviews!</div>;
+    if (reviewSummary === undefined) return <div>Loading</div>;
     return (
         <div>
             <section className={css['star-section']}>
-                <div className={css.stars}>
-                    <div className={css['stars__global-rating']}>{reviewSummary?.starData.avg ?? 'NO'} </div>
-                    <div className={css['stars__personal-rating']}>
-                        {reviewSummary?.starData.personalRating ?? 'NO'}
-                    </div>
-                </div>
+                <Ratings starData={reviewSummary.starData} locationId={locationId} />
+                <StarDistribution distribution={reviewSummary.starData.buckets} />
             </section>
             <section className={css['tag-section']}>
                 <table className={css['tag-list']}>

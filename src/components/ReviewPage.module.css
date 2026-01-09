@@ -1,3 +1,6 @@
+.tag-section {
+    margin-top: 30px;
+}
 .tag-list {
     padding: 0;
     margin: 0;
@@ -180,5 +183,109 @@
     }
     .tag__bar-indicator {
         display: none;
+    }
+}
+.star-section {
+    display: flex;
+    gap: 20px;
+}
+.stars {
+    flex-shrink: 0;
+}
+.stars__global-rating {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+.global-rating__number {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: -5px;
+    &.global-rating__number--inactive {
+        color: var(--black-500);
+    }
+}
+.stars__personal-rating {
+    margin-top: 20px;
+    display: flex;
+    gap: 5px;
+    font-size: 16px;
+}
+.star-outer-container {
+    position: relative;
+}
+.empty-star-container,
+.filled-star-container {
+    display: flex;
+    gap: var(--star-gap);
+    color: var(--black-600);
+    svg {
+        width: var(--star-height);
+        height: var(--star-height);
+    }
+}
+.invisible-button-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    button {
+        flex-grow: 2;
+        opacity: 0;
+        border: none;
+        padding: 0;
+        &:first-child {
+            flex-grow: 1;
+        }
+        &:last-child {
+            flex-grow: 1;
+        }
+    }
+}
+@property --star-cutoff {
+    syntax: '<percentage-length>';
+    inherits: false;
+    initial-value: 0%;
+}
+.filled-star-container {
+    color: var(--yellow-400);
+    overflow: hidden;
+    position: absolute;
+    inset: 0;
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 1) 0px,
+        rgba(0, 0, 0, 1) var(--star-cutoff),
+        rgba(0, 0, 0, 0) var(--star-cutoff)
+    );
+    transition: 0.09s --star-cutoff;
+}
+.star-distribution {
+    height: 13px;
+    background-color: var(--black-800);
+    border-radius: 99px;
+    flex-grow: 1;
+    align-self: flex-start;
+    margin-top: 10px;
+    display: flex;
+    overflow: hidden;
+    .star-distribution__bar {
+        &:nth-child(1) {
+            background-color: var(--red-500);
+        }
+        &:nth-child(2) {
+            background-color: var(--red-500);
+        }
+        &:nth-child(3) {
+            background-color: #fd8003;
+        }
+        &:nth-child(4) {
+            background-color: var(--yellow-400);
+        }
+        &:nth-child(5) {
+            background-color: #1db875;
+        }
+        &:nth-child(6) {
+            background-color: #189a62;
+        }
     }
 }
