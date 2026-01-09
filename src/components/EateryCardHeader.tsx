@@ -173,7 +173,7 @@ function EateryCardHeader({
                     }}
                     ref={moreButtonRef}
                 >
-                    <MoreHorizontal size={13} />
+                    <MoreHorizontal size={16} />
                 </button>
                 {isMenuOpen && renderMenu()}
             </div>
