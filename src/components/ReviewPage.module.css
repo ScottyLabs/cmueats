@@ -226,10 +226,10 @@
 }
 .invisible-button-container {
     position: absolute;
-    inset: 0;
+    inset: 0 calc(var(--star-gap) * -0.5);
     display: flex;
     button {
-        flex-grow: 2;
+        flex-grow: 1;
         opacity: 0;
         border: none;
         padding: 0;
@@ -262,8 +262,10 @@
 .star-distribution {
     height: 13px;
     background-color: var(--black-800);
-    border-radius: 99px;
+    border-radius: 3px;
     flex-grow: 1;
+    max-width: 200px;
+    margin-left: auto;
     align-self: flex-start;
     margin-top: 10px;
     display: flex;

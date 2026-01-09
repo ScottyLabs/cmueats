@@ -1,7 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    padding: 15px var(--drawer-x-padding) 40px;
+    padding: 20px var(--drawer-x-padding) 40px;
 }
 
 .description {
