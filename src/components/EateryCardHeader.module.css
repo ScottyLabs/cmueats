@@ -1,6 +1,7 @@
 .card-header-container {
     display: flex;
     align-items: center;
+    height: 30px;
     gap: 0px;
     color: var(--status-color);
     border-bottom: 2px solid var(--status-color);
@@ -58,7 +59,7 @@
 .more-button {
     color: var(--text-primary);
     border: none;
-    padding: 4px 6px;
+    padding: 6px;
     border-radius: 5px;
     background: transparent;
     display: inline-flex;
