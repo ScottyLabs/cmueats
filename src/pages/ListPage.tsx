@@ -79,19 +79,19 @@ function ListPage({
 
     return (
         <DrawerAPIContextProvider>
+            {showOfflineAlert && (
+                <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
+                    🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
+                    you are offline. We apologize for any inconvenience. 🌐🚫
+                </StyledAlert>
+            )}
+
             <div className="list-page-container" ref={mainContainerRef}>
                 {/*  showAlert &&
       <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
         🚧 [Issue Description]
         Please remain patient while we work on a fix. Thank you. 🚧
       </StyledAlert>  */}
-                {showOfflineAlert && (
-                    <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
-                        🚫🌐 We are temporarily unable to provide the latest available dining information or the map
-                        while you are offline. We apologize for any inconvenience. 🌐🚫
-                    </StyledAlert>
-                )}
-
                 <div className="list-box">
                     <ListPageHeader />
                     <div className="list-controls-container">
