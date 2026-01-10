@@ -4,11 +4,12 @@ import css from './EateryCardContent.module.css';
 
 function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_Full; partOfMainGrid: boolean }) {
     const { location: physicalLocation, name, cardViewPreference } = location;
+    const isPinned = cardViewPreference === 'pinned';
 
     return (
         <div className={css['card-content-container']}>
-            <h3 className={css['location-name-text']}>
-                {cardViewPreference === 'pinned' && <Pin size={16} />}
+            <h3 className={css['location-name-text']} style={isPinned ? { color: 'var(--yellow-300)' } : {}}>
+                {isPinned && <Pin size={16} />}
                 {name}
             </h3>
 

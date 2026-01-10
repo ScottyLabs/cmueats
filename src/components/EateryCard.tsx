@@ -62,14 +62,8 @@ function EateryCard({
     }, [isCardSelected]);
 
     const cardClassName = useMemo(
-        () =>
-            clsx(
-                css.card,
-                isCardSelected ? css['card-active'] : '',
-                partOfMainGrid ? css['card-in-main-grid'] : '',
-                location.cardViewPreference === 'pinned' ? css['card-pinned'] : '',
-            ),
-        [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
+        () => clsx(css.card, isCardSelected ? css['card-active'] : '', partOfMainGrid ? css['card-in-main-grid'] : ''),
+        [animate, isCardSelected, partOfMainGrid],
     );
     const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === (drawerAPIContext.selectedId ?? null); // aka change was not triggered by a drawer select/unselect
     return (

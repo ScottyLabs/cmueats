@@ -30,11 +30,6 @@
     outline: 2px solid white;
 }
 
-.card-pinned {
-    border: var(--card-border-width) solid var(--yellow-400);
-    border-radius: 7px;
-}
-
 .card__pin-container {
     position: absolute;
     bottom: 16px;
