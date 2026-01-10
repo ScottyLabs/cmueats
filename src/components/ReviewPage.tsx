@@ -10,7 +10,10 @@ import DislikeIcon from '../assets/control_buttons/dislike.svg?react';
 import EmptyStarIcon from '../assets/control_buttons/starEmpty.svg?react';
 import FilledStarIcon from '../assets/control_buttons/starFilled.svg?react';
 import PencilIcon from '../assets/control_buttons/pencil.svg?react';
+import DeleteIcon from '../assets/control_buttons/delete.svg?react';
 import { redToGreenInterpolation } from '../util/color';
+import { useContainerWidth } from '../contexts/ScreenWidth';
+import AllTagReviews from './AllTagReviews';
 
 type APISummaryType = MethodResponse<typeof $api, 'get', '/v2/locations/{locationId}/reviews/summary'>;
 
@@ -36,11 +39,13 @@ function BarIndicator({ upvotePercent, inactive }: { upvotePercent: number; inac
 function StarDisplay({
     starRating,
     setNewRating,
+    deleteRating,
     starHeight,
     starGap,
 }: {
     starRating: number | null;
     setNewRating?: (rating: number) => void;
+    deleteRating?: () => void;
     starHeight: number;
     starGap: number;
 }) {
@@ -51,43 +56,58 @@ function StarDisplay({
         // raw percentage includes the 4 gaps, so we'll need to subtract off 4*STAR_GAP*percentage to get real total star width. we then add on the gaps
         return `calc(${percent}% - ${(4 * starGap * percent) / 100}px + ${gapsCovered * starGap}px)`;
     };
+
     return (
         <div
-            className={css['star-outer-container']}
+            className={css['star-display']}
             style={{ '--star-gap': `${starGap}px`, '--star-height': `${starHeight}px` }}
-            onMouseLeave={() => setHoverCount(undefined)}
         >
-            <div className={css['empty-star-container']}>
-                {Array(5)
-                    .fill(undefined)
-                    .map((_, i) => (
-                        <EmptyStarIcon key={i} />
-                    ))}
-            </div>
-            <div
-                className={css['filled-star-container']}
-                style={{
-                    '--star-cutoff': `${findStarCutoffPercent()}`,
-                }}
-            >
-                {Array(5)
-                    .fill(undefined)
-                    .map((_, i) => (
-                        <FilledStarIcon key={i} />
-                    ))}
-            </div>
-            {setNewRating && (
-                <div className={css['invisible-button-container']}>
-                    {Array(10)
+            <div className={css['star-outer-container']} onMouseLeave={() => setHoverCount(undefined)}>
+                <div className={css['empty-star-container']}>
+                    {Array(5)
                         .fill(undefined)
                         .map((_, i) => (
-                            <button
-                                key={i}
-                                onMouseEnter={() => setHoverCount(i + 1)}
-                                onClick={() => setNewRating((i + 1) / 2)}
-                            />
+                            <EmptyStarIcon key={i} />
                         ))}
                 </div>
+                <div
+                    className={css['filled-star-container']}
+                    style={{
+                        '--star-cutoff': `${findStarCutoffPercent()}`,
+                    }}
+                >
+                    {Array(5)
+                        .fill(undefined)
+                        .map((_, i) => (
+                            <FilledStarIcon key={i} />
+                        ))}
+                </div>
+                {setNewRating && (
+                    <div className={css['invisible-button-container']}>
+                        {Array(10)
+                            .fill(undefined)
+                            .map((_, i) => (
+                                <button
+                                    key={i}
+                                    onMouseEnter={() => setHoverCount(i + 1)}
+                                    onClick={() => setNewRating((i + 1) / 2)}
+                                    type="button"
+                                    aria-label={`Set rating to ${(i + 1) / 2} stars`}
+                                />
+                            ))}
+                    </div>
+                )}
+            </div>
+            {setNewRating && (
+                <button
+                    className={css['star-display__delete']}
+                    disabled={starRating === null}
+                    aria-label="delete rating"
+                    onClick={deleteRating}
+                    type="button"
+                >
+                    <DeleteIcon />
+                </button>
             )}
         </div>
     );
@@ -103,6 +123,9 @@ function StarDistribution({ distribution }: { distribution: number[] }) {
 }
 function Ratings({ starData, locationId }: { starData: APISummaryType['starData']; locationId: string }) {
     const queryClient = useQueryClient();
+    const totalReviewCount = starData.buckets.reduce((acc, val) => acc + val);
+    const drawerWidth = useContainerWidth();
+
     return (
         <div className={css.stars}>
             <div className={css['stars__global-rating']}>
@@ -112,15 +135,21 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                         starData.avg === null && css['global-rating__number--inactive'],
                     )}
                 >
-                    {starData.avg?.toFixed(1) ?? 'N/A'}
+                    {starData.avg?.toFixed(1) ?? '0.0'}
                 </span>
-                <StarDisplay starRating={starData.avg} starHeight={25} starGap={5} />
+                <div className={css['global-rating__info']}>
+                    <div className={css['global-rating__info__star-display-wrapper']}>
+                        <StarDisplay starRating={starData.avg} starHeight={18} starGap={5} />
+                        <div className={css['star-display-wrapper__total-votes']}>({totalReviewCount})</div>
+                    </div>
+                    <StarDistribution distribution={starData.buckets} />
+                </div>
             </div>
             <div className={css['stars__personal-rating']}>
-                <span className={css['personal-rating__text']}>Your rating: </span>
+                <span className={css['personal-rating__text']}>Your rating</span>
                 <StarDisplay
                     starRating={starData.personalRating}
-                    starHeight={20}
+                    starHeight={drawerWidth > 450 ? 23 : 34}
                     starGap={5}
                     setNewRating={async (stars) => {
                         const { error } = await fetchClient
@@ -130,7 +159,23 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                             })
                             .catch((e) => ({ error: e }));
                         if (error) {
-                            toast.error('Failed to set rating!');
+                            toast.error('Failed to set rating! Are you logged in?');
+                        } else {
+                            await queryClient.refetchQueries(
+                                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                                    params: { path: { locationId } },
+                                }),
+                            );
+                        }
+                    }}
+                    deleteRating={async () => {
+                        const { error } = await fetchClient
+                            .DELETE('/v2/locations/{locationId}/reviews/stars/me', {
+                                params: { path: { locationId } },
+                            })
+                            .catch((e) => ({ error: e }));
+                        if (error) {
+                            toast.error('Failed to delete rating!');
                         } else {
                             await queryClient.refetchQueries(
                                 $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
@@ -220,7 +265,7 @@ function ReviewSection({
                     setDraftText(ev.target.value);
                     setInputBoxHeight(0); // recalibrate
                 }}
-                placeholder="Your review here"
+                placeholder="Your review here (anonymous)"
                 style={{ height: inputBoxHeight }}
                 ref={inputBoxRef}
             />
@@ -247,7 +292,20 @@ function ReviewSection({
 function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationId: string }) {
     const queryClient = useQueryClient();
     const [isDraftingReview, setIsDraftingReview] = useState(false);
-
+    const revalidateData = async () => {
+        await Promise.all([
+            queryClient.refetchQueries(
+                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                    params: { path: { locationId } },
+                }),
+            ),
+            queryClient.refetchQueries(
+                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
+                    params: { path: { locationId } },
+                }),
+            ),
+        ]);
+    };
     const toggleVote = async (voteUp: boolean) => {
         const removeExistingVote = tag.myReview?.vote === voteUp;
         if (removeExistingVote && tag.myReview?.text) {
@@ -267,11 +325,7 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
         if (error) {
             toast.error('Failed to vote! Are you logged in?');
         } else {
-            await queryClient.refetchQueries(
-                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-                    params: { path: { locationId } },
-                }),
-            );
+            revalidateData();
         }
     };
     const updateReview = async (review: string | undefined) => {
@@ -285,11 +339,7 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
         if (error) {
             toast.error(`Failed to ${review === undefined ? 'delete' : 'save'} review!`);
         } else {
-            await queryClient.refetchQueries(
-                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-                    params: { path: { locationId } },
-                }),
-            );
+            await revalidateData();
             setIsDraftingReview(false);
         }
     };
@@ -369,23 +419,29 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
 }
 
 export default function ReviewPage({ locationId }: { locationId: string }) {
-    const {
-        data: reviewSummary,
-        isLoading,
-        error,
-    } = $api.useQuery('get', '/v2/locations/{locationId}/reviews/summary', {
+    const { data: reviewSummary, error } = $api.useQuery('get', '/v2/locations/{locationId}/reviews/summary', {
         params: { path: { locationId } },
     });
+    const [page, setPage] = useState<'summary' | 'tag-reviews'>('summary');
     if (error) return <div>Failed to load reviews!</div>;
-    if (reviewSummary === undefined) return <div>Loading</div>;
-    return (
+    if (reviewSummary === undefined) return <div>Loading...</div>;
+    return page === 'summary' ? (
         <div>
             <section className={css['star-section']}>
                 <Ratings starData={reviewSummary.starData} locationId={locationId} />
-                <StarDistribution distribution={reviewSummary.starData.buckets} />
             </section>
             <section className={css['tag-section']}>
-                <table className={css['tag-list']}>
+                <div className={css['tag-section__header']}>
+                    <span>Tags</span>
+                    <button
+                        className={css['tag-section__see-all-button']}
+                        type="button"
+                        onClick={() => setPage('tag-reviews')}
+                    >
+                        See all tag reviews
+                    </button>
+                </div>
+                <table className={css['tag-section__list']}>
                     <tbody>
                         {reviewSummary?.tagData.map((tag) => (
                             <Tag tag={tag} key={tag.id} locationId={locationId} />
@@ -394,5 +450,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                 </table>
             </section>
         </div>
+    ) : (
+        <AllTagReviews locationId={locationId} goBack={() => setPage('summary')} />
     );
 }

@@ -7,6 +7,7 @@ import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
 import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
 import { ILocation_Full } from '../types/locationTypes';
+import { WidthProvider } from '../contexts/ScreenWidth';
 
 function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
@@ -39,19 +40,21 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     return (
         <AnimatePresence mode="popLayout">
             {pickedLocation !== undefined && (
-                <motion.div
-                    initial={{ opacity: 0, transform: 'translateX(3px)' }}
-                    animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
-                    exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
-                    className={css['drawer-box']}
-                    ref={drawerRef}
-                >
-                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
-                        <DrawerHeader />
-                        <DrawerTabNav />
-                        <DrawerTabContent />
-                    </DrawerTabsContextProvider>
-                </motion.div>
+                <WidthProvider elementToCheckRef={drawerRef}>
+                    <motion.div
+                        initial={{ opacity: 0, transform: 'translateX(3px)' }}
+                        animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
+                        exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
+                        className={css['drawer-box']}
+                        ref={drawerRef}
+                    >
+                        <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                            <DrawerHeader />
+                            <DrawerTabNav />
+                            <DrawerTabContent />
+                        </DrawerTabsContextProvider>
+                    </motion.div>
+                </WidthProvider>
             )}
         </AnimatePresence>
     );

@@ -24,6 +24,9 @@
     --green-400: #4fe3a3;
     --green-500: #1db875;
 
+    --yellow-100: #fef9ec;
+    --yellow-200: #fcebc0;
+    --yellow-300: #f9dc8e;
     --yellow-400: #f6cc5d;
     --yellow-500: #dbb653;
 
@@ -219,6 +222,11 @@ body {
 button {
     font-family: inherit;
     font-size: inherit;
+
+    /* button reset */
+    background-color: transparent;
+    border: none;
+    padding: 0;
     &:not(:disabled) {
         cursor: pointer;
     }

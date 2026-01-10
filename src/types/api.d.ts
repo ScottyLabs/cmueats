@@ -212,9 +212,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1767668622682 */
+                            /** @example 1768074887682 */
                             start: number;
-                            /** @example 1767668622682 */
+                            /** @example 1768074887682 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -390,6 +390,26 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        writtenReview: string;
+                        tagName: string;
+                        id: number;
+                        tagId: number;
+                        userId: number;
+                        locationId: string;
+                        vote: boolean;
+                        createdAt: number;
+                        updatedAt: number;
+                    }[];
+                };
+            };
+        };
     };
 }

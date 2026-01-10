@@ -53,7 +53,6 @@ paths:
                       - type: "null"
                 required:
                   - user
-                additionalProperties: false
       operationId: getWhoami
   /:
     get:
@@ -88,11 +87,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1767668622682
+                              - 1768074887682
                             type: number
                           end:
                             examples:
-                              - 1767668622682
+                              - 1768074887682
                             type: number
                         required:
                           - start
@@ -383,6 +382,44 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    writtenReview:
+                      type: string
+                    tagName:
+                      type: string
+                    id:
+                      type: number
+                    tagId:
+                      type: number
+                    userId:
+                      type: number
+                    locationId:
+                      type: string
+                    vote:
+                      type: boolean
+                    createdAt:
+                      type: number
+                    updatedAt:
+                      type: number
+                  required:
+                    - writtenReview
+                    - tagName
+                    - id
+                    - tagId
+                    - userId
+                    - locationId
+                    - vote
+                    - createdAt
+                    - updatedAt
       operationId: getV2LocationsByLocationIdReviewsTags
 components:
   schemas: {}
