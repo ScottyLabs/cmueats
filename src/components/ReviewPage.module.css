@@ -307,16 +307,10 @@
         opacity: 0;
         border: none;
         padding: 0;
-        &:first-child {
-            flex-grow: 1;
-        }
-        &:last-child {
-            flex-grow: 1;
-        }
     }
 }
 @property --star-cutoff {
-    syntax: '<percentage-length>';
+    syntax: '<length-percentage>';
     inherits: false;
     initial-value: 0%;
 }
@@ -331,7 +325,7 @@
         rgba(0, 0, 0, 1) var(--star-cutoff),
         rgba(0, 0, 0, 0) var(--star-cutoff)
     );
-    transition: 0.09s --star-cutoff;
+    transition: 0.05s --star-cutoff;
 }
 .star-distribution {
     height: 10px;

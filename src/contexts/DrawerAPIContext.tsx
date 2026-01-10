@@ -40,7 +40,6 @@ export function DrawerAPIContextProvider({ children }: { children: React.ReactNo
     );
     useEffect(() => {
         const popStateEventListener = () => {
-            console.log(window.location.href);
             const activeId = new URL(window.location.href).searchParams.get('active_id');
             setDrawerConceptId(activeId);
         };

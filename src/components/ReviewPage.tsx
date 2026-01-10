@@ -224,7 +224,7 @@ function ReviewSection({
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [draftText]);
+    }, [openForEditing, draftText, saveNewReview]);
 
     useLayoutEffect(() => {
         if (openForEditing) {
@@ -343,7 +343,7 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
             setIsDraftingReview(false);
         }
     };
-    const upvotePercent = (tag.totalLikes / tag.totalVotes) * 100 || 0; // in case of divsion by 0
+    const upvotePercent = (tag.totalLikes / tag.totalVotes) * 100 || 0; // in case of division by 0
     return (
         <>
             <tr className={css.tag}>

@@ -37,7 +37,12 @@ export default function AllTagReviews({ locationId, goBack }: { locationId: stri
     return (
         <section>
             <div className={css['tag-review-header']}>
-                <button className={css['tag-review-header__back']} onClick={goBack}>
+                <button
+                    className={css['tag-review-header__back']}
+                    onClick={goBack}
+                    aria-label="Go back to summary"
+                    type="button"
+                >
                     <DropdownArrow />
                     Back
                 </button>

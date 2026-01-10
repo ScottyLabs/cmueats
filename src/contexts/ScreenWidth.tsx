@@ -1,6 +1,6 @@
-import { createContext, RefObject, useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { createContext, RefObject, useContext, useLayoutEffect, useState } from 'react';
 
-const DrawerWidthContext = createContext<number | undefined>(undefined);
+const WidthContext = createContext<number | undefined>(undefined);
 export function WidthProvider({
     elementToCheckRef,
     children,
@@ -15,7 +15,7 @@ export function WidthProvider({
     useLayoutEffect(() => {
         const controller = new AbortController();
         if (elementToCheckRef.current) {
-            setWidth(elementToCheckRef.current?.getBoundingClientRect().width);
+            setWidth(elementToCheckRef.current.getBoundingClientRect().width);
         }
 
         window.addEventListener(
@@ -28,10 +28,10 @@ export function WidthProvider({
         );
         return () => controller.abort();
     }, []);
-    return <DrawerWidthContext value={width}>{children}</DrawerWidthContext>;
+    return <WidthContext value={width}>{children}</WidthContext>;
 }
 export function useContainerWidth() {
-    const width = useContext(DrawerWidthContext);
+    const width = useContext(WidthContext);
     if (width === undefined) throw new Error('Should use inside WidthContext!');
     return width;
 }
