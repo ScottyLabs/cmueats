@@ -231,13 +231,14 @@ function ReviewSection({
             // this conditional is important, since we don't want to early-update draft text when the textbox doesn't exist yet
             setDraftText(currentReview ?? '');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- (we don't want the draft input to change mid-edit)
     }, [openForEditing]);
 
     useLayoutEffect(() => {
         if (openForEditing) {
-            // so is this one
             setInputBoxHeight(0); // recalibrate
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- (we only want to recalibrate height when draftText changes)
     }, [draftText]);
 
     // focus cursor at end of textarea on input box open
@@ -268,6 +269,7 @@ function ReviewSection({
                 placeholder="Your review here (anonymous)"
                 style={{ height: inputBoxHeight }}
                 ref={inputBoxRef}
+                maxLength={1000}
             />
             <div className={css['review-control-buttons']}>
                 {currentReview && (
@@ -316,8 +318,8 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
             .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
                 params: { path: { locationId, tagId: tag.id.toString() } },
                 body: {
-                    voteUp: removeExistingVote ? undefined : voteUp,
-                    text: tag.myReview?.text ?? undefined,
+                    voteUp: removeExistingVote ? null : voteUp,
+                    text: tag.myReview?.text ?? null,
                 },
             })
             .catch((er) => ({ error: er }));
@@ -328,12 +330,12 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
             revalidateData();
         }
     };
-    const updateReview = async (review: string | undefined) => {
+    const updateReview = async (review: string | null) => {
         if (review?.length === 0) return;
         const { error } = await fetchClient
             .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
                 params: { path: { locationId, tagId: tag.id.toString() } },
-                body: { voteUp: tag.myReview?.vote, text: review },
+                body: { voteUp: tag.myReview?.vote ?? null, text: review },
             })
             .catch((e) => ({ error: e }));
         if (error) {
@@ -409,7 +411,7 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
                         saveNewReview={updateReview}
                         closeDraft={() => setIsDraftingReview(false)}
                         deleteReview={() => {
-                            updateReview(undefined);
+                            updateReview(null);
                         }}
                     />
                 </td>

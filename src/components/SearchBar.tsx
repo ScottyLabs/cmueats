@@ -19,7 +19,7 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
             setSearchQuery(pendingQuery);
         }, 150);
         return () => window.clearTimeout(timeoutId);
-    }, [pendingQuery, searchQuery]);
+    }, [pendingQuery, searchQuery, setSearchQuery]);
 
     useEffect(() => {
         function handleKeyDown(event: KeyboardEvent) {
@@ -47,7 +47,7 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    }, [isMac]);
 
     return (
         <div className={css['locations-search-wrapper']}>

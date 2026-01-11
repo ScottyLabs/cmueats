@@ -212,9 +212,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1768074887682 */
+                            /** @example 1768097289649 */
                             start: number;
-                            /** @example 1768074887682 */
+                            /** @example 1768097289649 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -365,16 +365,16 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    voteUp?: boolean;
-                    text?: string;
+                    voteUp: (boolean | null) | null;
+                    text: (string | null) | null;
                 };
                 "application/x-www-form-urlencoded": {
-                    voteUp?: boolean;
-                    text?: string;
+                    voteUp: (boolean | null) | null;
+                    text: (string | null) | null;
                 };
                 "multipart/form-data": {
-                    voteUp?: boolean;
-                    text?: string;
+                    voteUp: (boolean | null) | null;
+                    text: (string | null) | null;
                 };
             };
         };

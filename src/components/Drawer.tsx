@@ -30,7 +30,7 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [selectedId]);
+    }, [selectedId, closeDrawer]);
 
     // reset scroll when selected location changes
     useEffect(() => {

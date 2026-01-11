@@ -27,7 +27,7 @@ export function WidthProvider({
             { signal: controller.signal },
         );
         return () => controller.abort();
-    }, []);
+    }, [elementToCheckRef]);
     return <WidthContext value={width}>{children}</WidthContext>;
 }
 export function useContainerWidth() {

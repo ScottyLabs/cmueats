@@ -53,6 +53,7 @@ paths:
                       - type: "null"
                 required:
                   - user
+                additionalProperties: false
       operationId: getWhoami
   /:
     get:
@@ -87,11 +88,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1768074887682
+                              - 1768097289649
                             type: number
                           end:
                             examples:
-                              - 1768074887682
+                              - 1768097289649
                             type: number
                         required:
                           - start
@@ -305,6 +306,9 @@ paths:
               type: object
               properties:
                 stars:
+                  minimum: 0.5
+                  maximum: 5
+                  multipleOf: 0.5
                   type: number
               required:
                 - stars
@@ -313,6 +317,9 @@ paths:
               type: object
               properties:
                 stars:
+                  minimum: 0.5
+                  maximum: 5
+                  multipleOf: 0.5
                   type: number
               required:
                 - stars
@@ -321,6 +328,9 @@ paths:
               type: object
               properties:
                 stars:
+                  minimum: 0.5
+                  maximum: 5
+                  multipleOf: 0.5
                   type: number
               required:
                 - stars
@@ -354,25 +364,52 @@ paths:
               type: object
               properties:
                 voteUp:
-                  type: boolean
+                  nullable: true
+                  anyOf:
+                    - type: boolean
+                    - type: "null"
                 text:
-                  type: string
+                  nullable: true
+                  anyOf:
+                    - type: string
+                    - type: "null"
+              required:
+                - voteUp
+                - text
           application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
                 voteUp:
-                  type: boolean
+                  nullable: true
+                  anyOf:
+                    - type: boolean
+                    - type: "null"
                 text:
-                  type: string
+                  nullable: true
+                  anyOf:
+                    - type: string
+                    - type: "null"
+              required:
+                - voteUp
+                - text
           multipart/form-data:
             schema:
               type: object
               properties:
                 voteUp:
-                  type: boolean
+                  nullable: true
+                  anyOf:
+                    - type: boolean
+                    - type: "null"
                 text:
-                  type: string
+                  nullable: true
+                  anyOf:
+                    - type: string
+                    - type: "null"
+              required:
+                - voteUp
+                - text
       operationId: putV2LocationsByLocationIdReviewsTagsByTagIdMe
   /v2/locations/{locationId}/reviews/tags:
     get:
