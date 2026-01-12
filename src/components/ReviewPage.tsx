@@ -508,7 +508,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                         })
                                         .catch((e) => ({ error: e }));
                                     if (reviewError) {
-                                        toast.error(`Failed to ${review === undefined ? 'delete' : 'save'} review!`);
+                                        toast.error(`Failed to ${review === null ? 'delete' : 'save'} review!`);
                                         return false;
                                     }
                                     await revalidateData();
