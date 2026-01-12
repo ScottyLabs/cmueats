@@ -370,8 +370,9 @@ function Tag({
                             if (success) setIsDraftingReview(false);
                         }}
                         closeDraft={() => setIsDraftingReview(false)}
-                        deleteReview={() => {
-                            updateReview(null);
+                        deleteReview={async () => {
+                            const success = await updateReview(null);
+                            if (success) setIsDraftingReview(false);
                         }}
                     />
                 </td>
@@ -429,12 +430,13 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                 key={tag.id}
                                 toggleVote={async (voteUp) => {
                                     if (tagVoteProcessing.current) return; // guarantee that `reviewSummary` represents a correct summary
-                                    tagVoteProcessing.current = true;
                                     const removeExistingVote = tag.myReview?.vote === voteUp;
                                     if (removeExistingVote && tag.myReview?.text) {
                                         toast.error('Please delete your written review before unvoting!');
                                         return;
                                     }
+
+                                    tagVoteProcessing.current = true;
                                     const newReviewSummary: typeof reviewSummary = {
                                         starData: reviewSummary.starData,
                                         tagData: reviewSummary.tagData.map((originalTag) => {
