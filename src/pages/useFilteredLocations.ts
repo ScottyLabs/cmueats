@@ -35,6 +35,6 @@ export default function useFilteredLocations({
                 : searchResults.filter((item) => locationFilterResults.has(item));
 
         return locations !== undefined ? intersection : undefined;
-    }, [fuse, searchQuery, locationFilterQuery]);
+    }, [fuse, processedSearchQuery, locations, locationFilterQuery]);
     return filteredLocations;
 }

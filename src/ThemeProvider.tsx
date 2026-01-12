@@ -15,11 +15,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         document.body.className = theme;
     }, [theme]);
 
-    const updateTheme = (_theme: Theme) => {
-        safeSetItem('theme', _theme);
-        setTheme(_theme);
-    };
-    const exportedContext = useMemo(() => ({ theme, updateTheme }), [theme, updateTheme]);
+    const exportedContext = useMemo(
+        () => ({
+            theme,
+            updateTheme: (_theme: Theme) => {
+                safeSetItem('theme', _theme);
+                setTheme(_theme);
+            },
+        }),
+        [theme],
+    );
     // listen for localstorage changes
     return <ThemeContext.Provider value={exportedContext}>{children}</ThemeContext.Provider>;
 }

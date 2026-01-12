@@ -16,7 +16,6 @@
         flex-shrink: 0;
     }
     overflow-y: auto;
-    overflow-x: hidden;
     height: 100%;
 }
 
@@ -38,7 +37,7 @@
 
     @container (width<1000px) {
         max-width: initial;
-        padding: 20px var(--global-x-padding) 15px;
+        padding: 20px var(--global-x-padding) 10px;
     }
     @container (width<600px) {
         grid-template-columns: 1fr;

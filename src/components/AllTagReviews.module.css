@@ -1,0 +1,40 @@
+.tag-review-header__back {
+    color: var(--black-300);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    svg {
+        rotate: 90deg;
+    }
+}
+.review {
+    margin-top: 30px;
+}
+.review__heading {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    .review__heading__date-relative {
+        margin-left: auto;
+        color: var(--black-400);
+    }
+    .review__heading__date-absolute {
+        color: var(--black-600);
+    }
+}
+.review__text {
+    margin-top: 10px;
+    line-height: 1.6;
+    white-space: pre-wrap; /* show all newlines and spaces */
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 9; /* number of lines to show */
+    line-clamp: 9;
+    -webkit-box-orient: vertical;
+}
+
+.status-text {
+    margin-top: 20px;
+}
