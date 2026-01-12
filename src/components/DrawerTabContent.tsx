@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { next7DaysReadableString } from '../util/time';
 import { useCurrentTime } from '../contexts/NowContext';
 import css from './DrawerTabContent.module.css';
@@ -14,17 +15,18 @@ function DrawerTabContent() {
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const drawerContext = useDrawerTabsContext();
     const { location } = drawerContext;
-
-    queryClient.prefetchQuery(
-        $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-            params: { path: { locationId: location.id } },
-        }),
-    );
-    queryClient.prefetchQuery(
-        $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
-            params: { path: { locationId: location.id } },
-        }),
-    );
+    useEffect(() => {
+        queryClient.prefetchQuery(
+            $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                params: { path: { locationId: location.id } },
+            }),
+        );
+        queryClient.prefetchQuery(
+            $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
+                params: { path: { locationId: location.id } },
+            }),
+        );
+    }, [location.id, queryClient]);
 
     if (!location) {
         return <div className={css.container} />;

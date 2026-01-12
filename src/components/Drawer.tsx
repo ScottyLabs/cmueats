@@ -49,13 +49,13 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
                     className={css['drawer-box']}
                     ref={drawerRef}
                 >
-                    <WidthContext value={drawerWidth}>
+                    <WidthContext.Provider value={drawerWidth}>
                         <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
                             <DrawerHeader />
                             <DrawerTabNav />
                             <DrawerTabContent />
                         </DrawerTabsContextProvider>
-                    </WidthContext>
+                    </WidthContext.Provider>
                 </motion.div>
             )}
         </AnimatePresence>
