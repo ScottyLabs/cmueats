@@ -499,7 +499,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                     }
                                 }}
                                 updateReview={async (review) => {
-                                    if (tagVoteProcessing.current) return false; // prevent race-conditions between the refetch here and a failed tag set aboves
+                                    if (tagVoteProcessing.current) return false; // prevent race-conditions between the refetch here and a failed tag set above
                                     if (review?.length === 0) return false;
                                     const { error: reviewError } = await fetchClient
                                         .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
