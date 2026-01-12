@@ -1,17 +1,31 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { next7DaysReadableString } from '../util/time';
 import { useCurrentTime } from '../contexts/NowContext';
 import css from './DrawerTabContent.module.css';
 import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 import ReviewPage from './ReviewPage';
+import { $api } from '../api';
 
 function DrawerTabContent() {
+    const queryClient = useQueryClient();
     const now = useCurrentTime();
     const dayOffsetFromSunday = now.weekday % 7;
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const drawerContext = useDrawerTabsContext();
     const { location } = drawerContext;
+
+    queryClient.prefetchQuery(
+        $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+            params: { path: { locationId: location.id } },
+        }),
+    );
+    queryClient.prefetchQuery(
+        $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
+            params: { path: { locationId: location.id } },
+        }),
+    );
 
     if (!location) {
         return <div className={css.container} />;

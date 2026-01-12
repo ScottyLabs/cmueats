@@ -291,60 +291,17 @@ function ReviewSection({
         </div>
     );
 }
-function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationId: string }) {
-    const queryClient = useQueryClient();
+function Tag({
+    tag,
+    toggleVote,
+    updateReview,
+}: {
+    tag: APISummaryType['tagData'][0];
+    toggleVote: (voteUp: boolean) => Promise<void>;
+    updateReview: (review: string | null) => Promise<boolean>;
+}) {
     const [isDraftingReview, setIsDraftingReview] = useState(false);
-    const revalidateData = async () => {
-        await Promise.all([
-            queryClient.refetchQueries(
-                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-                    params: { path: { locationId } },
-                }),
-            ),
-            queryClient.refetchQueries(
-                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
-                    params: { path: { locationId } },
-                }),
-            ),
-        ]);
-    };
-    const toggleVote = async (voteUp: boolean) => {
-        const removeExistingVote = tag.myReview?.vote === voteUp;
-        if (removeExistingVote && tag.myReview?.text) {
-            toast.error('Please delete your written review before unvoting!');
-            return;
-        }
-        const { error } = await fetchClient
-            .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
-                params: { path: { locationId, tagId: tag.id.toString() } },
-                body: {
-                    voteUp: removeExistingVote ? null : voteUp,
-                    text: tag.myReview?.text ?? null,
-                },
-            })
-            .catch((er) => ({ error: er }));
 
-        if (error) {
-            toast.error('Failed to vote! Are you logged in?');
-        } else {
-            revalidateData();
-        }
-    };
-    const updateReview = async (review: string | null) => {
-        if (review?.length === 0) return;
-        const { error } = await fetchClient
-            .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
-                params: { path: { locationId, tagId: tag.id.toString() } },
-                body: { voteUp: tag.myReview?.vote ?? null, text: review },
-            })
-            .catch((e) => ({ error: e }));
-        if (error) {
-            toast.error(`Failed to ${review === undefined ? 'delete' : 'save'} review!`);
-        } else {
-            await revalidateData();
-            setIsDraftingReview(false);
-        }
-    };
     const upvotePercent = (tag.totalLikes / tag.totalVotes) * 100 || 0; // in case of division by 0
     return (
         <>
@@ -408,7 +365,10 @@ function Tag({ tag, locationId }: { tag: APISummaryType['tagData'][0]; locationI
                     <ReviewSection
                         currentReview={tag.myReview?.text ?? null}
                         openForEditing={isDraftingReview}
-                        saveNewReview={updateReview}
+                        saveNewReview={async (review) => {
+                            const success = await updateReview(review);
+                            if (success) setIsDraftingReview(false);
+                        }}
                         closeDraft={() => setIsDraftingReview(false)}
                         deleteReview={() => {
                             updateReview(null);
@@ -425,6 +385,23 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
         params: { path: { locationId } },
     });
     const [page, setPage] = useState<'summary' | 'tag-reviews'>('summary');
+    const queryClient = useQueryClient();
+
+    const revalidateData = async () => {
+        await Promise.all([
+            queryClient.refetchQueries(
+                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                    params: { path: { locationId } },
+                }),
+            ),
+            queryClient.refetchQueries(
+                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
+                    params: { path: { locationId } },
+                }),
+            ),
+        ]);
+    };
+
     if (error) return <div>Failed to load reviews!</div>;
     if (reviewSummary === undefined) return <div>Loading...</div>;
     return page === 'summary' ? (
@@ -446,7 +423,90 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                 <table className={css['tag-section__list']}>
                     <tbody>
                         {reviewSummary?.tagData.map((tag) => (
-                            <Tag tag={tag} key={tag.id} locationId={locationId} />
+                            <Tag
+                                tag={tag}
+                                key={tag.id}
+                                toggleVote={async (voteUp) => {
+                                    const removeExistingVote = tag.myReview?.vote === voteUp;
+                                    if (removeExistingVote && tag.myReview?.text) {
+                                        toast.error('Please delete your written review before unvoting!');
+                                        return;
+                                    }
+                                    const newReviewSummary: typeof reviewSummary = {
+                                        starData: reviewSummary.starData,
+                                        tagData: reviewSummary.tagData.map((originalTag) => {
+                                            if (originalTag.id !== tag.id) return originalTag;
+                                            return {
+                                                ...originalTag,
+                                                totalLikes:
+                                                    originalTag.totalLikes +
+                                                    (removeExistingVote
+                                                        ? voteUp
+                                                            ? -1
+                                                            : 0
+                                                        : voteUp
+                                                          ? 1
+                                                          : originalTag.myReview
+                                                            ? -1
+                                                            : 0),
+                                                totalVotes:
+                                                    originalTag.totalVotes +
+                                                    (removeExistingVote ? -1 : originalTag.myReview ? 0 : 1),
+                                                myReview: removeExistingVote
+                                                    ? null
+                                                    : {
+                                                          createdAt: originalTag.myReview?.createdAt ?? Date.now(),
+                                                          updatedAt: Date.now(),
+                                                          text: originalTag.myReview?.text ?? null,
+                                                          vote: voteUp,
+                                                      },
+                                            };
+                                        }),
+                                    };
+                                    queryClient.setQueryData(
+                                        $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                                            params: { path: { locationId } },
+                                        }).queryKey,
+                                        newReviewSummary,
+                                    );
+                                    const { error } = await fetchClient
+                                        .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
+                                            params: { path: { locationId, tagId: tag.id.toString() } },
+                                            body: {
+                                                voteUp: removeExistingVote ? null : voteUp,
+                                                text: tag.myReview?.text ?? null,
+                                            },
+                                        })
+                                        .catch((er) => ({ error: er }));
+
+                                    if (error) {
+                                        queryClient.setQueryData(
+                                            $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                                                params: { path: { locationId } },
+                                            }).queryKey,
+                                            reviewSummary,
+                                        );
+                                        toast.error('Failed to vote! Are you logged in?');
+                                    } else {
+                                        revalidateData();
+                                    }
+                                }}
+                                updateReview={async (review) => {
+                                    if (review?.length === 0) return false;
+                                    const { error: reviewError } = await fetchClient
+                                        .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
+                                            params: { path: { locationId, tagId: tag.id.toString() } },
+                                            body: { voteUp: tag.myReview?.vote ?? null, text: review },
+                                        })
+                                        .catch((e) => ({ error: e }));
+                                    if (reviewError) {
+                                        toast.error(`Failed to ${review === undefined ? 'delete' : 'save'} review!`);
+                                        return false;
+                                    }
+                                    await revalidateData();
+                                    return true;
+                                }}
+                            />
                         ))}
                     </tbody>
                 </table>
