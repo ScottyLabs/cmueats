@@ -1,8 +1,7 @@
 .tag-section {
-    margin-top: 25px;
+    margin-top: 10px;
 }
 .tag-section__header {
-    border-top: 4px solid var(--black-900);
     color: var(--black-200);
     font-weight: bold;
     display: flex;
@@ -34,6 +33,7 @@
     max-width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+
     td:not(.tag__review) {
         padding: 0;
         height: 43px;
@@ -212,6 +212,9 @@
     }
 }
 .star-section {
+    background-color: var(--black-1000);
+    margin: -20px calc(-1 * var(--drawer-x-padding)) 0;
+    padding: 20px var(--drawer-x-padding) 30px;
 }
 .stars {
     display: flex;
