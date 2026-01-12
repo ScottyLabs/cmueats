@@ -317,7 +317,7 @@ function Tag({
                                 tag.totalVotes > 0 ? redToGreenInterpolation(upvotePercent / 100) : `var(--black-500)`,
                         }}
                     >
-                        {upvotePercent}%
+                        {upvotePercent.toFixed(0)}%
                     </div>
                 </td>
 
