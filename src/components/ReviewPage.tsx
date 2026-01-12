@@ -474,7 +474,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                         }).queryKey,
                                         newReviewSummary,
                                     );
-                                    const { error } = await fetchClient
+                                    const { error: updateVoteError } = await fetchClient
                                         .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
                                             params: { path: { locationId, tagId: tag.id.toString() } },
                                             body: {
@@ -484,7 +484,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                         })
                                         .catch((er) => ({ error: er }));
 
-                                    if (error) {
+                                    if (updateVoteError) {
                                         queryClient.setQueryData(
                                             $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
                                                 params: { path: { locationId } },
