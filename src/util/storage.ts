@@ -43,7 +43,7 @@ export function useUserCardViewPreferences() {
             safeSetItem('eateryStates', JSON.stringify(migratedPreferences));
             migrationCompleted.current = true;
         }
-    }, [locationData]);
+    }, [locationData, preferences]);
     return [
         preferences,
         (newPreferences: CardViewPreferencesType) => {

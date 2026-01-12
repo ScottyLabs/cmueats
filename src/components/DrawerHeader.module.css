@@ -41,7 +41,7 @@
     height: 30px;
     border-radius: 30%;
     background: rgba(255, 255, 255, 0.06);
-    border: none;
+    padding: 6px;
     color: var(--text-primary);
     cursor: pointer;
 

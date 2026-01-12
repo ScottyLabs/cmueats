@@ -26,7 +26,6 @@ function EateryCard({
         prevDrawerSelectedIdRef.current = drawerAPIContext.selectedId ?? null;
     }, [drawerAPIContext.selectedId]);
 
-    const isCardSelected = drawerAPIContext.selectedId === location.id;
     const cardRef = useRef<HTMLDivElement | null>(null);
     function handleCardSelection() {
         // when the drawer is open, click other cards will open that
@@ -48,6 +47,7 @@ function EateryCard({
     };
 
     useEffect(() => {
+        const isCardSelected = drawerAPIContext.selectedId === location.id;
         if (
             (isCardSelected || (cardWasPreviouslySelected.current && drawerAPIContext.selectedId === null)) &&
             cardRef.current
@@ -59,17 +59,17 @@ function EateryCard({
             });
         }
         cardWasPreviouslySelected.current = isCardSelected;
-    }, [isCardSelected]);
+    }, [drawerAPIContext.selectedId, location.id]);
 
     const cardClassName = useMemo(
         () =>
             clsx(
                 css.card,
-                isCardSelected ? css['card-active'] : '',
+                drawerAPIContext.selectedId === location.id ? css['card-active'] : '',
                 partOfMainGrid ? css['card-in-main-grid'] : '',
                 location.cardViewPreference === 'pinned' ? css['card-pinned'] : '',
             ),
-        [animate, isCardSelected, partOfMainGrid, location.cardViewPreference],
+        [drawerAPIContext.selectedId, location.id, partOfMainGrid, location.cardViewPreference],
     );
     const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === (drawerAPIContext.selectedId ?? null); // aka change was not triggered by a drawer select/unselect
     return (
