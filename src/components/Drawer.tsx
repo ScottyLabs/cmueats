@@ -7,12 +7,14 @@ import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
 import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
 import { ILocation_Full } from '../types/locationTypes';
-import { WidthProvider } from '../contexts/ScreenWidth';
+import { useWidth, WidthContext } from '../contexts/ScreenWidth';
 
 function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
     const { selectedId, closeDrawer } = useDrawerAPIContext();
     const pickedLocation = locations?.find((loc) => loc.id === selectedId);
+    const drawerWidth = useWidth(drawerRef, pickedLocation !== undefined);
+
     // `esc` to close the drawer
     useEffect(() => {
         if (selectedId === null) return () => {};
@@ -47,13 +49,13 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
                     className={css['drawer-box']}
                     ref={drawerRef}
                 >
-                    <WidthProvider elementToCheckRef={drawerRef}>
+                    <WidthContext value={drawerWidth}>
                         <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
                             <DrawerHeader />
                             <DrawerTabNav />
                             <DrawerTabContent />
                         </DrawerTabsContextProvider>
-                    </WidthProvider>
+                    </WidthContext>
                 </motion.div>
             )}
         </AnimatePresence>

@@ -1,15 +1,7 @@
 import { createContext, RefObject, useContext, useLayoutEffect, useState } from 'react';
 
-const WidthContext = createContext<number | undefined>(undefined);
-export function WidthProvider({
-    elementToCheckRef,
-    children,
-}: {
-    elementToCheckRef: RefObject<HTMLElement | null>;
-    children: React.ReactNode;
-}) {
-    // What width media queries test is window.innerWidth, which is what you're in essence using now.
-    // https://stackoverflow.com/a/18548239/13171687
+export const WidthContext = createContext<number | undefined>(undefined);
+export function useWidth(elementToCheckRef: RefObject<HTMLElement | null>, isOpen: boolean) {
     const [width, setWidth] = useState(0);
 
     useLayoutEffect(() => {
@@ -27,9 +19,10 @@ export function WidthProvider({
             { signal: controller.signal },
         );
         return () => controller.abort();
-    }, [elementToCheckRef]);
-    return <WidthContext value={width}>{children}</WidthContext>;
+    }, [isOpen, elementToCheckRef]);
+    return width;
 }
+
 export function useContainerWidth() {
     const width = useContext(WidthContext);
     if (width === undefined) throw new Error('Should use inside WidthContext!');
