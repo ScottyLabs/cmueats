@@ -1,4 +1,3 @@
-import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { next7DaysReadableString } from '../util/time';

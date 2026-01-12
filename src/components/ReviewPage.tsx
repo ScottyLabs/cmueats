@@ -384,6 +384,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
     const { data: reviewSummary, error } = $api.useQuery('get', '/v2/locations/{locationId}/reviews/summary', {
         params: { path: { locationId } },
     });
+    const tagVoteProcessing = useRef(false);
     const [page, setPage] = useState<'summary' | 'tag-reviews'>('summary');
     const queryClient = useQueryClient();
 
@@ -427,6 +428,8 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                 tag={tag}
                                 key={tag.id}
                                 toggleVote={async (voteUp) => {
+                                    if (tagVoteProcessing.current) return; // guarantee that `reviewSummary` represents a correct summary
+                                    tagVoteProcessing.current = true;
                                     const removeExistingVote = tag.myReview?.vote === voteUp;
                                     if (removeExistingVote && tag.myReview?.text) {
                                         toast.error('Please delete your written review before unvoting!');
@@ -487,11 +490,14 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                             reviewSummary,
                                         );
                                         toast.error('Failed to vote! Are you logged in?');
+                                        tagVoteProcessing.current = false;
                                     } else {
+                                        tagVoteProcessing.current = false;
                                         revalidateData();
                                     }
                                 }}
                                 updateReview={async (review) => {
+                                    if (tagVoteProcessing.current) return false; // prevent race-conditions between the refetch here and a failed tag set aboves
                                     if (review?.length === 0) return false;
                                     const { error: reviewError } = await fetchClient
                                         .PUT('/v2/locations/{locationId}/reviews/tags/{tagId}/me', {
