@@ -40,7 +40,7 @@ body {
     flex: 1;
     min-height: 0;
 
-    overflow-y: visible;
+    overflow-y: auto;
     &:focus {
         outline: none;
     }
@@ -70,14 +70,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-.announcement {
-    padding: 16px;
-    font-size: 1.2em;
-    color: white;
-    text-align: center;
-    background-color: #23272a;
 }
 
 .AdBanner {

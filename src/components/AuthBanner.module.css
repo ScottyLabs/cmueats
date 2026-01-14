@@ -10,9 +10,14 @@
         margin-left: auto;
         background-color: transparent;
         border: transparent;
+        padding: 5px 2px;
         svg {
             height: 13px;
             display: block;
+        }
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
     }
 }

@@ -1,4 +1,3 @@
-import { Alert, styled } from '@mui/material';
 import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react';
 
 import { ILocation_Full } from '../types/locationTypes';
@@ -13,11 +12,6 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
-
-const StyledAlert = styled(Alert)({
-    backgroundColor: 'var(--main-bg-accent)',
-    color: 'var(--text-primary)',
-});
 
 function ListPage({
     locations,
@@ -46,7 +40,6 @@ function ListPage({
     useEffect(() => {
         mainContainerRef.current?.focus();
     }, []);
-    const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
 
     const filteredLocations = useFilteredLocations({
         locations,
@@ -62,36 +55,9 @@ function ListPage({
         }
     }, []);
 
-    // Monitor for the user being online
-    useEffect(() => {
-        const handleOnlineStatus = () => {
-            setShowOfflineAlert(!navigator.onLine);
-        };
-
-        window.addEventListener('online', handleOnlineStatus);
-        window.addEventListener('offline', handleOnlineStatus);
-
-        return () => {
-            window.removeEventListener('online', handleOnlineStatus);
-            window.removeEventListener('offline', handleOnlineStatus);
-        };
-    }, []);
-
     return (
         <DrawerAPIContextProvider>
-            {showOfflineAlert && (
-                <StyledAlert severity="info" className="announcement" onClose={() => setShowOfflineAlert(false)}>
-                    🚫🌐 We are temporarily unable to provide the latest available dining information or the map while
-                    you are offline. We apologize for any inconvenience. 🌐🚫
-                </StyledAlert>
-            )}
-
             <div className="list-page-container" ref={mainContainerRef}>
-                {/*  showAlert &&
-      <StyledAlert severity="info" className="announcement" onClose={() => setShowAlert(false)}>
-        🚧 [Issue Description]
-        Please remain patient while we work on a fix. Thank you. 🚧
-      </StyledAlert>  */}
                 <div className="list-box">
                     <ListPageHeader />
                     <div className="list-controls-container">

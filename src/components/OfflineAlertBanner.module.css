@@ -1,0 +1,43 @@
+.announcement {
+    padding: 10px 0;
+    font-size: 18px;
+    position: relative;
+    color: var(--text-primary);
+    background-color: var(--main-bg-accent);
+    text-align: center;
+
+    button {
+        position: absolute;
+        right: 3px;
+        border: none;
+        border-radius: 5px;
+        background: transparent;
+        color: var(--text-primary);
+        cursor: pointer;
+        padding: 3px;
+
+        &:hover {
+            color: var(--hover-accent-color);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+    }
+
+    @media screen and (max-width: 900px) {
+        display: flex;
+        padding: 10px 10px;
+
+        span {
+            width: 90%;
+        }
+
+        button {
+            flex: 1;
+            position: unset;
+        }
+
+        .x {
+            width: 25px;
+            height: 25px;
+        }
+    }
+}
