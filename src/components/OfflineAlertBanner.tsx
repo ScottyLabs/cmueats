@@ -1,6 +1,6 @@
+import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import css from './OfflineAlertBanner.module.css';
-import { X } from 'lucide-react';
 
 export default function AlertBanner() {
     const [showOfflineAlert, setShowOfflineAlert] = useState(!navigator.onLine);
