@@ -59,19 +59,15 @@ function EateryCardHeader({
 
     function renderMenu() {
         return createPortal(
-            // disable linter since this is not a button
-            // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <div
                 ref={menuRef}
                 className={css.menu}
                 style={{ top: `${menuPosition.top}px`, left: `${menuPosition.left}px` }}
-                onClick={(e) => e.preventDefault()}
             >
                 <button
                     type="button"
                     className={clsx(css['menu-button'], css['pin-button'])}
-                    onClick={(e) => {
-                        e.stopPropagation();
+                    onClick={() => {
                         updateViewPreference(isPinned ? 'normal' : 'pinned');
                         setIsMenuOpen(false);
                     }}
@@ -92,8 +88,7 @@ function EateryCardHeader({
                 <button
                     type="button"
                     className={clsx(css['menu-button'], isHidden ? css['hide-button_show'] : css['hide-button_hide'])}
-                    onClick={(e) => {
-                        e.stopPropagation();
+                    onClick={() => {
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
                         setIsMenuOpen(false);
                         if (!isHidden && location.id === selectedId) closeDrawer();
@@ -118,7 +113,7 @@ function EateryCardHeader({
 
     useEffect(() => {
         if (!isMenuOpen) return undefined;
-
+        const controller = new AbortController();
         const handlePointerDown = (event: PointerEvent) => {
             if (
                 menuRef.current &&
@@ -126,6 +121,8 @@ function EateryCardHeader({
                 !moreButtonRef.current?.contains(event.target as Node)
             ) {
                 setIsMenuOpen(false);
+            } else {
+                event.preventDefault();
             }
         };
 
@@ -135,17 +132,12 @@ function EateryCardHeader({
 
         const handleWindowChange = () => setIsMenuOpen(false);
 
-        document.addEventListener('pointerdown', handlePointerDown, true);
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('resize', handleWindowChange);
-        window.addEventListener('scroll', handleWindowChange, true);
+        window.addEventListener('click', handlePointerDown, { signal: controller.signal, capture: true });
+        window.addEventListener('keydown', handleKeyDown, { signal: controller.signal });
+        window.addEventListener('resize', handleWindowChange, { signal: controller.signal });
+        window.addEventListener('scroll', handleWindowChange, { signal: controller.signal, capture: true });
 
-        return () => {
-            document.removeEventListener('pointerdown', handlePointerDown, true);
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('resize', handleWindowChange);
-            window.removeEventListener('scroll', handleWindowChange, true);
-        };
+        return () => controller.abort(); // cleanup
     }, [isMenuOpen]);
 
     return (
