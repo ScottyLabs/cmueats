@@ -84,7 +84,7 @@
     border: 2px solid var(--black-900);
     background-color: var(--card-bg);
     color: var(--text-primary);
-    padding: 6px 8px;
+    padding: 7px;
 }
 
 .menu-button {
@@ -93,12 +93,14 @@
     align-items: center;
     gap: 5px;
     border: none;
+    border-radius: 3px;
     background-color: var(--card-bg);
-    border-radius: 5px;
-    height: 25px;
-
+    padding: 6px 8px;
     &:hover {
         background-color: rgba(255, 255, 255, 0.08);
+        &:active {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
     }
 }
 

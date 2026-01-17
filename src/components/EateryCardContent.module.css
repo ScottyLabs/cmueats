@@ -3,7 +3,7 @@
 }
 
 .location-name-text {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 3px;
     font-family: var(--text-primary-font);
@@ -13,14 +13,19 @@
 
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     color: inherit;
     text-decoration: none;
+    height: 18px;
 
     & svg {
         padding-top: 2px;
         color: var(--yellow-400);
         fill: var(--yellow-400);
+        flex-shrink: 0;
+    }
+    & span {
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 
