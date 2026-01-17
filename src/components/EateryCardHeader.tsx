@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { MoreHorizontal, Pin, PinOff, ChevronsUp, X } from 'lucide-react';
+import { MoreHorizontal, Pin, PinOff, EyeOff, Eye } from 'lucide-react';
 import clsx from 'clsx';
 import { ILocation_Full } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
@@ -101,12 +101,12 @@ function EateryCardHeader({
                 >
                     {isHidden ? (
                         <>
-                            <ChevronsUp size={16} />
+                            <Eye size={16} />
                             <div>Show Card</div>
                         </>
                     ) : (
                         <>
-                            <X size={16} />
+                            <EyeOff size={16} />
                             <div>Hide Card</div>
                         </>
                     )}
