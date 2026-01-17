@@ -9,7 +9,7 @@ import { LocationState, ILocation_Full } from '../types/locationTypes';
 import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
 
-import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
+import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 
 const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) => {
@@ -103,12 +103,8 @@ export default function EateryCardGrid({
                 <div className={css.supergrid__grid}>
                     <AnimatePresence mode="popLayout">
                         {[
-                            // FIXME: removing pinning functionality for now, since we don't have a dropdown yet
-                            ...sortedLocations.filter(
-                                (location) =>
-                                    location.cardViewPreference === 'normal' ||
-                                    location.cardViewPreference === 'pinned',
-                            ),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
                         ].map(locationToCard)}
                     </AnimatePresence>
                 </div>

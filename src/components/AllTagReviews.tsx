@@ -6,7 +6,7 @@ import css from './AllTagReviews.module.css';
 import LikeIcon from '../assets/control_buttons/like.svg?react';
 import DislikeIcon from '../assets/control_buttons/dislike.svg?react';
 import { useCurrentTime } from '../contexts/NowContext';
-import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
+import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 
 type ReviewType = MethodResponse<typeof $api, 'get', '/v2/locations/{locationId}/reviews/tags'>[0];
 function Review({ review }: { review: ReviewType }) {

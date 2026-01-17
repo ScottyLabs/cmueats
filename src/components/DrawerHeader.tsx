@@ -25,7 +25,7 @@ function DrawerHeader() {
             <div className={css.header__title}>
                 <h3 className={css.title__text}>
                     <a className={css['location-link']} href={url} target="_blank" rel="noreferrer">
-                        <span>{name} </span>
+                        <span>{name}</span>
                         <ExternalLink size={22} strokeWidth={3} aria-hidden />
                     </a>
                 </h3>
