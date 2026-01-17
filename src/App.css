@@ -80,14 +80,6 @@ body {
     justify-content: space-between;
 }
 
-.announcement {
-    padding: 16px;
-    font-size: 1.2em;
-    color: white;
-    text-align: center;
-    background-color: #23272a;
-}
-
 .AdBanner {
     /* display: none; */
     padding: 16px;
