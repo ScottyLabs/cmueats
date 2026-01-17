@@ -4,46 +4,15 @@
  */
 
 export interface paths {
-    "/login": {
+    "/whoami": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getLogin"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getLogout"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/code-exchange": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getCode-exchange"];
+        /** @description If you have an active login session with cmueats, this will return your user info. (this is NOT intended to work cross-site) */
+        get: operations["getWhoami"];
         put?: never;
         post?: never;
         delete?: never;
@@ -75,6 +44,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** @description The times array is guaranteed to be sorted and non-overlapping. Both start and end are inclusive boundaries */
         get: operations["getV2Locations"];
         put?: never;
         post?: never;
@@ -100,7 +70,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sendSlackMessage": {
+    "/v2/locations/{locationId}/reviews/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getV2LocationsByLocationIdReviewsSummary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/locations/{locationId}/reviews/stars/me": {
         parameters: {
             query?: never;
             header?: never;
@@ -108,22 +94,38 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        post: operations["postSendSlackMessage"];
-        delete?: never;
+        put: operations["putV2LocationsByLocationIdReviewsStarsMe"];
+        post?: never;
+        delete: operations["deleteV2LocationsByLocationIdReviewsStarsMe"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/whoami": {
+    "/v2/locations/{locationId}/reviews/tags/{tagId}/me": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getWhoami"];
+        get?: never;
+        put: operations["putV2LocationsByLocationIdReviewsTagsByTagIdMe"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/locations/{locationId}/reviews/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getV2LocationsByLocationIdReviewsTags"];
         put?: never;
         post?: never;
         delete?: never;
@@ -144,41 +146,34 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    getLogin: {
+    getWhoami: {
         parameters: {
-            query: {
-                redirectURL: (string | null) | null;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
-        responses: never;
-    };
-    getLogout: {
-        parameters: {
-            query: {
-                redirectURL: (string | null) | null;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        user: ({
+                            googleId: string;
+                            id: number;
+                            email: string;
+                            firstName: (string | null) | null;
+                            lastName: (string | null) | null;
+                            pictureUrl: (string | null) | null;
+                        } | null) | null;
+                    };
+                };
             };
-            header?: never;
-            path?: never;
-            cookie?: never;
         };
-        requestBody?: never;
-        responses: never;
-    };
-    "getCode-exchange": {
-        parameters: {
-            query: {
-                code: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: never;
     };
     getIndex: {
         parameters: {
@@ -217,9 +212,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1766976342183 */
+                            /** @example 1768097289649 */
                             start: number;
-                            /** @example 1766976342183 */
+                            /** @example 1768097289649 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -262,11 +257,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /**
-                         * @example [
-                         *       "Alice"
-                         *     ]
-                         */
+                        /** @example Alice */
                         name: string;
                         /** @example alice72@andrew.cmu.edu */
                         email: string;
@@ -275,33 +266,13 @@ export interface operations {
             };
         };
     };
-    postSendSlackMessage: {
+    getV2LocationsByLocationIdReviewsSummary: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    message: string;
-                };
-                "application/x-www-form-urlencoded": {
-                    message: string;
-                };
-                "multipart/form-data": {
-                    message: string;
-                };
+            path: {
+                locationId: string;
             };
-        };
-        responses: never;
-    };
-    getWhoami: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -313,15 +284,130 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        user: ({
-                            googleId: string;
+                        starData: {
+                            avg: (number | null) | null;
+                            personalRating: (number | null) | null;
+                            /**
+                             * @example [
+                             *       0,
+                             *       1,
+                             *       0,
+                             *       4,
+                             *       12,
+                             *       4
+                             *     ]
+                             */
+                            buckets: number[];
+                        };
+                        tagData: {
                             id: number;
-                            email: string;
-                            firstName: (string | null) | null;
-                            lastName: (string | null) | null;
-                            pictureUrl: (string | null) | null;
-                        } | null) | null;
+                            name: string;
+                            totalVotes: number;
+                            totalLikes: number;
+                            myReview: ({
+                                vote: boolean;
+                                text: (string | null) | null;
+                                createdAt: number;
+                                updatedAt: number;
+                            } | null) | null;
+                        }[];
                     };
+                };
+            };
+        };
+    };
+    putV2LocationsByLocationIdReviewsStarsMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                locationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    stars: number;
+                };
+                "application/x-www-form-urlencoded": {
+                    stars: number;
+                };
+                "multipart/form-data": {
+                    stars: number;
+                };
+            };
+        };
+        responses: never;
+    };
+    deleteV2LocationsByLocationIdReviewsStarsMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                locationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: never;
+    };
+    putV2LocationsByLocationIdReviewsTagsByTagIdMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                locationId: string;
+                tagId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    voteUp: (boolean | null) | null;
+                    text: (string | null) | null;
+                };
+                "application/x-www-form-urlencoded": {
+                    voteUp: (boolean | null) | null;
+                    text: (string | null) | null;
+                };
+                "multipart/form-data": {
+                    voteUp: (boolean | null) | null;
+                    text: (string | null) | null;
+                };
+            };
+        };
+        responses: never;
+    };
+    getV2LocationsByLocationIdReviewsTags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                locationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        writtenReview: string;
+                        tagName: string;
+                        id: number;
+                        tagId: number;
+                        userId: number;
+                        locationId: string;
+                        vote: boolean;
+                        createdAt: number;
+                        updatedAt: number;
+                    }[];
                 };
             };
         };

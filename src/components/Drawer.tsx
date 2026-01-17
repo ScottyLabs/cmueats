@@ -7,6 +7,7 @@ import DrawerTabContent from './DrawerTabContent';
 import css from './Drawer.module.css';
 import { DrawerTabsContextProvider } from '../contexts/DrawerTabsContext';
 import { ILocation_Full } from '../types/locationTypes';
+import { useWidth, WidthContext } from '../contexts/ScreenWidth';
 import BottomSheet from './BottomSheet';
 import { useIsMobileContext } from '../contexts/IsMobileContext';
 
@@ -14,6 +15,8 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const drawerRef = useRef<HTMLDivElement | null>(null);
     const { selectedId, closeDrawer } = useDrawerAPIContext();
     const pickedLocation = locations?.find((loc) => loc.id === selectedId);
+    const drawerWidth = useWidth(drawerRef, pickedLocation !== undefined);
+
     const isMobile = useIsMobileContext();
 
     // `esc` to close the drawer
@@ -33,7 +36,7 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [selectedId]);
+    }, [selectedId, closeDrawer]);
 
     // reset scroll when selected location changes
     useEffect(() => {
@@ -71,11 +74,13 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
                     className={css['drawer-box']}
                     ref={drawerRef}
                 >
-                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
-                        <DrawerHeader />
-                        <DrawerTabNav />
-                        <DrawerTabContent />
-                    </DrawerTabsContextProvider>
+                    <WidthContext.Provider value={drawerWidth}>
+                        <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                            <DrawerHeader />
+                            <DrawerTabNav />
+                            <DrawerTabContent />
+                        </DrawerTabsContextProvider>
+                    </WidthContext.Provider>
                 </motion.div>
             )}
         </AnimatePresence>

@@ -49,6 +49,14 @@ body {
         /* allow natural scroll on mobile */
         min-height: auto;
         overflow-y: visible;
+
+        /* tweaks to get the sticky search bar working again */
+        .list-page-container {
+            overflow-x: visible;
+        }
+        .list-box {
+            overflow-y: visible;
+        }
     }
 }
 
@@ -70,14 +78,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-.announcement {
-    padding: 16px;
-    font-size: 1.2em;
-    color: white;
-    text-align: center;
-    background-color: #23272a;
 }
 
 .AdBanner {

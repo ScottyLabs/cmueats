@@ -8,6 +8,7 @@
     overflow-y: auto;
     scrollbar-width: thin;
     background-color: var(--black-950);
+    container-type: inline-size;
 
     @media screen and (max-width: 900px) {
         & {

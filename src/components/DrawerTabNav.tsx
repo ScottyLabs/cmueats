@@ -15,21 +15,20 @@ function DrawerTabNav() {
                 overview
             </button>
             <button
+                className={`${css['tab-button']} ${activeTab === 'reviews' ? css['tab-button-active'] : ''}`}
+                type="button"
+                onClick={() => setActiveTab('reviews')}
+            >
+                <Star size={16} />
+                reviews
+            </button>
+            <button
                 className={`${css['tab-button']} ${activeTab === 'menu' ? css['tab-button-active'] : ''}`}
                 type="button"
                 onClick={() => setActiveTab('menu')}
             >
                 <BookOpen size={16} />
                 menu
-            </button>
-            <button
-                className={`${css['tab-button']} ${activeTab === 'reviews' ? css['tab-button-active'] : ''}`}
-                style={{ visibility: 'hidden' }}
-                type="button"
-                onClick={() => setActiveTab('reviews')}
-            >
-                <Star size={16} />
-                reviews
             </button>
         </div>
     );

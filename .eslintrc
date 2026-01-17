@@ -1,5 +1,12 @@
 {
-    "extends": ["airbnb", "airbnb-typescript", "plugin:react/jsx-runtime", "prettier", "plugin:import/typescript"],
+    "extends": [
+        "airbnb",
+        "airbnb-typescript",
+        "plugin:react/jsx-runtime",
+        "prettier",
+        "plugin:import/typescript",
+        "plugin:react-hooks/recommended"
+    ],
     "env": {
         "node": true,
         "es6": true,
@@ -25,7 +32,9 @@
         "@typescript-eslint/no-use-before-define": ["error", { "functions": false, "classes": false }],
         "no-plusplus": "off",
         "no-nested-ternary": "off",
-        "react/no-array-index-key": "off"
+        "react/no-array-index-key": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error"
     },
 
     "settings": {

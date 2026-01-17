@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
@@ -17,6 +18,7 @@ import { $api } from './api';
 import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
 import AuthBanner from './components/AuthBanner';
+import AlertBanner from './components/OfflineAlertBanner';
 
 function App() {
     const now = useCurrentTime();
@@ -46,6 +48,7 @@ function App() {
                             CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
                             &gt;_&lt;
                         </div> */}
+                    <AlertBanner />
                     <AuthBanner />
                     <div className="MainContent">
                         <Routes>
@@ -69,6 +72,7 @@ function App() {
                     <Navbar />
                 </div>
             </BrowserRouter>
+            <Toaster position="bottom-right" toastOptions={{ className: 'toast' }} />
         </React.StrictMode>
     );
 }

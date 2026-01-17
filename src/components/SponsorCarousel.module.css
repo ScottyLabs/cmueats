@@ -112,7 +112,7 @@
 }
 @media (max-width: 600px) {
     .carousel__track {
-        animation: carousel 30s linear infinite;
+        animation: carousel 70s linear infinite;
         .carousel__item {
             .carousel__image {
                 padding: 15px 10px;
