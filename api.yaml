@@ -2,42 +2,59 @@ openapi: 3.0.3
 tags: []
 info:
   title: CMU Dining API
-  description: Development documentation
+  description: Hello!~ Thanks for checking out the cmueats api. Have a great day!
   version: 2.0.0
 paths:
-  /login:
+  /whoami:
     get:
-      parameters:
-        - name: redirectURL
-          in: query
-          required: true
-          schema:
-            nullable: true
-            anyOf:
-              - type: string
-              - type: "null"
-      operationId: getLogin
-  /logout:
-    get:
-      parameters:
-        - name: redirectURL
-          in: query
-          required: true
-          schema:
-            nullable: true
-            anyOf:
-              - type: string
-              - type: "null"
-      operationId: getLogout
-  /code-exchange:
-    get:
-      parameters:
-        - name: code
-          in: query
-          required: true
-          schema:
-            type: string
-      operationId: getCode-exchange
+      description: If you have an active login session with cmueats, this will return
+        your user info. (this is NOT intended to work cross-site)
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    nullable: true
+                    anyOf:
+                      - type: object
+                        properties:
+                          googleId:
+                            type: string
+                          id:
+                            type: number
+                          email:
+                            type: string
+                          firstName:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                          lastName:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                          pictureUrl:
+                            nullable: true
+                            anyOf:
+                              - type: string
+                              - type: "null"
+                        required:
+                          - googleId
+                          - id
+                          - email
+                          - firstName
+                          - lastName
+                          - pictureUrl
+                      - type: "null"
+                required:
+                  - user
+                additionalProperties: false
+      operationId: getWhoami
   /:
     get:
       responses:
@@ -52,6 +69,8 @@ paths:
       operationId: getIndex
   /v2/locations:
     get:
+      description: The times array is guaranteed to be sorted and non-overlapping.
+        Both start and end are inclusive boundaries
       responses:
         "200":
           description: Response for status 200
@@ -69,11 +88,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1766976342183
+                              - 1768097289649
                             type: number
                           end:
                             examples:
-                              - 1766976342183
+                              - 1768097289649
                             type: number
                         required:
                           - start
@@ -173,8 +192,7 @@ paths:
                   type: object
                   properties:
                     name:
-                      example:
-                        - Alice
+                      example: Alice
                       type: string
                     email:
                       example: alice72@andrew.cmu.edu
@@ -183,38 +201,14 @@ paths:
                     - name
                     - email
       operationId: getEmails
-  /sendSlackMessage:
-    post:
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-              required:
-                - message
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-              required:
-                - message
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-              required:
-                - message
-      operationId: postSendSlackMessage
-  /whoami:
+  /v2/locations/{locationId}/reviews/summary:
     get:
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Response for status 200
@@ -223,43 +217,246 @@ paths:
               schema:
                 type: object
                 properties:
-                  user:
-                    nullable: true
-                    anyOf:
-                      - type: object
-                        properties:
-                          googleId:
-                            type: string
-                          id:
-                            type: number
-                          email:
-                            type: string
-                          firstName:
-                            nullable: true
-                            anyOf:
-                              - type: string
-                              - type: "null"
-                          lastName:
-                            nullable: true
-                            anyOf:
-                              - type: string
-                              - type: "null"
-                          pictureUrl:
-                            nullable: true
-                            anyOf:
-                              - type: string
-                              - type: "null"
-                        required:
-                          - googleId
-                          - id
-                          - email
-                          - firstName
-                          - lastName
-                          - pictureUrl
-                      - type: "null"
+                  starData:
+                    type: object
+                    properties:
+                      avg:
+                        nullable: true
+                        anyOf:
+                          - type: number
+                          - type: "null"
+                      personalRating:
+                        nullable: true
+                        anyOf:
+                          - type: number
+                          - type: "null"
+                      buckets:
+                        example:
+                          - 0
+                          - 1
+                          - 0
+                          - 4
+                          - 12
+                          - 4
+                        type: array
+                        items:
+                          type: number
+                    required:
+                      - avg
+                      - personalRating
+                      - buckets
+                  tagData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        totalVotes:
+                          type: number
+                        totalLikes:
+                          type: number
+                        myReview:
+                          nullable: true
+                          anyOf:
+                            - type: object
+                              properties:
+                                vote:
+                                  type: boolean
+                                text:
+                                  nullable: true
+                                  anyOf:
+                                    - type: string
+                                    - type: "null"
+                                createdAt:
+                                  type: number
+                                updatedAt:
+                                  type: number
+                              required:
+                                - vote
+                                - text
+                                - createdAt
+                                - updatedAt
+                            - type: "null"
+                      required:
+                        - id
+                        - name
+                        - totalVotes
+                        - totalLikes
+                        - myReview
                 required:
-                  - user
-                additionalProperties: false
-      operationId: getWhoami
+                  - starData
+                  - tagData
+      operationId: getV2LocationsByLocationIdReviewsSummary
+  /v2/locations/{locationId}/reviews/stars/me:
+    put:
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stars:
+                  minimum: 0.5
+                  maximum: 5
+                  multipleOf: 0.5
+                  type: number
+              required:
+                - stars
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                stars:
+                  minimum: 0.5
+                  maximum: 5
+                  multipleOf: 0.5
+                  type: number
+              required:
+                - stars
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                stars:
+                  minimum: 0.5
+                  maximum: 5
+                  multipleOf: 0.5
+                  type: number
+              required:
+                - stars
+      operationId: putV2LocationsByLocationIdReviewsStarsMe
+    delete:
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+      operationId: deleteV2LocationsByLocationIdReviewsStarsMe
+  /v2/locations/{locationId}/reviews/tags/{tagId}/me:
+    put:
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                voteUp:
+                  nullable: true
+                  anyOf:
+                    - type: boolean
+                    - type: "null"
+                text:
+                  nullable: true
+                  anyOf:
+                    - type: string
+                    - type: "null"
+              required:
+                - voteUp
+                - text
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                voteUp:
+                  nullable: true
+                  anyOf:
+                    - type: boolean
+                    - type: "null"
+                text:
+                  nullable: true
+                  anyOf:
+                    - type: string
+                    - type: "null"
+              required:
+                - voteUp
+                - text
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                voteUp:
+                  nullable: true
+                  anyOf:
+                    - type: boolean
+                    - type: "null"
+                text:
+                  nullable: true
+                  anyOf:
+                    - type: string
+                    - type: "null"
+              required:
+                - voteUp
+                - text
+      operationId: putV2LocationsByLocationIdReviewsTagsByTagIdMe
+  /v2/locations/{locationId}/reviews/tags:
+    get:
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    writtenReview:
+                      type: string
+                    tagName:
+                      type: string
+                    id:
+                      type: number
+                    tagId:
+                      type: number
+                    userId:
+                      type: number
+                    locationId:
+                      type: string
+                    vote:
+                      type: boolean
+                    createdAt:
+                      type: number
+                    updatedAt:
+                      type: number
+                  required:
+                    - writtenReview
+                    - tagName
+                    - id
+                    - tagId
+                    - userId
+                    - locationId
+                    - vote
+                    - createdAt
+                    - updatedAt
+      operationId: getV2LocationsByLocationIdReviewsTags
 components:
   schemas: {}

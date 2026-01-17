@@ -36,6 +36,13 @@
     --green-900: #072c1c;
 
     --main-bg: hsl(214, 7%, 19%);
+
+    --yellow-100: #fef9ec;
+    --yellow-200: #fcebc0;
+    --yellow-300: #f9dc8e;
+    --yellow-400: #f6cc5d;
+    --yellow-500: #dbb653;
+
     --main-bg-accent: #23272a;
     --text-primary: white;
     --text-greeting: white;
@@ -228,6 +235,11 @@ body {
 button {
     font-family: inherit;
     font-size: inherit;
+
+    /* button reset */
+    background-color: transparent;
+    border: none;
+    padding: 0;
     &:not(:disabled) {
         cursor: pointer;
     }
@@ -261,4 +273,10 @@ button {
     &:hover {
         background-color: var(--button-bg--hover);
     }
+}
+.toast {
+    background-color: var(--black-900) !important;
+    border: 2px solid var(--black-800);
+    color: var(--black-200) !important;
+    font-family: var(--text-secondary-font);
 }
