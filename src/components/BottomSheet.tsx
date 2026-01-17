@@ -11,15 +11,11 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const contentRef = useRef<HTMLDivElement | null>(null);
     const DELAY = 100;
     const windowHeight = window.innerHeight;
-    const [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN] = [
+    const [FULL, HIDDEN] = [
         windowHeight * 0.15,
-        windowHeight * 0.25,
-        windowHeight * 0.33,
-        windowHeight * 0.5,
-        windowHeight * 0.66,
         windowHeight * 1.25,
     ];
-    const snapPoints = [FULL, QUARTER, THIRD, HALF, TWO_THIRD, HIDDEN];
+    const snapPoints = [FULL, HIDDEN];
 
     const sheetRef = useRef<HTMLDivElement | null>(null);
     const pointerStart = useRef<{ x: number; y: number } | null>(null);
@@ -103,7 +99,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             setShow(true);
             const timeout = setTimeout(() => {
                 requestAnimationFrame(() => {
-                    setY(windowHeight * 0.625);
+                    setY(FULL);
                 });
             }, DELAY);
             return () => clearTimeout(timeout);
@@ -157,18 +153,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                 return;
             }
 
-            const target = e.target as Node;
-
-            if (!sheetRef.current.contains(target)) {
-                if (onHide) {
-                    onHide();
-                }
-
-                requestAnimationFrame(() => {
-                    setY(HIDDEN);
-                });
-            }
-
             pointerStart.current = null;
         }
 
@@ -203,43 +187,31 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         dragStartY.current = clientY;
     }
 
-    useEffect(() => {
-        if (y <= FULL) return;
-        const sheet = sheetRef.current;
-        if (!sheet) return;
+    function hide() {
+        if (onHide) {
+            onHide();
+        }
 
-        const handleTouchStart = (e: TouchEvent) => {
-            // Start drag
-            startDrag(e as any);
-            if (!dragging) return;
-            e.preventDefault(); // Prevent scrolling behind
-        };
+        requestAnimationFrame(() => {
+            setY(HIDDEN);
+        });
 
-        const handleTouchMove = (e: TouchEvent) => {
-            if (!dragging) return;
-            e.preventDefault(); // Prevent scrolling behind
-        };
-
-        sheet.addEventListener('touchstart', handleTouchStart, { passive: false });
-        sheet.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-        return () => {
-            sheet.removeEventListener('touchstart', handleTouchStart);
-            sheet.removeEventListener('touchmove', handleTouchMove);
-        };
-    }, [dragging]);
+        setShow(false);
+    }
 
     return (
         <>
-            <div className={`${styles.dim} ${show && y !== HIDDEN ? styles.dimVisible : ''}`} aria-hidden />
+            {show && y !== HIDDEN && 
+            <button 
+                className={`${styles.dim}`} 
+                onClick={hide}
+            />}
 
             {show && (
                 <div
                     role="dialog"
                     ref={sheetRef}
                     className={`${styles.bottomSheet} `}
-                    onMouseDown={y<=FULL ? ()=>{} : startDrag}
-                    onTouchStart={y<=FULL ? ()=>{} : startDrag}
                     style={{
                         transform: `translateY(${y}px)`,
                         transition: dragging ? 'none' : 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1)',
@@ -249,9 +221,8 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                         type="button"
                         ref={handleRef}
                         className={styles.handleContainer}
-                        onMouseDown={y<=FULL ? startDrag : ()=>{}}
-                        onTouchStart={y<=FULL ? startDrag : ()=>{}}
-                        aria-label="Drag bottom sheet"
+                        onMouseDown={startDrag}
+                        onTouchStart={startDrag}
                     >
                         <div className={styles.handle} />
                     </button>

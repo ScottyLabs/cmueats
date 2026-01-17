@@ -12,7 +12,6 @@
     box-shadow: 0 -10px 30px black;
     display: flex;
     flex-direction: column;
-    touch-action: none;
     transition: transform 0.3s ease-out;
     border:none;
 }
@@ -43,19 +42,10 @@
 }
 
 .dim {
-    position: fixed;
+    position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.35);
     z-index: 998;
 
-    opacity: 0;
-    pointer-events: none;
-
     transition: opacity 200ms ease;
 }
-
-.dimVisible {
-    opacity: 1;
-    pointer-events: auto;
-}
-

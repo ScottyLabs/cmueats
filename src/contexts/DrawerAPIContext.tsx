@@ -1,7 +1,7 @@
 // Differences between DrawerTabsContext:
 // Global drawer interaction: tracks which concept id is selected and exposes helpers to open/close it across the list page
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, useLayoutEffect } from 'react';
 
 type DrawerAPIContextValue = {
     selectedId: string | null;
@@ -17,6 +17,11 @@ export function DrawerAPIContextProvider({ children }: { children: React.ReactNo
         return activeId;
     });
 
+    useLayoutEffect(() => {
+        // prevent the card list from being scrolled on mobile, kind of works...
+        document.body.style.overflow = drawerConceptId === null ? 'visible' : 'hidden';
+    }, [drawerConceptId]);
+    
     const drawerContextValue = useMemo(
         () => ({
             closeDrawer: () => {
