@@ -87,6 +87,7 @@
     width: var(--drawer-width);
     overflow-y: auto;
     scrollbar-width: thin;
+    container-type: inline-size;
 
     @media screen and (max-width: 900px) {
         & {

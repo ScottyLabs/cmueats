@@ -43,6 +43,10 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
         drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
     }, [pickedLocation?.id]);
 
+    useEffect(() => {
+        console.log(drawerWidth);
+    }, [drawerWidth]);
+
     return isMobile ? (
         <BottomSheet
             active={pickedLocation !== undefined}
@@ -54,13 +58,17 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
                 }, 100);
             }}
         >
-            <div className={css['drawer-box-mobile']}>
+            <div 
+                className={css['drawer-box-mobile']}
+                ref={drawerRef}>
                 {pickedLocation !== undefined && (
-                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
-                        <DrawerHeader />
-                        <DrawerTabNav />
-                        <DrawerTabContent />
-                    </DrawerTabsContextProvider>
+                    <WidthContext.Provider value={drawerWidth}>
+                        <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                            <DrawerHeader />
+                            <DrawerTabNav />
+                            <DrawerTabContent />
+                        </DrawerTabsContextProvider>
+                    </WidthContext.Provider>
                 )}
             </div>
         </BottomSheet>
