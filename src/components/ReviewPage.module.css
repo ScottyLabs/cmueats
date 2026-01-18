@@ -328,7 +328,7 @@
         rgba(0, 0, 0, 1) var(--star-cutoff),
         rgba(0, 0, 0, 0) var(--star-cutoff)
     );
-    transition: 0.05s --star-cutoff;
+    /* transition: 0.05s --star-cutoff; */
 }
 .star-distribution {
     height: 10px;

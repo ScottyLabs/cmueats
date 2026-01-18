@@ -1,12 +1,14 @@
 import { KeyboardEvent, useEffect, useMemo, useRef } from 'react';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { ILocation_Full } from '../types/locationTypes';
 import { CardViewPreference } from '../util/storage';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 import EateryCardHeader from './EateryCardHeader';
 import EateryCardContent from './EateryCardContent';
 import css from './EateryCard.module.css';
+import { $api } from '../api';
 
 function EateryCard({
     location,
@@ -19,6 +21,7 @@ function EateryCard({
     animate?: boolean;
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
+    const queryClient = useQueryClient();
     const drawerAPIContext = useDrawerAPIContext();
     const prevDrawerSelectedIdRef = useRef<string | null>(null);
     const cardWasPreviouslySelected = useRef(false);
@@ -76,6 +79,18 @@ function EateryCard({
         <motion.div
             layout
             className={cardClassName}
+            onMouseOver={() => {
+                queryClient.prefetchQuery(
+                    $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                        params: { path: { locationId: location.id } },
+                    }),
+                );
+                queryClient.prefetchQuery(
+                    $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
+                        params: { path: { locationId: location.id } },
+                    }),
+                );
+            }}
             initial={
                 animate
                     ? {
