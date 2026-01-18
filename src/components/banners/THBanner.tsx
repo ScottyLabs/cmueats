@@ -1,9 +1,9 @@
 import { motion } from 'motion/react';
+import clsx from 'clsx';
 import useLocalStorage from '../../util/localStorage';
 import CloseButton from '../../assets/banner/close-button.svg?react';
 import TH26 from '../../assets/banner/TH26.svg?react';
 import css from './THBanner.module.css';
-import clsx from 'clsx';
 
 export default function Banner() {
     const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');

@@ -1,9 +1,9 @@
 import { motion } from 'motion/react';
+import clsx from 'clsx';
 import useLocalStorage from '../../util/localStorage';
 import closeButton from '../../assets/banner/close-button.svg';
 import scottyDog from '../../assets/banner/scotty-dog.svg';
 import css from './NovaBanner.module.css';
-import clsx from 'clsx';
 
 export default function Banner() {
     const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
