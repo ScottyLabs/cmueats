@@ -1,14 +1,10 @@
 // Differences between DrawerAPIContext:
-// Per-drawer view interaction: holds tab selection and location data for currently open drawer
+// Per-drawer view interaction: holds location data for currently open drawer (tab selection has been changes to a global drawer API attr.)
 
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { ILocation_Full } from '../types/locationTypes';
 
-export type DrawerTabType = 'overview' | 'menu' | 'reviews' | 'specials';
-
 export type DrawerTabsContextValue = {
-    activeTab: DrawerTabType;
-    setActiveTab: (tab: DrawerTabType) => void;
     location: ILocation_Full;
 };
 
@@ -21,14 +17,11 @@ export function DrawerTabsContextProvider({
     children: React.ReactNode;
     location: ILocation_Full;
 }) {
-    const [activeTab, setActiveTab] = useState<DrawerTabType>('overview');
     const drawerTabsContextValue = useMemo(
         () => ({
-            activeTab,
-            setActiveTab,
             location,
         }),
-        [activeTab, location],
+        [location],
     );
     return <DrawerTabsContext.Provider value={drawerTabsContextValue}>{children}</DrawerTabsContext.Provider>;
 }
