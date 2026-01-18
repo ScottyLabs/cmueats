@@ -13,9 +13,6 @@ function DrawerTabContent() {
     const drawerContext = useDrawerTabsContext();
     const { location } = drawerContext;
     const { activeTab } = useDrawerAPIContext();
-    if (!drawerContext.location) {
-        return <div className={css.container} />;
-    }
 
     const timeSlots = next7DaysReadableString(location.times, now);
     const specials = location.todaysSpecials ?? [];

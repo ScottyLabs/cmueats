@@ -43,7 +43,7 @@ export function DrawerAPIContextProvider({ children }: { children: React.ReactNo
             activeTab,
             setActiveTab,
         }),
-        [drawerConceptId, activeTab, setActiveTab],
+        [drawerConceptId, activeTab],
     );
     useEffect(() => {
         const popStateEventListener = () => {

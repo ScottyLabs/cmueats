@@ -1,5 +1,5 @@
 // Differences between DrawerAPIContext:
-// Per-drawer view interaction: holds location data for currently open drawer (tab selection has been changes to a global drawer API attr.)
+// Per-drawer view interaction: holds location data for currently open drawer (tab selection has been changed to a global drawer API attr.)
 
 import { createContext, useContext, useMemo } from 'react';
 import { ILocation_Full } from '../types/locationTypes';
