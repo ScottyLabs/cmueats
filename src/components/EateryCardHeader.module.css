@@ -1,6 +1,7 @@
 .card-header-container {
     display: flex;
     align-items: center;
+    height: 30px;
     gap: 0px;
     color: var(--status-color);
     border-bottom: 2px solid var(--status-color);
@@ -55,68 +56,62 @@
     margin-right: -3px;
 }
 
-.action-button {
+.more-button {
+    color: var(--text-primary);
     border: none;
+    padding: 6px;
     border-radius: 5px;
     background: transparent;
-    color: var(--text-primary);
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    padding: 5px;
-    margin-left: -3px;
 
     &:hover {
         color: var(--hover-accent-color);
         background-color: rgba(255, 255, 255, 0.08);
-        .action-button__icon {
-            color: var(--black-300);
+    }
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    transform: translateX(-100%);
+    z-index: 999;
+    width: max-content;
+    border-radius: 5px;
+    border: 2px solid var(--black-900);
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    padding: 7px;
+}
+
+.menu-button {
+    display: inline-flex;
+    font-size: 14px;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: var(--card-bg);
+    padding: 6px 8px;
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        &:active {
+            background-color: rgba(255, 255, 255, 0.03);
         }
     }
-    /* commenting out for now, since we'll probably go with a dropdown */
+}
 
-    /* &::after {
-        content: attr(aria-label);
-        z-index: 999;
-        position: absolute;
-        bottom: 115%;
-        left: -100%;
-        font-size: 12px;
-        background-color: var(--main-bg);
-        color: var(--text-primary);
-        text-align: center;
-        border-radius: 5px;
-        padding: 5px 8px;
-        white-space: nowrap;
-        opacity: 0;
-        transition:
-            opacity 0.2s ease,
-            visibility 0.2s ease;
-        pointer-events: none;
-    } */
-    /* &:hover::after {
-        opacity: 1;
-    } */
+.pin-button {
+    color: var(--yellow-400);
+}
 
-    /* &::before {
-        content: '';
-        position: absolute;
-        bottom: 70%;
-        border-width: 8px;
-        border-style: solid;
-        border-color: var(--main-bg) transparent transparent transparent;
-        opacity: 0;
-        transition:
-            opacity 0.2s ease,
-            visibility 0.2s ease;
-    }
-    &:hover::before {
-        opacity: 1;
-    } */
+.hide-button_hide {
+    color: var(--red-300);
+}
 
-    .action-button__icon {
-        width: 15px;
-        height: 13px;
-        color: var(--black-800);
-        vertical-align: middle;
-    }
+.hide-button_show {
+    color: var(--green-500);
 }

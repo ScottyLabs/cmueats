@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import clsx from 'clsx';
 import css from './SponsorCarousel.module.css';
-import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
+import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import ScottyDog from '../assets/scottydog.svg?react';
 
 function SponsorCarousel({ darkMode, openByDefault }: { darkMode: boolean; openByDefault: boolean }) {

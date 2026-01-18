@@ -3,17 +3,30 @@
 }
 
 .location-name-text {
+    display: flex;
+    align-items: center;
+    gap: 3px;
     font-family: var(--text-primary-font);
     font-size: 18px;
     font-weight: 500;
-    margin: 2px 0 0;
-    margin-left: 1px;
+    margin: 2px -1px 0;
 
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     color: inherit;
     text-decoration: none;
+    height: 18px;
+
+    & svg {
+        padding-top: 2px;
+        color: var(--yellow-400);
+        fill: var(--yellow-400);
+        flex-shrink: 0;
+    }
+    & span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 .physical-location-text {
@@ -26,7 +39,7 @@
     text-overflow: ellipsis;
 
     & svg {
-        margin-right: 0.3rem;
+        margin-right: 5px;
     }
 }
 
@@ -39,18 +52,4 @@
 
 .rating {
     visibility: hidden;
-}
-
-.card-content-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    position: absolute;
-    transform: translateX(-100%);
-    z-index: 999;
-    border-radius: 5px;
-    border: 1px solid var(--card-border-color);
-    background-color: var(--card-bg);
-    color: var(--text-primary);
-    padding: 5px 8px;
 }
