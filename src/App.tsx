@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
@@ -10,17 +9,15 @@ import { getLocationStatus } from './util/queryLocations';
 import './App.css';
 import { ILocation_FromAPI, ILocation_Full } from './types/locationTypes';
 import { useUserCardViewPreferences } from './util/storage';
-import scottyDog from './assets/banner/scotty-dog.svg';
-import closeButton from './assets/banner/close-button.svg';
-import useLocalStorage from './util/localStorage';
 import useRefreshWhenBackOnline from './util/network';
 import { $api } from './api';
 import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
-import AuthBanner from './components/AuthBanner';
-import AlertBanner from './components/OfflineAlertBanner';
+import THBanner from './components/banners/THBanner';
+import AuthBanner from './components/banners/AuthBanner';
+import AlertBanner from './components/banners/OfflineAlertBanner';
 
-function App() {
+export default function App() {
     const now = useCurrentTime();
     // Load locations
     const { data, error } = $api.useQuery('get', '/v2/locations');
@@ -43,11 +40,7 @@ function App() {
         <React.StrictMode>
             <BrowserRouter>
                 <div className="App">
-                    {/* <Banner /> */}
-                    {/* <div className="AdBanner">
-                            CMUEats is now up to date with the official dining website! Sorry for the inconvenience.
-                            &gt;_&lt;
-                        </div> */}
+                    <THBanner />
                     <AlertBanner />
                     <AuthBanner />
                     <div className="MainContent">
@@ -76,55 +69,3 @@ function App() {
         </React.StrictMode>
     );
 }
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// @ts-ignore
-function Banner() {
-    const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
-    const closeBanner = () => {
-        setIsClosed('true');
-    };
-
-    return (
-        <motion.div
-            className="welcome-banner-container"
-            animate={{ height: closed === null ? 'auto' : 0 }}
-            initial={{ height: closed === null ? 'auto' : 0 }}
-        >
-            <div className="welcome-banner">
-                <div className="welcome-banner__spacer" />
-                <div className="welcome-banner__text welcome-banner-padding">
-                    <span className="welcome-banner__text--long">
-                        <img src={scottyDog} alt="" />
-                        <span>
-                            <a
-                                href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                Register
-                            </a>{' '}
-                            for Nova, ScottyLabs&apos; GenAI Hackathon by Nov. 1st!
-                        </span>
-                    </span>
-                    <span className="welcome-banner__text--short">
-                        <a
-                            href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            Register
-                        </a>{' '}
-                        for Nova by Nov. 1st!
-                    </span>
-                </div>
-                <div className="welcome-banner__close welcome-banner-padding welcome-banner-padding--button">
-                    <button type="button" aria-label="close-banner" onClick={closeBanner}>
-                        <img src={closeButton} alt="" />
-                    </button>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
-export default App;
