@@ -26,14 +26,14 @@ export default function Banner() {
                             <a href="https://register.tartanhacks.com/" target="_blank" rel="noreferrer">
                                 Register
                             </a>{' '}
-                            for TartanHack, CMU&apos;s largest Hackathon by ScottyLabs!
+                            for TartanHacks, Pittsburgh&apos;s largest Hackathon!
                         </span>
                     </span>
                     <span className={css['welcome-banner__text--short']}>
                         <a href="https://register.tartanhacks.com/" target="_blank" rel="noreferrer">
                             Register
                         </a>{' '}
-                        for TartanHack by ScottyLabs!
+                        for TartanHacks!
                     </span>
                 </div>
                 <div
