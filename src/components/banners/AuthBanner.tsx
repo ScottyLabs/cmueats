@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import css from './AuthBanner.module.css';
-import XIcon from '../assets/control_buttons/x.svg?react';
+import XIcon from '../../assets/control_buttons/x.svg?react';
 
 /** Used for notifying the user if there was a problem signing in */
 export default function AuthBanner() {

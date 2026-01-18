@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import AuthBanner from '../../src/components/AuthBanner';
+import AuthBanner from '../../src/components/banners/AuthBanner';
 
 describe('AuthBanner', () => {
     const mockReplaceState = vi.fn();
