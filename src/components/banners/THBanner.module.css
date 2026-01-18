@@ -1,9 +1,9 @@
 .welcome-banner-container {
     overflow: hidden;
     position: sticky;
-    top: 0%;
+    top: 0;
     flex-shrink: 0;
-    z-index: 727;
+    z-index: 999;
 }
 .welcome-banner-padding {
     padding: 20px 15px;
