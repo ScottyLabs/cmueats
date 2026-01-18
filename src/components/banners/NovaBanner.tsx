@@ -6,7 +6,7 @@ import scottyDog from '../../assets/banner/scotty-dog.svg';
 import css from './NovaBanner.module.css';
 
 export default function Banner() {
-    const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
+    const [closed, setIsClosed] = useLocalStorage('nova25-banner-closed');
     const closeBanner = () => {
         setIsClosed('true');
     };

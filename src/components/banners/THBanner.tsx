@@ -6,7 +6,7 @@ import TH26 from '../../assets/banner/TH26.svg?react';
 import css from './THBanner.module.css';
 
 export default function Banner() {
-    const [closed, setIsClosed] = useLocalStorage('welcome-banner-closed');
+    const [closed, setIsClosed] = useLocalStorage('th26-banner-closed');
     const closeBanner = () => {
         setIsClosed('true');
     };
