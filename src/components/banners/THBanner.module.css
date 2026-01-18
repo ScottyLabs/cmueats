@@ -36,8 +36,11 @@
     background-color: #1c1d20;
     border-bottom: 2px solid hsl(180, 3%, 8%);
 
+    a {
+        color: oklch(0.6 0.2 260);
+    }
     :visited {
-        color: oklch(0.75 0.15 325);
+        color: oklch(0.5 0.2 320);
     }
     & > .welcome-banner__spacer {
         flex-grow: 1;
@@ -58,7 +61,7 @@
             inset: 0;
             z-index: -1;
             background-image: url('../../assets/banner/fg-wave.svg?inline');
-            filter: opacity(30%);
+            filter: opacity(20%);
             background-position: top center;
             background-size: max(100vw, 1400px) 100%;
             background-repeat: no-repeat;

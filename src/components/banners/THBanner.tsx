@@ -23,14 +23,14 @@ export default function Banner() {
                     <span className={css['welcome-banner__text--long']}>
                         <TH26 />
                         <span>
-                            <a href="https://register.tartanhacks.com/" target="_blank" rel="noreferrer">
+                            <a href="https://tartanhacks.com/" target="_blank" rel="noreferrer">
                                 Register
                             </a>{' '}
                             for TartanHacks, Pittsburgh&apos;s largest Hackathon!
                         </span>
                     </span>
                     <span className={css['welcome-banner__text--short']}>
-                        <a href="https://register.tartanhacks.com/" target="_blank" rel="noreferrer">
+                        <a href="https://tartanhacks.com/" target="_blank" rel="noreferrer">
                             Register
                         </a>{' '}
                         for TartanHacks!
