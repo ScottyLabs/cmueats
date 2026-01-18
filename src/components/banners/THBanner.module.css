@@ -2,6 +2,7 @@
     overflow: hidden;
     position: sticky;
     top: 0%;
+    flex-shrink: 0;
     z-index: 727;
 }
 .welcome-banner-padding {
@@ -94,7 +95,7 @@
         & > .welcome-banner__text--short {
             display: none;
         }
-        @media (max-width: 1073px) {
+        @media (max-width: 900px) {
             & > .welcome-banner__text--long {
                 display: none;
             }
