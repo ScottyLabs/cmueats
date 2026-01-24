@@ -95,9 +95,13 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
     useEffect(() => {
         if (active) {
+            document.body.style.overflow = 'none';
             requestAnimationFrame(() => {
                 setY(FULL);
             });
+        }
+        else {
+            document.body.style.overflow = 'visible';
         }
     }, [active, HIDDEN]);
 
