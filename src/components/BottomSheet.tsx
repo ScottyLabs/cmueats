@@ -96,6 +96,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
     useEffect(() => {
         if (active) {
+            document.body.style.overflow = 'hidden'
             setShow(true);
             const timeout = setTimeout(() => {
                 requestAnimationFrame(() => {
@@ -104,14 +105,10 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             }, DELAY);
             return () => clearTimeout(timeout);
         }
-        const timeout = setTimeout(() => {
-            setShow(false);
-        }, DELAY);
+        document.body.style.overflow = 'visible'
         requestAnimationFrame(() => {
             setY(HIDDEN);
         });
-
-        return () => clearTimeout(timeout);
     }, [active, HIDDEN]);
 
     useEffect(() => {
@@ -195,8 +192,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         requestAnimationFrame(() => {
             setY(HIDDEN);
         });
-
-        setShow(false);
     }
 
     return (
