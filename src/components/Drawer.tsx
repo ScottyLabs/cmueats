@@ -16,7 +16,6 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     const { selectedId, closeDrawer } = useDrawerAPIContext();
     const pickedLocation = locations?.find((loc) => loc.id === selectedId);
     const drawerWidth = useWidth(drawerRef, pickedLocation !== undefined);
-
     const isMobile = useIsMobileContext();
 
     // `esc` to close the drawer
@@ -43,20 +42,10 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
         drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
     }, [pickedLocation?.id]);
 
-    useEffect(() => {
-        console.log(drawerWidth);
-    }, [drawerWidth]);
-
     return isMobile ? (
         <BottomSheet
             active={pickedLocation !== undefined}
-            onHide={() => {
-                setTimeout(() => {
-                    requestAnimationFrame(() => {
-                        closeDrawer();
-                    });
-                }, 100);
-            }}
+            onHide={closeDrawer}
         >
             <div 
                 className={css['drawer-box-mobile']}

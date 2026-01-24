@@ -13,7 +13,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const windowHeight = window.innerHeight;
     const [FULL, HIDDEN] = [
         windowHeight * 0.15,
-        windowHeight * 1.25,
+        windowHeight
     ];
     const snapPoints = [FULL, HIDDEN];
 
@@ -27,7 +27,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const handleRef = useRef<HTMLButtonElement | null>(null);
 
     const [y, setY] = useState<number>(HIDDEN);
-    const [show, setShow] = useState<boolean>(false);
     const [dragging, setDragging] = useState<boolean>(false);
 
     useEffect(() => {
@@ -96,19 +95,10 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
     useEffect(() => {
         if (active) {
-            document.body.style.overflow = 'hidden'
-            setShow(true);
-            const timeout = setTimeout(() => {
-                requestAnimationFrame(() => {
-                    setY(FULL);
-                });
-            }, DELAY);
-            return () => clearTimeout(timeout);
+            requestAnimationFrame(() => {
+                setY(FULL);
+            });
         }
-        document.body.style.overflow = 'visible'
-        requestAnimationFrame(() => {
-            setY(HIDDEN);
-        });
     }, [active, HIDDEN]);
 
     useEffect(() => {
@@ -185,24 +175,26 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }
 
     function hide() {
-        if (onHide) {
-            onHide();
-        }
-
         requestAnimationFrame(() => {
             setY(HIDDEN);
         });
+            
+        if (onHide) {
+            setTimeout(() => {
+                onHide();
+            }, DELAY);
+        }
     }
 
     return (
         <>
-            {show && y !== HIDDEN && 
+            {active && y !== HIDDEN && 
             <button 
                 className={`${styles.dim}`} 
                 onClick={hide}
             />}
 
-            {show && (
+            {active && (
                 <div
                     role="dialog"
                     ref={sheetRef}
