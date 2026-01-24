@@ -222,6 +222,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                         }}
                     >
                         {children}
+                        <div className={styles.navbarPadding}></div>
                     </div>
                 </div>
             )}
