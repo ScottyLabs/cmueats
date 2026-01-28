@@ -70,6 +70,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["postReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v2/locations/{locationId}/reviews/summary": {
         parameters: {
             query?: never;
@@ -212,9 +228,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1768097289649 */
+                            /** @example 1769623319891 */
                             start: number;
-                            /** @example 1768097289649 */
+                            /** @example 1769623319891 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -266,6 +282,34 @@ export interface operations {
             };
         };
     };
+    postReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    locationName: string;
+                    locationId: string;
+                    message: string;
+                };
+                "application/x-www-form-urlencoded": {
+                    locationName: string;
+                    locationId: string;
+                    message: string;
+                };
+                "multipart/form-data": {
+                    locationName: string;
+                    locationId: string;
+                    message: string;
+                };
+            };
+        };
+        responses: never;
+    };
     getV2LocationsByLocationIdReviewsSummary: {
         parameters: {
             query?: never;
@@ -288,6 +332,7 @@ export interface operations {
                             avg: (number | null) | null;
                             personalRating: (number | null) | null;
                             /**
+                             * @description Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}
                              * @example [
                              *       0,
                              *       1,
