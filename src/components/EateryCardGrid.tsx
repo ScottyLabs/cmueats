@@ -95,12 +95,12 @@ export default function EateryCardGrid({
 
     return (
         <div className={css.supergrid}>
-            <span className={`${css['supergrid__help-text']} ${css['supergrid__help-text--report']}`}>
-                Do we have wrong data? Let us know through the card dropdown!
-            </span>
             <div className={css['supergrid__help-text']}>
-                <Info size={16} aria-hidden="true" />
-                <span>Tap or click on the cards for more information!</span>
+                <div>Do we have wrong data? Let us know through the card dropdown!</div>
+                <div>
+                    <Info size={16} aria-hidden="true" />
+                    <span>Tap or click on the cards for more information!</span>
+                </div>
             </div>
             <div className={css.supergrid__section}>
                 <div className={css.supergrid__grid}>
