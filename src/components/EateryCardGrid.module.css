@@ -45,6 +45,10 @@
     color: var(--card-text-muted);
     font-size: 14px;
     margin-left: var(--global-x-padding);
+    &.supergrid__help-text--report {
+        color: var(--red-300);
+        margin-bottom: 20px;
+    }
 }
 .supergrid {
     flex: 1;

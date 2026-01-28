@@ -53,7 +53,6 @@ paths:
                       - type: "null"
                 required:
                   - user
-                additionalProperties: false
       operationId: getWhoami
   /:
     get:
@@ -88,11 +87,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1768097289649
+                              - 1769623319891
                             type: number
                           end:
                             examples:
-                              - 1768097289649
+                              - 1769623319891
                             type: number
                         required:
                           - start
@@ -201,6 +200,54 @@ paths:
                     - name
                     - email
       operationId: getEmails
+  /report:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locationName:
+                  type: string
+                locationId:
+                  type: string
+                message:
+                  type: string
+              required:
+                - locationName
+                - locationId
+                - message
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                locationName:
+                  type: string
+                locationId:
+                  type: string
+                message:
+                  type: string
+              required:
+                - locationName
+                - locationId
+                - message
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                locationName:
+                  type: string
+                locationId:
+                  type: string
+                message:
+                  type: string
+              required:
+                - locationName
+                - locationId
+                - message
+      operationId: postReport
   /v2/locations/{locationId}/reviews/summary:
     get:
       parameters:
@@ -238,6 +285,8 @@ paths:
                           - 4
                           - 12
                           - 4
+                        description: Count of ratings of star rating
+                          [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}
                         type: array
                         items:
                           type: number
@@ -371,7 +420,8 @@ paths:
                 text:
                   nullable: true
                   anyOf:
-                    - type: string
+                    - maxLength: 1000
+                      type: string
                     - type: "null"
               required:
                 - voteUp
@@ -388,7 +438,8 @@ paths:
                 text:
                   nullable: true
                   anyOf:
-                    - type: string
+                    - maxLength: 1000
+                      type: string
                     - type: "null"
               required:
                 - voteUp
@@ -405,7 +456,8 @@ paths:
                 text:
                   nullable: true
                   anyOf:
-                    - type: string
+                    - maxLength: 1000
+                      type: string
                     - type: "null"
               required:
                 - voteUp
