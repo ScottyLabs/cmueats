@@ -20,6 +20,7 @@ export default function Popup({
             onClick={(ev) => {
                 if (ev.defaultPrevented) return;
                 closePopup();
+                ev.preventDefault();
             }}
             // this doesn't do anything lmao
             onKeyDown={(event) => {
