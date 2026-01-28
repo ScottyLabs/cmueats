@@ -115,9 +115,12 @@ function EateryCardHeader({
                 <button
                     type="button"
                     className={clsx(css['menu-button'], css['report-button'])}
-                    onClick={() => setReportPopupOpen(true)}
+                    onClick={() => {
+                        setIsMenuOpen(false);
+                        setReportPopupOpen(true);
+                    }}
                 >
-                    <FlagIcon height={16} />
+                    <FlagIcon height={16} width={16} />
                     Report wrong info
                 </button>
             </div>,
