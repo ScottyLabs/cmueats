@@ -104,7 +104,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }, []);
 
     const lockScroll = () => {
-        console.log("lock");
         document.body.style.overflow = 'hidden';
         
         document.addEventListener('touchmove', preventScroll, {passive: false});
@@ -113,7 +112,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }
 
     const unlockScroll = () => {
-        console.log("unlock");
         document.body.style.overflow = 'visible';
 
         document.removeEventListener('touchmove', preventScroll);
@@ -248,10 +246,11 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
                     <div
                         data-scrollable
+                        className={styles.content}
                         ref={contentRef}
                         style={{
                             height: `calc(100vh - ${y}px - 41px)`, // 41px = handle
-                            overflowY: 'auto'
+                            overflowY: 'auto',
                         }}
                     >
                         {children}

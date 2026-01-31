@@ -58,3 +58,7 @@
   display: none;
   overscroll-behavior: none;
 }
+
+.content {
+  overscroll-behavior: none;
+}
