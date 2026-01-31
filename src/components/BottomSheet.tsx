@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState, useCallback } from 'react';
 import styles from './BottomSheet.module.css';
 
 type BottomSheetProps = {
@@ -93,15 +93,43 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         };
     }, [dragging, y, snapPoints, FULL, HIDDEN]);
 
+    const preventScroll = useCallback((e: Event) => {
+        const target = e.target as HTMLElement;
+
+        if (target.closest('[data-scrollable]')) {
+            return;
+        }
+
+        e.preventDefault();
+    }, []);
+
+    const lockScroll = () => {
+        console.log("lock");
+        document.body.style.overflow = 'hidden';
+        
+        document.addEventListener('touchmove', preventScroll, {passive: false});
+        document.addEventListener('wheel', preventScroll, {passive: false});
+        document.documentElement.classList.add('scroll-lock');
+    }
+
+    const unlockScroll = () => {
+        console.log("unlock");
+        document.body.style.overflow = 'visible';
+
+        document.removeEventListener('touchmove', preventScroll);
+        document.removeEventListener('wheel', preventScroll);
+        document.documentElement.classList.remove('scroll-lock');
+    }
+
     useEffect(() => {
         if (active) {
-            document.body.style.overflow = 'none';
+            lockScroll();
             requestAnimationFrame(() => {
                 setY(FULL);
             });
         }
         else {
-            document.body.style.overflow = 'visible';
+            unlockScroll();
         }
     }, [active, HIDDEN]);
 
@@ -219,6 +247,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                     </button>
 
                     <div
+                        data-scrollable
                         ref={contentRef}
                         style={{
                             height: `calc(100vh - ${y}px - 41px)`, // 41px = handle

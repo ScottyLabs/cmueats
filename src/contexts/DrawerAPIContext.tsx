@@ -20,12 +20,6 @@ export function DrawerAPIContextProvider({ children }: { children: React.ReactNo
         return activeId;
     });
     const [activeTab, setActiveTab] = useState<DrawerTabType>('overview');
-
-
-    useLayoutEffect(() => {
-        // prevent the card list from being scrolled on mobile, kind of works...
-        document.body.style.overflow = drawerConceptId === null ? 'visible' : 'hidden';
-    }, [drawerConceptId]);
     
     const drawerContextValue = useMemo(
         () => ({

@@ -47,8 +47,14 @@
     background: rgba(0, 0, 0, 0.35);
     z-index: 997;
     transition: opacity 200ms ease;
+    overflow: hidden;
 }
 
 .navbarPadding {
     padding-bottom: 50px;
+}
+
+.scroll-lock::-webkit-scrollbar {
+  display: none;
+  overscroll-behavior: none;
 }
