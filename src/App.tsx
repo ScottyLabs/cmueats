@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { useQueries } from '@tanstack/react-query';
 import Navbar from './components/Navbar';
 import ListPage from './pages/ListPage';
 import MapPage from './pages/MapPage';
@@ -29,11 +30,38 @@ export default function App() {
     const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
     useRefreshWhenBackOnline();
 
+    const locationIds = useMemo(() => locations?.map((location) => location.id) ?? [], [locations]);
+
+    const reviewSummaries = useQueries({
+        queries: locationIds.map((locationId) =>
+            $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                params: { path: { locationId } },
+            }),
+        ),
+    });
+
+    const ratingMap = useMemo(() => {
+        const averages: Record<string, { avg: number | null; count: number | null }> = {};
+        reviewSummaries.forEach((summary, index) => {
+            const locationId = locationIds[index];
+            if (!locationId) return;
+            const buckets = summary.data?.starData?.buckets ?? [];
+            const count = buckets.reduce((total, bucket) => total + bucket, 0);
+            averages[locationId] = {
+                avg: summary.data?.starData?.avg ?? null,
+                count: Number.isFinite(count) ? count : null,
+            };
+        });
+        return averages;
+    }, [reviewSummaries]); 
+    
     const fullLocationData: ILocation_Full[] | undefined = locations?.map((location) => ({
         ...location,
         ...getLocationStatus(location.times, now),
         cardViewPreference:
             cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
+        averageRating: ratingMap[location.id]?.avg ?? null,
+        ratingCount: ratingMap[location.id]?.count ?? null,
     }));
 
     return (

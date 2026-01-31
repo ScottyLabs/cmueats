@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useReducer, useRef } from 'react';
 
 import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
+import SelectSort, { SelectSort as SelectSortType } from '../components/SelectSort';
 import SearchBar from '../components/SearchBar';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
@@ -36,6 +37,12 @@ function ListPage({
         shouldAnimateCards.current = false;
         return newState;
     }, '');
+
+    const [sortQuery, setSortOption] = useReducer<SelectSortType, [SelectSortType]>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, 'time');
+
     const mainContainerRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         mainContainerRef.current?.focus();
@@ -64,6 +71,7 @@ function ListPage({
                         <div className="list-controls-layout">
                             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                             <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                            <SelectSort sortOption={sortQuery} setSortOption={setSortOption} />
                         </div>
                     </div>
                     <EateryCardGrid
@@ -71,6 +79,7 @@ function ListPage({
                         shouldAnimateCards={shouldAnimateCards.current}
                         apiError={error}
                         setSearchQuery={setSearchQuery}
+                        sortOption={sortQuery}
                         updateCardViewPreference={(id, preference) => {
                             shouldAnimateCards.current = false;
                             updateCardViewPreference(id, preference);

@@ -1,8 +1,15 @@
 import { DateTime, Interval } from 'luxon';
 
-import { LocationState, ITimeRangeList, ILocation_TimeStatusData, IStatusMessage } from '../types/locationTypes';
+import {
+    LocationState,
+    ITimeRangeList,
+    ILocation_TimeStatusData,
+    IStatusMessage,
+} from '../types/locationTypes';
 import { getNextTimeSlot, isValidTimeSlotArray, getApproximateTimeStringFromMinutes } from './time';
 import assert from './assert';
+
+import { fetchClient } from '../api';
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

@@ -94,10 +94,16 @@ export type ILocation_TimeStatusData =
     | ILocation_TimeStateData_NotPermanentlyClosed
     | ILocation_TimeStatusData_PermanentlyClosed;
 
+
+export type ILocation_RatingData = {
+    averageRating?: number | null;
+    ratingCount?: number | null;
+}
+
 /** Extra data derived from a single location */
 export type ILocation_ExtraData = ILocation_TimeStatusData & {
-    cardViewPreference: CardViewPreference;
-};
+        cardViewPreference: CardViewPreference;
+    };
 
 /** we'll typically pass this into components for efficient look-up of extra data (like time until close) */
 export type ILocation_ExtraData_Map = {
@@ -105,4 +111,4 @@ export type ILocation_ExtraData_Map = {
 };
 
 /** once we combine extraDataMap with our base api data */
-export type ILocation_Full = ILocation_FromAPI & ILocation_ExtraData;
+export type ILocation_Full = ILocation_FromAPI & ILocation_ExtraData & ILocation_RatingData;

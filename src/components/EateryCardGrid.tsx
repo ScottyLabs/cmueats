@@ -8,11 +8,12 @@ import NoResultsError from './NoResultsError';
 import { LocationState, ILocation_Full } from '../types/locationTypes';
 import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
+import { SelectSort } from './SelectSort';
 
 import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 
-const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) => {
+const compareLocationsByTime = (location1: ILocation_Full, location2: ILocation_Full) => {
     const state1 = location1.locationState;
     const state2 = location2.locationState;
 
@@ -30,18 +31,33 @@ const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) 
     return location1.minutesUntil - location2.minutesUntil;
 };
 
+const compareLocationsByRating = (l1: ILocation_Full, l2: ILocation_Full, type: SelectSort) => {
+    const r1 = l1.averageRating ?? null;
+    const r2 = l2.averageRating ?? null;
+
+    if (r1 === null) return 1;
+    if (r2 === null) return -1;
+
+    if (r1 === null && r2 === null) return compareLocationsByTime(l1, l2);
+    if (r1 === r2) return compareLocationsByTime(l1, l2);
+
+    return type === 'stars-asc' ? r1 - r2 : r2 - r1;
+};
+
 export default function EateryCardGrid({
     locations,
     setSearchQuery,
     shouldAnimateCards,
     apiError,
     updateCardViewPreference,
+    sortOption,
 }: {
     locations: ILocation_Full[] | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
+    sortOption: SelectSort;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
 
@@ -75,7 +91,10 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
-    const sortedLocations = [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
+    const sortedLocations = [...locations].sort((location1, location2) => {
+        if (sortOption != 'time') return compareLocationsByRating(location1, location2, sortOption);   
+        return compareLocationsByTime(location1, location2);
+    }); // we make a copy to avoid mutating the original array
 
     function locationToCard(location: ILocation_Full) {
         return (
