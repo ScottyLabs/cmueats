@@ -226,6 +226,8 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
             {active && (
                 <div
+                    onMouseDown = {contentRef?.current?.scrollTop == 0 ? startDrag : ()=>{}}
+                    onTouchStart = {contentRef?.current?.scrollTop == 0 ? startDrag : ()=>{}}
                     role="dialog"
                     ref={sheetRef}
                     className={`${styles.bottomSheet} `}
@@ -238,14 +240,15 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                         type="button"
                         ref={handleRef}
                         className={styles.handleContainer}
-                        onMouseDown={startDrag}
-                        onTouchStart={startDrag}
+                        onMouseDown = {contentRef?.current?.scrollTop == 0 ? ()=>{} : startDrag}
+                        onTouchStart = {contentRef?.current?.scrollTop == 0 ? ()=>{} : startDrag}
                     >
                         <div className={styles.handle} />
                     </button>
 
                     <div
                         data-scrollable
+                        id="bottom-sheet-content"
                         className={styles.content}
                         ref={contentRef}
                         style={{
