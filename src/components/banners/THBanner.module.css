@@ -1,0 +1,150 @@
+.welcome-banner-container {
+    overflow: hidden;
+    top: 0;
+    flex-shrink: 0;
+    z-index: 999;
+}
+.welcome-banner-padding {
+    padding: 20px 15px;
+    &.welcome-banner-padding--button {
+        padding-left: 0;
+        padding-right: 0;
+        /* so it grows the same amt as spacer on left */
+    }
+}
+.welcome-banner {
+    display: flex;
+    align-items: start;
+    font-family: var(--text-secondary-font);
+    color: black;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(
+        92deg,
+        #9dcff2 0%,
+        #fbd8bf 16.66%,
+        #d6f6e9 33.33%,
+        #9dcff2 50%,
+        #fbd8bf 66.66%,
+        #d6f6e9 83.33%,
+        #9dcff2 100%
+    );
+
+    background-size: 200% 100%;
+    animation: gradient-flow 6s linear infinite;
+    background-repeat: no-repeat;
+    background-color: #1c1d20;
+    border-bottom: 2px solid hsl(180, 3%, 8%);
+
+    a {
+        color: oklch(0.6 0.2 260);
+    }
+    :visited {
+        color: oklch(0.5 0.2 320);
+    }
+    & > .welcome-banner__spacer {
+        flex-grow: 1;
+    }
+    & > .welcome-banner__text {
+        isolation: isolate;
+        align-self: stretch;
+        position: relative;
+        font-size: 20px;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+
+        /* for a fade-out illusion, we create a second copy of the lines with the color the same as the bg but with dimensions equal to the text */
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background-image: url('../../assets/banner/fg-wave.svg?inline');
+            filter: opacity(20%);
+            background-position: top center;
+            background-size: max(100vw, 1400px) 100%;
+            background-repeat: no-repeat;
+
+            mask-image: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(0, 0, 0, 0.88) 10%,
+                rgba(0, 0, 0, 0.88) 90%,
+                transparent 100%
+            );
+            @media (max-width: 538px) {
+                /* at around this point the container is no longer centered and thus can't act as a opacity filter */
+                content: none;
+            }
+        }
+
+        & > .welcome-banner__text--long {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            & svg {
+                height: 1.5em;
+            }
+            & span {
+                /* firefox support something something */
+                text-wrap: nowrap;
+            }
+        }
+        & > .welcome-banner__text--long {
+            display: flex;
+        }
+        & > .welcome-banner__text--short {
+            display: none;
+        }
+        @media (max-width: 900px) {
+            & > .welcome-banner__text--long {
+                display: none;
+            }
+            & > .welcome-banner__text--short {
+                display: inline;
+            }
+        }
+    }
+
+    & > .welcome-banner__close {
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 0; /* so it grows the same amt as the spacer on the other side (instead of like slightly more) */
+        align-self: center;
+        & > button {
+            display: block;
+            margin-left: auto;
+            margin-right: 60px;
+            @media (max-width: 900px) {
+                margin-right: 10px;
+            }
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            & svg {
+                transition: 0.2s all ease-in-out;
+                height: 20px;
+                path {
+                    stroke: var(--black-800) !important;
+                }
+                &:hover {
+                    filter: brightness(150%);
+                    rotate: 90deg;
+                    &:active {
+                        filter: brightness(120%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}

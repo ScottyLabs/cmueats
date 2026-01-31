@@ -1,36 +1,18 @@
 import { ExternalLink } from 'lucide-react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { next7DaysReadableString } from '../util/time';
 import { useCurrentTime } from '../contexts/NowContext';
 import css from './DrawerTabContent.module.css';
 import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 import ReviewPage from './ReviewPage';
-import { $api } from '../api';
+import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function DrawerTabContent() {
-    const queryClient = useQueryClient();
     const now = useCurrentTime();
     const dayOffsetFromSunday = now.weekday % 7;
     const daysStartingFromSunday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const drawerContext = useDrawerTabsContext();
     const { location } = drawerContext;
-    useEffect(() => {
-        queryClient.prefetchQuery(
-            $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-                params: { path: { locationId: location.id } },
-            }),
-        );
-        queryClient.prefetchQuery(
-            $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
-                params: { path: { locationId: location.id } },
-            }),
-        );
-    }, [location.id, queryClient]);
-
-    if (!location) {
-        return <div className={css.container} />;
-    }
+    const { activeTab } = useDrawerAPIContext();
 
     const timeSlots = next7DaysReadableString(location.times, now);
     const specials = location.todaysSpecials ?? [];
@@ -115,15 +97,15 @@ function DrawerTabContent() {
 
     return (
         <div className={css.container}>
-            {drawerContext.activeTab === 'overview' && (
+            {activeTab === 'overview' && (
                 <>
                     {renderDescription()}
                     {renderHours()}
                     {(specials.length > 0 || soups.length > 0) && renderTodaysSpecials()}
                 </>
             )}
-            {drawerContext.activeTab === 'menu' && renderMenu()}
-            {drawerContext.activeTab === 'reviews' && <ReviewPage locationId={location.id} />}
+            {activeTab === 'menu' && renderMenu()}
+            {activeTab === 'reviews' && <ReviewPage locationId={location.id} />}
         </div>
     );
 }

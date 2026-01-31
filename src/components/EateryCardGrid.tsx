@@ -9,7 +9,7 @@ import { LocationState, ILocation_Full } from '../types/locationTypes';
 import assert from '../util/assert';
 import css from './EateryCardGrid.module.css';
 
-import DropdownArrow from '../assets/control_button/dropdown_arrow.svg?react';
+import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 import { useIsMobileContext } from '../contexts/IsMobileContext';
 
@@ -97,21 +97,20 @@ export default function EateryCardGrid({
     return (
         <div className={css.supergrid}>
             <div className={css['supergrid__help-text']}>
-                <Info size={16} aria-hidden="true" />
-                <span>
-                    {isMobile ? 'Tap on a card for more details' : 'Tap or click on the cards to see more information!'}
+                <div>Do we have wrong data? Let us know through the card dropdown!</div>
+                <div>
+                    <Info size={16} aria-hidden="true" />
+                    <span>
+                    {isMobile ? 'Tap on a card for more details' : 'Tap or click on the cards for more information!'}
                 </span>
+                </div>
             </div>
             <div className={css.supergrid__section}>
                 <div className={css.supergrid__grid}>
                     <AnimatePresence mode="popLayout">
                         {[
-                            // FIXME: removing pinning functionality for now, since we don't have a dropdown yet
-                            ...sortedLocations.filter(
-                                (location) =>
-                                    location.cardViewPreference === 'normal' ||
-                                    location.cardViewPreference === 'pinned',
-                            ),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
+                            ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
                         ].map(locationToCard)}
                     </AnimatePresence>
                 </div>
