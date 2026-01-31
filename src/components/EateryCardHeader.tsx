@@ -2,11 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MoreHorizontal, Pin, PinOff, EyeOff, Eye } from 'lucide-react';
 import clsx from 'clsx';
+import toast from 'react-hot-toast';
+import FlagIcon from '../assets/control_buttons/flag.svg?react';
 import { ILocation_Full } from '../types/locationTypes';
 import { highlightColors } from '../constants/colors';
 import css from './EateryCardHeader.module.css';
 import { CardViewPreference } from '../util/storage';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
+import Popup from './Popup';
+import { fetchClient } from '../api';
 
 function EateryCardHeader({
     location,
@@ -16,6 +20,8 @@ function EateryCardHeader({
     updateViewPreference: (newViewPreference: CardViewPreference) => void;
 }) {
     const dotRef = useRef<HTMLDivElement | null>(null);
+    const [reportPopupOpen, setReportPopupOpen] = useState(false);
+    const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
     const isPinned = location.cardViewPreference === 'pinned';
     const isHidden = location.cardViewPreference === 'hidden';
@@ -87,7 +93,7 @@ function EateryCardHeader({
 
                 <button
                     type="button"
-                    className={clsx(css['menu-button'], isHidden ? css['hide-button_show'] : css['hide-button_hide'])}
+                    className={clsx(css['menu-button'], isHidden ? css['hide-button--show'] : css['hide-button--hide'])}
                     onClick={() => {
                         updateViewPreference(isHidden ? 'normal' : 'hidden');
                         setIsMenuOpen(false);
@@ -105,6 +111,17 @@ function EateryCardHeader({
                             <div>Hide Card</div>
                         </>
                     )}
+                </button>
+                <button
+                    type="button"
+                    className={clsx(css['menu-button'], css['report-button'])}
+                    onClick={() => {
+                        setIsMenuOpen(false);
+                        setReportPopupOpen(true);
+                    }}
+                >
+                    <FlagIcon height={16} width={16} />
+                    Report wrong info
                 </button>
             </div>,
             document.body,
@@ -140,36 +157,83 @@ function EateryCardHeader({
         return () => controller.abort(); // cleanup
     }, [isMenuOpen]);
 
-    return (
-        <div
-            className={css['card-header-container']}
-            style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
-        >
-            <div
-                className={clsx(css['card-header-dot'], statusChangesSoon && css['card-header-dot--blinking'])}
-                style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
-                ref={dotRef}
-            />
+    useEffect(() => {
+        textAreaRef.current?.focus();
+    }, [reportPopupOpen]);
 
-            <div className={css['time-container']}>
-                <span className={css['card-header-relative-time-text']}>{statusMsg.shortStatus[0]}</span>
-                <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
+    return (
+        <>
+            <div
+                className={css['card-header-container']}
+                style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
+            >
+                <div
+                    className={clsx(css['card-header-dot'], statusChangesSoon && css['card-header-dot--blinking'])}
+                    style={{ '--status-color': highlightColors[location.locationState] } as React.CSSProperties}
+                    ref={dotRef}
+                />
+
+                <div className={css['time-container']}>
+                    <span className={css['card-header-relative-time-text']}>{statusMsg.shortStatus[0]}</span>
+                    <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
+                </div>
+                <div className={css['button-container']}>
+                    <button
+                        type="button"
+                        className={css['more-button']}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleToggleMenu();
+                        }}
+                        ref={moreButtonRef}
+                    >
+                        <MoreHorizontal size={16} />
+                    </button>
+                    {isMenuOpen && renderMenu()}
+                </div>
             </div>
-            <div className={css['button-container']}>
-                <button
-                    type="button"
-                    className={css['more-button']}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handleToggleMenu();
-                    }}
-                    ref={moreButtonRef}
-                >
-                    <MoreHorizontal size={16} />
-                </button>
-                {isMenuOpen && renderMenu()}
-            </div>
-        </div>
+            <Popup popupOpen={reportPopupOpen} closePopup={() => setReportPopupOpen(false)}>
+                <p className={css.report__header}>Report wrong info for {location.name}</p>
+
+                <textarea
+                    name=""
+                    className={css.report__input}
+                    placeholder="What data is inaccurate?"
+                    ref={textAreaRef}
+                    maxLength={300}
+                />
+                <div className={css['report__button-container']}>
+                    <button
+                        className={css['report__cancel-button']}
+                        onClick={() => setReportPopupOpen(false)}
+                        type="button"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        className={css['report__report-button']}
+                        onClick={async () => {
+                            const msg = textAreaRef.current?.value;
+                            if (!msg) return;
+                            const { error } = await fetchClient
+                                .POST('/report', {
+                                    body: { locationId: location.id, locationName: location.name, message: msg },
+                                })
+                                .catch((e) => ({ error: e }));
+                            if (error) {
+                                toast.error('Failed to submit report!');
+                            } else {
+                                setReportPopupOpen(false);
+                                toast.success("Thanks for taking the time to report this! We'll address it ASAP");
+                            }
+                        }}
+                        type="button"
+                    >
+                        Send Report
+                    </button>
+                </div>
+            </Popup>
+        </>
     );
 }
 

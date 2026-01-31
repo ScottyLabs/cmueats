@@ -1,0 +1,16 @@
+.outer-container {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.346);
+    z-index: 1000;
+    display: flex;
+    padding: 20px;
+}
+.popup {
+    transform: translate(0, -50px);
+    padding: 30px 20px 20px;
+    margin: auto;
+    background-color: var(--black-1000);
+    width: 500px;
+    max-width: 700px;
+}
