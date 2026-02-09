@@ -2,7 +2,7 @@ import { Pin, MapPin } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
 
-function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_Full; partOfMainGrid: boolean }) {
+function EateryCardContent({ location }: { location: ILocation_Full }) {
     const { location: physicalLocation, name, cardViewPreference } = location;
     const isPinned = cardViewPreference === 'pinned';
 
@@ -13,16 +13,14 @@ function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_F
                 <span>{name}</span>
             </h3>
 
-            <span className={css['physical-location-text']}>
-                <MapPin size={12} />
-                {physicalLocation}
-            </span>
+            <div className={css['lower-bar']}>
+                <span className={css['physical-location-text']}>
+                    <MapPin size={12} />
+                    {physicalLocation}
+                </span>
 
-            {partOfMainGrid && (
-                <div className={css['action-bar']}>
-                    <div className={css.rating}>rating placeholder</div>
-                </div>
-            )}
+                <div className={css.rating}>{location.ratingsAvg}</div>
+            </div>
         </div>
     );
 }

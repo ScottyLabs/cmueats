@@ -87,11 +87,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1769623319891
+                              - 1770660001555
                             type: number
                           end:
                             examples:
-                              - 1769623319891
+                              - 1770660001555
                             type: number
                         required:
                           - start
@@ -129,6 +129,11 @@ paths:
                         - type: "null"
                     location:
                       type: string
+                    ratingsAvg:
+                      nullable: true
+                      anyOf:
+                        - type: number
+                        - type: "null"
                     shortDescription:
                       nullable: true
                       anyOf:
@@ -168,6 +173,7 @@ paths:
                     - todaysSpecials
                     - name
                     - location
+                    - ratingsAvg
                     - shortDescription
                     - description
                     - url
@@ -214,6 +220,7 @@ paths:
                 locationId:
                   type: string
                 message:
+                  maxLength: 300
                   type: string
               required:
                 - locationName
@@ -228,6 +235,7 @@ paths:
                 locationId:
                   type: string
                 message:
+                  maxLength: 300
                   type: string
               required:
                 - locationName
@@ -242,6 +250,7 @@ paths:
                 locationId:
                   type: string
                 message:
+                  maxLength: 300
                   type: string
               required:
                 - locationName
@@ -286,7 +295,7 @@ paths:
                           - 12
                           - 4
                         description: Count of ratings of star rating
-                          [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}
+                          [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]
                         type: array
                         items:
                           type: number

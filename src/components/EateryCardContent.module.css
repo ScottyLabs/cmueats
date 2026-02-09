@@ -33,7 +33,6 @@
     font-size: 15px;
     color: var(--black-500);
     display: block;
-    margin-top: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -43,13 +42,12 @@
     }
 }
 
-.action-bar {
-    display: none;
+.lower-bar {
+    display: flex;
     margin-top: 12px;
     align-items: center;
     justify-content: space-between;
 }
 
 .rating {
-    visibility: hidden;
 }
