@@ -15,6 +15,7 @@ import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
 import AuthBanner from './components/banners/AuthBanner';
 import AlertBanner from './components/banners/OfflineAlertBanner';
+import ReviewSystemBanner from './components/banners/ReviewSystemBanner';
 
 export default function App() {
     const now = useCurrentTime();
@@ -39,6 +40,7 @@ export default function App() {
         <React.StrictMode>
             <BrowserRouter>
                 <div className="App">
+                    <ReviewSystemBanner />
                     <AlertBanner />
                     <AuthBanner />
                     <div className="MainContent">
