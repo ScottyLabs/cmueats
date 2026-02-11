@@ -22,7 +22,7 @@ export default function Banner() {
                 <div className={clsx(css['welcome-banner__text'], css['welcome-banner-padding'])}>
                     <span className={css['welcome-banner__text--long']}>
                         <img src={scottyDog} alt="" />
-                        <span>How's your food? Tap on a card to leave a review!</span>
+                        <span>How&apos;s your food? Tap on a card to leave a review!</span>
                     </span>
                     <span className={css['welcome-banner__text--short']}>Leave a review!</span>
                 </div>
