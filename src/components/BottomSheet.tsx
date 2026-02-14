@@ -30,7 +30,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const [dragging, setDragging] = useState<boolean>(false);
 
     useEffect(() => {
-        function onMove(e: MouseEvent | TouchEvent) {
+        const onMove = (e: MouseEvent | TouchEvent) => {
             if (!dragging) return;
 
             const clientY =
@@ -42,7 +42,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             setY(next);
         }
 
-        function onEnd(e: MouseEvent | TouchEvent) {
+        const onEnd = (e: MouseEvent | TouchEvent) => {
             if (!dragging) return;
             setDragging(false);
 
@@ -120,9 +120,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     useEffect(() => {
         if (active) {
             lockScroll();
-            requestAnimationFrame(() => {
-                setY(FULL);
-            });
+            setY(FULL);
         }
         else {
             unlockScroll();
@@ -130,7 +128,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }, [active, HIDDEN]);
 
     useEffect(() => {
-        function onDown(e: MouseEvent | TouchEvent) {
+        const onDown = (e: MouseEvent | TouchEvent) => {
             if (!sheetRef.current) return;
 
             const point = 'touches' in e && e.touches.length > 0 ? e.touches[0] : 'clientX' in e ? e : null;
@@ -144,7 +142,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             moved.current = false;
         }
 
-        function onMove(e: MouseEvent | TouchEvent) {
+        const onMove = (e: MouseEvent | TouchEvent) => {
             if (!pointerStart.current) return;
 
             const point = 'touches' in e && e.touches.length > 0 ? e.touches[0] : 'clientX' in e ? e : null;
@@ -159,7 +157,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             }
         }
 
-        function onUp(e: MouseEvent | TouchEvent) {
+        const onUp = (e: MouseEvent | TouchEvent) => {
             if (!sheetRef.current) return;
             if (!pointerStart.current) return;
 
@@ -190,7 +188,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         };
     }, [HIDDEN]);
 
-    function startDrag(e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
+    const startDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         setDragging(true);
 
         const clientY = 'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
@@ -202,15 +200,27 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         dragStartY.current = clientY;
     }
 
-    function hide() {
-        requestAnimationFrame(() => {
+    const hide = () => {
+        if (y != HIDDEN) {
             setY(HIDDEN);
-        });
+        }
             
         if (onHide) {
             setTimeout(() => {
                 onHide();
             }, DELAY);
+        }
+    }
+
+    const startSheetDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+        if (!(contentRef?.current?.scrollTop)) {
+            startDrag(e);
+        }
+    }
+
+    const startHandleDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+        if ((contentRef?.current?.scrollTop)) {
+            startDrag(e);
         }
     }
 
@@ -224,8 +234,8 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
             {active && (
                 <div
-                    onMouseDown = {contentRef?.current?.scrollTop == 0 ? startDrag : ()=>{}}
-                    onTouchStart = {contentRef?.current?.scrollTop == 0 ? startDrag : ()=>{}}
+                    onMouseDown = {startSheetDrag}
+                    onTouchStart = {startSheetDrag}
                     role="dialog"
                     ref={sheetRef}
                     className={`${styles.bottomSheet} `}
@@ -238,8 +248,8 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                         type="button"
                         ref={handleRef}
                         className={styles.handleContainer}
-                        onMouseDown = {contentRef?.current?.scrollTop == 0 ? ()=>{} : startDrag}
-                        onTouchStart = {contentRef?.current?.scrollTop == 0 ? ()=>{} : startDrag}
+                        onMouseDown = {startHandleDrag}
+                        onTouchStart = {startHandleDrag}
                     >
                         <div className={styles.handle} />
                     </button>
