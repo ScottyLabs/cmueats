@@ -13,9 +13,9 @@ import useRefreshWhenBackOnline from './util/network';
 import { $api } from './api';
 import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
-import THBanner from './components/banners/THBanner';
 import AuthBanner from './components/banners/AuthBanner';
 import AlertBanner from './components/banners/OfflineAlertBanner';
+import ReviewSystemBanner from './components/banners/ReviewSystemBanner';
 
 export default function App() {
     const now = useCurrentTime();
@@ -40,7 +40,7 @@ export default function App() {
         <React.StrictMode>
             <BrowserRouter>
                 <div className="App">
-                    <THBanner />
+                    <ReviewSystemBanner />
                     <AlertBanner />
                     <AuthBanner />
                     <div className="MainContent">

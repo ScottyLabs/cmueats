@@ -122,7 +122,7 @@ function EateryCardHeader({
                     }}
                 >
                     <FlagIcon height={16} width={16} />
-                    Report wrong info
+                    Report
                 </button>
             </div>,
             document.body,
@@ -194,12 +194,12 @@ function EateryCardHeader({
                 </div>
             </div>
             <Popup popupOpen={reportPopupOpen} closePopup={() => setReportPopupOpen(false)}>
-                <p className={css.report__header}>Report wrong info for {location.name}</p>
+                <p className={css.report__header}>Report wrong info or other issue for {location.name}</p>
 
                 <textarea
                     name=""
                     className={css.report__input}
-                    placeholder="What data is inaccurate?"
+                    placeholder="Issue with open hours, other info, staff, etc."
                     ref={textAreaRef}
                     maxLength={300}
                 />
