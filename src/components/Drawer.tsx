@@ -38,9 +38,9 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     }, [selectedId, closeDrawer]);
 
     // reset scroll when selected location changes
-    // useEffect(() => {
-    //     drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
-    // }, [pickedLocation?.id]);
+    useEffect(() => {
+        drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+    }, [pickedLocation?.id]);
 
     return isMobile ? (
         <BottomSheet
