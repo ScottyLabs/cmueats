@@ -74,9 +74,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
             setY(target);
             if (target === HIDDEN) {
-                if (onHide) {
-                    onHide();
-                }
+                hide();
             }
         }
 
