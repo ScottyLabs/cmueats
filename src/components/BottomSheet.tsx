@@ -241,7 +241,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                     className={`${styles.bottomSheet} `}
                     style={{
                         transform: `translateY(${y}px)`,
-                        transition: dragging ? 'none' : 'transform 300ms cubic-bezier(0.22, 1, 0.36, 1)',
+                        transition: dragging ? 'none' : 'transform 500ms cubic-bezier(0.22, 1, 0.36, 1)',
                     }}
                 >
                     <button
