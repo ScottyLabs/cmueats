@@ -39,6 +39,7 @@ body {
 .MainContent {
     flex: 1;
     min-height: 0;
+    background-image: url(./assets/v_day_bg.png);
 
     overflow-y: auto;
     &:focus {

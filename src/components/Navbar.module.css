@@ -3,7 +3,7 @@
     bottom: 0;
     z-index: 727;
     flex-shrink: 0;
-    background-color: var(--nav-bg);
+    background-color: hsl(341.19deg 92.19% 74.9%);
     padding: 13px 0;
     border-top: 2px solid var(--nav-border-top);
     @media (max-width: 800px) {

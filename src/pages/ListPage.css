@@ -23,7 +23,7 @@
     position: sticky;
     top: -10px;
     z-index: 727;
-    background-color: var(--black-950);
+    background-color: transparent;
     margin-bottom: 10px;
 }
 .list-controls-layout {

@@ -5,7 +5,7 @@
     justify-content: space-between;
     gap: 20px;
     position: relative;
-    background-color: var(--black-1000);
+    background-color: hsl(341.19deg 92.19% 74.9%);
     @container (max-width: 1100px) {
         flex-direction: column-reverse;
         align-items: flex-start;

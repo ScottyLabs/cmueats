@@ -56,7 +56,7 @@
     --card-header-bg: #1d1f21;
     --card-text-title: white;
     --card-text-description: white;
-    --card-text-muted: #8d979f;
+    --card-text-muted: #545a5f;
     --card-border-color: rgba(0, 0, 0, 0.2);
     --card-border-width: 2px;
 
@@ -77,9 +77,9 @@
     --button-bg--hover: hsl(210, 6%, 9%);
     --button-text: white;
 
-    --location-open-text-color: #19b875;
-    --location-closed-text-color: #dd3c18;
-    --location-closed-long-term-text-color: #dd3c18;
+    --location-open-text-color: #055736;
+    --location-closed-text-color: #961010;
+    --location-closed-long-term-text-color: #5d1909;
     --location-opens-soon-text-color: #f6cc5d;
     --location-closes-soon-text-color: #f3f65d;
 
@@ -228,6 +228,9 @@ body.miku {
     }
 }
 body {
+    .MainContent {
+        background-image: url(./assets/v_day_bg.png);
+    }
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

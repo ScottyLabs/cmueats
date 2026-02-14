@@ -3,7 +3,7 @@
     align-items: center;
     gap: 10px;
     padding: 16px var(--drawer-x-padding);
-    background: var(--black-1000);
+    background: #f13976;
     border-top: 3px solid var(--black-900);
     overflow-x: auto;
     scrollbar-width: thin;
@@ -35,7 +35,7 @@
 
     &:hover {
         color: var(--text-primary);
-        background: rgba(255, 255, 255, 0.12);
+        background: #f13976;
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
     }

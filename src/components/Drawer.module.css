@@ -7,7 +7,7 @@
     box-shadow: -32px 0 80px rgba(0, 0, 0, 0.45);
     overflow-y: auto;
     scrollbar-width: thin;
-    background-color: var(--black-950);
+    background-color: hsl(341.19deg 92.19% 74.9%);
     container-type: inline-size;
 
     @media screen and (max-width: 900px) {
