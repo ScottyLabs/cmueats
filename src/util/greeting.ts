@@ -54,6 +54,7 @@ const eveningShort = ['Have a good evening!', 'Grab a bite to eat!', 'Hungry nig
 interface Special {
     isMikuDay: boolean;
 }
+
 const getRandomStringFrom = (greetings: string[]) => {
     if (greetings.length === 0) return 'Welcome to CMUEats!';
     return greetings[Math.floor(Math.random() * greetings.length)];
@@ -94,7 +95,7 @@ const getGreetingMobile = (hours: number, special?: Special) => {
     return 'Welcome to CMUEats!';
 };
 const getGreetings = (hours: number, special?: Special) => ({
-    desktopGreeting: getGreeting(hours, special),
-    mobileGreeting: getGreetingMobile(hours, special),
+    desktopGreeting: "Happy Valentine's Day!",
+    mobileGreeting: "Happy Valentine's Day!",
 });
 export { getGreeting, getGreetingMobile, getGreetings };
