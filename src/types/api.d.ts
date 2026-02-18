@@ -228,9 +228,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1770660001555 */
+                            /** @example 1771392122322 */
                             start: number;
-                            /** @example 1770660001555 */
+                            /** @example 1771392122322 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -244,6 +244,7 @@ export interface operations {
                         name: (string | null) | null;
                         location: string;
                         ratingsAvg: (number | null) | null;
+                        ratingsCount: number;
                         shortDescription: (string | null) | null;
                         description: string;
                         url: string;

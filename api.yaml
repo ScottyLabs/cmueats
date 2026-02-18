@@ -53,6 +53,7 @@ paths:
                       - type: "null"
                 required:
                   - user
+                additionalProperties: false
       operationId: getWhoami
   /:
     get:
@@ -87,11 +88,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1770660001555
+                              - 1771392122322
                             type: number
                           end:
                             examples:
-                              - 1770660001555
+                              - 1771392122322
                             type: number
                         required:
                           - start
@@ -134,6 +135,8 @@ paths:
                       anyOf:
                         - type: number
                         - type: "null"
+                    ratingsCount:
+                      type: number
                     shortDescription:
                       nullable: true
                       anyOf:
@@ -174,6 +177,7 @@ paths:
                     - name
                     - location
                     - ratingsAvg
+                    - ratingsCount
                     - shortDescription
                     - description
                     - url
@@ -347,6 +351,7 @@ paths:
                 required:
                   - starData
                   - tagData
+                additionalProperties: false
       operationId: getV2LocationsByLocationIdReviewsSummary
   /v2/locations/{locationId}/reviews/stars/me:
     put:
@@ -521,3 +526,4 @@ paths:
       operationId: getV2LocationsByLocationIdReviewsTags
 components:
   schemas: {}
+
