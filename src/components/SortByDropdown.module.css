@@ -1,0 +1,34 @@
+.select {
+    appearance: none;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    min-width: 120px;
+    padding: 10.4px 13.6px;
+    border-radius: 14.4px;
+    background: var(--input-bg) url(../assets/select.svg) no-repeat calc(100% - 10px) 50%;
+    outline: none;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--black-400);
+    font-weight: 500;
+}
+
+.select:hover {
+    transition: all 0.5s;
+    box-shadow: 0 0 40px var(--hover-accent-color);
+    border-color: var(--hover-accent-color);
+    outline: none;
+}
+
+@media screen and (max-width: 900px) {
+    .select {
+        opacity: 1;
+        animation: none;
+        width: 100%;
+        min-width: 0;
+    }
+}

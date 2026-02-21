@@ -36,12 +36,14 @@ export default function EateryCardGrid({
     shouldAnimateCards,
     apiError,
     updateCardViewPreference,
+    preserveOrder = false,
 }: {
     locations: ILocation_Full[] | undefined;
     setSearchQuery: React.Dispatch<string>;
     shouldAnimateCards: boolean;
     apiError: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
+    preserveOrder?: boolean;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
 
@@ -75,7 +77,7 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
-    const sortedLocations = [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
+    const sortedLocations = preserveOrder ? [...locations] : [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
 
     function locationToCard(location: ILocation_Full) {
         return (
