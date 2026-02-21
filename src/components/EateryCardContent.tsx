@@ -5,7 +5,6 @@ import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_Full; partOfMainGrid: boolean }) {
     const { location: physicalLocation, name, cardViewPreference } = location;
-    const isMobile = useIsMobileContext();
     const isPinned = cardViewPreference === 'pinned';
 
     return (
@@ -16,11 +15,11 @@ function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_F
             </h3>
 
             <span className={css['physical-location-text']}>
-                <MapPin size={isMobile ? 12 : 13} />
+                <MapPin size={12} />
                 {physicalLocation}
             </span>
 
-            {partOfMainGrid && !isMobile && (
+            {partOfMainGrid && (
                 <div className={css['action-bar']}>
                     <div className={css.rating}>rating placeholder</div>
                 </div>

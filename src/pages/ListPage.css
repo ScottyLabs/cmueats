@@ -39,10 +39,8 @@
         max-width: initial;
         padding: 20px var(--global-x-padding) 10px;
     }
-
-    @container (width<=600px) {
+    @container (width<600px) {
         grid-template-columns: 1fr;
-        padding: 15px var(--global-x-padding) 15px;
     }
 }
 
@@ -135,47 +133,5 @@
 
     90% {
         opacity: 1;
-    }
-}
-
-@media (min-width: 601px) {
-    .mobile {
-        display: none;
-    }
-}
-
-@media (max-width: 600px) {
-    .info-text {
-        color: #b4bbc0;
-        padding: none;
-        font-size: 14px;
-    }
-
-    .Locations-header {
-        grid-gap: 0px;
-        padding-bottom: 0.8rem;
-    }
-
-    .list-header-controls {
-        display: block;
-        grid-template-columns: none;
-    }
-
-    .list-header-greeting-container {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
-    .list-header {
-        padding-bottom: 8px;
-        background-color: none;
-    }
-
-    .list-controls-layout {
-        margin: 0px;
-    }
-
-    .list-controls-container {
-        margin-bottom: 0px;
     }
 }

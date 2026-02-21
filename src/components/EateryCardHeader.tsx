@@ -23,9 +23,9 @@ function EateryCardHeader({
     const [reportPopupOpen, setReportPopupOpen] = useState(false);
     const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
     const statusChangesSoon = !location.closedLongTerm && location.changesSoon;
+    const isPinned = location.cardViewPreference === 'pinned';
     const isHidden = location.cardViewPreference === 'hidden';
     const { closeDrawer, selectedId } = useDrawerAPIContext();
-    const isPinned = location.cardViewPreference === 'pinned';
 
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];

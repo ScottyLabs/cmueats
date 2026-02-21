@@ -11,7 +11,6 @@ import css from './EateryCardGrid.module.css';
 
 import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
-import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) => {
     const state1 = location1.locationState;
@@ -45,7 +44,6 @@ export default function EateryCardGrid({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
-    const isMobile = useIsMobileContext();
     if (apiError)
         return (
             <p className={css['locations__error-text']}>
@@ -100,11 +98,7 @@ export default function EateryCardGrid({
                 <div>Do we have wrong data? Let us know through the card dropdown!</div>
                 <div>
                     <Info size={16} aria-hidden="true" />
-                    <span>
-                        {isMobile
-                            ? 'Tap on a card for more details'
-                            : 'Tap or click on the cards for more information!'}
-                    </span>
+                    <span>Tap or click on the cards for more information!</span>
                 </div>
             </div>
             <div className={css.supergrid__section}>
