@@ -15,7 +15,6 @@ import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
 import AuthBanner from './components/banners/AuthBanner';
 import AlertBanner from './components/banners/OfflineAlertBanner';
-import ReviewSystemBanner from './components/banners/ReviewSystemBanner';
 import GeneralBanner from './components/banners/GeneralBanner';
 
 export default function App() {
