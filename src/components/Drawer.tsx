@@ -43,13 +43,8 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     }, [pickedLocation?.id]);
 
     return isMobile ? (
-        <BottomSheet
-            active={pickedLocation !== undefined}
-            onHide={closeDrawer}
-        >
-            <div 
-                className={css['drawer-box-mobile']}
-                ref={drawerRef}>
+        <BottomSheet active={pickedLocation !== undefined} onHide={closeDrawer}>
+            <div className={css['drawer-box-mobile']} ref={drawerRef}>
                 {pickedLocation !== undefined && (
                     <WidthContext.Provider value={drawerWidth}>
                         <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>

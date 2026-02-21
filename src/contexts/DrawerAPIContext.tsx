@@ -1,7 +1,7 @@
 // Differences between DrawerTabsContext:
 // Global drawer interaction: tracks which concept id is selected and exposes helpers to open/close it across the list page
 
-import { createContext, useContext, useEffect, useMemo, useState, useLayoutEffect } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 type DrawerAPIContextValue = {
     selectedId: string | null;
@@ -20,7 +20,7 @@ export function DrawerAPIContextProvider({ children }: { children: React.ReactNo
         return activeId;
     });
     const [activeTab, setActiveTab] = useState<DrawerTabType>('overview');
-    
+
     const drawerContextValue = useMemo(
         () => ({
             closeDrawer: () => {

@@ -101,8 +101,10 @@ export default function EateryCardGrid({
                 <div>
                     <Info size={16} aria-hidden="true" />
                     <span>
-                    {isMobile ? 'Tap on a card for more details' : 'Tap or click on the cards for more information!'}
-                </span>
+                        {isMobile
+                            ? 'Tap on a card for more details'
+                            : 'Tap or click on the cards for more information!'}
+                    </span>
                 </div>
             </div>
             <div className={css.supergrid__section}>
