@@ -28,6 +28,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
     const [y, setY] = useState<number>(HIDDEN);
     const [dragging, setDragging] = useState<boolean>(false);
+    const [dragging2, setDragging2] = useState<React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement> | null>(null);
 
     useEffect(() => {
         const onMove = (e: MouseEvent | TouchEvent) => {
@@ -151,10 +152,22 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         }
     }
 
+    const onSheetScroll = (e: Event) => {
+        if (!(contentRef?.current?.scrollTop) && dragging2) {
+            startDrag(dragging2);
+        }
+    }
+
     const startSheetDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+        contentRef?.current?.addEventListener("scroll", onSheetScroll);
+        setDragging2(e);
         if (!(contentRef?.current?.scrollTop)) {
             startDrag(e);
         }
+    }
+
+    const endSheetDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+        document.removeEventListener('scroll', onSheetScroll);
     }
 
     const startHandleDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
@@ -174,7 +187,9 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             {active && (
                 <div
                     onMouseDown = {startSheetDrag}
+                    onMouseUp = {endSheetDrag}
                     onTouchStart = {startSheetDrag}
+                    onTouchEnd = {endSheetDrag}
                     role="dialog"
                     ref={sheetRef}
                     className={`${styles.bottomSheet} `}
