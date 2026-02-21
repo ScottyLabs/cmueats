@@ -217,7 +217,7 @@ function EateryCardHeader({
                             if (!msg) return;
                             const { error } = await fetchClient
                                 .POST('/report', {
-                                    body: { locationId: location.id, locationName: location.name, message: msg },
+                                    body: { locationId: location.id, message: msg },
                                 })
                                 .catch((e) => ({ error: e }));
                             if (error) {

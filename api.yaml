@@ -87,11 +87,11 @@ paths:
                         properties:
                           start:
                             examples:
-                              - 1769623319891
+                              - 1771714397336
                             type: number
                           end:
                             examples:
-                              - 1769623319891
+                              - 1771714397336
                             type: number
                         required:
                           - start
@@ -202,6 +202,7 @@ paths:
       operationId: getEmails
   /report:
     post:
+      description: Endpoint for reporting errors in information
       requestBody:
         required: true
         content:
@@ -209,42 +210,39 @@ paths:
             schema:
               type: object
               properties:
-                locationName:
-                  type: string
                 locationId:
                   type: string
                 message:
+                  minLength: 1
+                  maxLength: 512
                   type: string
               required:
-                - locationName
                 - locationId
                 - message
           application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
-                locationName:
-                  type: string
                 locationId:
                   type: string
                 message:
+                  minLength: 1
+                  maxLength: 512
                   type: string
               required:
-                - locationName
                 - locationId
                 - message
           multipart/form-data:
             schema:
               type: object
               properties:
-                locationName:
-                  type: string
                 locationId:
                   type: string
                 message:
+                  minLength: 1
+                  maxLength: 512
                   type: string
               required:
-                - locationName
                 - locationId
                 - message
       operationId: postReport
@@ -510,5 +508,49 @@ paths:
                     - createdAt
                     - updatedAt
       operationId: getV2LocationsByLocationIdReviewsTags
+  /v2/locations/{locationId}/reports:
+    get:
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Response for status 200
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    userId:
+                      nullable: true
+                      anyOf:
+                        - type: number
+                        - type: "null"
+                    createdAt:
+                      anyOf:
+                        - type: Date
+                        - format: date-time
+                          type: string
+                        - format: date
+                          type: string
+                        - type: number
+                    locationId:
+                      type: string
+                    message:
+                      type: string
+                  required:
+                    - id
+                    - userId
+                    - createdAt
+                    - locationId
+                    - message
+      operationId: getV2LocationsByLocationIdReports
 components:
   schemas: {}

@@ -79,6 +79,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /** @description Endpoint for reporting errors in information */
         post: operations["postReport"];
         delete?: never;
         options?: never;
@@ -142,6 +143,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["getV2LocationsByLocationIdReviewsTags"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/locations/{locationId}/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getV2LocationsByLocationIdReports"];
         put?: never;
         post?: never;
         delete?: never;
@@ -228,9 +245,9 @@ export interface operations {
                 content: {
                     "application/json": {
                         times: {
-                            /** @example 1769623319891 */
+                            /** @example 1771714397336 */
                             start: number;
-                            /** @example 1769623319891 */
+                            /** @example 1771714397336 */
                             end: number;
                         }[];
                         todaysSoups: {
@@ -292,17 +309,14 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    locationName: string;
                     locationId: string;
                     message: string;
                 };
                 "application/x-www-form-urlencoded": {
-                    locationName: string;
                     locationId: string;
                     message: string;
                 };
                 "multipart/form-data": {
-                    locationName: string;
                     locationId: string;
                     message: string;
                 };
@@ -452,6 +466,34 @@ export interface operations {
                         vote: boolean;
                         createdAt: number;
                         updatedAt: number;
+                    }[];
+                };
+            };
+        };
+    };
+    getV2LocationsByLocationIdReports: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                locationId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Response for status 200 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        id: number;
+                        userId: (number | null) | null;
+                        createdAt: Record<string, never> | string | number;
+                        locationId: string;
+                        message: string;
                     }[];
                 };
             };
