@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 
-import { ILocation_Full, LocationState } from '../types/locationTypes';
+import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
 import SortByDropdown from '../components/SortByDropdown';
 import SearchBar from '../components/SearchBar';
@@ -9,7 +9,7 @@ import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider } from '../contexts/DrawerAPIContext';
 import useFilteredLocations from './useFilteredLocations';
-import { getDistanceMeters } from '../util/distances';
+import getDistanceMeters from '../util/distances';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
@@ -56,7 +56,7 @@ function ListPage({
         if (option === 'distance' && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-                () => {}
+                () => {},
             );
         } else {
             setUserCoords(null);
@@ -72,13 +72,9 @@ function ListPage({
             const bLat = b.coordinateLat;
             const bLng = b.coordinateLng;
             const aDist =
-                aLat != null && aLng != null
-                    ? getDistanceMeters(userCoords.lat, userCoords.lng, aLat, aLng)
-                    : Infinity;
+                aLat != null && aLng != null ? getDistanceMeters(userCoords.lat, userCoords.lng, aLat, aLng) : Infinity;
             const bDist =
-                bLat != null && bLng != null
-                    ? getDistanceMeters(userCoords.lat, userCoords.lng, bLat, bLng)
-                    : Infinity;
+                bLat != null && bLng != null ? getDistanceMeters(userCoords.lat, userCoords.lng, bLat, bLng) : Infinity;
             return aDist - bDist;
         });
     }, [filteredLocations, userCoords]);
@@ -104,9 +100,7 @@ function ListPage({
                         </div>
                     </div>
                     <EateryCardGrid
-                        locations={
-                            sortBy === 'distance' && userCoords !== null ? sortedLocations : filteredLocations
-                        }
+                        locations={sortBy === 'distance' && userCoords !== null ? sortedLocations : filteredLocations}
                         shouldAnimateCards={shouldAnimateCards.current}
                         apiError={error}
                         setSearchQuery={setSearchQuery}

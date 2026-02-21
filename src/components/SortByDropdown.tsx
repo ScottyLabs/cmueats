@@ -9,11 +9,7 @@ type SortByDropdownProps = {
 
 function SortByDropdown({ value, onChange }: SortByDropdownProps) {
     return (
-        <select
-            className={css.select}
-            value={value}
-            onChange={(e) => onChange(e.target.value as SortByOption)}
-        >
+        <select className={css.select} value={value} onChange={(e) => onChange(e.target.value as SortByOption)}>
             <option value="">Sort by</option>
             <option value="default">Default</option>
             <option value="distance">Location</option>

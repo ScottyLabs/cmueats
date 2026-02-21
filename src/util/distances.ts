@@ -1,9 +1,4 @@
-export function getDistanceMeters(
-    lat1: number,
-    lng1: number,
-    lat2: number,
-    lng2: number
-): number {
+export default function getDistanceMeters(lat1: number, lng1: number, lat2: number, lng2: number): number {
     const R = 6371000;
     const lat1Rad = (lat1 * Math.PI) / 180;
     const lat2Rad = (lat2 * Math.PI) / 180;
