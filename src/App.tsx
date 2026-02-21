@@ -15,6 +15,7 @@ import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
 import AuthBanner from './components/banners/AuthBanner';
 import AlertBanner from './components/banners/OfflineAlertBanner';
+import GeneralBanner from './components/banners/GeneralBanner';
 
 export default function App() {
     const now = useCurrentTime();
@@ -39,6 +40,11 @@ export default function App() {
         <React.StrictMode>
             <BrowserRouter>
                 <div className="App">
+                    <GeneralBanner
+                        desktopText="How's your food? Tap on a card to leave a review!"
+                        mobileText="Leave a review!"
+                        localStorageKey="review-sys26-banner-closed"
+                    />
                     <AlertBanner />
                     <AuthBanner />
                     <div className="MainContent">
