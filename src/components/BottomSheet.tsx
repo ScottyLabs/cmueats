@@ -18,8 +18,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const snapPoints = [FULL, HIDDEN];
 
     const sheetRef = useRef<HTMLDivElement | null>(null);
-    const pointerStart = useRef<{ x: number; y: number } | null>(null);
-    const moved = useRef(false);
     const dragStartTime = useRef<number>(0);
     const dragStartY = useRef<number>(0);
     const startY = useRef<number>(0);
@@ -28,7 +26,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
     const [y, setY] = useState<number>(HIDDEN);
     const [dragging, setDragging] = useState<boolean>(false);
-    const [dragging2, setDragging2] = useState<React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement> | null>(null);
+    const [sheetDrag, setSheetDrag] = useState<React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement> | null>(null);
 
     useEffect(() => {
         const onMove = (e: MouseEvent | TouchEvent) => {
@@ -153,14 +151,14 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }
 
     const onSheetScroll = (e: Event) => {
-        if (!(contentRef?.current?.scrollTop) && dragging2) {
-            startDrag(dragging2);
+        if (!(contentRef?.current?.scrollTop) && sheetDrag) {
+            startDrag(sheetDrag);
         }
     }
 
     const startSheetDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         contentRef?.current?.addEventListener("scroll", onSheetScroll);
-        setDragging2(e);
+        setSheetDrag(e);
         if (!(contentRef?.current?.scrollTop)) {
             startDrag(e);
         }
