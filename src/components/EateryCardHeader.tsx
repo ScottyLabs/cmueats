@@ -217,11 +217,13 @@ function EateryCardHeader({
                             if (!msg) return;
                             const { error } = await fetchClient
                                 .POST('/report', {
-                                    body: { locationId: location.id, locationName: location.name, message: msg },
+                                    body: { locationId: location.id, message: msg },
                                 })
                                 .catch((e) => ({ error: e }));
                             if (error) {
-                                toast.error('Failed to submit report!');
+                                // eslint-disable-next-line no-console
+                                console.error(error);
+                                toast.error(`Failed to submit report: ${error}`);
                             } else {
                                 setReportPopupOpen(false);
                                 toast.success("Thanks for taking the time to report this! We'll address it ASAP");
