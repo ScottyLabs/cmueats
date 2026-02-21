@@ -221,8 +221,9 @@ function EateryCardHeader({
                                 })
                                 .catch((e) => ({ error: e }));
                             if (error) {
-                                console.error(error)
-                                toast.error('Failed to submit report: ' + error);
+                                // eslint-disable-next-line no-console
+                                console.error(error);
+                                toast.error(`Failed to submit report: ${error}`);
                             } else {
                                 setReportPopupOpen(false);
                                 toast.success("Thanks for taking the time to report this! We'll address it ASAP");
