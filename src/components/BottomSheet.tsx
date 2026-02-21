@@ -127,67 +127,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         }
     }, [active, HIDDEN]);
 
-    useEffect(() => {
-        const onDown = (e: MouseEvent | TouchEvent) => {
-            if (!sheetRef.current) return;
-
-            const point = 'touches' in e && e.touches.length > 0 ? e.touches[0] : 'clientX' in e ? e : null;
-
-            if (!point) return;
-
-            pointerStart.current = {
-                x: point.clientX,
-                y: point.clientY,
-            };
-            moved.current = false;
-        }
-
-        const onMove = (e: MouseEvent | TouchEvent) => {
-            if (!pointerStart.current) return;
-
-            const point = 'touches' in e && e.touches.length > 0 ? e.touches[0] : 'clientX' in e ? e : null;
-
-            if (!point) return;
-
-            const dx = Math.abs(point.clientX - pointerStart.current.x);
-            const dy = Math.abs(point.clientY - pointerStart.current.y);
-
-            if (dx > 5 || dy > 5) {
-                moved.current = true;
-            }
-        }
-
-        const onUp = (e: MouseEvent | TouchEvent) => {
-            if (!sheetRef.current) return;
-            if (!pointerStart.current) return;
-
-            if (moved.current) {
-                pointerStart.current = null;
-                return;
-            }
-
-            pointerStart.current = null;
-        }
-
-        document.addEventListener('mousedown', onDown);
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onUp);
-
-        document.addEventListener('touchstart', onDown);
-        document.addEventListener('touchmove', onMove);
-        document.addEventListener('touchend', onUp);
-
-        return () => {
-            document.removeEventListener('mousedown', onDown);
-            document.removeEventListener('mousemove', onMove);
-            document.removeEventListener('mouseup', onUp);
-
-            document.removeEventListener('touchstart', onDown);
-            document.removeEventListener('touchmove', onMove);
-            document.removeEventListener('touchend', onUp);
-        };
-    }, [HIDDEN]);
-
     const startDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         setDragging(true);
 
