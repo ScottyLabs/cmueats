@@ -3,10 +3,18 @@ import clsx from 'clsx';
 import useLocalStorage from '../../util/localStorage';
 import closeButton from '../../assets/banner/close-button.svg';
 import scottyDog from '../../assets/banner/scotty-dog.svg';
-import css from './NovaBanner.module.css';
+import css from './GeneralBanner.module.css';
 
-export default function Banner() {
-    const [closed, setIsClosed] = useLocalStorage('nova25-banner-closed');
+export default function GeneralBanner({
+    desktopText,
+    mobileText,
+    localStorageKey,
+}: {
+    desktopText: React.ReactNode;
+    mobileText: React.ReactNode;
+    localStorageKey: string;
+}) {
+    const [closed, setIsClosed] = useLocalStorage(localStorageKey);
     const closeBanner = () => {
         setIsClosed('true');
     };
@@ -22,27 +30,9 @@ export default function Banner() {
                 <div className={clsx(css['welcome-banner__text'], css['welcome-banner-padding'])}>
                     <span className={css['welcome-banner__text--long']}>
                         <img src={scottyDog} alt="" />
-                        <span>
-                            <a
-                                href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                Register
-                            </a>{' '}
-                            for Nova, ScottyLabs&apos; GenAI Hackathon by Nov. 1st!
-                        </span>
+                        <span>{desktopText}</span>
                     </span>
-                    <span className={css['welcome-banner__text--short']}>
-                        <a
-                            href="https://docs.google.com/forms/d/e/1FAIpQLSd6mXSOzxxUctc0EeQBTanqebc31xmBnKb_cFRosqHjtmuemg/viewform"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            Register
-                        </a>{' '}
-                        for Nova by Nov. 1st!
-                    </span>
+                    <span className={css['welcome-banner__text--short']}>{mobileText}</span>
                 </div>
                 <div
                     className={clsx(

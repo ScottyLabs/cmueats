@@ -6,7 +6,7 @@ import scottyDog from '../../assets/banner/scotty-dog.svg';
 import css from './ReviewSystemBanner.module.css';
 
 export default function Banner() {
-    const [closed, setIsClosed] = useLocalStorage('review-sys26-banner-closed');
+    const [closed, setIsClosed] = useLocalStorage('');
     const closeBanner = () => {
         setIsClosed('true');
     };
@@ -22,7 +22,7 @@ export default function Banner() {
                 <div className={clsx(css['welcome-banner__text'], css['welcome-banner-padding'])}>
                     <span className={css['welcome-banner__text--long']}>
                         <img src={scottyDog} alt="" />
-                        <span>How&apos;s your food? Tap on a card to leave a review!</span>
+                        <span></span>
                     </span>
                     <span className={css['welcome-banner__text--short']}>Leave a review!</span>
                 </div>

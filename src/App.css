@@ -44,9 +44,14 @@ body {
     &:focus {
         outline: none;
     }
-    @media screen and (max-width: 900px) {
-        /* important! this breakpoint should match the mobile drawer breakpoint */
-        /* allow natural scroll on mobile */
+}
+@media screen and (max-width: 900px) {
+    /* important! this breakpoint should match the mobile drawer breakpoint */
+    /* allow natural scroll on mobile */
+    .App {
+        height: auto;
+    }
+    .MainContent {
         min-height: auto;
         overflow-y: visible;
 
