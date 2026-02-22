@@ -30,8 +30,8 @@
     margin-left: auto;
     padding: 27px var(--global-x-padding) 15px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 230px;
-    max-width: 550px;
+    grid-template-columns: minmax(0, 1fr) 230px 140px;
+    max-width: 720px;
     gap: 0.6rem;
     align-items: center;
 
