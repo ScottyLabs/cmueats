@@ -51,6 +51,7 @@ export interface ILocation_FromAPI {
     id: string;
     name: string;
     ratingsAvg: number | null;
+    ratingsCount: number;
     shortDescription: string | null;
     description: string;
     url: string;

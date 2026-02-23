@@ -1,5 +1,5 @@
 .card-content-container {
-    padding: 12px 13px 20px;
+    padding: 12px 5px 10px 13px;
 }
 
 .location-name-text {
@@ -49,5 +49,51 @@
     justify-content: space-between;
 }
 
-.rating {
+.rating-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.star-container {
+    position: relative;
+    height: 16px;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.rating-avg {
+    font-size: 14px;
+}
+
+.rating-count {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.empty-star,
+.filled-star {
+    color: var(--black-600);
+}
+
+.filled-star {
+    color: var(--yellow-400);
+    overflow: hidden;
+    position: absolute;
+    inset: 0;
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 1) 0px,
+        rgba(0, 0, 0, 1) var(--star-cutoff),
+        rgba(0, 0, 0, 0) var(--star-cutoff)
+    );
+}
+
+@property --star-cutoff {
+    syntax: '<length-percentage>';
+    inherits: false;
+    initial-value: 0%;
 }
