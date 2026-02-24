@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import z from 'zod';
-import { DateTime } from 'luxon';
 import { safeGetItem, safeSetItem, safeRemoveItem } from './safeStorage';
 import { $api } from '../api';
-import { getLocationStatus } from './queryLocations';
-import { ILocation_FromAPI, ILocation_Full } from '../types/locationTypes';
 
 const stringToJSONSchema = z.string().transform((str) => {
     try {
@@ -71,73 +68,3 @@ export function getPreferences() {
     }
     return CardViewPreferences.parse(safeGetItem('eateryStates') ?? '{}');
 }
-
-export function getLocatationFull(
-    locations: ILocation_FromAPI[] | undefined,
-    cardViewPreferences: CardViewPreferencesType,
-    now: DateTime,
-) {
-    if (!locations) return undefined;
-    return locations.map((location) => ({
-        ...location,
-        ...getLocationStatus(location.times, now),
-        cardViewPreference:
-            cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal',
-        averageRating: 0,
-    })) as ILocation_Full[];
-}
-
-
-// export async function getLocationRating(locationId: string): Promise<ILocation_RatingData> {
-//     try {
-//         const response = await fetchClient.GET('/v2/locations/{locationId}/reviews/summary', {
-//             params: { path: { locationId } },
-//         });
-
-//         const avg = response.data?.starData?.avg ?? 0;
-
-//         return {
-//             averageRating: avg,
-//         };
-//     } catch {
-//         return {
-//             averageRating: 0,
-//         };
-//     }
-// }
-
-// export function useFullLocationData(
-//     locations: ILocation_FromAPI[] | undefined,
-//     cardViewPreferences: CardViewPreferencesType,
-//     now: DateTime,
-// ) {
-//     const [fullLocationData, setFullLocationData] = useState<ILocation_Full[]>();
-//     const fetched = useRef(false);
-
-//     useEffect(() => {
-//         if (!locations) return;
-//         if (fetched.current) return;
-//         fetched.current = true;
-
-//         const base = getLocatationFull(locations, cardViewPreferences, now);
-//         if(!base) return;
-        
-//         setFullLocationData(base);
-
-//         (async () => {
-//             const ratingResults = await Promise.all(
-//                 base.map((loc) => getLocationRating(loc.id))
-//             );
-
-//             const updated = base.map((loc, idx) => ({
-//                 ...loc,
-//                 ...ratingResults[idx],
-//             }));
-            
-//             console.log(updated);
-//             setFullLocationData(updated);
-//         })();
-//     }, [locations]); /** Wait for locations to be available */
-
-//     return fullLocationData;
-// }
