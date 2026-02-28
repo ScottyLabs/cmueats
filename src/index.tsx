@@ -13,6 +13,7 @@ import notifySlack from './util/slack';
 import GlobalErrorBoundary from './ErrorFallback';
 import { NowContextProvider } from './contexts/NowContext';
 import { queryClient } from './api';
+import { IsMobileContextProvider } from './contexts/IsMobileContext';
 
 posthog.init(env.VITE_POSTHOG_KEY || '', {
     person_profiles: 'identified_only',
@@ -38,7 +39,9 @@ if (rootElement) {
                     <QueryClientProvider client={queryClient}>
                         <ThemeProvider>
                             <NowContextProvider>
-                                <App />
+                                <IsMobileContextProvider>
+                                    <App />
+                                </IsMobileContextProvider>
                             </NowContextProvider>
                         </ThemeProvider>
                         <ReactQueryDevtools position="left" buttonPosition="bottom-left" />

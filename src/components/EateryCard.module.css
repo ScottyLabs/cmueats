@@ -88,3 +88,9 @@
         box-shadow: 0 0 20px var(--hover-accent-color);
     }
 }
+
+@media (max-width: 600px) {
+    .desktop {
+        display: none;
+    }
+}

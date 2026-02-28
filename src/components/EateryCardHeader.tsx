@@ -26,6 +26,7 @@ function EateryCardHeader({
     const isPinned = location.cardViewPreference === 'pinned';
     const isHidden = location.cardViewPreference === 'hidden';
     const { closeDrawer, selectedId } = useDrawerAPIContext();
+
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
         if (!statusChangesSoon) {
