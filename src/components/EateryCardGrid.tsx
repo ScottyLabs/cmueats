@@ -5,30 +5,13 @@ import clsx from 'clsx';
 import EateryCard from './EateryCard';
 import EateryCardSkeleton from './EateryCardSkeleton';
 import NoResultsError from './NoResultsError';
-import { LocationState, ILocation_Full } from '../types/locationTypes';
-import assert from '../util/assert';
+import { ILocation_Full, IMikuCardData } from '../types/locationTypes';
 import css from './EateryCardGrid.module.css';
 
 import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
-
-const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) => {
-    const state1 = location1.locationState;
-    const state2 = location2.locationState;
-
-    if (state1 !== state2) return state1 - state2;
-
-    // this if statement is janky but otherwise TS won't
-    // realize that the timeUntil property exists on both l1 and l2
-    if (location1.closedLongTerm || location2.closedLongTerm) {
-        assert(location1.closedLongTerm && location2.closedLongTerm);
-        return location1.name.localeCompare(location2.name);
-    }
-    if (state1 === LocationState.OPEN || state1 === LocationState.CLOSES_SOON) {
-        return location2.minutesUntil - location1.minutesUntil;
-    }
-    return location1.minutesUntil - location2.minutesUntil;
-};
+import mikuSongs from '../data/mikuSongs';
+import MikuCard from './MikuCard';
 
 export default function EateryCardGrid({
     locations,
@@ -37,8 +20,10 @@ export default function EateryCardGrid({
     apiError,
     updateCardViewPreference,
 }: {
+    /** locations should already be filtered and sorted - this component is just responsible for rendering the content as-is */
     locations: ILocation_Full[] | undefined;
     setSearchQuery: React.Dispatch<string>;
+    /** whether or not to animate card fade in transition on mount. this is set to false when the user performs a search */
     shouldAnimateCards: boolean;
     apiError: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
@@ -75,23 +60,32 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
-    const sortedLocations = [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
-
-    function locationToCard(location: ILocation_Full) {
+    function locationToCard(data: ILocation_Full | IMikuCardData, i: number) {
+        if (data.id === undefined) {
+            // janky type discrimination
+            return <MikuCard songData={data} key={i} animate={shouldAnimateCards} />;
+        }
         return (
             <EateryCard
-                location={location}
-                key={location.id}
+                location={data}
+                key={data.id}
                 animate={shouldAnimateCards}
                 partOfMainGrid
                 updateViewPreference={(newPreference: CardViewPreference) => {
-                    updateCardViewPreference(location.id, newPreference);
+                    updateCardViewPreference(data.id, newPreference);
                 }}
             />
         );
     }
-
-    const hiddenLocations = sortedLocations.filter((location) => location.cardViewPreference === 'hidden');
+    const pinnedLocations = locations.filter((location) => location.cardViewPreference === 'pinned');
+    const normalLocations = locations.filter((location) => location.cardViewPreference === 'normal');
+    const hiddenLocations = locations.filter((location) => location.cardViewPreference === 'hidden');
+    const mainCards = [...pinnedLocations, ...normalLocations];
+    const mainCardsWithMikuSongs: (ILocation_Full | IMikuCardData)[] = [];
+    for (let i = 0; i < mainCards.length; i++) {
+        mainCardsWithMikuSongs.push(mainCards[i]!);
+        if (i % 5 === 0) mainCardsWithMikuSongs.push(mikuSongs[0]!);
+    }
 
     return (
         <div className={css.supergrid}>
@@ -104,12 +98,7 @@ export default function EateryCardGrid({
             </div>
             <div className={css.supergrid__section}>
                 <div className={css.supergrid__grid}>
-                    <AnimatePresence mode="popLayout">
-                        {[
-                            ...sortedLocations.filter((location) => location.cardViewPreference === 'pinned'),
-                            ...sortedLocations.filter((location) => location.cardViewPreference === 'normal'),
-                        ].map(locationToCard)}
-                    </AnimatePresence>
+                    <AnimatePresence mode="popLayout">{mainCardsWithMikuSongs.map(locationToCard)}</AnimatePresence>
                 </div>
             </div>
 

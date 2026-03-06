@@ -68,6 +68,9 @@
     --nav-bg: #1e1e1e;
     --selected-tab-bg: #2b2f33;
 
+    --miku: hsl(172deg, 77%, 54%);
+    --miku-darker: hsl(172deg, 47%, 74%);
+
     --hover-accent-color: rgba(238, 111, 82, 0.7);
 
     --text-primary-font:

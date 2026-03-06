@@ -8,6 +8,8 @@
     padding: 3px 13px 4px;
     box-sizing: content-box;
     background: var(--card-header-bg);
+    --scroll-percentage: 30%;
+    position: relative;
 }
 
 .card-header-dot {
@@ -159,4 +161,46 @@
         background-color: var(--red-700);
     }
     color: var(--black-100);
+}
+
+/* Miku Day 2026 styling */
+.song-scrobble-clickable-area {
+    height: 2px;
+    padding: 8px 0;
+    margin: -8px 0;
+    position: relative;
+    z-index: 9;
+    /* background-color: red; */
+}
+.song-scrobble {
+    height: 100%;
+    background-color: var(--status-color);
+    background-clip: content-box;
+    position: relative;
+    .song-scrobble-filled {
+        background-color: var(--miku-darker);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: var(--song-progress);
+        .song-scrobble-button {
+            position: absolute;
+            content: '';
+            height: 10px;
+            width: 10px;
+            padding: 10px;
+            z-index: 99;
+            background-color: var(--miku-darker);
+            background-clip: content-box;
+            right: 0;
+            top: 50%;
+            transform: translate(50%, -50%);
+            border-radius: 99px;
+        }
+    }
+}
+
+.card-header-container--song-variant {
+    border: none;
 }
