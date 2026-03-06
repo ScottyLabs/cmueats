@@ -68,6 +68,17 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
 
                 ev.preventDefault();
             }}
+            onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    if (audioState.status === 'playing') {
+                        audioControls.pauseSong(playerId);
+                    }
+                    if (audioState.status === 'paused') {
+                        audioControls.playSong(playerId);
+                    }
+                }
+            }}
             tabIndex={0}
         >
             <MikuCardHeader
