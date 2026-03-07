@@ -1,12 +1,12 @@
 import { IMikuCardData } from '../types/locationTypes';
-import モニタリング_Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD from '../assets/miku/songs/モニタリング_Best_Friend_Remix_-_Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD.mp3';
-import モニタリング_Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUDImg from '../assets/miku/songs/モニタリング_Best_Friend_Remix_-_Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD.webp';
-import メズマライザー_Mesmerizer__32ki_KLICKAUD from '../assets/miku/songs/メズマライザー_Mesmerizer_-_32ki_KLICKAUD.mp3';
-import メズマライザー_Mesmerizer__32ki_KLICKAUDImg from '../assets/miku/songs/メズマライザー_Mesmerizer_-_32ki_KLICKAUD.jpg';
-import いますぐ輪廻_Retry_Now_なきそ_NAKISO_ft_Hatsune_Miku_KLICKAUD from '../assets/miku/songs/いますぐ輪廻_Retry_Now_なきそ_NAKISO_ft_Hatsune_Miku_KLICKAUD.mp3';
-import いますぐ輪廻_Retry_Now_なきそ_NAKISO_ft_Hatsune_Miku_KLICKAUDImg from '../assets/miku/songs/いますぐ輪廻_Retry_Now_なきそ_NAKISO_ft_Hatsune_Miku_KLICKAUD.jpeg';
-import DECO27__ラビットホール_Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD from '../assets/miku/songs/DECO27_-_ラビットホール_Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD.mp3';
-import DECO27__ラビットホール_Rabbit_Hole_feat_Hatsune_Miku_KLICKAUDImg from '../assets/miku/songs/DECO27_-_ラビットホール_Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD.png';
+import Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD from '../assets/miku/songs/_Best_Friend_Remix_-_Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD.mp3';
+import Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUDImg from '../assets/miku/songs/_Best_Friend_Remix_-_Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD.webp';
+import Mesmerizer__32ki_KLICKAUD from '../assets/miku/songs/ー_Mesmerizer_-_32ki_KLICKAUD.mp3';
+import Mesmerizer__32ki_KLICKAUDImg from '../assets/miku/songs/ー_Mesmerizer_-_32ki_KLICKAUD.jpg';
+import Retry_Now_NAKISO_ft_Hatsune_Miku_KLICKAUD from '../assets/miku/songs/_Retry_Now__NAKISO_ft_Hatsune_Miku_KLICKAUD.mp3';
+import Retry_Now_NAKISO_ft_Hatsune_Miku_KLICKAUDImg from '../assets/miku/songs/_Retry_Now__NAKISO_ft_Hatsune_Miku_KLICKAUD.jpeg';
+import DECO27__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD from '../assets/miku/songs/DECO27_-__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD.mp3';
+import DECO27__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUDImg from '../assets/miku/songs/DECO27_-__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD.png';
 import fake_meme from '../assets/miku/songs/fake_meme.mp3';
 import fake_memeImg from '../assets/miku/songs/fake_meme.jpeg';
 import godish from '../assets/miku/songs/godish.mp3';
@@ -45,26 +45,26 @@ const mikuSongs: IMikuCardData[] = [
     },
     {
         artist: 'DECO*27',
-        image: モニタリング_Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUDImg,
-        songUrl: モニタリング_Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD,
+        image: Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUDImg,
+        songUrl: Best_Friend_Remix__Monitoring_DECO27_ft_Hatsune_Miku_KLICKAUD,
         title: 'Monitoring (Best Friend Remix)',
     },
     {
         artist: '32ki',
-        image: メズマライザー_Mesmerizer__32ki_KLICKAUDImg,
-        songUrl: メズマライザー_Mesmerizer__32ki_KLICKAUD,
+        image: Mesmerizer__32ki_KLICKAUDImg,
+        songUrl: Mesmerizer__32ki_KLICKAUD,
         title: 'Mesmerizer',
     },
     {
         artist: 'NAKISO',
-        image: いますぐ輪廻_Retry_Now_なきそ_NAKISO_ft_Hatsune_Miku_KLICKAUDImg,
-        songUrl: いますぐ輪廻_Retry_Now_なきそ_NAKISO_ft_Hatsune_Miku_KLICKAUD,
+        image: Retry_Now_NAKISO_ft_Hatsune_Miku_KLICKAUDImg,
+        songUrl: Retry_Now_NAKISO_ft_Hatsune_Miku_KLICKAUD,
         title: 'いますぐ輪廻 (Retry Now)',
     },
     {
         artist: 'DECO*27',
-        image: DECO27__ラビットホール_Rabbit_Hole_feat_Hatsune_Miku_KLICKAUDImg,
-        songUrl: DECO27__ラビットホール_Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD,
+        image: DECO27__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUDImg,
+        songUrl: DECO27__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD,
         title: 'Rabbit Hole',
     },
     {
