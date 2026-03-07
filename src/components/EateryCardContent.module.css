@@ -36,14 +36,18 @@
 .physical-location-text {
     font-size: 15px;
     color: var(--black-500);
-    display: block;
+    display: flex;
+    align-items: center;
     margin-top: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    & span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    gap: 5px;
 
     & svg {
-        margin-right: 5px;
+        flex-shrink: 0;
     }
 }
 

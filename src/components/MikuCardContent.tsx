@@ -1,7 +1,7 @@
-import { MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { IMikuCardData } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
+import MusicIcon from '../assets/control_buttons/music.svg?react';
 
 function MikuCardContent({
     songData,
@@ -19,8 +19,8 @@ function MikuCardContent({
             </h3>
 
             <span className={css['physical-location-text']}>
-                <MapPin size={12} />
-                {songData.artist}
+                <MusicIcon height={13} width={13} />
+                <span>{songData.artist}</span>
             </span>
 
             <img

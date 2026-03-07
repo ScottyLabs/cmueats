@@ -12,7 +12,7 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
     const drawerAPIContext = useDrawerAPIContext();
     const { audioState, ...audioControls } = useAudioContext();
     const prevDrawerSelectedIdRef = useRef<string | null>(null);
-    const playerId = useId();
+    const playerId = songData.songUrl;
     useEffect(() => {
         prevDrawerSelectedIdRef.current = drawerAPIContext.selectedId ?? null;
     }, [drawerAPIContext.selectedId]);

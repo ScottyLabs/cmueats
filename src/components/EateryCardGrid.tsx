@@ -63,7 +63,7 @@ export default function EateryCardGrid({
     function locationToCard(data: ILocation_Full | IMikuCardData, i: number) {
         if (data.id === undefined) {
             // janky type discrimination
-            return <MikuCard songData={data} key={i} animate={shouldAnimateCards} />;
+            return <MikuCard songData={data} key={data.songUrl} animate={shouldAnimateCards} />;
         }
         return (
             <EateryCard
@@ -82,10 +82,11 @@ export default function EateryCardGrid({
     const hiddenLocations = locations.filter((location) => location.cardViewPreference === 'hidden');
     const mainCards = [...pinnedLocations, ...normalLocations];
     const mainCardsWithMikuSongs: (ILocation_Full | IMikuCardData)[] = [];
-    for (let i = 0; i < mikuSongs.length; i++) {
-        // mainCardsWithMikuSongs.push(mainCards[i]!);
-        if (true || i % 5 === 0) mainCardsWithMikuSongs.push(mikuSongs[i]!);
+    for (let i = 0; i < Math.min(7, mikuSongs.length); i++) {
+        mainCardsWithMikuSongs.push(...mainCards.splice(0, 5));
+        mainCardsWithMikuSongs.push(mikuSongs[i]!);
     }
+    mainCardsWithMikuSongs.push(...mainCards); // rest
 
     return (
         <div className={css.supergrid}>

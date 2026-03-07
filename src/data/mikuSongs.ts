@@ -36,7 +36,7 @@ import Tell_Your_World_KLICKAUDImg from '../assets/miku/songs/Tell_Your_World_KL
 import World_Is_Mine_Edit_feat_supercell_KLICKAUD from '../assets/miku/songs/World_Is_Mine_Edit_feat_supercell_KLICKAUD.mp3';
 import World_Is_Mine_Edit_feat_supercell_KLICKAUDImg from '../assets/miku/songs/World_Is_Mine_Edit_feat_supercell_KLICKAUD.jpeg';
 
-const mikuSongs: IMikuCardData[] = [
+const mikuSongs: IMikuCardData[] = shuffleArray([
     {
         artist: 'TAK',
         image: LEMON_MELON_COOKIE_feat_Hatsune_Miku_KLICKAUDImg,
@@ -145,5 +145,15 @@ const mikuSongs: IMikuCardData[] = [
         songUrl: World_Is_Mine_Edit_feat_supercell_KLICKAUD,
         title: 'World is Mine',
     },
-];
+]);
+function shuffleArray<T>(ar: T[]) {
+    const shuffled = [...ar];
+    for (let i = 0; i < ar.length; i++) {
+        const j = Math.floor(Math.random() * (ar.length - i)) + i;
+        console.log(i, j);
+        [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
+    }
+    console.log(shuffled);
+    return shuffled;
+}
 export default mikuSongs;
