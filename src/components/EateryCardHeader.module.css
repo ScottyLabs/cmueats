@@ -8,7 +8,6 @@
     padding: 3px 13px 4px;
     box-sizing: content-box;
     background: var(--card-header-bg);
-    --scroll-percentage: 30%;
     position: relative;
     isolation: isolate;
 }
@@ -84,7 +83,7 @@
     width: max-content;
     border-radius: 5px;
     border: 2px solid var(--black-900);
-    background-color: var(----black-100);
+    background-color: var(--black-1000);
     color: var(--text-primary);
     padding: 7px;
 }
@@ -96,7 +95,6 @@
     gap: 5px;
     border: none;
     border-radius: 3px;
-    background-color: var(----black-100);
     padding: 6px 8px;
     &:hover {
         background-color: rgba(255, 255, 255, 0.08);
@@ -170,7 +168,6 @@
     margin: -8px 0;
     position: relative;
     z-index: 9;
-    /* background-color: red; */
 }
 .song-scrobble {
     height: 100%;

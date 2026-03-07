@@ -5,7 +5,7 @@ import MusicIcon from '../assets/control_buttons/music.svg?react';
 function MikuCardContent({ songData, playing }: { songData: IMikuCardData; playing: boolean }) {
     return (
         <div className={css['card-content-container']}>
-            <h3 className={css['location-name-text']} style={{ background: playing ? '#23272a' : '' }}>
+            <h3 className={css['location-name-text']} style={{ background: playing ? 'var(--black-1000)' : '' }}>
                 <span>{songData.title}</span>
             </h3>
 

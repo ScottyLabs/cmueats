@@ -14,10 +14,8 @@ export default function WaveTable({ color }: { color: string }) {
         const elementBox = canvas.getBoundingClientRect();
         canvas.width = elementBox.width * scale;
         canvas.height = elementBox.height * scale;
-        // ctx.scale(scale, scale);
         function animate() {
             if (!active) return;
-            // if (!ctx) return;
             const waveTable = getWaveTable().slice(0, -10);
             const RECTANGLE_WIDTH = canvas.width / waveTable.length;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
