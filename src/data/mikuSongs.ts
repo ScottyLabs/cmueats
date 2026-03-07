@@ -150,10 +150,8 @@ function shuffleArray<T>(ar: T[]) {
     const shuffled = [...ar];
     for (let i = 0; i < ar.length; i++) {
         const j = Math.floor(Math.random() * (ar.length - i)) + i;
-        console.log(i, j);
         [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
     }
-    console.log(shuffled);
     return shuffled;
 }
 export default mikuSongs;

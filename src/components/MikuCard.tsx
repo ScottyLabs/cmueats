@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import clsx from 'clsx';
 import { IMikuCardData } from '../types/locationTypes';
@@ -87,7 +87,6 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
             <MikuCardContent
                 songData={songData}
                 playing={audioState?.playerId === playerId && audioState.status === 'playing'}
-                playerActive={playerId === audioState?.playerId}
             />
         </motion.div>
     );

@@ -1,17 +1,8 @@
-import { useEffect, useState } from 'react';
 import { IMikuCardData } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
 import MusicIcon from '../assets/control_buttons/music.svg?react';
 
-function MikuCardContent({
-    songData,
-    playing,
-    playerActive,
-}: {
-    songData: IMikuCardData;
-    playing: boolean;
-    playerActive: boolean;
-}) {
+function MikuCardContent({ songData, playing }: { songData: IMikuCardData; playing: boolean }) {
     return (
         <div className={css['card-content-container']}>
             <h3 className={css['location-name-text']} style={{ background: playing ? '#23272a' : '' }}>

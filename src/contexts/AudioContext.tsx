@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 type AudioState = {
     /** which card is responsible for displaying controls for current audio */
@@ -75,9 +75,8 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                     analyzer.connect(audioCtx.destination);
                     analyzer.fftSize = 256;
                     const bufferLength = analyzer.frequencyBinCount;
-                    const dataArray = new Uint8Array(bufferLength);
                     setAudioAnalyzer(analyzer);
-                    setDataArray(dataArray);
+                    setDataArray(new Uint8Array(bufferLength));
                 }
                 setAudioState({
                     playerId,

@@ -11,7 +11,7 @@ export default function ListPageHeader() {
     const { theme } = useThemeContext();
     const { mobileGreeting, desktopGreeting } = useMemo(
         () => getGreetings(new Date().getHours(), { isMikuDay: theme === 'miku' }),
-        [],
+        [theme],
     );
 
     return (

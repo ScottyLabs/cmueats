@@ -61,7 +61,7 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
-    function locationToCard(data: ILocation_Full | IMikuCardData, i: number) {
+    function locationToCard(data: ILocation_Full | IMikuCardData) {
         if (data.id === undefined) {
             // janky type discrimination
             return <MikuCard songData={data} key={data.songUrl} animate={shouldAnimateCards} />;

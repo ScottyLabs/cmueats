@@ -17,6 +17,7 @@ function secondsToReadableString(totalSeconds: number) {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 function MikuCardHeader({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     songData,
     playerActive,
     setSongProgress,
