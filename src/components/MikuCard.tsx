@@ -79,7 +79,7 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
         >
             <MikuCardHeader
                 songData={songData}
-                songActive={playerId === audioState?.playerId}
+                playerActive={playerId === audioState?.playerId}
                 setSongProgress={(percent) => {
                     audioControls.setSongProgress(playerId, percent);
                 }}

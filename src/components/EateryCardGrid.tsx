@@ -82,9 +82,9 @@ export default function EateryCardGrid({
     const hiddenLocations = locations.filter((location) => location.cardViewPreference === 'hidden');
     const mainCards = [...pinnedLocations, ...normalLocations];
     const mainCardsWithMikuSongs: (ILocation_Full | IMikuCardData)[] = [];
-    for (let i = 0; i < mainCards.length; i++) {
-        mainCardsWithMikuSongs.push(mainCards[i]!);
-        if (i % 5 === 0) mainCardsWithMikuSongs.push(mikuSongs[0]!);
+    for (let i = 0; i < mikuSongs.length; i++) {
+        // mainCardsWithMikuSongs.push(mainCards[i]!);
+        if (true || i % 5 === 0) mainCardsWithMikuSongs.push(mikuSongs[i]!);
     }
 
     return (

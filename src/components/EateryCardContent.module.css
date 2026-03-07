@@ -64,7 +64,7 @@
     box-sizing: border-box;
     width: 40%;
     object-fit: cover;
-    object-position: left;
+    object-position: left top;
     z-index: -1;
     /* filter: saturate(0.7); */
     opacity: 0.5;
