@@ -44,7 +44,6 @@ export default function EateryCardGrid({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
-
     if (apiError)
         return (
             <p className={css['locations__error-text']}>

@@ -55,6 +55,7 @@
         rgba(0, 0, 0, 1) var(--right-cutoff),
         rgba(0, 0, 0, 0) calc(var(--right-cutoff) + 10%)
     );
+
     &.list-header__greeting--mobile {
         font-size: 30px;
     }
