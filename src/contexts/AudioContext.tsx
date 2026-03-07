@@ -1,9 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 type AudioState = {
+    /** which card is responsible for displaying controls for current audio */
     playerId: string | null;
+    /** is NaN when data is still loading */
     duration: number;
     status: 'playing' | 'paused';
+    /** is NaN when data is still loading */
     timeCode: number;
 };
 type DrawerAPIContextValue = {
@@ -25,6 +28,8 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
         status: 'playing',
         playerId: null,
     });
+
+    // this... well... actually works lmao
     useEffect(() => {
         globalAudioObj.addEventListener('timeupdate', () => {
             setAudioState((curState) => ({ ...curState, timeCode: globalAudioObj.currentTime }));
@@ -39,6 +44,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
             setAudioState((curState) => ({ ...curState, duration: globalAudioObj.duration }));
         });
     }, []);
+
     const ctx: DrawerAPIContextValue = useMemo(
         () => ({
             playSong: (playerId) => {
