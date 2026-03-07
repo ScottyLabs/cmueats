@@ -15,12 +15,14 @@ type DrawerAPIContextValue = {
     playSong: (playerId: string) => void;
     pauseSong: (playerId: string) => void;
     setSongProgress: (playerId: string, percent: number) => void;
+    getWaveTable: () => number[];
     audioState: AudioState;
 };
 
 const AudioContext = createContext<DrawerAPIContextValue | undefined>(undefined);
 
-const globalAudioObj = new Audio(); // just to make sure we only have one song playing at a given time
+export const globalAudioObj = new Audio(); // just to make sure we only have one song playing at a given time
+
 export function AudioContextProvider({ children }: { children: React.ReactNode }) {
     const [audioState, setAudioState] = useState<AudioState>({
         duration: NaN,
@@ -28,6 +30,8 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
         status: 'playing',
         playerId: null,
     });
+    const [audioAnalyzer, setAudioAnalyzer] = useState<AnalyserNode>();
+    const [dataArray, setDataArray] = useState<Uint8Array<ArrayBuffer>>();
 
     // this... well... actually works lmao
     useEffect(() => {
@@ -63,6 +67,18 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                 globalAudioObj.setAttribute('src', url);
                 globalAudioObj.load();
                 globalAudioObj.play();
+                if (audioAnalyzer === undefined) {
+                    const audioCtx = new window.AudioContext();
+                    const audioSource = audioCtx.createMediaElementSource(globalAudioObj);
+                    const analyzer = audioCtx.createAnalyser();
+                    audioSource.connect(analyzer);
+                    analyzer.connect(audioCtx.destination);
+                    analyzer.fftSize = 256;
+                    const bufferLength = analyzer.frequencyBinCount;
+                    const dataArray = new Uint8Array(bufferLength);
+                    setAudioAnalyzer(analyzer);
+                    setDataArray(dataArray);
+                }
                 setAudioState({
                     playerId,
                     timeCode: NaN,
@@ -71,8 +87,14 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                 });
             },
             audioState,
+            getWaveTable() {
+                if (audioAnalyzer === undefined || dataArray === undefined || Number.isNaN(audioState.timeCode))
+                    return [0];
+                audioAnalyzer.getByteFrequencyData(dataArray);
+                return [...dataArray];
+            },
         }),
-        [audioState],
+        [audioState, audioAnalyzer, dataArray],
     );
     return <AudioContext.Provider value={ctx}>{children}</AudioContext.Provider>;
 }

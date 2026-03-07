@@ -12,8 +12,11 @@
     font-weight: 500;
     margin: 2px -1px 0;
 
+    width: fit-content;
+    max-width: 100%;
+
     white-space: nowrap;
-    overflow: hidden;
+    /* overflow: hidden; */
     color: inherit;
     text-decoration: none;
     height: 18px;

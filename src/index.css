@@ -53,7 +53,6 @@
     --input-text: var(--text-primary);
     --input-text-placeholder: rgba(255, 255, 255, 0.585);
 
-    --card-bg: #23272a;
     --card-header-bg: #1d1f21;
     --card-text-title: white;
     --card-text-description: white;
@@ -61,7 +60,6 @@
     --card-border-color: rgba(0, 0, 0, 0.2);
     --card-border-width: 2px;
 
-    --dialog-bg: var(--card-bg);
     --dialog-header-bg: var(--card-header-bg);
 
     --nav-border-top: #31373e;

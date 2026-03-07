@@ -7,6 +7,7 @@ import { IMikuCardData } from '../types/locationTypes';
 import css from './EateryCardHeader.module.css';
 import PlayIcon from '../assets/control_buttons/play.svg?react';
 import PauseIcon from '../assets/control_buttons/pause.svg?react';
+import WaveTable from './WaveTable';
 
 function secondsToReadableString(totalSeconds: number) {
     if (Number.isNaN(totalSeconds)) return '-:--';
@@ -83,6 +84,7 @@ function MikuCardHeader({
                         </span>
                     )}
                 </div>
+                {playerActive && <WaveTable color="white" />}
             </div>
             {showProgressBar ? (
                 // eslint-disable-next-line jsx-a11y/control-has-associated-label

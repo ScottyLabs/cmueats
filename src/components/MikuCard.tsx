@@ -87,6 +87,7 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
             <MikuCardContent
                 songData={songData}
                 playing={audioState?.playerId === playerId && audioState.status === 'playing'}
+                playerActive={playerId === audioState?.playerId}
             />
         </motion.div>
     );
