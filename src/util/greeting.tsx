@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import assert from './assert';
 import bounded from './misc';
 
@@ -58,10 +59,15 @@ const getRandomStringFrom = (greetings: string[]) => {
     if (greetings.length === 0) return 'Welcome to CMUEats!';
     return greetings[Math.floor(Math.random() * greetings.length)];
 };
-const getGreeting = (hours: number, special?: Special) => {
+const getGreeting = (hours: number, special?: Special): ReactNode => {
     assert(bounded(hours, 0, 24));
 
-    if (special?.isMikuDay) return 'Happy Miku Day! (March 9th)';
+    if (special?.isMikuDay)
+        return (
+            <>
+                Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span> (3/9)
+            </>
+        );
     if (hours < 6) {
         return getRandomStringFrom(graveyard);
     }
@@ -78,7 +84,12 @@ const getGreeting = (hours: number, special?: Special) => {
     return 'Welcome to CMUEats!';
 };
 const getGreetingMobile = (hours: number, special?: Special) => {
-    if (special?.isMikuDay) return 'Happy Miku Day!';
+    if (special?.isMikuDay)
+        return (
+            <>
+                Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span> (3/9)
+            </>
+        );
     if (hours < 6) {
         return getRandomStringFrom(graveyardShort);
     }

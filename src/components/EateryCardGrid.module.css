@@ -39,21 +39,12 @@
 }
 
 .supergrid__help-text {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     color: var(--card-text-muted);
     font-size: 14px;
     margin-inline: var(--global-x-padding);
     animation: 0.5s fade-in forwards;
     div:nth-child(1) {
-        background-color: hsl(11 59% 55% / 1);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 3px;
-    }
-    div:nth-child(2) {
-        gap: 8px;
+        gap: 4px;
         display: flex;
         align-items: center;
         flex-wrap: nowrap;

@@ -12,6 +12,7 @@ import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 import mikuSongs from '../data/mikuSongs';
 import MikuCard from './MikuCard';
+import { useThemeContext } from '../ThemeProvider';
 
 export default function EateryCardGrid({
     locations,
@@ -29,7 +30,7 @@ export default function EateryCardGrid({
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
-
+    const { theme } = useThemeContext();
     if (apiError)
         return (
             <p className={css['locations__error-text']}>
@@ -82,19 +83,36 @@ export default function EateryCardGrid({
     const hiddenLocations = locations.filter((location) => location.cardViewPreference === 'hidden');
     const mainCards = [...pinnedLocations, ...normalLocations];
     const mainCardsWithMikuSongs: (ILocation_Full | IMikuCardData)[] = [];
-    for (let i = 0; i < Math.min(7, mikuSongs.length); i++) {
-        mainCardsWithMikuSongs.push(...mainCards.splice(0, 5));
-        mainCardsWithMikuSongs.push(mikuSongs[i]!);
+    if (theme === 'miku') {
+        mainCardsWithMikuSongs.push(...mainCards.splice(0, 1));
+        for (let i = 0; i < Math.min(7, mikuSongs.length); i++) {
+            mainCardsWithMikuSongs.push(mikuSongs[i]!);
+            mainCardsWithMikuSongs.push(...mainCards.splice(0, 5));
+        }
     }
     mainCardsWithMikuSongs.push(...mainCards); // rest
 
     return (
         <div className={css.supergrid}>
             <div className={css['supergrid__help-text']}>
-                <div>Do we have wrong data? Let us know through the card dropdown!</div>
                 <div>
                     <Info size={16} aria-hidden="true" />
-                    <span>Tap or click on the cards for more information!</span>
+                    <span>
+                        {theme === 'miku' ? (
+                            <>
+                                See the full Miku playlist{' '}
+                                <a
+                                    target="_blank"
+                                    href="https://open.spotify.com/playlist/3SMANeNbyWci6ZveHBZMK2?si=edeb9eb3c83747ba"
+                                    rel="noreferrer"
+                                >
+                                    here!
+                                </a>
+                            </>
+                        ) : (
+                            'Tap or click on the cards for more information!'
+                        )}
+                    </span>
                 </div>
             </div>
             <div className={css.supergrid__section}>

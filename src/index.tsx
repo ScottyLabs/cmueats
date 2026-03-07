@@ -37,13 +37,13 @@ if (rootElement) {
             <GlobalErrorBoundary>
                 <PostHogProvider client={posthog}>
                     <QueryClientProvider client={queryClient}>
-                        <ThemeProvider>
-                            <NowContextProvider>
+                        <NowContextProvider>
+                            <ThemeProvider>
                                 <AudioContextProvider>
                                     <App />
                                 </AudioContextProvider>
-                            </NowContextProvider>
-                        </ThemeProvider>
+                            </ThemeProvider>
+                        </NowContextProvider>
                         <ReactQueryDevtools position="left" buttonPosition="bottom-left" />
                     </QueryClientProvider>
                 </PostHogProvider>

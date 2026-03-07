@@ -1,32 +1,22 @@
-import { useState, useContext, createContext, useLayoutEffect, useMemo } from 'react';
-import IS_MIKU_DAY from './util/constants';
-import { safeGetItem, safeSetItem } from './util/safeStorage';
+import { useContext, createContext, useLayoutEffect } from 'react';
+import { useCurrentTime } from './contexts/NowContext';
 
 type Theme = 'none' | 'miku';
 
 const ThemeContext = createContext<{
     theme: Theme;
-    updateTheme: (theme: Theme) => void;
-}>({ theme: 'none', updateTheme: () => {} });
+}>({ theme: 'none' });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<Theme>(() => (IS_MIKU_DAY && safeGetItem('theme') === 'miku' ? 'miku' : 'none'));
+    const now = useCurrentTime();
+    const IS_MIKU_DAY = (now.month === 3 && now.day === 9) || window.location.href.includes('force-miku-day');
+    const theme: Theme = IS_MIKU_DAY ? 'miku' : 'none';
     useLayoutEffect(() => {
         document.body.className = theme;
     }, [theme]);
 
-    const exportedContext = useMemo(
-        () => ({
-            theme,
-            updateTheme: (_theme: Theme) => {
-                safeSetItem('theme', _theme);
-                setTheme(_theme);
-            },
-        }),
-        [theme],
-    );
-    // listen for localstorage changes
-    return <ThemeContext.Provider value={exportedContext}>{children}</ThemeContext.Provider>;
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
+    return <ThemeContext.Provider value={{ theme }}>{children}</ThemeContext.Provider>;
 }
 export function useThemeContext() {
     const theme = useContext(ThemeContext);

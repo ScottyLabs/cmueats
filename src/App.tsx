@@ -40,11 +40,11 @@ export default function App() {
         <React.StrictMode>
             <BrowserRouter>
                 <div className="App">
-                    <GeneralBanner
+                    {/* <GeneralBanner
                         desktopText="How's your food? Tap on a card to leave a review!"
                         mobileText="Leave a review!"
                         localStorageKey="review-sys26-banner-closed"
-                    />
+                    /> */}
                     <AlertBanner />
                     <AuthBanner />
                     <div className="MainContent">
