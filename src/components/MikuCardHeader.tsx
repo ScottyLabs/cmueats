@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useAudioContext } from '../contexts/AudioContext';
 import { IMikuCardData } from '../types/locationTypes';
 import css from './EateryCardHeader.module.css';
+import PlayIcon from '../assets/control_buttons/play.svg?react';
+import PauseIcon from '../assets/control_buttons/pause.svg?react';
 
 function secondsToReadableString(seconds: number) {
     if (Number.isNaN(seconds)) return '-:--';
@@ -19,14 +21,17 @@ function MikuCardHeader({
     setSongProgress,
 }: {
     songData: IMikuCardData;
+    /** does the currently playing song correspond with this card? */
     songActive: boolean;
     setSongProgress: (percent: number) => void;
 }) {
     const { audioState } = useAudioContext();
+    /** user input state will override audioState timecode when set */
+    const [userInputWidthPercent, setUserInputWidthPercent] = useState<null | number>(null);
     const showProgressBar = songActive && !Number.isNaN(audioState.timeCode) && !Number.isNaN(audioState.duration);
     const progressBarRef = useRef<HTMLDivElement>(null);
-    const [userInputWidthPercent, setUserInputWidthPercent] = useState<null | number>(null);
     const userInputStale = useRef(false); // only set to true once user has finished dragging
+    const ignoreMouseDown = useRef(false); // if user did not initiate mouse down in the scrobble container, ignore movement
     useEffect(() => {
         if (userInputStale.current) {
             // remove user input (new audio data detected)
@@ -56,11 +61,19 @@ function MikuCardHeader({
             }}
         >
             <div className={clsx(css['card-header-container'], css['card-header-container--song-variant'])}>
-                <div className={css['card-header-dot']} />
+                {songActive ? (
+                    audioState.status === 'paused' ? (
+                        <PlayIcon height={12} width={12} />
+                    ) : (
+                        <PauseIcon height={12} width={12} />
+                    )
+                ) : (
+                    <div className={css['card-header-dot']} />
+                )}
 
                 <div className={css['time-container']}>
                     <span className={css['card-header-relative-time-text']}>
-                        {songActive ? '~Playing' : 'Tap/Click to Play'}
+                        {songActive ? (audioState.status === 'paused' ? 'Paused' : 'Playing') : 'Tap/Click to Play'}
                     </span>
                     {showProgressBar && (
                         <span className={css['card-header-absolute-time-text']}>
@@ -75,28 +88,48 @@ function MikuCardHeader({
                 role="slider"
                 aria-valuenow={songProgress}
                 className={css['song-scrobble-clickable-area']}
-                onClick={(ev) => {
-                    // if (ev.clientX === 0) return;
+                onTouchMove={(ev) => {
                     if (!showProgressBar) return;
-                    setSongProgress(getPercentScrolled(ev.clientX));
-                    ev.preventDefault();
+                    setUserInputWidthPercent(getPercentScrolled(ev.touches[0]!.clientX));
                 }}
-                onDragEnd={(ev) => {
-                    const percent = getPercentScrolled(ev.clientX);
+                onTouchEndCapture={() => {
+                    if (!showProgressBar) return;
+
+                    if (userInputWidthPercent === null) return;
                     userInputStale.current = true;
-                    setSongProgress(percent);
+                    setSongProgress(userInputWidthPercent);
                 }}
-                onDrag={(ev) => {
-                    if (ev.clientX === 0) return; // seems like a chrome bug when the user stops dragging...
+                onMouseUp={(ev) => {
+                    if (!showProgressBar) return;
+                    if (!ignoreMouseDown.current) {
+                        userInputStale.current = true;
+                        setSongProgress(getPercentScrolled(ev.clientX));
+                    }
+                    ignoreMouseDown.current = false;
+                }}
+                onClick={(ev) => {
+                    if (showProgressBar) ev.preventDefault();
+                }}
+                onMouseMove={(ev) => {
+                    if (!showProgressBar) return;
+                    if (ignoreMouseDown.current) return;
+                    if (ev.buttons === 1) setUserInputWidthPercent(getPercentScrolled(ev.clientX));
+                }}
+                onMouseLeave={(ev) => {
+                    if (ev.buttons === 1 && !ignoreMouseDown.current) {
+                        userInputStale.current = true;
+
+                        setSongProgress(getPercentScrolled(ev.clientX));
+                    }
+                    ignoreMouseDown.current = false;
+                }}
+                onMouseEnter={(ev) => {
+                    if (ev.buttons === 1) ignoreMouseDown.current = true;
+                }}
+                onMouseDown={(ev) => {
+                    if (!showProgressBar) return;
                     setUserInputWidthPercent(getPercentScrolled(ev.clientX));
-                    ev.preventDefault();
                 }}
-                onDragStart={(ev) => {
-                    const img = new Image();
-                    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                    ev.dataTransfer.setDragImage(img, 0, 0);
-                }}
-                draggable
                 ref={progressBarRef}
             >
                 <div className={css['song-scrobble']}>

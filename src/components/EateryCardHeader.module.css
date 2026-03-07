@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     height: 30px;
-    gap: 0px;
+    gap: 8px;
     color: var(--status-color);
     border-bottom: 2px solid var(--status-color);
     padding: 3px 13px 4px;
@@ -17,7 +17,6 @@
     height: 10px;
     border-radius: 50%;
     background-color: var(--status-color);
-    margin-right: 8px;
     &.card-header-dot--blinking {
         animation: blinking 1s infinite;
     }
@@ -178,7 +177,7 @@
     background-clip: content-box;
     position: relative;
     .song-scrobble-filled {
-        background-color: var(--miku-darker);
+        background-color: white;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -191,7 +190,7 @@
             width: 10px;
             padding: 10px;
             z-index: 99;
-            background-color: var(--miku-darker);
+            background-color: white;
             background-clip: content-box;
             right: 0;
             top: 50%;

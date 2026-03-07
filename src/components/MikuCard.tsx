@@ -21,11 +21,7 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
     return (
         <motion.div
             layout
-            className={clsx(
-                css.card,
-                css['card-in-main-grid'],
-                audioState?.playerId === playerId && audioState.status === 'playing' && 'card--song-active',
-            )}
+            className={clsx(css.card, css['card-in-main-grid'])}
             initial={
                 animate
                     ? {
@@ -88,7 +84,10 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
                     audioControls.setSongProgress(playerId, percent);
                 }}
             />
-            <MikuCardContent songData={songData} />
+            <MikuCardContent
+                songData={songData}
+                playing={audioState?.playerId === playerId && audioState.status === 'playing'}
+            />
         </motion.div>
     );
 }

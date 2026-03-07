@@ -60,7 +60,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                 setAudioState({
                     playerId,
                     timeCode: NaN,
-                    status: 'paused',
+                    status: 'playing',
                     duration: NaN,
                 });
             },
