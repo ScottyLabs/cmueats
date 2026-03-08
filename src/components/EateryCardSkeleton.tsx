@@ -1,7 +1,7 @@
 import { Card, CardHeader, styled, CardContent, Avatar, Skeleton } from '@mui/material';
 
 const StyledCard = styled(Card)({
-    backgroundColor: 'var(--black-100)',
+    backgroundColor: 'var(--black-1000)',
     border: 'var(--card-border-width) solid var(--card-border-color)',
     textAlign: 'left',
     borderRadius: 7,

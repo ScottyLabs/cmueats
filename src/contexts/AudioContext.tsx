@@ -9,7 +9,7 @@ type AudioState = {
     /** is NaN when data is still loading */
     timeCode: number;
 };
-const isDesktop = window.screen.orientation.type.includes('landscape');
+const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 type AudioContextValue = {
     /** always restarts song, even if playerId is currently active */
