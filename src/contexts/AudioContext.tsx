@@ -9,6 +9,7 @@ type AudioState = {
     /** is NaN when data is still loading */
     timeCode: number;
 };
+const isDesktop = window.screen.orientation.type.includes('landscape');
 
 type AudioContextValue = {
     /** always restarts song, even if playerId is currently active */
@@ -74,21 +75,28 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
 
     // wavetable audio object to globalAudioObj handoff
     useEffect(() => {
-        document.addEventListener('visibilitychange', async () => {
-            if (document.visibilityState === 'hidden') {
-                backgroundAudioObj.currentTime = foregroundAudioObj.currentTime;
-                if (!foregroundAudioObj.paused) {
-                    foregroundAudioObj.pause();
-                    backgroundAudioObj.play();
+        if (isDesktop) return () => {};
+        const controller = new AbortController();
+        document.addEventListener(
+            'visibilitychange',
+            async () => {
+                if (document.visibilityState === 'hidden') {
+                    backgroundAudioObj.currentTime = foregroundAudioObj.currentTime;
+                    if (!foregroundAudioObj.paused) {
+                        foregroundAudioObj.pause();
+                        backgroundAudioObj.play();
+                    }
+                } else if (document.visibilityState === 'visible') {
+                    foregroundAudioObj.currentTime = backgroundAudioObj.currentTime;
+                    if (!backgroundAudioObj.paused) {
+                        backgroundAudioObj.pause();
+                        foregroundAudioObj.play();
+                    }
                 }
-            } else if (document.visibilityState === 'visible') {
-                foregroundAudioObj.currentTime = backgroundAudioObj.currentTime;
-                if (!backgroundAudioObj.paused) {
-                    backgroundAudioObj.pause();
-                    foregroundAudioObj.play();
-                }
-            }
-        });
+            },
+            { signal: controller.signal },
+        );
+        return () => controller.abort();
     }, []);
     const getWaveTable = useCallback(() => {
         if (audioAnalyzer === undefined || dataArray === undefined) return [0];
