@@ -1,4 +1,4 @@
-import { useContext, createContext, useLayoutEffect, useMemo } from 'react';
+import { useContext, createContext, useMemo } from 'react';
 import { useCurrentTime } from './contexts/NowContext';
 
 type Theme = 'none' | 'miku';
