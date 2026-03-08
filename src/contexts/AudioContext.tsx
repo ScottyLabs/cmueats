@@ -51,7 +51,6 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
             'pause',
             () => {
                 setAudioState((curState) => ({ ...curState, status: 'paused' }));
-                foregroundAudioObj.pause();
             },
             { signal: controller.signal },
         );
@@ -59,7 +58,6 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
             'play',
             () => {
                 setAudioState((curState) => ({ ...curState, status: 'playing' }));
-                foregroundAudioObj.play();
             },
             { signal: controller.signal },
         );
