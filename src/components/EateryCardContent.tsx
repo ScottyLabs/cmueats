@@ -14,8 +14,8 @@ function EateryCardContent({ location, partOfMainGrid }: { location: ILocation_F
             </h3>
 
             <span className={css['physical-location-text']}>
-                <MapPin size={12} />
-                {physicalLocation}
+                <MapPin size={14} />
+                <span>{physicalLocation}</span>
             </span>
 
             {partOfMainGrid && (

@@ -2,12 +2,14 @@
     display: flex;
     align-items: center;
     height: 30px;
-    gap: 0px;
+    gap: 8px;
     color: var(--status-color);
     border-bottom: 2px solid var(--status-color);
     padding: 3px 13px 4px;
     box-sizing: content-box;
     background: var(--card-header-bg);
+    position: relative;
+    isolation: isolate;
 }
 
 .card-header-dot {
@@ -15,7 +17,6 @@
     height: 10px;
     border-radius: 50%;
     background-color: var(--status-color);
-    margin-right: 8px;
     &.card-header-dot--blinking {
         animation: blinking 1s infinite;
     }
@@ -82,7 +83,7 @@
     width: max-content;
     border-radius: 5px;
     border: 2px solid var(--black-900);
-    background-color: var(--card-bg);
+    background-color: var(--black-1000);
     color: var(--text-primary);
     padding: 7px;
 }
@@ -94,7 +95,6 @@
     gap: 5px;
     border: none;
     border-radius: 3px;
-    background-color: var(--card-bg);
     padding: 6px 8px;
     &:hover {
         background-color: rgba(255, 255, 255, 0.08);
@@ -159,4 +159,45 @@
         background-color: var(--red-700);
     }
     color: var(--black-100);
+}
+
+/* Miku Day 2026 styling */
+.song-scrobble-clickable-area {
+    height: 2px;
+    padding: 8px 0;
+    margin: -8px 0;
+    position: relative;
+    z-index: 9;
+}
+.song-scrobble {
+    height: 100%;
+    background-color: var(--status-color);
+    background-clip: content-box;
+    position: relative;
+    .song-scrobble-filled {
+        background-color: white;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: var(--song-progress);
+        .song-scrobble-button {
+            position: absolute;
+            content: '';
+            height: 10px;
+            width: 10px;
+            padding: 10px;
+            z-index: 99;
+            background-color: white;
+            background-clip: content-box;
+            right: 0;
+            top: 50%;
+            transform: translate(50%, -50%);
+            border-radius: 99px;
+        }
+    }
+}
+
+.card-header-container--song-variant {
+    border: none;
 }
