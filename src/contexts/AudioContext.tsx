@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 type AudioState = {
     /** which card is responsible for displaying controls for current audio */
@@ -21,8 +21,6 @@ type DrawerAPIContextValue = {
 
 const AudioContext = createContext<DrawerAPIContextValue | undefined>(undefined);
 
-export const globalAudioObj = new Audio(); // just to make sure we only have one song playing at a given time
-
 export function AudioContextProvider({ children }: { children: React.ReactNode }) {
     const [audioState, setAudioState] = useState<AudioState>({
         duration: NaN,
@@ -32,44 +30,50 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
     });
     const [audioAnalyzer, setAudioAnalyzer] = useState<AnalyserNode>();
     const [dataArray, setDataArray] = useState<Uint8Array<ArrayBuffer>>();
+    const initializedAudioAnalyzer = useRef(false);
+    const audioElementRef = useRef<HTMLAudioElement>(null);
 
     // this... well... actually works lmao
     useEffect(() => {
-        globalAudioObj.addEventListener('timeupdate', () => {
-            setAudioState((curState) => ({ ...curState, timeCode: globalAudioObj.currentTime }));
+        audioElementRef.current!.addEventListener('timeupdate', () => {
+            setAudioState((curState) => ({ ...curState, timeCode: audioElementRef.current!.currentTime }));
         });
-        globalAudioObj.addEventListener('pause', () => {
+        audioElementRef.current!.addEventListener('pause', () => {
             setAudioState((curState) => ({ ...curState, status: 'paused' }));
         });
-        globalAudioObj.addEventListener('play', () => {
+        audioElementRef.current!.addEventListener('play', () => {
             setAudioState((curState) => ({ ...curState, status: 'playing' }));
         });
-        globalAudioObj.addEventListener('loadedmetadata', () => {
-            setAudioState((curState) => ({ ...curState, duration: globalAudioObj.duration }));
+        audioElementRef.current!.addEventListener('loadedmetadata', () => {
+            setAudioState((curState) => ({ ...curState, duration: audioElementRef.current!.duration }));
         });
     }, []);
-
+    const getWaveTable = useCallback(() => {
+        if (audioAnalyzer === undefined || dataArray === undefined) return [0];
+        audioAnalyzer.getByteFrequencyData(dataArray);
+        return [...dataArray];
+    }, [audioAnalyzer, dataArray]);
     const ctx: DrawerAPIContextValue = useMemo(
         () => ({
             playSong: (playerId) => {
                 if (audioState?.playerId !== playerId) return;
-                globalAudioObj.play();
+                audioElementRef.current!.play();
             },
             pauseSong: (playerId) => {
                 if (audioState?.playerId !== playerId) return;
-                globalAudioObj.pause();
+                audioElementRef.current!.pause();
             },
             setSongProgress: (playerId, percent) => {
                 if (audioState?.playerId !== playerId) return;
-                globalAudioObj.currentTime = percent * globalAudioObj.duration;
+                audioElementRef.current!.currentTime = percent * audioElementRef.current!.duration;
             },
             initSong: (url, playerId) => {
-                globalAudioObj.setAttribute('src', url);
-                globalAudioObj.load();
-                globalAudioObj.play();
-                if (audioAnalyzer === undefined) {
+                audioElementRef.current!.setAttribute('src', url);
+                audioElementRef.current!.load();
+                audioElementRef.current!.play();
+                if (!initializedAudioAnalyzer.current) {
                     const audioCtx = new window.AudioContext();
-                    const audioSource = audioCtx.createMediaElementSource(globalAudioObj);
+                    const audioSource = audioCtx.createMediaElementSource(audioElementRef.current!);
                     const analyzer = audioCtx.createAnalyser();
                     audioSource.connect(analyzer);
                     analyzer.connect(audioCtx.destination);
@@ -77,6 +81,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                     const bufferLength = analyzer.frequencyBinCount;
                     setAudioAnalyzer(analyzer);
                     setDataArray(new Uint8Array(bufferLength));
+                    initializedAudioAnalyzer.current = true; // guarantee only one init
                 }
                 setAudioState({
                     playerId,
@@ -86,16 +91,17 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                 });
             },
             audioState,
-            getWaveTable() {
-                if (audioAnalyzer === undefined || dataArray === undefined || Number.isNaN(audioState.timeCode))
-                    return [0];
-                audioAnalyzer.getByteFrequencyData(dataArray);
-                return [...dataArray];
-            },
+            getWaveTable,
         }),
-        [audioState, audioAnalyzer, dataArray],
+        [audioState, getWaveTable],
     );
-    return <AudioContext.Provider value={ctx}>{children}</AudioContext.Provider>;
+    return (
+        <AudioContext.Provider value={ctx}>
+            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+            <audio ref={audioElementRef} />
+            {children}
+        </AudioContext.Provider>
+    );
 }
 
 export const useAudioContext = () => {
