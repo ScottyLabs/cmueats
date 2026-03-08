@@ -69,7 +69,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
             },
             initSong: (url, playerId) => {
                 audioElementRef.current!.setAttribute('src', url);
-                audioElementRef.current!.load();
+                // audioElementRef.current!.load();
                 audioElementRef.current!.play();
                 if (!initializedAudioAnalyzer.current) {
                     const audioCtx = new window.AudioContext();
