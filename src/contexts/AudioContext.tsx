@@ -93,10 +93,10 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                 audioElementRef.current!.play();
                 if (!initializedAudioAnalyzer.current) {
                     const audioCtx = new window.AudioContext();
-                    const audioSource = audioCtx.createMediaElementSource(audioElementRef.current!);
+                    // const audioSource = audioCtx.createMediaElementSource(audioElementRef.current!);
                     const analyzer = audioCtx.createAnalyser();
-                    audioSource.connect(analyzer);
-                    analyzer.connect(audioCtx.destination);
+                    // audioSource.connect(analyzer);
+                    // analyzer.connect(audioCtx.destination);
                     analyzer.fftSize = 256;
                     const bufferLength = analyzer.frequencyBinCount;
                     setAudioAnalyzer(analyzer);
