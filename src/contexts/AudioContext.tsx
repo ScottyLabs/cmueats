@@ -1,5 +1,4 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import placeholderMp3 from '../assets/miku/songs/DECO27_-__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD.mp3';
 
 type AudioState = {
     /** which card is responsible for displaying controls for current audio */
@@ -10,6 +9,7 @@ type AudioState = {
     /** is NaN when data is still loading */
     timeCode: number;
 };
+
 type DrawerAPIContextValue = {
     /** always restarts song, even if playerId is currently active */
     initSong: (url: string, playerId: string) => void;
@@ -19,7 +19,9 @@ type DrawerAPIContextValue = {
     getWaveTable: () => number[];
     audioState: AudioState;
 };
-
+// const globalAudioObj = new Audio();
+const foregroundAudioObj = new Audio();
+const backgroundAudioObj = new Audio();
 const AudioContext = createContext<DrawerAPIContextValue | undefined>(undefined);
 
 export function AudioContextProvider({ children }: { children: React.ReactNode }) {
@@ -32,41 +34,61 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
     const [audioAnalyzer, setAudioAnalyzer] = useState<AnalyserNode>();
     const [dataArray, setDataArray] = useState<Uint8Array<ArrayBuffer>>();
     const initializedAudioAnalyzer = useRef(false);
-    const audioElementRef = useRef<HTMLAudioElement>(null);
 
     // this... well... actually works lmao
     useEffect(() => {
         const controller = new AbortController();
 
-        audioElementRef.current!.addEventListener(
+        foregroundAudioObj.addEventListener(
             'timeupdate',
             () => {
-                setAudioState((curState) => ({ ...curState, timeCode: audioElementRef.current!.currentTime }));
+                setAudioState((curState) => ({ ...curState, timeCode: foregroundAudioObj.currentTime }));
             },
             { signal: controller.signal },
         );
-        audioElementRef.current!.addEventListener(
+        foregroundAudioObj.addEventListener(
             'pause',
             () => {
                 setAudioState((curState) => ({ ...curState, status: 'paused' }));
+                foregroundAudioObj.pause();
             },
             { signal: controller.signal },
         );
-        audioElementRef.current!.addEventListener(
+        foregroundAudioObj.addEventListener(
             'play',
             () => {
                 setAudioState((curState) => ({ ...curState, status: 'playing' }));
+                foregroundAudioObj.play();
             },
             { signal: controller.signal },
         );
-        audioElementRef.current!.addEventListener(
+        foregroundAudioObj.addEventListener(
             'loadedmetadata',
             () => {
-                setAudioState((curState) => ({ ...curState, duration: audioElementRef.current!.duration }));
+                setAudioState((curState) => ({ ...curState, duration: foregroundAudioObj.duration }));
             },
             { signal: controller.signal },
         );
         return () => controller.abort();
+    }, []);
+
+    // wavetable audio object to globalAudioObj handoff
+    useEffect(() => {
+        document.addEventListener('visibilitychange', async () => {
+            if (document.visibilityState === 'hidden') {
+                backgroundAudioObj.currentTime = foregroundAudioObj.currentTime;
+                if (!foregroundAudioObj.paused) {
+                    foregroundAudioObj.pause();
+                    backgroundAudioObj.play();
+                }
+            } else if (document.visibilityState === 'visible') {
+                foregroundAudioObj.currentTime = backgroundAudioObj.currentTime;
+                if (!backgroundAudioObj.paused) {
+                    backgroundAudioObj.pause();
+                    foregroundAudioObj.play();
+                }
+            }
+        });
     }, []);
     const getWaveTable = useCallback(() => {
         if (audioAnalyzer === undefined || dataArray === undefined) return [0];
@@ -77,26 +99,27 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
         () => ({
             playSong: (playerId) => {
                 if (audioState?.playerId !== playerId) return;
-                audioElementRef.current!.play();
+                foregroundAudioObj.play();
             },
             pauseSong: (playerId) => {
                 if (audioState?.playerId !== playerId) return;
-                audioElementRef.current!.pause();
+                foregroundAudioObj.pause();
             },
             setSongProgress: (playerId, percent) => {
                 if (audioState?.playerId !== playerId) return;
-                audioElementRef.current!.currentTime = percent * audioElementRef.current!.duration;
+                foregroundAudioObj.currentTime = percent * foregroundAudioObj.duration;
             },
             initSong: (url, playerId) => {
-                audioElementRef.current!.setAttribute('src', url);
-                // audioElementRef.current!.load();
-                audioElementRef.current!.play();
+                foregroundAudioObj.setAttribute('src', url);
+                backgroundAudioObj.setAttribute('src', url);
+                foregroundAudioObj.load();
+                foregroundAudioObj.play();
                 if (!initializedAudioAnalyzer.current) {
                     const audioCtx = new window.AudioContext();
-                    // const audioSource = audioCtx.createMediaElementSource(audioElementRef.current!);
+                    const audioSource = audioCtx.createMediaElementSource(foregroundAudioObj);
                     const analyzer = audioCtx.createAnalyser();
-                    // audioSource.connect(analyzer);
-                    // analyzer.connect(audioCtx.destination);
+                    audioSource.connect(analyzer);
+                    analyzer.connect(audioCtx.destination);
                     analyzer.fftSize = 256;
                     const bufferLength = analyzer.frequencyBinCount;
                     setAudioAnalyzer(analyzer);
@@ -115,13 +138,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
         }),
         [audioState, getWaveTable],
     );
-    return (
-        <AudioContext.Provider value={ctx}>
-            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <audio ref={audioElementRef} preload="auto" src={placeholderMp3} />
-            {children}
-        </AudioContext.Provider>
-    );
+    return <AudioContext.Provider value={ctx}>{children}</AudioContext.Provider>;
 }
 
 export const useAudioContext = () => {
