@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import placeholderMp3 from '../assets/miku/songs/DECO27_-__Rabbit_Hole_feat_Hatsune_Miku_KLICKAUD.mp3';
 
 type AudioState = {
     /** which card is responsible for displaying controls for current audio */
@@ -98,7 +99,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
     return (
         <AudioContext.Provider value={ctx}>
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <audio ref={audioElementRef} preload="auto" src="" />
+            <audio ref={audioElementRef} preload="auto" src={placeholderMp3} />
             {children}
         </AudioContext.Provider>
     );
