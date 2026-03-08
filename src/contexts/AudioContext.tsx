@@ -36,18 +36,37 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
 
     // this... well... actually works lmao
     useEffect(() => {
-        audioElementRef.current!.addEventListener('timeupdate', () => {
-            setAudioState((curState) => ({ ...curState, timeCode: audioElementRef.current!.currentTime }));
-        });
-        audioElementRef.current!.addEventListener('pause', () => {
-            setAudioState((curState) => ({ ...curState, status: 'paused' }));
-        });
-        audioElementRef.current!.addEventListener('play', () => {
-            setAudioState((curState) => ({ ...curState, status: 'playing' }));
-        });
-        audioElementRef.current!.addEventListener('loadedmetadata', () => {
-            setAudioState((curState) => ({ ...curState, duration: audioElementRef.current!.duration }));
-        });
+        const controller = new AbortController();
+
+        audioElementRef.current!.addEventListener(
+            'timeupdate',
+            () => {
+                setAudioState((curState) => ({ ...curState, timeCode: audioElementRef.current!.currentTime }));
+            },
+            { signal: controller.signal },
+        );
+        audioElementRef.current!.addEventListener(
+            'pause',
+            () => {
+                setAudioState((curState) => ({ ...curState, status: 'paused' }));
+            },
+            { signal: controller.signal },
+        );
+        audioElementRef.current!.addEventListener(
+            'play',
+            () => {
+                setAudioState((curState) => ({ ...curState, status: 'playing' }));
+            },
+            { signal: controller.signal },
+        );
+        audioElementRef.current!.addEventListener(
+            'loadedmetadata',
+            () => {
+                setAudioState((curState) => ({ ...curState, duration: audioElementRef.current!.duration }));
+            },
+            { signal: controller.signal },
+        );
+        return () => controller.abort();
     }, []);
     const getWaveTable = useCallback(() => {
         if (audioAnalyzer === undefined || dataArray === undefined) return [0];
