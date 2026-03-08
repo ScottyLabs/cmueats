@@ -98,7 +98,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
     return (
         <AudioContext.Provider value={ctx}>
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <audio ref={audioElementRef} />
+            <audio ref={audioElementRef} preload="auto" src="" />
             {children}
         </AudioContext.Provider>
     );
