@@ -66,13 +66,17 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
             }}
             onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
+                    if (audioState?.playerId !== playerId) {
+                        audioControls.initSong(songData.songUrl, playerId);
+                    } else {
+                        if (audioState.status === 'playing') {
+                            audioControls.pauseSong(playerId);
+                        }
+                        if (audioState.status === 'paused') {
+                            audioControls.playSong(playerId);
+                        }
+                    }
                     event.preventDefault();
-                    if (audioState.status === 'playing') {
-                        audioControls.pauseSong(playerId);
-                    }
-                    if (audioState.status === 'paused') {
-                        audioControls.playSong(playerId);
-                    }
                 }
             }}
             tabIndex={0}

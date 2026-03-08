@@ -10,7 +10,7 @@ type AudioState = {
     timeCode: number;
 };
 
-type DrawerAPIContextValue = {
+type AudioContextValue = {
     /** always restarts song, even if playerId is currently active */
     initSong: (url: string, playerId: string) => void;
     playSong: (playerId: string) => void;
@@ -19,10 +19,10 @@ type DrawerAPIContextValue = {
     getWaveTable: () => number[];
     audioState: AudioState;
 };
-// const globalAudioObj = new Audio();
+
 const foregroundAudioObj = new Audio();
 const backgroundAudioObj = new Audio();
-const AudioContext = createContext<DrawerAPIContextValue | undefined>(undefined);
+const AudioContext = createContext<AudioContextValue | undefined>(undefined);
 
 export function AudioContextProvider({ children }: { children: React.ReactNode }) {
     const [audioState, setAudioState] = useState<AudioState>({
@@ -95,7 +95,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
         audioAnalyzer.getByteFrequencyData(dataArray);
         return [...dataArray];
     }, [audioAnalyzer, dataArray]);
-    const ctx: DrawerAPIContextValue = useMemo(
+    const ctx: AudioContextValue = useMemo(
         () => ({
             playSong: (playerId) => {
                 if (audioState?.playerId !== playerId) return;
