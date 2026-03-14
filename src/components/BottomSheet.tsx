@@ -10,6 +10,7 @@ type BottomSheetProps = {
 export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
     const contentRef = useRef<HTMLDivElement | null>(null);
     const DELAY = 100;
+    const RESISTANCE = 0.1
     const windowHeight = window.innerHeight;
     const [FULL, HIDDEN] = [windowHeight * 0.15, windowHeight];
 
@@ -110,7 +111,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             unlockScroll();
         }
     }, [active, FULL, HIDDEN, lockScroll, unlockScroll]);
-
+    
     useEffect(() => {
         const onMove = (e: MouseEvent | TouchEvent) => {
             if (!dragging) return;
@@ -126,6 +127,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
         const onEnd = (e: MouseEvent | TouchEvent) => {
             if (!dragging) return;
+
             setDragging(false);
 
             const clientY =
@@ -159,6 +161,8 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                 hide();
             }
         };
+
+        contentRef.current && (contentRef.current.style.overflowY = (y <= FULL) ? 'auto' : 'hidden');
 
         window.addEventListener('mousemove', onMove);
         window.addEventListener('mouseup', onEnd);
