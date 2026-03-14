@@ -17,6 +17,7 @@ import { DateTime } from 'luxon';
 
 import PinIcon from '../assets/pin.svg';
 import UnpinIcon from '../assets/unpin.svg';
+import GrubhubIcon from '../assets/justeat.svg'
 import { getTimeSlotsString } from '../util/time';
 import TextProps from '../types/interfaces';
 import { IReadOnlyLocation_Combined, LocationState } from '../types/locationTypes';
@@ -95,6 +96,7 @@ const ActionButton = styled(Button)({
     color: 'var(--button-text)',
     backgroundColor: 'var(--button-bg)',
     padding: '5px 10px',
+    img: GrubhubIcon,
 
     letterSpacing: -0.2,
     '&:hover': {
@@ -194,7 +196,7 @@ function EateryCard({
                                 window.open(grubhubUrl, '_self');
                             }}
                         >
-                            Order in GrubHub
+                           Grubhub 
                         </ActionButton>
                     )}
                     <div className="card__pin-container">
