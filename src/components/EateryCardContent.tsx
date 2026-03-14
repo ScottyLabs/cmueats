@@ -3,7 +3,7 @@ import { ILocation_Full } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
 import EmptyStarIcon from '../assets/control_buttons/starEmpty.svg?react';
 import FilledStarIcon from '../assets/control_buttons/starFilled.svg?react';
-import { StarDisplay, ratingToFontColor } from '../components/ReviewPage';
+import { StarDisplay } from './ReviewPage';
 
 function SingleStarDisplay({ starRating }: { starRating: number | null }) {
     // remapping, since 20% looks like 0% and 80% looks like 100%
