@@ -3,6 +3,7 @@ import { ILocation_Full } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
 import EmptyStarIcon from '../assets/control_buttons/starEmpty.svg?react';
 import FilledStarIcon from '../assets/control_buttons/starFilled.svg?react';
+import { StarDisplay, ratingToFontColor } from '../components/ReviewPage';
 
 function SingleStarDisplay({ starRating }: { starRating: number | null }) {
     // remapping, since 20% looks like 0% and 80% looks like 100%
@@ -34,11 +35,18 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
                     {physicalLocation}
                 </span>
 
-                <div className={css['rating-container']}>
-                    <span className={css['rating-avg']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span>
-                    <span className={css['rating-count']}>({ratingsCount ?? '0'})</span>
+                <div className={css['singlestar-rating-container']}>
+                    {/* <span style={{color: ratingToFontColor(ratingsAvg)}} className={css['singlestar-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span> */}
+                    <span className={css['singlestar-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span>
                     <SingleStarDisplay starRating={ratingsAvg} />
+                    <span className={css['singlestar-rating-count']}>({ratingsCount ?? '0'})</span>
                 </div>
+            </div>
+
+            <div className={css['multiplestars-rating-container']}>
+                <span className={css['multiplestars-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span>
+                <StarDisplay starRating={ratingsAvg} starHeight={14} starGap={2} />
+                <span className={css['multiplestars-rating-count']}>({ratingsCount ?? '0'})</span>
             </div>
         </div>
     );
