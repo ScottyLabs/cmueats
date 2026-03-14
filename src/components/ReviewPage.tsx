@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { MethodResponse } from 'openapi-react-query';
-import { $api, fetchClient } from '../api';
+import { $api, fetchClient, login } from '../api';
 import css from './ReviewPage.module.css';
 import LikeIcon from '../assets/control_buttons/like.svg?react';
 import DislikeIcon from '../assets/control_buttons/dislike.svg?react';
@@ -159,7 +159,11 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                             })
                             .catch((e) => ({ error: e }));
                         if (error) {
-                            toast.error('Failed to set rating! Are you logged in?');
+                            if (error === 'Unauthorized') {
+                                login();
+                            } else {
+                                toast.error(`Failed to set rating! Error: ${error}`);
+                            }
                         } else {
                             await queryClient.refetchQueries(
                                 $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
@@ -175,7 +179,11 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                             })
                             .catch((e) => ({ error: e }));
                         if (error) {
-                            toast.error('Failed to delete rating!');
+                            if (error === 'Unauthorized') {
+                                login();
+                            } else {
+                                toast.error('Failed to delete rating!');
+                            }
                         } else {
                             await queryClient.refetchQueries(
                                 $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
@@ -491,7 +499,11 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                             }).queryKey,
                                             reviewSummary,
                                         );
-                                        toast.error('Failed to vote! Are you logged in?');
+                                        if (updateVoteError === 'Unauthorized') {
+                                            login();
+                                        } else {
+                                            toast.error('Failed to vote!');
+                                        }
                                         tagVoteProcessing.current = false;
                                     } else {
                                         tagVoteProcessing.current = false;
@@ -508,7 +520,11 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                         })
                                         .catch((e) => ({ error: e }));
                                     if (reviewError) {
-                                        toast.error(`Failed to ${review === null ? 'delete' : 'save'} review!`);
+                                        if (reviewError === 'Unauthorized') {
+                                            login();
+                                        } else {
+                                            toast.error(`Failed to ${review === null ? 'delete' : 'save'} review!`);
+                                        }
                                         return false;
                                     }
                                     await revalidateData();

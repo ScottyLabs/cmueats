@@ -22,11 +22,10 @@ export default function Footer() {
         <footer className={css.footer}>
             <div className={css['footer__text-section']}>
                 {theme === 'miku' ? (
-                    <p>
-                        Blue hair, blue tie, hiding in your wifi
-                        <br />
-                        All times are displayed in Pittsburgh local time ({nowString}).
-                    </p>
+                    <>
+                        <p>Blue hair, blue tie, hiding in your wifi</p>
+                        <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
+                    </>
                 ) : (
                     <>
                         <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
@@ -93,10 +92,8 @@ export default function Footer() {
                     <span>:eats</span>
                 </h4>
             </div>
-            <div className={css['sponsors-spacer']}>
-                <SponsorCarousel darkMode openByDefault={false} />
-            </div>
-            {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className="footer__miku" />}
+            <SponsorCarousel darkMode openByDefault={false} />
+            {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className={css.footer__miku} />}
         </footer>
     );
 }

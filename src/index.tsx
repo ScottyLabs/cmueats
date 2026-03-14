@@ -13,6 +13,7 @@ import notifySlack from './util/slack';
 import GlobalErrorBoundary from './ErrorFallback';
 import { NowContextProvider } from './contexts/NowContext';
 import { queryClient } from './api';
+import { AudioContextProvider } from './contexts/AudioContext';
 import { IsMobileContextProvider } from './contexts/IsMobileContext';
 
 posthog.init(env.VITE_POSTHOG_KEY || '', {
@@ -37,13 +38,15 @@ if (rootElement) {
             <GlobalErrorBoundary>
                 <PostHogProvider client={posthog}>
                     <QueryClientProvider client={queryClient}>
-                        <ThemeProvider>
-                            <NowContextProvider>
+                        <NowContextProvider>
+                            <ThemeProvider>
+                                <AudioContextProvider>
                                 <IsMobileContextProvider>
-                                    <App />
+                                        <App />
                                 </IsMobileContextProvider>
-                            </NowContextProvider>
-                        </ThemeProvider>
+                                </AudioContextProvider>
+                            </ThemeProvider>
+                        </NowContextProvider>
                         <ReactQueryDevtools position="left" buttonPosition="bottom-left" />
                     </QueryClientProvider>
                 </PostHogProvider>

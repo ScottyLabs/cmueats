@@ -1,5 +1,6 @@
 .card-content-container {
     padding: 12px 13px 20px;
+    position: relative;
 }
 
 .location-name-text {
@@ -11,8 +12,10 @@
     font-weight: 500;
     margin: 2px -1px 0;
 
+    width: fit-content;
+    max-width: 100%;
+
     white-space: nowrap;
-    overflow: hidden;
     color: inherit;
     text-decoration: none;
     height: 18px;
@@ -32,15 +35,22 @@
 .physical-location-text {
     font-size: 15px;
     color: var(--black-500);
-    display: block;
+    display: flex;
+    align-items: center;
     margin-top: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    & span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    gap: 5px;
 
     & svg {
-        margin-right: 5px;
+        flex-shrink: 0;
     }
+}
+.physical-location-text--warn {
+    color: var(--red-300);
 }
 
 .action-bar {
@@ -52,4 +62,20 @@
 
 .rating {
     visibility: hidden;
+}
+
+/* miku stuff */
+.card-content__song-image {
+    position: absolute;
+    height: 100%;
+    right: 0;
+    top: 0;
+    box-sizing: border-box;
+    width: 40%;
+    object-fit: cover;
+    object-position: left top;
+    z-index: -1;
+    /* filter: saturate(0.7); */
+    opacity: 0.5;
+    mask-image: linear-gradient(108deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 1) 20%);
 }
