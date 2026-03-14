@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Map, Marker, ColorScheme, PointOfInterestCategory } from 'mapkit-react';
-import { ILocation_Full } from '../types/locationTypes';
+import { ILocation_Full, LocationState } from '../types/locationTypes';
 import { mapMarkerBackgroundColors, mapMarkerTextColors } from '../constants/colors';
 import env from '../env';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
@@ -85,16 +85,31 @@ function MapSection({ locations }: { locations: ILocation_Full[] }) {
         </Map>
     );
 }
+const OPEN_STATES = [LocationState.OPEN, LocationState.CLOSES_SOON];
+
 function MapPage({ locations }: { locations: ILocation_Full[] | undefined }) {
+    const [toggleClicked, setToggleClicked] = useState(false);
+    const displayedLocations = useMemo(() => {
+        if (!locations) return undefined;
+        if (!toggleClicked) return locations;
+        return locations.filter((loc) => OPEN_STATES.includes(loc.locationState));
+    }, [locations, toggleClicked]);
+
     return (
         <DrawerAPIContextProvider>
             <div className={css['map-page']}>
                 {locations && (
                     <div className={css['map-page__map-container']}>
-                        <MapSection locations={locations} />
+                        <button type="button" className={css['map-page__open-toggle']} onClick={() => setToggleClicked((prev) => !prev)} aria-pressed={toggleClicked}>
+                            <span className={`${css['map-page__open-toggle-track']} ${toggleClicked ? css['map-page__open-toggle-track--clicked'] : ''}`}>
+                                <span className={`${css['map-page__open-toggle-thumb']} ${toggleClicked ? css['map-page__open-toggle-thumb--clicked'] : ''}`}/>
+                            </span>
+                            <span className={css['map-page__open-toggle-label']}>Show open locations</span>
+                        </button>
+                        <MapSection locations={displayedLocations ?? locations} />
                     </div>
                 )}
-                <Drawer locations={locations} />
+                <Drawer locations={displayedLocations ?? locations} />
             </div>
         </DrawerAPIContextProvider>
     );
