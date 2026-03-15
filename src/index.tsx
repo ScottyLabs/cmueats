@@ -41,9 +41,9 @@ if (rootElement) {
                         <NowContextProvider>
                             <ThemeProvider>
                                 <AudioContextProvider>
-                                <IsMobileContextProvider>
+                                    <IsMobileContextProvider>
                                         <App />
-                                </IsMobileContextProvider>
+                                    </IsMobileContextProvider>
                                 </AudioContextProvider>
                             </ThemeProvider>
                         </NowContextProvider>
