@@ -94,7 +94,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     };
 
     const endSheetDrag = () => {
-        document.removeEventListener('scroll', onSheetScroll);
+        contentRef?.current?.removeEventListener('scroll', onSheetScroll);
     };
 
     const startHandleDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
