@@ -9,8 +9,8 @@ type BottomSheetProps = {
 
 export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
     const DELAY = 100;
-    const contentRef = useRef<HTMLDivElement | null>(null);
 
+    const contentRef = useRef<HTMLDivElement | null>(null);
     const sheetRef = useRef<HTMLDivElement | null>(null);
     const dragStartTime = useRef<number>(0);
     const dragStartY = useRef<number>(0);
@@ -18,6 +18,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const startTranslate = useRef<number>(0);
     const handleRef = useRef<HTMLButtonElement | null>(null);
     const hideTimeoutRef = useRef<number | null>(null);
+    const activeRef = useRef(active);
 
     const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
     const [FULL, setFULL] = useState<number>(windowHeight * 0.15);
@@ -39,25 +40,21 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             if (hideTimeoutRef.current) {
                 clearTimeout(hideTimeoutRef.current);
             }
-
             hideTimeoutRef.current = window.setTimeout(() => {
                 onHide();
             }, DELAY);
         }
     }, [y, HIDDEN, onHide]);
 
-    const preventScroll = useCallback(
-        (e: Event) => {
-            const target = e.target as HTMLElement;
+    const preventScroll = useCallback((e: Event) => {
+        const target = e.target as HTMLElement;
 
-            if (target.closest('[data-scrollable]') || !active) {
-                return;
-            }
+        if (target.closest('[data-scrollable]') || !activeRef.current) {
+            return;
+        }
 
-            e.preventDefault();
-        },
-        [active],
-    );
+        e.preventDefault();
+    }, []);
 
     const lockScroll = useCallback(() => {
         document.body.style.overflow = 'hidden';
@@ -177,7 +174,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         };
 
         if (contentRef.current) {
-            contentRef.current.style.overflowY = y <= FULL ? 'auto' : 'hidden';
+            contentRef.current.style.overflow = y <= FULL ? 'auto' : 'hidden';
         }
 
         window.addEventListener('mousemove', onMove);
