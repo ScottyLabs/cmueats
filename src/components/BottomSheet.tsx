@@ -10,7 +10,6 @@ type BottomSheetProps = {
 export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
     const DELAY = 100;
     const contentRef = useRef<HTMLDivElement | null>(null);
-   
 
     const sheetRef = useRef<HTMLDivElement | null>(null);
     const dragStartTime = useRef<number>(0);
@@ -44,18 +43,21 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             hideTimeoutRef.current = window.setTimeout(() => {
                 onHide();
             }, DELAY);
-            }
+        }
     }, [y, HIDDEN, onHide]);
 
-    const preventScroll = useCallback((e: Event) => {
-        const target = e.target as HTMLElement;
+    const preventScroll = useCallback(
+        (e: Event) => {
+            const target = e.target as HTMLElement;
 
-        if (target.closest('[data-scrollable]')) {
-            return;
-        }
+            if (target.closest('[data-scrollable]') || !active) {
+                return;
+            }
 
-        e.preventDefault();
-    }, []);
+            e.preventDefault();
+        },
+        [active],
+    );
 
     const lockScroll = useCallback(() => {
         document.body.style.overflow = 'hidden';
@@ -191,13 +193,14 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         };
     }, [dragging, y, snapPoints, FULL, HIDDEN, hide]);
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             if (hideTimeoutRef.current) {
                 clearTimeout(hideTimeoutRef.current);
             }
-        };
-    }, []);
+        },
+        [],
+    );
 
     return (
         <>
