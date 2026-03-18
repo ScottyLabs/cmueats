@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Easter Bunny Face -->
+  <circle cx="100" cy="110" r="70" fill="#FFF5F5"/>
+  
+  <!-- Left Ear -->
+  <ellipse cx="60" cy="45" rx="20" ry="45" fill="#FFF5F5"/>
+  <ellipse cx="60" cy="45" rx="12" ry="35" fill="#FFB6C1"/>
+  
+  <!-- Right Ear -->
+  <ellipse cx="140" cy="45" rx="20" ry="45" fill="#FFF5F5"/>
+  <ellipse cx="140" cy="45" rx="12" ry="35" fill="#FFB6C1"/>
+  
+  <!-- Left Eye -->
+  <circle cx="75" cy="100" r="10" fill="#333"/>
+  <circle cx="77" cy="97" r="4" fill="#FFF"/>
+  
+  <!-- Right Eye -->
+  <circle cx="125" cy="100" r="10" fill="#333"/>
+  <circle cx="127" cy="97" r="4" fill="#FFF"/>
+  
+  <!-- Nose -->
+  <ellipse cx="100" cy="125" rx="12" ry="8" fill="#FFB6C1"/>
+  
+  <!-- Mouth -->
+  <path d="M 90 135 Q 100 145 110 135" stroke="#333" stroke-width="2" fill="none"/>
+  
+  <!-- Whiskers -->
+  <line x1="45" y1="115" x2="70" y2="120" stroke="#DDD" stroke-width="1.5"/>
+  <line x1="45" y1="125" x2="70" y2="125" stroke="#DDD" stroke-width="1.5"/>
+  <line x1="45" y1="135" x2="70" y2="130" stroke="#DDD" stroke-width="1.5"/>
+  <line x1="155" y1="115" x2="130" y2="120" stroke="#DDD" stroke-width="1.5"/>
+  <line x1="155" y1="125" x2="130" y2="125" stroke="#DDD" stroke-width="1.5"/>
+  <line x1="155" y1="135" x2="130" y2="130" stroke="#DDD" stroke-width="1.5"/>
+  
+  <!-- Blush -->
+  <circle cx="55" cy="125" r="10" fill="#FFB6C1" opacity="0.5"/>
+  <circle cx="145" cy="125" r="10" fill="#FFB6C1" opacity="0.5"/>
+  
+  <!-- Small Easter Egg on head -->
+  <ellipse cx="100" cy="50" rx="15" ry="20" fill="#E6E6FA"/>
+  <path d="M 88 50 Q 100 60 112 50" stroke="#FFB6C1" stroke-width="3" fill="none"/>
+  <path d="M 88 45 Q 100 55 112 45" stroke="#98D8AA" stroke-width="2" fill="none"/>
+</svg>

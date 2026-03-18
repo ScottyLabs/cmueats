@@ -118,3 +118,14 @@
         margin: 20px auto 0;
     }
 }
+.list-header-easter {
+    width: 100%;
+    max-width: 700px;
+    margin: 30px auto 0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(255, 182, 193, 0.3);
+    @container (max-width: 900px) {
+        margin: 20px auto 0;
+    }
+}

@@ -69,6 +69,19 @@
     --miku: hsl(172deg, 77%, 54%);
     --miku-darker: hsl(172deg, 47%, 74%);
 
+    /* Easter theme colors - pastel palette */
+    --easter-pink: hsl(340deg, 80%, 80%);
+    --easter-pink-darker: hsl(340deg, 60%, 70%);
+    --easter-yellow: hsl(50deg, 90%, 85%);
+    --easter-yellow-darker: hsl(50deg, 80%, 75%);
+    --easter-lavender: hsl(270deg, 70%, 85%);
+    --easter-lavender-darker: hsl(270deg, 60%, 75%);
+    --easter-mint: hsl(160deg, 70%, 80%);
+    --easter-mint-darker: hsl(160deg, 60%, 70%);
+    --easter-peach: hsl(25deg, 80%, 85%);
+    --easter-peach-darker: hsl(25deg, 70%, 75%);
+    --easter-primary: var(--easter-pink);
+
     --hover-accent-color: rgba(238, 111, 82, 0.7);
 
     --text-primary-font:
@@ -101,6 +114,10 @@
 
     --logo-first-half: #dd3c18;
     --logo-second-half: #19b875;
+
+    /* Easter theme logo colors */
+    --logo-first-half-easter: var(--easter-pink);
+    --logo-second-half-easter: var(--easter-mint);
 
     --global-x-padding: 24px;
     @media screen and (max-width: 900px) {

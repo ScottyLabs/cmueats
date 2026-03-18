@@ -54,6 +54,7 @@ const evening = [
 const eveningShort = ['Have a good evening!', 'Grab a bite to eat!', 'Hungry night owl?'];
 interface Special {
     isMikuDay: boolean;
+    isEaster: boolean;
 }
 const getRandomStringFrom = (greetings: string[]) => {
     if (greetings.length === 0) return 'Welcome to CMUEats!';
@@ -66,6 +67,12 @@ const getGreeting = (hours: number, special?: Special): ReactNode => {
         return (
             <>
                 Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span> (3/9)
+            </>
+        );
+    if (special?.isEaster)
+        return (
+            <>
+                🐰 Happy <span style={{ color: `var(--easter-pink)` }}>Easter!</span> 🥚
             </>
         );
     if (hours < 6) {
@@ -88,6 +95,12 @@ const getGreetingMobile = (hours: number, special?: Special) => {
         return (
             <>
                 Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span> (3/9)
+            </>
+        );
+    if (special?.isEaster)
+        return (
+            <>
+                🐰 Happy <span style={{ color: `var(--easter-pink)` }}>Easter!</span> 🥚
             </>
         );
     if (hours < 6) {

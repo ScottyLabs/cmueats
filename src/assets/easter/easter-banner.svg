@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+  <!-- Background banner -->
+  <defs>
+    <linearGradient id="easterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFB6C1;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#FFFACD;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#E6E6FA;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#98D8AA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFB6C1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="800" height="200" fill="url(#easterGrad)" rx="20"/>
+  
+  <!-- Decorative Easter Eggs -->
+  <ellipse cx="80" cy="150" rx="30" ry="40" fill="#FFDAB9"/>
+  <path d="M 55 140 Q 80 160 105 140" stroke="#FFB6C1" stroke-width="4" fill="none"/>
+  <circle cx="70" cy="160" r="5" fill="#E6E6FA"/>
+  <circle cx="90" cy="155" r="4" fill="#FFF"/>
+  
+  <ellipse cx="720" cy="150" rx="30" ry="40" fill="#E6E6FA"/>
+  <path d="M 695 140 Q 720 160 745 140" stroke="#98D8AA" stroke-width="4" fill="none"/>
+  <circle cx="710" cy="160" r="5" fill="#FFB6C1"/>
+  <circle cx="730" cy="155" r="4" fill="#FFDAB9"/>
+  
+  <!-- Small eggs scattered -->
+  <ellipse cx="200" cy="50" rx="15" ry="20" fill="#FFFACD" opacity="0.8"/>
+  <ellipse cx="600" cy="45" rx="12" ry="16" fill="#98D8AA" opacity="0.8"/>
+  <ellipse cx="350" cy="180" rx="12" ry="16" fill="#E6E6FA" opacity="0.8"/>
+  <ellipse cx="450" cy="175" rx="15" ry="20" fill="#FFDAB9" opacity="0.8"/>
+  
+  <!-- Easter Bunny (simplified) -->
+  <g transform="translate(100, 60)">
+    <!-- Ears -->
+    <ellipse cx="15" cy="20" rx="8" ry="25" fill="#FFF5F5"/>
+    <ellipse cx="15" cy="20" rx="5" ry="18" fill="#FFB6C1"/>
+    <ellipse cx="45" cy="20" rx="8" ry="25" fill="#FFF5F5"/>
+    <ellipse cx="45" cy="20" rx="5" ry="18" fill="#FFB6C1"/>
+    <!-- Face -->
+    <circle cx="30" cy="55" r="25" fill="#FFF5F5"/>
+    <!-- Eyes -->
+    <circle cx="22" cy="50" r="4" fill="#333"/>
+    <circle cx="38" cy="50" r="4" fill="#333"/>
+    <!-- Nose -->
+    <ellipse cx="30" cy="60" rx="5" ry="3" fill="#FFB6C1"/>
+  </g>
+  
+  <!-- Happy Easter Text -->
+  <text x="400" y="90" text-anchor="middle" font-family="'Zilla Slab', serif" font-size="48" font-weight="bold" fill="#333">
+    🐰 Happy Easter! 🥚
+  </text>
+  <text x="400" y="130" text-anchor="middle" font-family="'Inter', sans-serif" font-size="20" fill="#555">
+    Wishing you an egg-cellent day!
+  </text>
+  
+  <!-- Decorative bunny (right side) -->
+  <g transform="translate(650, 60)">
+    <!-- Ears -->
+    <ellipse cx="15" cy="20" rx="8" ry="25" fill="#FFF5F5"/>
+    <ellipse cx="15" cy="20" rx="5" ry="18" fill="#FFB6C1"/>
+    <ellipse cx="45" cy="20" rx="8" ry="25" fill="#FFF5F5"/>
+    <ellipse cx="45" cy="20" rx="5" ry="18" fill="#FFB6C1"/>
+    <!-- Face -->
+    <circle cx="30" cy="55" r="25" fill="#FFF5F5"/>
+    <!-- Eyes -->
+    <circle cx="22" cy="50" r="4" fill="#333"/>
+    <circle cx="38" cy="50" r="4" fill="#333"/>
+    <!-- Nose -->
+    <ellipse cx="30" cy="60" rx="5" ry="3" fill="#FFB6C1"/>
+  </g>
+</svg>

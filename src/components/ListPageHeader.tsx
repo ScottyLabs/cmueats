@@ -6,16 +6,20 @@ import GoogleIcon from '../assets/google.svg?react';
 import SignOut from '../assets/control_buttons/signOut.svg?react';
 import { useThemeContext } from '../ThemeProvider';
 import mikuHeaderImg from '../assets/miku/miku-banner-2026.png';
+import easterBannerImg from '../assets/easter/easter-banner.svg';
 
 export default function ListPageHeader() {
     const { data: userLoggedInData, isLoading, error } = $api.useQuery('get', '/whoami');
     const { theme } = useThemeContext();
     const { mobileGreeting, desktopGreeting } = useMemo(
-        () => getGreetings(new Date().getHours(), { isMikuDay: theme === 'miku' }),
+        () => getGreetings(new Date().getHours(), { isMikuDay: theme === 'miku', isEaster: theme === 'easter' }),
         [theme],
     );
     if (theme === 'miku') {
         return <img className={css['list-header-miku']} src={mikuHeaderImg} alt="" />;
+    }
+    if (theme === 'easter') {
+        return <img className={css['list-header-easter']} src={easterBannerImg} alt="Happy Easter!" />;
     }
 
     return (

@@ -43,6 +43,21 @@
         }
     }
 }
+.footer__easter {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    height: 150px;
+    width: auto;
+    z-index: -1;
+    opacity: 0.9;
+    @media screen and (max-width: 900px) {
+        & {
+            height: 100px;
+            right: 10px;
+        }
+    }
+}
 .sponsors-spacer {
     position: relative;
     height: 35px;

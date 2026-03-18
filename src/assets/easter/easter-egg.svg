@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120">
+  <!-- Easter Egg -->
+  <ellipse cx="50" cy="65" rx="40" ry="50" fill="#FFB6C1"/>
+  
+  <!-- Decorative stripes -->
+  <path d="M 15 45 Q 50 70 85 45" stroke="#FFF" stroke-width="6" fill="none"/>
+  <path d="M 12 70 Q 50 95 88 70" stroke="#E6E6FA" stroke-width="8" fill="none"/>
+  
+  <!-- Polka dots -->
+  <circle cx="30" cy="50" r="6" fill="#98D8AA"/>
+  <circle cx="70" cy="55" r="6" fill="#FFDAB9"/>
+  <circle cx="40" cy="85" r="5" fill="#FFF"/>
+  <circle cx="65" cy="90" r="4" fill="#B8E0D2"/>
+  
+  <!-- Shine -->
+  <ellipse cx="35" cy="40" rx="8" ry="12" fill="#FFF" opacity="0.4"/>
+</svg>

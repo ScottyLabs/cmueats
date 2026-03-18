@@ -2,6 +2,7 @@ import css from './Footer.module.css';
 import SponsorCarousel from './SponsorCarousel';
 import { useThemeContext } from '../ThemeProvider';
 import footerMikuUrl from '../assets/miku/miku2.png';
+import footerEasterUrl from '../assets/easter/easter-bunny.svg';
 import { $api } from '../api';
 import { useCurrentTime } from '../contexts/NowContext';
 
@@ -24,6 +25,12 @@ export default function Footer() {
                 {theme === 'miku' ? (
                     <>
                         <p>Blue hair, blue tie, hiding in your wifi</p>
+                        <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
+                    </>
+                ) : theme === 'easter' ? (
+                    <>
+                        <p>🐰 Hippity hoppity, Easter's on its way! 🥚</p>
+                        <p>Wishing you an egg-cellent day full of treats!</p>
                         <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
                     </>
                 ) : (
@@ -94,6 +101,7 @@ export default function Footer() {
             </div>
             <SponsorCarousel darkMode openByDefault={false} />
             {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className={css.footer__miku} />}
+            {theme === 'easter' && <img src={footerEasterUrl} alt="Easter Bunny!" className={css.footer__easter} />}
         </footer>
     );
 }
