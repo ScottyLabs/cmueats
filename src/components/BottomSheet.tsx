@@ -72,23 +72,27 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         document.documentElement.classList.remove('scroll-lock');
     }, [preventScroll]);
 
-    const startDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-        setDragging(true);
+    const startDrag = useCallback(
+        (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+            setDragging(true);
 
-        const clientY = 'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
+            const clientY =
+                'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
 
-        startY.current = clientY;
-        startTranslate.current = y;
+            startY.current = clientY;
+            startTranslate.current = y;
 
-        dragStartTime.current = Date.now();
-        dragStartY.current = clientY;
-    };
+            dragStartTime.current = performance.now();
+            dragStartY.current = clientY;
+        },
+        [y],
+    );
 
-    const onSheetScroll = () => {
+    const onSheetScroll = useCallback(() => {
         if (!contentRef?.current?.scrollTop && sheetDrag) {
             startDrag(sheetDrag);
         }
-    };
+    }, [sheetDrag, startDrag]);
 
     const startSheetDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
         contentRef?.current?.addEventListener('scroll', onSheetScroll);
@@ -115,6 +119,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }, [FULL, HIDDEN, windowHeight]);
 
     useEffect(() => {
+        activeRef.current = active;
         if (active) {
             lockScroll();
             setY(FULL);
@@ -148,7 +153,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                       ? e.clientY
                       : startY.current;
 
-            const endTime = Date.now();
+            const endTime = performance.now();
             const dt = endTime - dragStartTime.current;
             const dy = clientY - dragStartY.current;
 
