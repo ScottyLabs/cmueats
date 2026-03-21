@@ -9,7 +9,7 @@
     font-family: var(--text-primary-font);
     font-size: 18px;
     font-weight: 500;
-    margin: 2px -1px 0;
+    margin: 0 1px 0;
 
     white-space: nowrap;
     overflow: hidden;
@@ -19,8 +19,8 @@
 
     & svg {
         padding-top: 2px;
-        color: var(--yellow-400);
-        fill: var(--yellow-400);
+        color: var(--yellow-500);
+        fill: var(--yellow-500);
         flex-shrink: 0;
     }
     & span {
@@ -44,9 +44,14 @@
 
 .lower-bar {
     display: flex;
-    margin-top: 12px;
+    margin-top: 8px;
     align-items: center;
     justify-content: space-between;
+
+    @media screen and (max-width: 600px) {
+        margin-top: 12px;
+        gap: 20px;
+    }
 }
 
 .singlestar-rating-container {
@@ -54,7 +59,7 @@
     align-items: center;
     gap: 4px;
 
-    @media screen and (min-width: 900px) {
+    @media screen and (min-width: 600px) {
         display: none;
     }
 }
@@ -108,19 +113,19 @@
     align-items: center;
     font-size: 14px;
     gap: 4px;
-    margin-top: 8px;
+    margin-top: 6px;
 
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 600px) {
         display: none;
     }
 }
 
 .multiplestars-rating-avg-text {
     color: var(--yellow-400);
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .multiplestars-rating-count {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--black-500);
 }

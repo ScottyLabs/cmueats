@@ -29,11 +29,19 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
                 <span>{name}</span>
             </h3>
 
+            <div className={css['multiplestars-rating-container']}>
+                <span className={css['multiplestars-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span>
+                <StarDisplay starRating={ratingsAvg} starHeight={12} starGap={2} />
+                <span className={css['multiplestars-rating-count']}>({ratingsCount ?? '0'})</span>
+            </div>
+
             <div className={css['lower-bar']}>
                 <span className={css['physical-location-text']}>
                     <MapPin size={12} />
                     {physicalLocation}
                 </span>
+
+                <span className={css['blank-box']}></span>
 
                 <div className={css['singlestar-rating-container']}>
                     {/* <span style={{color: ratingToFontColor(ratingsAvg)}} className={css['singlestar-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span> */}
@@ -41,12 +49,6 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
                     <SingleStarDisplay starRating={ratingsAvg} />
                     <span className={css['singlestar-rating-count']}>({ratingsCount ?? '0'})</span>
                 </div>
-            </div>
-
-            <div className={css['multiplestars-rating-container']}>
-                <span className={css['multiplestars-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span>
-                <StarDisplay starRating={ratingsAvg} starHeight={14} starGap={2} />
-                <span className={css['multiplestars-rating-count']}>({ratingsCount ?? '0'})</span>
             </div>
         </div>
     );
