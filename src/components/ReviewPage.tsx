@@ -17,26 +17,6 @@ import AllTagReviews from './AllTagReviews';
 
 type APISummaryType = MethodResponse<typeof $api, 'get', '/v2/locations/{locationId}/reviews/summary'>;
 
-export function ratingToFontColor(rating: number | null) {
-    if (rating == null) return 'var(--text-muted)';
-    type RangeMap = {
-        min: number;
-        max: number;
-        color: string;
-        inclusiveMax?: boolean;
-    };
-    const ranges: RangeMap[] = [
-        { min: 0.0, max: 1.0, color: '#dd3c18' },
-        { min: 1.0, max: 2.0, color: '#fd8003' },
-        { min: 2.0, max: 3.0, color: '#f6cc5d' },
-        { min: 3.0, max: 4.0, color: '#1db875' },
-        { min: 4.0, max: 5.0, color: '#189a62', inclusiveMax: true },
-    ];
-
-    const match = ranges.find((r) => rating >= r.min && (r.inclusiveMax ? rating <= r.max : rating < r.max));
-    return match?.color ?? '#ffffff';
-}
-
 const MIN_INPUT_HEIGHT_PX = 100;
 function BarIndicator({ upvotePercent, inactive }: { upvotePercent: number; inactive: boolean }) {
     const greenRectCount = Math.floor(upvotePercent / 10);
