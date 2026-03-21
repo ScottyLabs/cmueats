@@ -28,9 +28,12 @@ export const queryClient = new QueryClient({
 });
 
 export const $api = createClient(fetchClient);
+/** redirects user to login backend url */
 export const login = () => {
     window.location.href = `${env.VITE_API_URL}/login?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
 };
+
+/** redirects user to logout backend url */
 export const logout = () => {
     window.location.href = `${env.VITE_API_URL}/logout?redirectURL=${window.location.origin}`; // not type safe, but we're probably not changing this either
 };

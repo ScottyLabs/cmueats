@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { MethodResponse } from 'openapi-react-query';
-import { $api, fetchClient } from '../api';
+import { $api, fetchClient, login } from '../api';
 import css from './ReviewPage.module.css';
 import LikeIcon from '../assets/control_buttons/like.svg?react';
 import DislikeIcon from '../assets/control_buttons/dislike.svg?react';
@@ -42,12 +42,14 @@ export function StarDisplay({
     deleteRating,
     starHeight,
     starGap,
+    starColor,
 }: {
     starRating: number | null;
     setNewRating?: (rating: number) => void;
     deleteRating?: () => void;
     starHeight: number;
     starGap: number;
+    starColor: string;
 }) {
     const [hoverCount, setHoverCount] = useState<number>(); // ranges from 1-10
     const findStarCutoffPercent = () => {
@@ -74,6 +76,7 @@ export function StarDisplay({
                     className={css['filled-star-container']}
                     style={{
                         '--star-cutoff': `${findStarCutoffPercent()}`,
+                        color: `${starColor}`,
                     }}
                 >
                     {Array(5)
@@ -139,7 +142,12 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                 </span>
                 <div className={css['global-rating__info']}>
                     <div className={css['global-rating__info__star-display-wrapper']}>
-                        <StarDisplay starRating={starData.avg} starHeight={18} starGap={5} />
+                        <StarDisplay
+                            starRating={starData.avg}
+                            starHeight={18}
+                            starGap={5}
+                            starColor="var(--yellow-400)"
+                        />
                         <div className={css['star-display-wrapper__total-votes']}>({totalReviewCount})</div>
                     </div>
                     <StarDistribution distribution={starData.buckets} />
@@ -159,7 +167,11 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                             })
                             .catch((e) => ({ error: e }));
                         if (error) {
-                            toast.error('Failed to set rating! Are you logged in?');
+                            if (error === 'Unauthorized') {
+                                login();
+                            } else {
+                                toast.error(`Failed to set rating! Error: ${error}`);
+                            }
                         } else {
                             await queryClient.refetchQueries(
                                 $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
@@ -175,7 +187,11 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                             })
                             .catch((e) => ({ error: e }));
                         if (error) {
-                            toast.error('Failed to delete rating!');
+                            if (error === 'Unauthorized') {
+                                login();
+                            } else {
+                                toast.error('Failed to delete rating!');
+                            }
                         } else {
                             await queryClient.refetchQueries(
                                 $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
@@ -184,6 +200,7 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                             );
                         }
                     }}
+                    starColor="var(--yellow-400)"
                 />
             </div>
         </div>
@@ -491,7 +508,11 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                             }).queryKey,
                                             reviewSummary,
                                         );
-                                        toast.error('Failed to vote! Are you logged in?');
+                                        if (updateVoteError === 'Unauthorized') {
+                                            login();
+                                        } else {
+                                            toast.error('Failed to vote!');
+                                        }
                                         tagVoteProcessing.current = false;
                                     } else {
                                         tagVoteProcessing.current = false;
@@ -508,7 +529,11 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                         })
                                         .catch((e) => ({ error: e }));
                                     if (reviewError) {
-                                        toast.error(`Failed to ${review === null ? 'delete' : 'save'} review!`);
+                                        if (reviewError === 'Unauthorized') {
+                                            login();
+                                        } else {
+                                            toast.error(`Failed to ${review === null ? 'delete' : 'save'} review!`);
+                                        }
                                         return false;
                                     }
                                     await revalidateData();

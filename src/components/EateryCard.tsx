@@ -74,7 +74,7 @@ function EateryCard({
             ),
         [drawerAPIContext.selectedId, location.id, partOfMainGrid, location.cardViewPreference],
     );
-    const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === (drawerAPIContext.selectedId ?? null); // aka change was not triggered by a drawer select/unselect
+    const shouldAnimatePositionChange = prevDrawerSelectedIdRef.current === drawerAPIContext.selectedId; // aka change was not triggered by a drawer select/unselect
     return (
         <motion.div
             layout

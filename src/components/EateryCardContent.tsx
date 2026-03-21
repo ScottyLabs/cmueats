@@ -1,9 +1,11 @@
 import { Pin, MapPin } from 'lucide-react';
+import { DateTime, Interval } from 'luxon';
 import { ILocation_Full } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
 import EmptyStarIcon from '../assets/control_buttons/starEmpty.svg?react';
 import FilledStarIcon from '../assets/control_buttons/starFilled.svg?react';
 import { StarDisplay } from './ReviewPage';
+import { useCurrentTime } from '../contexts/NowContext';
 
 function SingleStarDisplay({ starRating }: { starRating: number | null }) {
     // remapping, since 20% looks like 0% and 80% looks like 100%
@@ -21,6 +23,10 @@ function SingleStarDisplay({ starRating }: { starRating: number | null }) {
 function EateryCardContent({ location }: { location: ILocation_Full }) {
     const { location: physicalLocation, name, cardViewPreference, ratingsAvg, ratingsCount } = location;
     const isPinned = cardViewPreference === 'pinned';
+    const now = useCurrentTime();
+    const GALLO_CLOSING_DATE = DateTime.fromObject({ year: 2026, month: 5, day: 5 }, { zone: 'America/New_York' });
+    const interval = Interval.fromDateTimes(now, GALLO_CLOSING_DATE);
+    const isGallo = location.name.toLowerCase().includes('gallo');
 
     return (
         <div className={css['card-content-container']}>
@@ -36,15 +42,21 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
                 >
                     {ratingsAvg?.toFixed(1) ?? '0.0'}
                 </span>
-                <StarDisplay starRating={ratingsAvg} starHeight={12} starGap={2} />
+                <StarDisplay starRating={ratingsAvg} starHeight={12} starGap={2} starColor="var(--yellow-600)" />
                 <span className={css['multiplestars-rating-count']}>({ratingsCount ?? '0'})</span>
             </div>
 
             <div className={css['lower-bar']}>
-                <span className={css['physical-location-text']}>
-                    <MapPin size={12} />
-                    {physicalLocation}
-                </span>
+                {isGallo && interval.isValid ? (
+                    <span className={`${css['physical-location-text']} ${css['physical-location-text--warn']}`}>
+                        Permanently closing in {interval.count('day')} days
+                    </span>
+                ) : (
+                    <span className={css['physical-location-text']}>
+                        <MapPin size={12} />
+                        {physicalLocation}
+                    </span>
+                )}
 
                 <div className={css['singlestar-rating-container']}>
                     {/* <span style={{color: ratingToFontColor(ratingsAvg)}} className={css['singlestar-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span> */}
