@@ -1,5 +1,5 @@
 .card-content-container {
-    padding: 10px 5px 10px 10px;
+    padding: 10px 5px 15px 10px;
     position: relative;
 }
 
@@ -59,23 +59,16 @@
 
 .lower-bar {
     display: flex;
-    margin-top: 10px;
+    margin-top: 15px;
     align-items: center;
     justify-content: space-between;
-
-    @media screen and (max-width: 600px) {
-        gap: 20px;
-    }
+    gap: 40px;
 }
 
 .singlestar-rating-container {
     display: flex;
     align-items: center;
     gap: 4px;
-
-    @media screen and (min-width: 600px) {
-        display: none;
-    }
 }
 
 .star-container {
@@ -120,18 +113,6 @@
     syntax: '<length-percentage>';
     inherits: false;
     initial-value: 0%;
-}
-
-.multiplestars-rating-container {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    gap: 4px;
-    margin-top: 12px;
-
-    @media screen and (max-width: 600px) {
-        display: none;
-    }
 }
 
 .multiplestars-rating-avg-text {

@@ -35,17 +35,6 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
                 <span>{name}</span>
             </h3>
 
-            <div className={css['multiplestars-rating-container']}>
-                <span
-                    className={css['multiplestars-rating-avg-text']}
-                    style={ratingsAvg ? {} : { color: 'var(--black-500)' }}
-                >
-                    {ratingsAvg?.toFixed(1) ?? '0.0'}
-                </span>
-                <StarDisplay starRating={ratingsAvg} starHeight={12} starGap={2} starColor="var(--yellow-600)" />
-                <span className={css['multiplestars-rating-count']}>({ratingsCount ?? '0'})</span>
-            </div>
-
             <div className={css['lower-bar']}>
                 {isGallo && interval.isValid ? (
                     <span className={`${css['physical-location-text']} ${css['physical-location-text--warn']}`}>
@@ -54,13 +43,17 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
                 ) : (
                     <span className={css['physical-location-text']}>
                         <MapPin size={12} />
-                        {physicalLocation}
+                        <span>{physicalLocation}</span>
                     </span>
                 )}
 
                 <div className={css['singlestar-rating-container']}>
-                    {/* <span style={{color: ratingToFontColor(ratingsAvg)}} className={css['singlestar-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span> */}
-                    <span className={css['singlestar-rating-avg-text']}>{ratingsAvg?.toFixed(1) ?? '0.0'}</span>
+                    <span
+                        className={css['singlestar-rating-avg-text']}
+                        style={ratingsAvg ? {} : { color: 'var(--black-500)' }}
+                    >
+                        {ratingsAvg?.toFixed(1) ?? '0.0'}
+                    </span>
                     <SingleStarDisplay starRating={ratingsAvg} />
                     <span className={css['singlestar-rating-count']}>({ratingsCount ?? '0'})</span>
                 </div>
