@@ -269,6 +269,8 @@ export interface operations {
                         acceptsOnlineOrders: boolean;
                         id: string;
                         conceptId: (string | null) | null;
+                        images: string[];
+                        menuItemsString: (string | null) | null;
                     }[];
                 };
             };

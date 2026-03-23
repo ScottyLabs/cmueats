@@ -94,3 +94,21 @@
         text-decoration: underline;
     }
 }
+
+.menu-images-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.menu-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.hidden-menu-text {
+    display: none;
+}

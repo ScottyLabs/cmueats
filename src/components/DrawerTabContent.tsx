@@ -65,11 +65,42 @@ function DrawerTabContent() {
     }
 
     function renderMenu() {
+        const images = location.images ?? [];
+        const menuItemsString = location.menuItemsString ?? '';
+
+        const menuUrls = Object.values(
+            import.meta.glob('../assets/menu_images/*', {
+                eager: true,
+                query: 'url',
+            }) as Record<string, { default: string }>,
+        ).map(({ default: menuUrl }) => {
+            const filename = menuUrl.split('/').pop() || '';
+            return {
+                src: menuUrl,
+                alt: filename,
+            };
+        });
+
+        const menuUrlMap = Object.fromEntries(menuUrls.map((item) => [item.alt, item.src]));
+
         return (
             <>
                 <h4 className={css['section-header']}>Menu</h4>
                 <div>
-                    {menu ? (
+                    {images.length > 0 ? (
+                        <>
+                            <div className={css['menu-images-gallery']}>
+                                {images.map((image) => {
+                                    const menuUrl = menuUrlMap[image];
+                                    if (menuUrl)
+                                        return (
+                                            <img key={image} src={menuUrl} alt={image} className={css['menu-image']} />
+                                        );
+                                })}
+                            </div>
+                            {menuItemsString && <div className={css['hidden-menu-text']}>{menuItemsString}</div>}
+                        </>
+                    ) : menu ? (
                         <a className={css['inline-link']} href={menu} target="_blank" rel="noreferrer">
                             <span>View menu online</span>
                             <ExternalLink size={14} aria-hidden />

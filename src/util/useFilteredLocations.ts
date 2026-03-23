@@ -5,7 +5,7 @@ import assert from './assert';
 
 const FUSE_OPTIONS: IFuseOptions<ILocation_Full> = {
     // keys to perform the search on
-    keys: ['name', 'location', 'shortDescription', 'description'],
+    keys: ['name', 'location', 'shortDescription', 'description', 'menuItemsString'],
     ignoreLocation: true,
     threshold: 0.2,
 };

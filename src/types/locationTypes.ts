@@ -64,6 +64,9 @@ export interface ILocation_FromAPI {
     todaysSoups: ISpecial[];
     /** The id provided on the dining services website */
     conceptId: string | null;
+    /** List of menu image filenames */
+    images: string[];
+    menuItemsString: string | null;
 }
 export interface IStatusMessage {
     shortStatus: [string, string];
