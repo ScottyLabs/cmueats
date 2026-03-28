@@ -1,6 +1,6 @@
 import css from './SelectLocation.module.css';
 
-export type SelectSort = 'time' | 'stars-asc' | 'stars-desc';
+export type SelectSort = 'time' | 'stars-desc-open' | 'stars-asc' | 'stars-desc';
 
 type SelectSortProps = {
     sortOption: SelectSort;
@@ -16,8 +16,9 @@ function SelectSortControl({ sortOption, setSortOption }: SelectSortProps) {
             aria-label="Sort results"
         >
             <option value="time">Sort by Opening</option>
-            <option value="stars-desc">Sort by Highest Rating</option>
-            <option value="stars-asc">Sort by Lowest Rating</option>
+            <option value="stars-desc-open">Sort by Highest Rating (Open Only)</option>
+            <option value="stars-desc">Sort by Highest Rating (All)</option>
+            <option value="stars-asc">Sort by Lowest Rating (All)</option>
         </select>
     );
 }

@@ -36,6 +36,17 @@ const compareLocationsByTime = (location1: ILocation_Full, location2: ILocation_
 
 
 const compareLocationsByRating = (l1: ILocation_Full, l2: ILocation_Full, type: SelectSort) => {
+    // kind of confusing but asc means lowest to highest and desc means highest to lowest  
+
+    const o1 = l1.locationState === LocationState.OPEN || l1.locationState === LocationState.CLOSES_SOON;
+    const o2 = l2.locationState === LocationState.OPEN || l2.locationState === LocationState.CLOSES_SOON;       
+    
+    const state1 = l1.locationState;    
+    const state2 = l2.locationState;
+
+    if (o1 !== o2 && (type === 'stars-desc-open')) return state1 - state2; // keep same sorting by open/closed status as the default time sorting
+    if (!o1 && !o2) return compareLocationsByTime(l1, l2); // if both are closed, sort by closed time like normal
+
     const r1 = l1.averageRating ?? null;
     const r2 = l2.averageRating ?? null;
 
@@ -45,7 +56,7 @@ const compareLocationsByRating = (l1: ILocation_Full, l2: ILocation_Full, type: 
 
     if (r1 === r2) return compareLocationsByTime(l1, l2);
 
-    return type === 'stars-asc' ? r1 - r2 : r2 - r1;
+    return (type === 'stars-asc') ? r1 - r2 : r2 - r1;
 };
 
 export default function EateryCardGrid({
