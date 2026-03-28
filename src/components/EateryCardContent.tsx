@@ -1,4 +1,4 @@
-import { Pin, MapPin } from 'lucide-react';
+import { Pin } from 'lucide-react';
 import { DateTime, Interval } from 'luxon';
 import { ILocation_Full } from '../types/locationTypes';
 import css from './EateryCardContent.module.css';
@@ -8,8 +8,8 @@ import { useCurrentTime } from '../contexts/NowContext';
 
 function SingleStarDisplay({ starRating }: { starRating: number | null }) {
     // remapping, since 20% looks like 0% and 80% looks like 100%
-    const lerp = (x: number) => (x - 50) * Math.abs((x - 50) / 50) + 50;
-    const fillPercent = lerp(starRating !== null ? (starRating / 5) * 100 : 0);
+    const ease = (x: number) => (x - 50) * Math.abs((x - 50) / 50) + 50;
+    const fillPercent = ease(starRating !== null ? (starRating / 5) * 100 : 0);
 
     return (
         <div className={css['star-container']}>
@@ -41,7 +41,6 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
                     </span>
                 ) : (
                     <span className={css['physical-location-text']}>
-                        <MapPin size={12} />
                         <span>{physicalLocation}</span>
                     </span>
                 )}
