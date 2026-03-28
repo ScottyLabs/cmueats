@@ -36,18 +36,20 @@ function BarIndicator({ upvotePercent, inactive }: { upvotePercent: number; inac
         </div>
     );
 }
-function StarDisplay({
+export function StarDisplay({
     starRating,
     setNewRating,
     deleteRating,
     starHeight,
     starGap,
+    starColor,
 }: {
     starRating: number | null;
     setNewRating?: (rating: number) => void;
     deleteRating?: () => void;
     starHeight: number;
     starGap: number;
+    starColor: string;
 }) {
     const [hoverCount, setHoverCount] = useState<number>(); // ranges from 1-10
     const findStarCutoffPercent = () => {
@@ -74,6 +76,7 @@ function StarDisplay({
                     className={css['filled-star-container']}
                     style={{
                         '--star-cutoff': `${findStarCutoffPercent()}`,
+                        color: `${starColor}`,
                     }}
                 >
                     {Array(5)
@@ -139,7 +142,12 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                 </span>
                 <div className={css['global-rating__info']}>
                     <div className={css['global-rating__info__star-display-wrapper']}>
-                        <StarDisplay starRating={starData.avg} starHeight={18} starGap={5} />
+                        <StarDisplay
+                            starRating={starData.avg}
+                            starHeight={18}
+                            starGap={5}
+                            starColor="var(--yellow-400)"
+                        />
                         <div className={css['star-display-wrapper__total-votes']}>({totalReviewCount})</div>
                     </div>
                     <StarDistribution distribution={starData.buckets} />
@@ -192,6 +200,7 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                             );
                         }
                     }}
+                    starColor="var(--yellow-400)"
                 />
             </div>
         </div>

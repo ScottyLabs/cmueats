@@ -129,7 +129,7 @@ function EateryCard({
             onKeyDown={handleCardKeyDown}
         >
             <EateryCardHeader location={location} updateViewPreference={updateViewPreference} />
-            <EateryCardContent location={location} partOfMainGrid={partOfMainGrid} />
+            <EateryCardContent location={location} />
         </motion.div>
     );
 }
