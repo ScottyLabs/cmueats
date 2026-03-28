@@ -37,7 +37,7 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
             <div className={css['lower-bar']}>
                 {isGallo && interval.isValid ? (
                     <span className={`${css['physical-location-text']} ${css['physical-location-text--warn']}`}>
-                        Permanently closing in {interval.count('day')} days
+                        Perm. closing in {interval.count('day')} days
                     </span>
                 ) : (
                     <span className={css['physical-location-text']}>
