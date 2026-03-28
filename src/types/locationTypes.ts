@@ -52,6 +52,7 @@ export interface ILocation_FromAPI {
     name: string;
     shortDescription: string | null;
     description: string;
+    grubhubUrl: string | null;
     url: string;
     /** Menu link */
     menu: string | null;

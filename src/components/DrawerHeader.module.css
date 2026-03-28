@@ -74,3 +74,17 @@
     color: var(--text-muted);
     gap: 5px;
 }
+
+.header__grubhub-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

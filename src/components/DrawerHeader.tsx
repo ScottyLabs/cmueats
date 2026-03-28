@@ -1,13 +1,14 @@
 import { ExternalLink, MapPin, X } from 'lucide-react';
 import { highlightColors } from '../constants/colors';
 import css from './DrawerHeader.module.css';
+import GrubhubIcon from '../assets/justeat.svg';
 import { useDrawerTabsContext } from '../contexts/DrawerTabsContext';
 import { useDrawerAPIContext } from '../contexts/DrawerAPIContext';
 
 function DrawerHeader() {
     const { location } = useDrawerTabsContext();
     const { closeDrawer } = useDrawerAPIContext();
-    const { name, location: physicalLocation, url } = location;
+    const { name, location: physicalLocation, url, grubhubUrl } = location;
 
     return (
         <div className={css['drawer-header-container']}>
@@ -35,6 +36,13 @@ function DrawerHeader() {
                 <MapPin size={16} />
                 <span>{physicalLocation}</span>
             </div>
+
+            {grubhubUrl && (
+                <a className={css['header__grubhub-link']} href={grubhubUrl} target="_blank" rel="noreferrer">
+                    <img src={GrubhubIcon} alt="Grubhub" width={16} height={16} />
+                    <span>Order on Grubhub</span>
+                </a>
+            )}
         </div>
     );
 }
