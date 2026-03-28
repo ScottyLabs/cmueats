@@ -6,8 +6,8 @@ import { CardViewPreference } from '../util/storage';
 
 export type RecursiveReadonly<T> = T extends object
     ? {
-          readonly [P in keyof T]: RecursiveReadonly<T[P]>;
-      }
+        readonly [P in keyof T]: RecursiveReadonly<T[P]>;
+    }
     : T;
 
 /**
@@ -52,7 +52,7 @@ export interface ILocation_FromAPI {
     name: string;
     shortDescription: string | null;
     description: string;
-    grubhubUrl: string | null;
+    grubhubUrl?: string | null;
     url: string;
     /** Menu link */
     menu: string | null;
