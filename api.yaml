@@ -53,6 +53,7 @@ paths:
                       - type: "null"
                 required:
                   - user
+                additionalProperties: false
       operationId: getWhoami
   /:
     get:
@@ -129,6 +130,13 @@ paths:
                         - type: "null"
                     location:
                       type: string
+                    ratingsAvg:
+                      nullable: true
+                      anyOf:
+                        - type: number
+                        - type: "null"
+                    ratingsCount:
+                      type: number
                     shortDescription:
                       nullable: true
                       anyOf:
@@ -168,6 +176,8 @@ paths:
                     - todaysSpecials
                     - name
                     - location
+                    - ratingsAvg
+                    - ratingsCount
                     - shortDescription
                     - description
                     - url
@@ -284,7 +294,7 @@ paths:
                           - 12
                           - 4
                         description: Count of ratings of star rating
-                          [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}
+                          [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]
                         type: array
                         items:
                           type: number
@@ -336,6 +346,7 @@ paths:
                 required:
                   - starData
                   - tagData
+                additionalProperties: false
       operationId: getV2LocationsByLocationIdReviewsSummary
   /v2/locations/{locationId}/reviews/stars/me:
     put:
@@ -554,3 +565,4 @@ paths:
       operationId: getV2LocationsByLocationIdReports
 components:
   schemas: {}
+

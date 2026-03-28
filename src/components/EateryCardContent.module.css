@@ -1,16 +1,16 @@
 .card-content-container {
-    padding: 12px 13px 20px;
+    padding: 10px 10px 15px 10px;
     position: relative;
 }
 
 .location-name-text {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 3px;
     font-family: var(--text-primary-font);
     font-size: 18px;
     font-weight: 500;
-    margin: 2px -1px 0;
+    margin: 0;
 
     width: fit-content;
     max-width: 100%;
@@ -33,17 +33,21 @@
 }
 
 .physical-location-text {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--black-500);
+
     display: flex;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     align-items: center;
-    margin-top: 12px;
+    gap: 5px;
+
     & span {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    gap: 5px;
 
     & svg {
         flex-shrink: 0;
@@ -53,15 +57,66 @@
     color: var(--red-300);
 }
 
-.action-bar {
-    display: none;
-    margin-top: 12px;
+.lower-bar {
+    display: flex;
+    margin-top: 15px;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
+
+    @media screen and (max-width: 600px) {
+        gap: 40px;
+    }
 }
 
-.rating {
-    visibility: hidden;
+.singlestar-rating-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.star-container {
+    position: relative;
+
+    svg {
+        width: 13px;
+        height: 13px;
+    }
+}
+
+.singlestar-rating-avg-text {
+    color: var(--yellow-400);
+    font-size: 14px;
+}
+
+.singlestar-rating-count {
+    font-size: 12px;
+    color: var(--black-500);
+}
+
+.empty-star,
+.filled-star {
+    display: flex;
+    color: var(--black-600);
+}
+
+.filled-star {
+    color: var(--yellow-400);
+    overflow: hidden;
+    position: absolute;
+    inset: 0;
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 1) 0px,
+        rgba(0, 0, 0, 1) var(--star-cutoff),
+        rgba(0, 0, 0, 0) var(--star-cutoff)
+    );
+}
+
+@property --star-cutoff {
+    syntax: '<length-percentage>';
+    inherits: false;
+    initial-value: 0%;
 }
 
 /* miku stuff */
