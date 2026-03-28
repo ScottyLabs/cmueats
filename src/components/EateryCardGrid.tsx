@@ -47,8 +47,8 @@ const compareLocationsByRating = (l1: ILocation_Full, l2: ILocation_Full, type: 
     if (o1 !== o2 && (type === 'stars-desc-open')) return state1 - state2; // keep same sorting by open/closed status as the default time sorting
     if (!o1 && !o2) return compareLocationsByTime(l1, l2); // if both are closed, sort by closed time like normal
 
-    const r1 = l1.averageRating ?? null;
-    const r2 = l2.averageRating ?? null;
+    const r1 = l1.ratingsAvg ?? null;
+    const r2 = l2.ratingsAvg ?? null;
 
     if (r1 === null && r2 === null) return compareLocationsByTime(l1, l2);
     if (r1 === null) return 1;

@@ -97,11 +97,6 @@ export type ILocation_TimeStatusData =
     | ILocation_TimeStatusData_PermanentlyClosed;
 
 
-export type ILocation_RatingData = {
-    averageRating?: number | null;
-    ratingCount?: number | null;
-};
-
 /** Extra data derived from a single location */
 export type ILocation_ExtraData = ILocation_TimeStatusData & {
     cardViewPreference: CardViewPreference;
@@ -113,7 +108,7 @@ export type ILocation_ExtraData_Map = {
 };
 
 /** once we combine extraDataMap with our base api data */
-export type ILocation_Full = ILocation_FromAPI & ILocation_ExtraData & ILocation_RatingData;
+export type ILocation_Full = ILocation_FromAPI & ILocation_ExtraData;
 
 export type IMikuCardData = {
     id?: undefined;
