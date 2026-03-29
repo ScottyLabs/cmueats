@@ -61,7 +61,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
         document.addEventListener('touchmove', preventScroll, { passive: false });
         document.addEventListener('wheel', preventScroll, { passive: false });
-        document.documentElement.classList.add('scroll-lock');
     }, [preventScroll]);
 
     const unlockScroll = useCallback(() => {
@@ -69,7 +68,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
         document.removeEventListener('touchmove', preventScroll);
         document.removeEventListener('wheel', preventScroll);
-        document.documentElement.classList.remove('scroll-lock');
     }, [preventScroll]);
 
     const startDrag = useCallback(
@@ -89,14 +87,17 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     );
 
     const onSheetScroll = useCallback(() => {
-        if (!contentRef?.current?.scrollTop && sheetDrag) {
+        if (!contentRef?.current?.scrollTop && sheetDrag && !dragging) {
             startDrag(sheetDrag);
         }
-    }, [sheetDrag, startDrag]);
+    }, [sheetDrag, startDrag, dragging]);
 
     const startSheetDrag = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-        contentRef?.current?.addEventListener('scroll', onSheetScroll);
+        if (dragging) {
+            return;
+        }
         setSheetDrag(e);
+        contentRef?.current?.addEventListener('scroll', onSheetScroll);
         if (!contentRef?.current?.scrollTop) {
             startDrag(e);
         }
@@ -135,8 +136,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             const clientY =
                 'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
 
-            let next = startTranslate.current + (clientY - startY.current);
-            next = Math.max(FULL, Math.min(next, HIDDEN));
+            const next = Math.max(FULL, Math.min(startTranslate.current + (clientY - startY.current), HIDDEN));
 
             setY(next);
         };
@@ -173,6 +173,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             }
 
             setY(target);
+
             if (target === HIDDEN) {
                 hide();
             }
@@ -195,14 +196,15 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         };
     }, [dragging, y, snapPoints, FULL, HIDDEN, hide]);
 
-    useEffect(
-        () => () => {
+    useEffect(() => {
+        activeRef.current = active;
+        return () => {
             if (hideTimeoutRef.current) {
                 clearTimeout(hideTimeoutRef.current);
             }
-        },
-        [],
-    );
+            unlockScroll();
+        };
+    }, [active, unlockScroll]);
 
     return (
         <>
@@ -212,9 +214,9 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
             {active && (
                 <div
-                    onMouseDown={startSheetDrag}
+                    onMouseMove={startSheetDrag}
                     onMouseUp={endSheetDrag}
-                    onTouchStart={startSheetDrag}
+                    onTouchMove={startSheetDrag}
                     onTouchEnd={endSheetDrag}
                     onKeyDown={(e) => {
                         if (e.key === 'Escape') hide();
