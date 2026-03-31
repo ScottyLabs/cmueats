@@ -30,14 +30,14 @@ export default function ListPageHeader() {
                         <span style={{ color: 'var(--yellow-300)' }}> El Gallo De Oro</span>
                         <br />
                         <span style={{ fontSize: 24, color: 'var(--black-500)' }}>
-                            (and thus will be {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                            and thus will also be {/* eslint-disable-next-line react/jsx-no-target-blank */}
                             <a
                                 href="https://the-tartan.org/2026/02/16/el-gallo-to-close-after-29-years-of-operation/"
                                 style={{ color: 'inherit' }}
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                closing in 34 days)
+                                closing in 34 days
                             </a>
                         </span>
                     </span>
