@@ -22,12 +22,24 @@ export default function ListPageHeader() {
     return (
         <header className={css['list-header']}>
             <h3 className={css['list-header__greeting']}>
-                {(today.getMonth() === 3 && today.getDate() === 1) || true ? (
+                {theme === 'april-fools' ? (
                     <span>
                         <span style={{ color: 'var(--logo-first-half)' }}>cmu</span>
                         <span style={{ color: 'var(--logo-second-half)' }}>:eats </span>
-                        is now acquired by
-                        <span style={{ color: 'var(--yellow-300)' }}> El Gallo De Oro</span>!!!
+                        has been acquired by
+                        <span style={{ color: 'var(--yellow-300)' }}> El Gallo De Oro</span>
+                        <br />
+                        <span style={{ fontSize: 24, color: 'var(--black-500)' }}>
+                            (and thus will be {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                            <a
+                                href="https://the-tartan.org/2026/02/16/el-gallo-to-close-after-29-years-of-operation/"
+                                style={{ color: 'inherit' }}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                closing in 34 days)
+                            </a>
+                        </span>
                     </span>
                 ) : (
                     <>
