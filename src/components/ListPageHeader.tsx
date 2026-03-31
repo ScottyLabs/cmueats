@@ -17,7 +17,6 @@ export default function ListPageHeader() {
     if (theme === 'miku') {
         return <img className={css['list-header-miku']} src={mikuHeaderImg} alt="" />;
     }
-    const today = new Date();
 
     return (
         <header className={css['list-header']}>
