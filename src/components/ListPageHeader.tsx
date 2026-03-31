@@ -32,12 +32,12 @@ export default function ListPageHeader() {
                 ) : (
                     <>
                         <span className={css['list-header__greeting--desktop']}>
-                            {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData.user.firstName}! `}
+                            {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData?.user?.firstName}! `}
                             {desktopGreeting}
                         </span>
 
                         <span className={css['list-header__greeting--mobile']}>
-                            {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData.user.firstName}! `}
+                            {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData?.user?.firstName}! `}
                             {mobileGreeting}
                         </span>
                     </>
