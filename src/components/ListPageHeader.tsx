@@ -7,6 +7,29 @@ import SignOut from '../assets/control_buttons/signOut.svg?react';
 import { useThemeContext } from '../ThemeProvider';
 import mikuHeaderImg from '../assets/miku/miku-banner-2026.png';
 
+function AprilFools() {
+    return (
+        <span>
+            <span style={{ color: 'var(--logo-first-half)' }}>cmu</span>
+            <span style={{ color: 'var(--logo-second-half)' }}>:eats </span>
+            has been acquired by
+            <span style={{ color: 'var(--yellow-300)' }}> El Gallo De Oro</span>
+            <br />
+            <span style={{ fontSize: 24, color: 'var(--black-500)' }}>
+                and thus will also be {/* eslint-disable-next-line react/jsx-no-target-blank */}
+                <a
+                    href="https://the-tartan.org/2026/02/16/el-gallo-to-close-after-29-years-of-operation/"
+                    className={css['april-fools-url']}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    closing in 34 days
+                </a>
+            </span>
+        </span>
+    );
+}
+
 export default function ListPageHeader() {
     const { data: userLoggedInData, isLoading, error } = $api.useQuery('get', '/whoami');
     const { theme } = useThemeContext();
@@ -22,24 +45,7 @@ export default function ListPageHeader() {
         <header className={css['list-header']}>
             <h3 className={css['list-header__greeting']}>
                 {theme === 'april-fools' ? (
-                    <span>
-                        <span style={{ color: 'var(--logo-first-half)' }}>cmu</span>
-                        <span style={{ color: 'var(--logo-second-half)' }}>:eats </span>
-                        has been acquired by
-                        <span style={{ color: 'var(--yellow-300)' }}> El Gallo De Oro</span>
-                        <br />
-                        <span style={{ fontSize: 24, color: 'var(--black-500)' }}>
-                            and thus will also be {/* eslint-disable-next-line react/jsx-no-target-blank */}
-                            <a
-                                href="https://the-tartan.org/2026/02/16/el-gallo-to-close-after-29-years-of-operation/"
-                                style={{ color: 'inherit' }}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                closing in 34 days
-                            </a>
-                        </span>
-                    </span>
+                    <AprilFools />
                 ) : (
                     <>
                         <span className={css['list-header__greeting--desktop']}>
