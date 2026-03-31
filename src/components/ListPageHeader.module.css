@@ -118,3 +118,14 @@
         margin: 20px auto 0;
     }
 }
+
+.april-fools-url {
+    color: var(--red-300);
+    border: 2px dashed var(--text-muted);
+    text-decoration: none;
+
+    &:hover {
+        border: 2px solid var(--text-muted);
+        text-decoration: underline;
+    }
+}
