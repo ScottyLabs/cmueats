@@ -26,12 +26,19 @@ function EateryCardContent({ location }: { location: ILocation_Full }) {
     const GALLO_CLOSING_DATE = DateTime.fromObject({ year: 2026, month: 5, day: 5 }, { zone: 'America/New_York' });
     const interval = Interval.fromDateTimes(now, GALLO_CLOSING_DATE);
     const isGallo = location.name.toLowerCase().includes('gallo');
+    const today = new Date();
 
     return (
         <div className={css['card-content-container']}>
             <h3 className={css['location-name-text']} style={isPinned ? { color: 'var(--yellow-300)' } : {}}>
                 {isPinned && <Pin size={16} />}
-                <span>{name}</span>
+                <span
+                    style={
+                        (today.getMonth() === 3 && today.getDate() === 1) || true ? { color: 'var(--yellow-300)' } : {}
+                    }
+                >
+                    {(today.getMonth() === 3 && today.getDate() === 1) || true ? 'El Gallo De Oro' : name}
+                </span>
             </h3>
 
             <div className={css['lower-bar']}>

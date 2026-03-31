@@ -17,19 +17,31 @@ export default function ListPageHeader() {
     if (theme === 'miku') {
         return <img className={css['list-header-miku']} src={mikuHeaderImg} alt="" />;
     }
+    const today = new Date();
 
     return (
         <header className={css['list-header']}>
             <h3 className={css['list-header__greeting']}>
-                <span className={css['list-header__greeting--desktop']}>
-                    {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData.user.firstName}! `}
-                    {desktopGreeting}
-                </span>
+                {(today.getMonth() === 3 && today.getDate() === 1) || true ? (
+                    <span>
+                        <span style={{ color: 'var(--logo-first-half)' }}>cmu</span>
+                        <span style={{ color: 'var(--logo-second-half)' }}>:eats </span>
+                        is now acquired by
+                        <span style={{ color: 'var(--yellow-300)' }}> El Gallo De Oro</span>!!!
+                    </span>
+                ) : (
+                    <>
+                        <span className={css['list-header__greeting--desktop']}>
+                            {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData.user.firstName}! `}
+                            {desktopGreeting}
+                        </span>
 
-                <span className={css['list-header__greeting--mobile']}>
-                    {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData.user.firstName}! `}
-                    {mobileGreeting}
-                </span>
+                        <span className={css['list-header__greeting--mobile']}>
+                            {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData.user.firstName}! `}
+                            {mobileGreeting}
+                        </span>
+                    </>
+                )}
             </h3>
             {error !== null ? (
                 <button disabled type="button" className={css.button__error}>
