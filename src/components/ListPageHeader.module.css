@@ -121,10 +121,9 @@
 
 .april-fools-url {
     color: var(--red-300);
-    border: 2px dashed var(--text-muted);
 
     &:hover {
-        border: 2px solid var(--text-muted);
+        outline: 2px solid var(--text-muted);
         text-decoration: underline;
     }
 }
