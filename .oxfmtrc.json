@@ -1,4 +1,5 @@
 {
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
     "bracketSpacing": true,
     "printWidth": 120,
     "proseWrap": "preserve",
@@ -11,16 +12,9 @@
     "endOfLine": "lf",
     "overrides": [
         {
-            "files": "*.json",
+            "files": ["*.json"],
             "options": {
                 "singleQuote": false
-            }
-        },
-        {
-            "files": ".*rc",
-            "options": {
-                "singleQuote": false,
-                "parser": "json"
             }
         }
     ]
