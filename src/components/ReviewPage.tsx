@@ -75,8 +75,8 @@ export function StarDisplay({
                 <div
                     className={css['filled-star-container']}
                     style={{
-                        '--star-cutoff': `${findStarCutoffPercent()}`,
-                        color: `${starColor}`,
+                        '--star-cutoff': findStarCutoffPercent(),
+                        color: starColor,
                     }}
                 >
                     {Array(5)
@@ -516,7 +516,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
                                         tagVoteProcessing.current = false;
                                     } else {
                                         tagVoteProcessing.current = false;
-                                        revalidateData();
+                                        void revalidateData();
                                     }
                                 }}
                                 updateReview={async (review) => {
