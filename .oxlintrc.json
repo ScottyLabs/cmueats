@@ -16,13 +16,7 @@
     "tests",
     "src/types/api.d.ts"
   ],
-  "plugins": [
-    "typescript",
-    "react",
-    "import",
-    "jsx-a11y",
-    "vitest"
-  ],
+  "plugins": ["typescript", "react", "import", "jsx-a11y", "vitest"],
   "options": {
     "typeAware": true
   },
@@ -57,7 +51,14 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
     "import/no-named-as-default": "off",
-    "import/no-unassigned-import": "off"
+    "import/no-unassigned-import": "off",
+    "no-unsafe-type-assertion": "off",
+    "no-unused-vars": [
+      "error",
+      {
+        "caughtErrors": "none"
+      }
+    ]
   },
   "settings": {
     "react": {

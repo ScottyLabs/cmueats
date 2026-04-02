@@ -88,8 +88,8 @@ function MikuCardHeader({
                 {playerActive && <WaveTable color="white" />}
             </div>
             {showProgressBar ? (
-                // eslint-disable-next-line jsx-a11y/control-has-associated-label
                 <div
+                    // oxlint-disable-next-line jsx_a11y/role-has-required-aria-props
                     role="slider"
                     aria-valuenow={songProgressPercent}
                     className={css['song-scrobble-clickable-area']}

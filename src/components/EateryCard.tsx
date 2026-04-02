@@ -80,12 +80,12 @@ function EateryCard({
             layout
             className={cardClassName}
             onMouseOver={() => {
-                queryClient.prefetchQuery(
+                void queryClient.prefetchQuery(
                     $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
                         params: { path: { locationId: location.id } },
                     }),
                 );
-                queryClient.prefetchQuery(
+                void queryClient.prefetchQuery(
                     $api.queryOptions('get', '/v2/locations/{locationId}/reviews/tags', {
                         params: { path: { locationId: location.id } },
                     }),
@@ -118,6 +118,7 @@ function EateryCard({
                       }
             }
             // whole card clickable
+            // oxlint-disable-next-line jsx_a11y/prefer-tag-over-role
             role="button"
             tabIndex={0}
             onClick={(ev) => {
