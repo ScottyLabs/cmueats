@@ -1,21 +1,32 @@
 {
-    "$schema": "./node_modules/oxfmt/configuration_schema.json",
-    "bracketSpacing": true,
-    "printWidth": 120,
-    "proseWrap": "preserve",
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "tabWidth": 4,
-    "useTabs": false,
-    "arrowParens": "always",
-    "endOfLine": "lf",
-    "overrides": [
-        {
-            "files": ["*.json"],
-            "options": {
-                "singleQuote": false
-            }
-        }
-    ]
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    "build",
+    "dist",
+    "coverage",
+    "*.json",
+    ".github",
+    "api.d.ts",
+    "api.yaml"
+  ],
+  "bracketSpacing": true,
+  "printWidth": 120,
+  "proseWrap": "preserve",
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "tabWidth": 4,
+  "useTabs": false,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": ["*.json"],
+      "options": {
+        "tabWidth": 2,
+        "useTabs": false,
+        "singleQuote": false
+      }
+    }
+  ]
 }
