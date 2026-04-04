@@ -10,7 +10,10 @@ type BottomSheetProps = {
 };
 
 export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
-    const DELAY = 100;
+    const HideSheetDelay = 100;
+    const windowHeight = window.innerHeight;
+    const FULL = windowHeight * 0.15;
+    const HIDDEN = windowHeight;
 
     const contentRef = useRef<HTMLDivElement | null>(null);
     const sheetRef = useRef<HTMLDivElement | null>(null);
@@ -22,9 +25,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     const hideTimeoutRef = useRef<number | null>(null);
     const activeRef = useRef(active);
 
-    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-    const [FULL, setFULL] = useState(windowHeight * 0.15);
-    const [HIDDEN, setHIDDEN] = useState(windowHeight);
     const [y, setY] = useState(HIDDEN);
     const [dragging, setDragging] = useState(false);
     const [sheetDrag, setSheetDrag] = useState<React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement> | null>(
@@ -44,7 +44,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             }
             hideTimeoutRef.current = window.setTimeout(() => {
                 onHide();
-            }, DELAY);
+            }, HideSheetDelay);
         }
     }, [y, HIDDEN, onHide]);
 
@@ -114,12 +114,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             startDrag(e);
         }
     };
-
-    useEffect(() => {
-        setWindowHeight(window.innerHeight);
-        setFULL(windowHeight * 0.15);
-        setHIDDEN(windowHeight);
-    }, [FULL, HIDDEN, windowHeight]);
 
     useEffect(() => {
         activeRef.current = active;

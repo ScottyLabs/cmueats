@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease-out;
-    border:none;
+    border: none;
 }
 
 .hidden {
@@ -38,7 +38,7 @@
 .handleContainer {
     background: var(--black-1000);
     padding: 10px 0px;
-    border:none;
+    border: none;
 }
 
 .dim {
@@ -55,10 +55,10 @@
 }
 
 .scroll-lock::-webkit-scrollbar {
-  display: none;
-  overscroll-behavior: none;
+    display: none;
+    overscroll-behavior: none;
 }
 
 .content {
-  overscroll-behavior: none;
+    overscroll-behavior: none;
 }
