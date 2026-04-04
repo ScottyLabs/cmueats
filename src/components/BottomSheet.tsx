@@ -1,5 +1,3 @@
-/* oxlint-disable no-static-element-interactions*/
-
 import { ReactNode, useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from './BottomSheet.module.css';
 
@@ -209,6 +207,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             )}
 
             {active && (
+                // oxlint-disable-next-line no-static-element-interactions
                 <div
                     onMouseMove={startSheetDrag}
                     onMouseUp={endSheetDrag}

@@ -1,5 +1,5 @@
 .bottomSheet {
-    z-index: 998;
+    z-index: 998; /*navbar is at 999 z-index, bottom sheet sits right underneath*/
     position: fixed;
     overflow-y: auto;
     left: 0;
