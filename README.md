@@ -13,7 +13,7 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 3. To start developing, you'll need to download [pnpm](https://pnpm.io/installation), [Git](https://git-scm.com/download/win), and an IDE (I recommend [VSCode](https://code.visualstudio.com)). You should also download [Github Desktop](https://desktop.github.com) to make development easier at the beginning. I recommend checking out [Learn Git Branching](https://learngitbranching.js.org) later.
 
-4. If you followed my IDE recommendation, also download the [Prettier VSCode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
+4. If you're using VSCode, also download the Oxc extension for inline linting and auto-formatting.
 
 5. Any of the following steps where you type something (i.e. git clone…, pnpm install, etc.) should be done in your IDE's terminal.
 
@@ -85,21 +85,21 @@ VITE_API_URL=locations.json
 
 1. Start the dining-api backend:
 
-    ```
-    cd ../dining-api
-    pnpm install
-    pnpm run dev
-    ```
+   ```
+   cd ../dining-api
+   pnpm install
+   pnpm run dev
+   ```
 
-    This runs the dining-api server on port 5010.
+   This runs the dining-api server on port 5010.
 
 2. Start the frontend:
 
-    ```
-    pnpm run dev
-    ```
+   ```
+   pnpm run dev
+   ```
 
-    This runs the Vite dev server on port 5173.
+   This runs the Vite dev server on port 5173.
 
 ## Production/Deployment
 
@@ -107,14 +107,14 @@ VITE_API_URL=locations.json
 
 - Deploy dining-api to Railway with the start command:
 
-    ```
-    pnpm run start
-    ```
+  ```
+  pnpm run start
+  ```
 
 ## Updating the OpenAPI spec types
 
 Update the `api.yaml` file, and run
 
 ```shell
-pnpx openapi-typescript api.yaml -o src/types/api.d.ts
+pnpm run api-update
 ```

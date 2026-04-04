@@ -50,6 +50,8 @@ export interface ILocation_FromAPI {
     /** unique identifier for this location */
     id: string;
     name: string;
+    ratingsAvg: number | null;
+    ratingsCount: number;
     shortDescription: string | null;
     description: string;
     url: string;

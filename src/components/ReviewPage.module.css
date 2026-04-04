@@ -318,7 +318,6 @@
     initial-value: 0%;
 }
 .filled-star-container {
-    color: var(--yellow-400);
     overflow: hidden;
     position: absolute;
     inset: 0;
