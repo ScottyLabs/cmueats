@@ -89,7 +89,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     );
 
     const onSheetScroll = useCallback(() => {
-        if ((contentRef?.current?.scrollTop === 0) && sheetDrag && !dragging) {
+        if (contentRef?.current?.scrollTop === 0 && sheetDrag && !dragging) {
             startDrag(sheetDrag);
         }
     }, [sheetDrag, startDrag, dragging]);
@@ -98,12 +98,12 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         if (dragging) {
             return;
         }
-        
+
         //user mouse/touch stored to allow smooth transition between scrolling and dragging
         setSheetDrag(e);
 
         //starts sheet dragging if user is scrolling past the top of the sheet contents
-        contentRef?.current?.addEventListener('scroll', onSheetScroll); 
+        contentRef?.current?.addEventListener('scroll', onSheetScroll);
 
         if (contentRef?.current?.scrollTop === 0) {
             startDrag(e);
@@ -120,54 +120,60 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         }
     };
 
-    const onDrag = useCallback((e: MouseEvent | TouchEvent) => {
-        if (!dragging) return;
+    const onDrag = useCallback(
+        (e: MouseEvent | TouchEvent) => {
+            if (!dragging) return;
 
-        const clientY =
-            'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
+            const clientY =
+                'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
 
-        const next = Math.max(FULL, Math.min(startTranslate.current + (clientY - startY.current), HIDDEN));
+            const next = Math.max(FULL, Math.min(startTranslate.current + (clientY - startY.current), HIDDEN));
 
-        setY(next);
-    }, [dragging, setY, FULL, HIDDEN]);
+            setY(next);
+        },
+        [dragging, setY, FULL, HIDDEN],
+    );
 
-    const onDragEnd = useCallback((e: MouseEvent | TouchEvent) => {
-        if (!dragging) return;
+    const onDragEnd = useCallback(
+        (e: MouseEvent | TouchEvent) => {
+            if (!dragging) return;
 
-        setDragging(false);
+            setDragging(false);
 
-        const clientY =
-            'changedTouches' in e && e.changedTouches.length > 0
-                ? e.changedTouches[0]!.clientY
-                : 'clientY' in e
-                    ? e.clientY
-                    : startY.current;
+            const clientY =
+                'changedTouches' in e && e.changedTouches.length > 0
+                    ? e.changedTouches[0]!.clientY
+                    : 'clientY' in e
+                      ? e.clientY
+                      : startY.current;
 
-        const endTime = performance.now();
-        const dt = endTime - dragStartTime.current;
-        const dy = clientY - dragStartY.current;
+            const endTime = performance.now();
+            const dt = endTime - dragStartTime.current;
+            const dy = clientY - dragStartY.current;
 
-        const velocity = dy / dt;
-        const FLICK_THRESHOLD = 0.6;
+            const velocity = dy / dt;
+            const FLICK_THRESHOLD = 0.6;
 
-        let target: number;
+            let target: number;
 
-        if (Math.abs(velocity) > FLICK_THRESHOLD) {
-            if (velocity > 0) {
-                target = snapPoints.find((p) => p > y) ?? HIDDEN;
+            if (Math.abs(velocity) > FLICK_THRESHOLD) {
+                if (velocity > 0) {
+                    target = snapPoints.find((p) => p > y) ?? HIDDEN;
+                } else {
+                    target = [...snapPoints].reverse().find((p) => p < y) ?? FULL;
+                }
             } else {
-                target = [...snapPoints].reverse().find((p) => p < y) ?? FULL;
+                target = snapPoints.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a));
             }
-        } else {
-            target = snapPoints.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a));
-        }
 
-        setY(target);
+            setY(target);
 
-        if (target === HIDDEN) {
-            hide();
-        }
-    }, [dragging, setDragging, snapPoints, HIDDEN, FULL, y, hide]);
+            if (target === HIDDEN) {
+                hide();
+            }
+        },
+        [dragging, setDragging, snapPoints, HIDDEN, FULL, y, hide],
+    );
 
     useEffect(() => {
         activeRef.current = active;
