@@ -87,7 +87,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     );
 
     const onSheetScroll = useCallback(() => {
-        if (!contentRef?.current?.scrollTop && sheetDrag && !dragging) {
+        if ((contentRef?.current?.scrollTop == 0) && sheetDrag && !dragging) {
             startDrag(sheetDrag);
         }
     }, [sheetDrag, startDrag, dragging]);
@@ -98,7 +98,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         }
         setSheetDrag(e);
         contentRef?.current?.addEventListener('scroll', onSheetScroll);
-        if (!contentRef?.current?.scrollTop) {
+        if (contentRef?.current?.scrollTop == 0) {
             startDrag(e);
         }
     };
