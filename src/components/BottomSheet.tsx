@@ -8,7 +8,7 @@ type BottomSheetProps = {
 };
 
 export default function BottomSheet({ children, active, onHide }: BottomSheetProps) {
-    const HideSheetDelay = 100;
+    const hideSheetDelay = 100;
     const windowHeight = window.innerHeight;
     const FULL = windowHeight * 0.15;
     const HIDDEN = windowHeight;
@@ -25,6 +25,8 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
     const [y, setY] = useState(HIDDEN);
     const [dragging, setDragging] = useState(false);
+
+    //stores position of user touch/cursor
     const [sheetDrag, setSheetDrag] = useState<React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement> | null>(
         null,
     );
@@ -42,7 +44,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
             }
             hideTimeoutRef.current = window.setTimeout(() => {
                 onHide();
-            }, HideSheetDelay);
+            }, hideSheetDelay);
         }
     }, [y, HIDDEN, onHide]);
 
@@ -87,7 +89,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     );
 
     const onSheetScroll = useCallback(() => {
-        if ((contentRef?.current?.scrollTop == 0) && sheetDrag && !dragging) {
+        if ((contentRef?.current?.scrollTop === 0) && sheetDrag && !dragging) {
             startDrag(sheetDrag);
         }
     }, [sheetDrag, startDrag, dragging]);
@@ -96,9 +98,14 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         if (dragging) {
             return;
         }
+        
+        //user mouse/touch stored to allow smooth transition between scrolling and dragging
         setSheetDrag(e);
-        contentRef?.current?.addEventListener('scroll', onSheetScroll);
-        if (contentRef?.current?.scrollTop == 0) {
+
+        //starts sheet dragging if user is scrolling past the top of the sheet contents
+        contentRef?.current?.addEventListener('scroll', onSheetScroll); 
+
+        if (contentRef?.current?.scrollTop === 0) {
             startDrag(e);
         }
     };
@@ -172,6 +179,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         }
     }, [active, FULL, HIDDEN, lockScroll, unlockScroll]);
 
+    //if dragging, starts calculating sheet position (moves sheet)
     useEffect(() => {
         if (contentRef.current) {
             contentRef.current.style.overflow = y <= FULL ? 'auto' : 'hidden';
@@ -190,6 +198,7 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         };
     }, [dragging, y, snapPoints, FULL, HIDDEN, hide, onDragEnd, onDrag]);
 
+    //cleanup
     useEffect(() => {
         activeRef.current = active;
         return () => {
