@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react';
+import GrubhubIcon from '../assets/justeat.svg';
 import { next7DaysReadableString } from '../util/time';
 import { useCurrentTime } from '../contexts/NowContext';
 import css from './DrawerTabContent.module.css';
@@ -89,6 +90,17 @@ function DrawerTabContent() {
                             </a>
                             .
                         </div>
+                    )}
+                    {location.grubhubUrl && (
+                        <a
+                            className={`${css['inline-link']} ${css['grubhub-link']}`}
+                            href={location.grubhubUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <span>Open Grubhub</span>
+                            <ExternalLink size={14} aria-hidden />
+                        </a>
                     )}
                 </div>
             </>
