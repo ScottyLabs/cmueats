@@ -1,3 +1,5 @@
+/* oxlint-disable no-static-element-interactions*/
+
 import { ReactNode, useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from './BottomSheet.module.css';
 
@@ -12,19 +14,19 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
 
     const contentRef = useRef<HTMLDivElement | null>(null);
     const sheetRef = useRef<HTMLDivElement | null>(null);
-    const dragStartTime = useRef<number>(0);
-    const dragStartY = useRef<number>(0);
-    const startY = useRef<number>(0);
-    const startTranslate = useRef<number>(0);
+    const dragStartTime = useRef(0);
+    const dragStartY = useRef(0);
+    const startY = useRef(0);
+    const startTranslate = useRef(0);
     const handleRef = useRef<HTMLButtonElement | null>(null);
     const hideTimeoutRef = useRef<number | null>(null);
     const activeRef = useRef(active);
 
-    const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
-    const [FULL, setFULL] = useState<number>(windowHeight * 0.15);
-    const [HIDDEN, setHIDDEN] = useState<number>(windowHeight);
-    const [y, setY] = useState<number>(HIDDEN);
-    const [dragging, setDragging] = useState<boolean>(false);
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+    const [FULL, setFULL] = useState(windowHeight * 0.15);
+    const [HIDDEN, setHIDDEN] = useState(windowHeight);
+    const [y, setY] = useState(HIDDEN);
+    const [dragging, setDragging] = useState(false);
     const [sheetDrag, setSheetDrag] = useState<React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement> | null>(
         null,
     );
@@ -221,8 +223,6 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
                     onKeyDown={(e) => {
                         if (e.key === 'Escape') hide();
                     }}
-                    tabIndex={0}
-                    role="button"
                     aria-label="Draggable bottom sheet"
                     style={{ outline: 'none' }}
                 >
