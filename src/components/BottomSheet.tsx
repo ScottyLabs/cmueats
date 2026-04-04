@@ -113,6 +113,55 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
         }
     };
 
+    const onDrag = useCallback((e: MouseEvent | TouchEvent) => {
+        if (!dragging) return;
+
+        const clientY =
+            'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
+
+        const next = Math.max(FULL, Math.min(startTranslate.current + (clientY - startY.current), HIDDEN));
+
+        setY(next);
+    }, [dragging, setY, FULL, HIDDEN]);
+
+    const onDragEnd = useCallback((e: MouseEvent | TouchEvent) => {
+        if (!dragging) return;
+
+        setDragging(false);
+
+        const clientY =
+            'changedTouches' in e && e.changedTouches.length > 0
+                ? e.changedTouches[0]!.clientY
+                : 'clientY' in e
+                    ? e.clientY
+                    : startY.current;
+
+        const endTime = performance.now();
+        const dt = endTime - dragStartTime.current;
+        const dy = clientY - dragStartY.current;
+
+        const velocity = dy / dt;
+        const FLICK_THRESHOLD = 0.6;
+
+        let target: number;
+
+        if (Math.abs(velocity) > FLICK_THRESHOLD) {
+            if (velocity > 0) {
+                target = snapPoints.find((p) => p > y) ?? HIDDEN;
+            } else {
+                target = [...snapPoints].reverse().find((p) => p < y) ?? FULL;
+            }
+        } else {
+            target = snapPoints.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a));
+        }
+
+        setY(target);
+
+        if (target === HIDDEN) {
+            hide();
+        }
+    }, [dragging, setDragging, snapPoints, HIDDEN, FULL, y, hide]);
+
     useEffect(() => {
         activeRef.current = active;
         if (active) {
@@ -124,71 +173,22 @@ export default function BottomSheet({ children, active, onHide }: BottomSheetPro
     }, [active, FULL, HIDDEN, lockScroll, unlockScroll]);
 
     useEffect(() => {
-        const onMove = (e: MouseEvent | TouchEvent) => {
-            if (!dragging) return;
-
-            const clientY =
-                'touches' in e && e.touches.length > 0 ? e.touches[0]!.clientY : 'clientY' in e ? e.clientY : 0;
-
-            const next = Math.max(FULL, Math.min(startTranslate.current + (clientY - startY.current), HIDDEN));
-
-            setY(next);
-        };
-
-        const onEnd = (e: MouseEvent | TouchEvent) => {
-            if (!dragging) return;
-
-            setDragging(false);
-
-            const clientY =
-                'changedTouches' in e && e.changedTouches.length > 0
-                    ? e.changedTouches[0]!.clientY
-                    : 'clientY' in e
-                      ? e.clientY
-                      : startY.current;
-
-            const endTime = performance.now();
-            const dt = endTime - dragStartTime.current;
-            const dy = clientY - dragStartY.current;
-
-            const velocity = dy / dt;
-            const FLICK_THRESHOLD = 0.6;
-
-            let target: number;
-
-            if (Math.abs(velocity) > FLICK_THRESHOLD) {
-                if (velocity > 0) {
-                    target = snapPoints.find((p) => p > y) ?? HIDDEN;
-                } else {
-                    target = [...snapPoints].reverse().find((p) => p < y) ?? FULL;
-                }
-            } else {
-                target = snapPoints.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a));
-            }
-
-            setY(target);
-
-            if (target === HIDDEN) {
-                hide();
-            }
-        };
-
         if (contentRef.current) {
             contentRef.current.style.overflow = y <= FULL ? 'auto' : 'hidden';
         }
 
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onEnd);
-        window.addEventListener('touchmove', onMove);
-        window.addEventListener('touchend', onEnd);
+        window.addEventListener('mousemove', onDrag);
+        window.addEventListener('mouseup', onDragEnd);
+        window.addEventListener('touchmove', onDrag);
+        window.addEventListener('touchend', onDragEnd);
 
         return () => {
-            window.removeEventListener('mousemove', onMove);
-            window.removeEventListener('mouseup', onEnd);
-            window.removeEventListener('touchmove', onMove);
-            window.removeEventListener('touchend', onEnd);
+            window.removeEventListener('mousemove', onDrag);
+            window.removeEventListener('mouseup', onDragEnd);
+            window.removeEventListener('touchmove', onDrag);
+            window.removeEventListener('touchend', onDragEnd);
         };
-    }, [dragging, y, snapPoints, FULL, HIDDEN, hide]);
+    }, [dragging, y, snapPoints, FULL, HIDDEN, hide, onDragEnd, onDrag]);
 
     useEffect(() => {
         activeRef.current = active;
