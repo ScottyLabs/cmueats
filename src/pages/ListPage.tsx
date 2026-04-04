@@ -14,6 +14,7 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
+import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 function ListBox({
     locations,
@@ -26,6 +27,8 @@ function ListBox({
 }) {
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
+    const isMobile = useIsMobileContext();
+
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
     // re-animating in when filter gets cleared
@@ -62,7 +65,7 @@ function ListBox({
             <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
                 </div>
             </div>
             <EateryCardGrid

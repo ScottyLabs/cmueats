@@ -14,6 +14,7 @@ import GlobalErrorBoundary from './ErrorFallback';
 import { NowContextProvider } from './contexts/NowContext';
 import { queryClient } from './api';
 import { AudioContextProvider } from './contexts/AudioContext';
+import { IsMobileContextProvider } from './contexts/IsMobileContext';
 
 posthog.init(env.VITE_POSTHOG_KEY || '', {
     person_profiles: 'identified_only',
@@ -40,7 +41,9 @@ if (rootElement) {
                         <NowContextProvider>
                             <ThemeProvider>
                                 <AudioContextProvider>
-                                    <App />
+                                    <IsMobileContextProvider>
+                                        <App />
+                                    </IsMobileContextProvider>
                                 </AudioContextProvider>
                             </ThemeProvider>
                         </NowContextProvider>
