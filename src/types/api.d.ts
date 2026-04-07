@@ -260,6 +260,8 @@ export interface operations {
                         }[];
                         name: (string | null) | null;
                         location: string;
+                        ratingsAvg: (number | null) | null;
+                        ratingsCount: number;
                         shortDescription: (string | null) | null;
                         description: string;
                         url: string;
@@ -348,7 +350,7 @@ export interface operations {
                             avg: (number | null) | null;
                             personalRating: (number | null) | null;
                             /**
-                             * @description Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}
+                             * @description Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]
                              * @example [
                              *       0,
                              *       1,

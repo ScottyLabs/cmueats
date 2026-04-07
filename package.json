@@ -52,7 +52,8 @@
                 "lint": "pnpm eslint src",
                 "lint-fix": "eslint --fix src",
                 "format": "pnpm prettier --write src",
-                "coverage": "pnpm vitest --coverage"
+                "coverage": "pnpm vitest --coverage",
+                "api-update": "pnpm openapi-typescript api.yaml -o src/types/api.d.ts"
         },
         "packageManager": "pnpm@10.18.0",
         "eslintConfig": {
