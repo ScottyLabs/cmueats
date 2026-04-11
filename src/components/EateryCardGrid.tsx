@@ -125,7 +125,12 @@ export default function EateryCardGrid({
                         ) : theme === 'collegecart' ? (
                             <>
                                 Moving out? Buy &amp; sell with CMU students on{' '}
-                                <a target="_blank" href="https://collegecart.org" rel="noreferrer" style={{ color: '#a78bfa' }}>
+                                <a
+                                    target="_blank"
+                                    href="https://collegecart.org"
+                                    rel="noreferrer"
+                                    style={{ color: '#a78bfa' }}
+                                >
                                     collegecart.org
                                 </a>
                             </>

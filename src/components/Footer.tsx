@@ -26,7 +26,12 @@ export default function Footer() {
                         <p>
                             <span style={{ color: '#a78bfa', fontWeight: 700 }}>CollegeCart</span> — Buy and sell
                             furniture, textbooks, and more with fellow CMU students.{' '}
-                            <a href="https://collegecart.org" target="_blank" rel="noreferrer" style={{ color: '#a78bfa' }}>
+                            <a
+                                href="https://collegecart.org"
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: '#a78bfa' }}
+                            >
                                 Visit collegecart.org
                             </a>
                         </p>

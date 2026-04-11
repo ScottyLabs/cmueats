@@ -13,8 +13,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const IS_APRIL_FOOLS_DAY =
         (now.month === 4 && now.day === 1) || window.location.href.includes('force-april-fools-day');
     const IS_COLLEGECART_DAY =
-        (now.month === 4 && now.day >= 11 && now.day <= 13) ||
-        window.location.href.includes('force-collegecart');
+        (now.month === 4 && now.day >= 11 && now.day <= 13) || window.location.href.includes('force-collegecart');
 
     const ctx: ThemeContextType = useMemo(
         () => ({

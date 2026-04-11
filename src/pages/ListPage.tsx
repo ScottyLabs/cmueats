@@ -14,7 +14,6 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
-import CollegeCartScotty from '../components/CollegeCartScotty';
 import { useThemeContext } from '../ThemeProvider';
 
 function ListBox({
@@ -103,7 +102,7 @@ function ListPage({
                 <ListBox error={error} locations={locations} updateCardViewPreference={updateCardViewPreference} />
                 <Drawer locations={locations} />
                 <link rel="prefetch" href={mikuBgUrl} />
-                {theme === 'collegecart' && <CollegeCartScotty />}
+                {theme === 'collegecart'}
             </div>
         </DrawerAPIContextProvider>
     );

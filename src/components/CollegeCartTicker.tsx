@@ -9,14 +9,26 @@ function CollegeCartTicker() {
             <div className={css.ticker__track}>
                 {ITEMS.map((_, i) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <a key={i} href="https://collegecart.org" target="_blank" rel="noreferrer" className={css.ticker__item}>
+                    <a
+                        key={i}
+                        href="https://collegecart.org"
+                        target="_blank"
+                        rel="noreferrer"
+                        className={css.ticker__item}
+                    >
                         <img src={logoWhite} alt="" className={css.ticker__logo} />
                         <span>collegecart.org</span>
                     </a>
                 ))}
                 {ITEMS.map((_, i) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <a key={`dup-${i}`} href="https://collegecart.org" target="_blank" rel="noreferrer" className={css.ticker__item}>
+                    <a
+                        key={`dup-${i}`}
+                        href="https://collegecart.org"
+                        target="_blank"
+                        rel="noreferrer"
+                        className={css.ticker__item}
+                    >
                         <img src={logoWhite} alt="" className={css.ticker__logo} />
                         <span>collegecart.org</span>
                     </a>
