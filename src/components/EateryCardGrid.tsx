@@ -12,7 +12,11 @@ import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 import mikuSongs from '../data/mikuSongs';
 import MikuCard from './MikuCard';
+import collegeCartPromos from '../data/collegeCartPromos';
+import CollegeCartCard from './CollegeCartCard';
+import CollegeCartTicker from './CollegeCartTicker';
 import { useThemeContext } from '../ThemeProvider';
+import type { ICollegeCartPromo } from '../data/collegeCartPromos';
 
 export default function EateryCardGrid({
     locations,
@@ -61,7 +65,10 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
-    function locationToCard(data: ILocation_Full | IMikuCardData) {
+    function locationToCard(data: ILocation_Full | IMikuCardData | ICollegeCartPromo) {
+        if ('category' in data && 'tagline' in data) {
+            return <CollegeCartCard promo={data} key={`cc-${data.category}`} animate={shouldAnimateCards} />;
+        }
         if (data.id === undefined) {
             // janky type discrimination
             return <MikuCard songData={data} key={data.songUrl} animate={shouldAnimateCards} />;
@@ -82,11 +89,17 @@ export default function EateryCardGrid({
     const normalLocations = locations.filter((location) => location.cardViewPreference === 'normal');
     const hiddenLocations = locations.filter((location) => location.cardViewPreference === 'hidden');
     const mainCards = [...pinnedLocations, ...normalLocations];
-    const mainCardsWithMikuSongs: (ILocation_Full | IMikuCardData)[] = [];
+    const mainCardsWithMikuSongs: (ILocation_Full | IMikuCardData | ICollegeCartPromo)[] = [];
     if (theme === 'miku') {
         mainCardsWithMikuSongs.push(...mainCards.splice(0, 1));
         for (let i = 0; i < Math.min(7, mikuSongs.length); i++) {
             mainCardsWithMikuSongs.push(mikuSongs[i]!);
+            mainCardsWithMikuSongs.push(...mainCards.splice(0, 5));
+        }
+    } else if (theme === 'collegecart') {
+        mainCardsWithMikuSongs.push(...mainCards.splice(0, 3));
+        for (let i = 0; i < collegeCartPromos.length; i++) {
+            mainCardsWithMikuSongs.push(collegeCartPromos[i]!);
             mainCardsWithMikuSongs.push(...mainCards.splice(0, 5));
         }
     }
@@ -109,6 +122,18 @@ export default function EateryCardGrid({
                                     here!
                                 </a>
                             </>
+                        ) : theme === 'collegecart' ? (
+                            <>
+                                Moving out? Buy &amp; sell with CMU students on{' '}
+                                <a
+                                    target="_blank"
+                                    href="https://collegecart.org"
+                                    rel="noreferrer"
+                                    style={{ color: '#a78bfa' }}
+                                >
+                                    collegecart.org
+                                </a>
+                            </>
                         ) : (
                             'Tap or click on the cards for more information!'
                         )}
@@ -120,6 +145,8 @@ export default function EateryCardGrid({
                     <AnimatePresence mode="popLayout">{mainCardsWithMikuSongs.map(locationToCard)}</AnimatePresence>
                 </div>
             </div>
+
+            {theme === 'collegecart' && <CollegeCartTicker />}
 
             {hiddenLocations.length > 0 && (
                 <div className={css.supergrid__section}>

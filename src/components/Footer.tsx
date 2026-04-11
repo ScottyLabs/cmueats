@@ -21,7 +21,23 @@ export default function Footer() {
     return (
         <footer className={css.footer}>
             <div className={css['footer__text-section']}>
-                {theme === 'miku' ? (
+                {theme === 'collegecart' ? (
+                    <>
+                        <p>
+                            <span style={{ color: '#a78bfa', fontWeight: 700 }}>CollegeCart</span> — Buy and sell
+                            furniture, textbooks, and more with fellow CMU students.{' '}
+                            <a
+                                href="https://collegecart.org"
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: '#a78bfa' }}
+                            >
+                                Visit collegecart.org
+                            </a>
+                        </p>
+                        <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
+                    </>
+                ) : theme === 'miku' ? (
                     <>
                         <p>Blue hair, blue tie, hiding in your wifi</p>
                         <p>All times are displayed in Pittsburgh local time ({nowString}).</p>

@@ -14,6 +14,7 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
+import { useThemeContext } from '../ThemeProvider';
 
 function ListBox({
     locations,
@@ -93,12 +94,15 @@ function ListPage({
         mainContainerRef.current?.focus();
     }, []);
 
+    const { theme } = useThemeContext();
+
     return (
         <DrawerAPIContextProvider>
             <div className="list-page-container" ref={mainContainerRef}>
                 <ListBox error={error} locations={locations} updateCardViewPreference={updateCardViewPreference} />
                 <Drawer locations={locations} />
                 <link rel="prefetch" href={mikuBgUrl} />
+                {theme === 'collegecart'}
             </div>
         </DrawerAPIContextProvider>
     );

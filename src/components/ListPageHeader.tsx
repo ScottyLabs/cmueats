@@ -34,7 +34,11 @@ export default function ListPageHeader() {
     const { data: userLoggedInData, isLoading, error } = $api.useQuery('get', '/whoami');
     const { theme } = useThemeContext();
     const { mobileGreeting, desktopGreeting } = useMemo(
-        () => getGreetings(new Date().getHours(), { isMikuDay: theme === 'miku' }),
+        () =>
+            getGreetings(new Date().getHours(), {
+                isMikuDay: theme === 'miku',
+                isCollegeCartDay: theme === 'collegecart',
+            }),
         [theme],
     );
     if (theme === 'miku') {
