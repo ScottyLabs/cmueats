@@ -54,7 +54,6 @@ const evening = [
 const eveningShort = ['Have a good evening!', 'Grab a bite to eat!', 'Hungry night owl?'];
 interface Special {
     isMikuDay: boolean;
-    isCollegeCartDay?: boolean;
 }
 const getRandomStringFrom = (greetings: string[]) => {
     if (greetings.length === 0) return 'Welcome to CMUEats!';
@@ -63,21 +62,6 @@ const getRandomStringFrom = (greetings: string[]) => {
 const getGreeting = (hours: number, special?: Special): ReactNode => {
     assert(bounded(hours, 0, 24));
 
-    if (special?.isCollegeCartDay) {
-        const desktopGreetings = [
-            'Moving out? Buy & sell on',
-            'Graduating? List your stuff on',
-            'Furnish your new place with',
-            'Need furniture? Check out',
-            'Selling textbooks? Try',
-        ];
-        const greeting = desktopGreetings[Math.floor(Math.random() * desktopGreetings.length)];
-        return (
-            <>
-                {greeting} <span style={{ color: '#a78bfa' }}>collegecart.org</span>
-            </>
-        );
-    }
     if (special?.isMikuDay)
         return (
             <>
@@ -100,12 +84,6 @@ const getGreeting = (hours: number, special?: Special): ReactNode => {
     return 'Welcome to CMUEats!';
 };
 const getGreetingMobile = (hours: number, special?: Special) => {
-    if (special?.isCollegeCartDay)
-        return (
-            <>
-                Moving out? Use <span style={{ color: '#a78bfa' }}>collegecart.org</span>
-            </>
-        );
     if (special?.isMikuDay)
         return (
             <>

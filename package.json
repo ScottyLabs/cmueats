@@ -28,7 +28,6 @@
                 "netlify-plugin-mapkitjs-token": "^1.2.0",
                 "openapi-fetch": "^0.15.0",
                 "openapi-react-query": "^0.5.1",
-                "oxlint": "^1.59.0",
                 "posthog-js": "^1.309.1",
                 "prettier-eslint": "^16.4.2",
                 "prettier-eslint-cli": "^8.0.1",
@@ -44,9 +43,8 @@
                 "zod": "^4.2.1"
         },
         "scripts": {
-                "start": "vite --host",
+                "start": "vite preview  --host",
                 "dev": "vite --host",
-                "preview": "vite preview --host",
                 "build": "tsc && vite build",
                 "typecheck": "tsc",
                 "test": "dotenv -e .env.test -- vitest --coverage",

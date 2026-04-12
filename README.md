@@ -96,7 +96,7 @@ VITE_API_URL=locations.json
 2. Start the frontend:
 
     ```
-    pnpm start
+    pnpm run dev
     ```
 
     This runs the Vite dev server on port 5173.
@@ -109,12 +109,6 @@ VITE_API_URL=locations.json
 
     ```
     pnpm run start
-    ```
-
-- Preview a production build of CMUEats locally with:
-
-    ```
-    pnpm run preview
     ```
 
 ## Updating the OpenAPI spec types
