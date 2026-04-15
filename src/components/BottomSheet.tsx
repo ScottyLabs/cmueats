@@ -1,10 +1,10 @@
 import React, { ReactNode, useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from './BottomSheet.module.css';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 type BottomSheetProps = {
     children: ReactNode;
-    onHide?: () => void;
+    onHide: () => void;
     hideSheetDelayMs?: number;
 };
 
@@ -23,17 +23,26 @@ export default function BottomSheet({ children, onHide, hideSheetDelayMs = 450 }
     const [cardY, setCardY] = useState(Math.min(...snapPoints));
     const [dragging, setDragging] = useState(false);
 
+    // hide timeout stuff
     const hideTimeoutRef = useRef<number | null>(null);
     const queueHideCallback = useCallback(() => {
-        if (onHide) {
-            if (hideTimeoutRef.current) {
+        if (hideTimeoutRef.current !== null) {
+            clearTimeout(hideTimeoutRef.current);
+        }
+        hideTimeoutRef.current = window.setTimeout(() => {
+            onHide();
+        }, hideSheetDelayMs);
+    }, [onHide, hideSheetDelayMs]);
+
+    useEffect(() => {
+        // cleanup
+        return () => {
+            if (hideTimeoutRef.current !== null) {
                 clearTimeout(hideTimeoutRef.current);
             }
-            hideTimeoutRef.current = window.setTimeout(() => {
-                onHide();
-            }, hideSheetDelayMs);
-        }
-    }, [onHide, hideSheetDelayMs]);
+        };
+    }, []);
+    // end hide timeout stuff
 
     const startDrag = (ev: React.MouseEvent | React.TouchEvent) => {
         if (dragging) return;

@@ -41,7 +41,7 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     useEffect(() => {
         drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
     }, [pickedLocation?.id]);
-    if (pickedLocation === undefined) return;
+    if (pickedLocation === undefined) return null;
     return isMobile ? (
         <BottomSheet onHide={closeDrawer}>
             <div className={css['drawer-box-mobile']} ref={drawerRef}>
