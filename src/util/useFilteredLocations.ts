@@ -28,6 +28,47 @@ const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) 
     return location1.minutesUntil - location2.minutesUntil;
 };
 
+function getDistanceInMeters(
+    start: { latitude: number; longitude: number },
+    end: { latitude: number; longitude: number },
+) {
+    const earthRadiusMeters = 6371000;
+    const lat1 = (start.latitude * Math.PI) / 180;
+    const lat2 = (end.latitude * Math.PI) / 180;
+    const deltaLat = ((end.latitude - start.latitude) * Math.PI) / 180;
+    const deltaLng = ((end.longitude - start.longitude) * Math.PI) / 180;
+    const a =
+        Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return earthRadiusMeters * c;
+}
+
+function getLocationDistanceFromUser(
+    location: ILocation_Full,
+    userCoordinates: { latitude: number; longitude: number },
+): number | undefined {
+    if (location.coordinateLat === null || location.coordinateLng === null) return undefined;
+    return getDistanceInMeters(userCoordinates, {
+        latitude: location.coordinateLat,
+        longitude: location.coordinateLng,
+    });
+}
+
+function compareLocationsByDistanceWithinState(
+    location1: ILocation_Full,
+    location2: ILocation_Full,
+    userCoordinates: { latitude: number; longitude: number },
+) {
+    const distance1 = getLocationDistanceFromUser(location1, userCoordinates);
+    const distance2 = getLocationDistanceFromUser(location2, userCoordinates);
+    if (distance1 === undefined && distance2 === undefined) return compareLocations(location1, location2);
+    if (distance1 === undefined) return 1;
+    if (distance2 === undefined) return -1;
+    if (distance1 !== distance2) return distance1 - distance2;
+    return compareLocations(location1, location2);
+}
+
 export function useFilteredLocations({
     locations,
     searchQuery,
@@ -58,7 +99,22 @@ export function useFilteredLocations({
     return filteredLocations;
 }
 
-export function useSortedLocations({ locations }: { locations: ILocation_Full[] | undefined }) {
+export function useSortedLocations({
+    locations,
+    sortBy,
+    userCoordinates,
+}: {
+    locations: ILocation_Full[] | undefined;
+    sortBy: '' | 'distance';
+    userCoordinates: { latitude: number; longitude: number } | null;
+}) {
     if (locations === undefined) return undefined;
+    if (sortBy === 'distance' && userCoordinates) {
+        return [...locations].sort((location1, location2) => {
+            const stateComparison = location1.locationState - location2.locationState;
+            if (stateComparison !== 0) return stateComparison;
+            return compareLocationsByDistanceWithinState(location1, location2, userCoordinates);
+        });
+    }
     return [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
 }
