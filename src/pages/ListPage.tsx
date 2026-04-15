@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useEffect, useLayoutEffect, useReducer, useRef } from 'react';
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react';
 
 import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
+import SelectSort from '../components/SelectSort';
 import SearchBar from '../components/SearchBar';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
@@ -25,6 +26,8 @@ function ListBox({
     error: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
+    const [userCoordinates, setUserCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
+    const [isFetchingCoordinates, setIsFetchingCoordinates] = useState(false);
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
     // permanently cut out animation when user filters cards,
@@ -38,13 +41,36 @@ function ListBox({
         shouldAnimateCards.current = false;
         return newState;
     }, '');
+    const [sortBy, setSortBy] = useReducer<'' | 'distance', ['' | 'distance']>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, '');
 
     const filteredLocations = useFilteredLocations({
         locations,
         searchQuery,
         locationFilterQuery,
     });
-    const sortedLocations = useSortedLocations({ locations: filteredLocations });
+    const sortedLocations = useSortedLocations({ locations: filteredLocations, sortBy, userCoordinates });
+
+    const requestUserCoordinates = () => {
+        if (!navigator.geolocation || isFetchingCoordinates || userCoordinates !== null) return;
+        setIsFetchingCoordinates(true);
+        navigator.geolocation.getCurrentPosition(
+            ({ coords }) => {
+                setUserCoordinates({ latitude: coords.latitude, longitude: coords.longitude });
+                setIsFetchingCoordinates(false);
+            },
+            () => {
+                setIsFetchingCoordinates(false);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 60000,
+            },
+        );
+    };
     // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');
@@ -64,6 +90,13 @@ function ListBox({
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    <SelectSort
+                        sortBy={sortBy}
+                        setSortBy={(newSortBy) => {
+                            setSortBy(newSortBy);
+                            if (newSortBy === 'distance') requestUserCoordinates();
+                        }}
+                    />
                 </div>
             </div>
             <EateryCardGrid
