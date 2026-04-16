@@ -20,7 +20,11 @@ export default function BottomSheet({ children, onHide, hideSheetDelayMs = 450 }
         historicalClientYPos: [] as { pos: number; time: number }[], // for flick detection
     });
 
-    const [cardY, setCardY] = useState(Math.min(...snapPoints));
+    const [cardY, setCardY] = useState(Math.max(...snapPoints));
+    useEffect(() => {
+        setCardY(Math.min(...snapPoints));
+    }, [snapPoints]);
+
     const [dragging, setDragging] = useState(false);
 
     // hide timeout stuff
@@ -140,14 +144,16 @@ export default function BottomSheet({ children, onHide, hideSheetDelayMs = 450 }
                 />
             )}
 
-            <motion.div
+            <div
                 aria-label="Draggable bottom sheet"
                 role="dialog"
                 aria-modal="true"
                 className={styles.bottomSheet}
-                initial={{ height: 0 }}
-                animate={{ height: `${windowHeight - cardY}px` }}
-                transition={{ duration: dragging ? 0 : hideSheetDelayMs / 1000, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                    top: cardY,
+                    transition: dragging ? 'none' : `all ${hideSheetDelayMs}ms cubic-bezier(.22,1,.36,1)`,
+                }} // initial={{ height: 0 }}
+                // transition={{ duration: dragging ? 0 : hideSheetDelayMs / 1000, ease: [0.22, 1, 0.36, 1] }}
                 onTouchMove={(ev) => {
                     // starts all drag interaction
                     if (contentRef?.current?.scrollTop === 0) {
@@ -175,7 +181,7 @@ export default function BottomSheet({ children, onHide, hideSheetDelayMs = 450 }
                 >
                     {children}
                 </div>
-            </motion.div>
+            </div>
         </>
     );
 }
