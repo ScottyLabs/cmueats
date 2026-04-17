@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import styles from './BottomSheet.module.css';
-import { motion } from 'motion/react';
 
 type BottomSheetProps = {
     children: ReactNode;
