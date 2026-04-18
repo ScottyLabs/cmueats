@@ -12,7 +12,7 @@ export function IsMobileContextProvider({ children }: { children: React.ReactNod
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [isTouchScreen]);
 
     return <isMobileContext.Provider value={isMobile}>{children}</isMobileContext.Provider>;
 }
