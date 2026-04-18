@@ -75,7 +75,7 @@
     gap: 5px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
     .drawer-header-container {
         padding: 0px var(--drawer-x-padding) 20px;
     }

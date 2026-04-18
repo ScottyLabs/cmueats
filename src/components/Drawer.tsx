@@ -41,9 +41,9 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
     useEffect(() => {
         drawerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
     }, [pickedLocation?.id]);
-
+    if (pickedLocation === undefined) return null;
     return isMobile ? (
-        <BottomSheet active={pickedLocation !== undefined} onHide={closeDrawer}>
+        <BottomSheet onHide={closeDrawer}>
             <div className={css['drawer-box-mobile']} ref={drawerRef}>
                 {pickedLocation !== undefined && (
                     <WidthContext.Provider value={drawerWidth}>
@@ -58,23 +58,21 @@ function Drawer({ locations }: { locations: ILocation_Full[] | undefined }) {
         </BottomSheet>
     ) : (
         <AnimatePresence mode="popLayout">
-            {pickedLocation !== undefined && (
-                <motion.div
-                    initial={{ opacity: 0, transform: 'translateX(3px)' }}
-                    animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
-                    exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
-                    className={css['drawer-box']}
-                    ref={drawerRef}
-                >
-                    <WidthContext.Provider value={drawerWidth}>
-                        <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
-                            <DrawerHeader />
-                            <DrawerTabNav />
-                            <DrawerTabContent />
-                        </DrawerTabsContextProvider>
-                    </WidthContext.Provider>
-                </motion.div>
-            )}
+            <motion.div
+                initial={{ opacity: 0, transform: 'translateX(3px)' }}
+                animate={{ opacity: 1, transform: 'translateX(0)', transition: { delay: 0.04 } }} // it just feels right lmao
+                exit={{ opacity: 0, transition: { duration: 0 } }} // hard transition cut so back swipe gesture on mobile isn't jank (can remove once we add the actual mobile drawer)
+                className={css['drawer-box']}
+                ref={drawerRef}
+            >
+                <WidthContext.Provider value={drawerWidth}>
+                    <DrawerTabsContextProvider location={pickedLocation} key={pickedLocation.id}>
+                        <DrawerHeader />
+                        <DrawerTabNav />
+                        <DrawerTabContent />
+                    </DrawerTabsContextProvider>
+                </WidthContext.Provider>
+            </motion.div>
         </AnimatePresence>
     );
 }

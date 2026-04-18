@@ -9,17 +9,6 @@
     scrollbar-width: thin;
     background-color: var(--black-950);
     container-type: inline-size;
-
-    @media screen and (max-width: 900px) {
-        & {
-            --drawer-width: 100%;
-            --drawer-x-padding: 15px;
-
-            position: fixed;
-            overflow-y: auto;
-            inset: 0;
-        }
-    }
 }
 
 .drawer-enter {
