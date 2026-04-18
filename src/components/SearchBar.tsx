@@ -54,7 +54,6 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
             <input
                 ref={inputRef}
                 className={css['locations-search']}
-                type="search"
                 value={pendingQuery}
                 onChange={(e) => setPendingQuery(e.target.value)}
                 placeholder=" "
