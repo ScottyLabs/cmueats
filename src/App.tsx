@@ -37,7 +37,7 @@ export default function App() {
         cardViewPreference:
             cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
         distanceFromUserMeters:
-            userCoordinates === null ? null : getLocationDistanceFromUser(location, userCoordinates),
+            userCoordinates === null ? null : (getLocationDistanceFromUser(location, userCoordinates) ?? null),
     }));
 
     return (
