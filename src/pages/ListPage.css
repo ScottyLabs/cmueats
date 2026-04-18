@@ -30,7 +30,7 @@
     margin-left: auto;
     padding: 27px var(--global-x-padding) 15px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) 42px 42px;
     max-width: 550px;
     gap: 0.6rem;
     align-items: center;
@@ -38,9 +38,6 @@
     @container (width<1000px) {
         max-width: initial;
         padding: 20px var(--global-x-padding) 10px;
-    }
-    @container (width<600px) {
-        grid-template-columns: minmax(0, 1fr) auto auto;
     }
 }
 

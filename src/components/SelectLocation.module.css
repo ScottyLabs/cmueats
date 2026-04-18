@@ -5,8 +5,8 @@
 
 .triggerButton {
     cursor: pointer;
-    width: 52px;
-    height: 52px;
+    width: 42px;
+    height: 42px;
     border-radius: 14.4px;
     border: 1px solid transparent;
     display: grid;
