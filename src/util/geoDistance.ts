@@ -15,6 +15,7 @@ export function getDistanceInMeters(
     return earthRadiusMeters * c;
 }
 
+// Distance in meters or undefined if the location has no coordinates
 export function getLocationDistanceFromUser(
     location: { coordinateLat: number | null; coordinateLng: number | null },
     userCoordinates: { latitude: number; longitude: number },
