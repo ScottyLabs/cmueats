@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 
 export type UserCoordinates = { latitude: number; longitude: number };
 
@@ -11,18 +11,18 @@ const UserLocationContext = createContext<UserLocationContextValue | undefined>(
 
 export function UserLocationContextProvider({ children }: { children: React.ReactNode }) {
     const [userCoordinates, setUserCoordinates] = useState<UserCoordinates | null>(null);
-    const [isFetchingCoordinates, setIsFetchingCoordinates] = useState(false);
+    const isFetchingCoordinates = useRef(false);
 
     const requestUserCoordinates = useCallback(() => {
-        if (!navigator.geolocation || isFetchingCoordinates || userCoordinates !== null) return;
-        setIsFetchingCoordinates(true);
+        if (!navigator.geolocation || isFetchingCoordinates.current || userCoordinates !== null) return;
+        isFetchingCoordinates.current = true;
         navigator.geolocation.getCurrentPosition(
             ({ coords }) => {
                 setUserCoordinates({ latitude: coords.latitude, longitude: coords.longitude });
-                setIsFetchingCoordinates(false);
+                isFetchingCoordinates.current = false;
             },
             () => {
-                setIsFetchingCoordinates(false);
+                isFetchingCoordinates.current = false;
             },
             {
                 enableHighAccuracy: true,
@@ -30,7 +30,7 @@ export function UserLocationContextProvider({ children }: { children: React.Reac
                 maximumAge: 60000,
             },
         );
-    }, [isFetchingCoordinates, userCoordinates]);
+    }, [userCoordinates]);
 
     const value = useMemo(
         () => ({ userCoordinates, requestUserCoordinates }),
