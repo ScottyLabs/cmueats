@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useReducer, useRef } from 'react';
 
 import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
@@ -10,12 +10,13 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { useFilteredLocations, useSortedLocations } from '../util/useFilteredLocations';
+import { type SortOption, useFilteredLocations, useSortedLocations } from '../util/useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
 import { useIsMobileContext } from '../contexts/IsMobileContext';
+import { useUserLocation } from '../contexts/UserLocationContext';
 
 function ListBox({
     locations,
@@ -26,8 +27,7 @@ function ListBox({
     error: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
-    const [userCoordinates, setUserCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
-    const [isFetchingCoordinates, setIsFetchingCoordinates] = useState(false);
+    const { requestUserCoordinates } = useUserLocation();
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
     const isMobile = useIsMobileContext();
@@ -43,7 +43,7 @@ function ListBox({
         shouldAnimateCards.current = false;
         return newState;
     }, '');
-    const [sortBy, setSortBy] = useReducer<'' | 'distance', ['' | 'distance']>((_, newState) => {
+    const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
     }, '');
@@ -53,26 +53,7 @@ function ListBox({
         searchQuery,
         locationFilterQuery,
     });
-    const sortedLocations = useSortedLocations({ locations: filteredLocations, sortBy, userCoordinates });
-
-    const requestUserCoordinates = () => {
-        if (!navigator.geolocation || isFetchingCoordinates || userCoordinates !== null) return;
-        setIsFetchingCoordinates(true);
-        navigator.geolocation.getCurrentPosition(
-            ({ coords }) => {
-                setUserCoordinates({ latitude: coords.latitude, longitude: coords.longitude });
-                setIsFetchingCoordinates(false);
-            },
-            () => {
-                setIsFetchingCoordinates(false);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 60000,
-            },
-        );
-    };
+    const sortedLocations = useSortedLocations({ locations: filteredLocations, sortBy });
     // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');

@@ -1,6 +1,5 @@
 import css from './SelectLocation.module.css';
-
-type SortOption = '' | 'distance';
+import type { SortOption } from '../util/useFilteredLocations';
 
 function SelectSort({ sortBy, setSortBy }: { sortBy: SortOption; setSortBy: React.Dispatch<SortOption> }) {
     return (

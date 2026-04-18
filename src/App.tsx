@@ -13,11 +13,14 @@ import useRefreshWhenBackOnline from './util/network';
 import { $api } from './api';
 import toTitleCase from './util/string';
 import { useCurrentTime } from './contexts/NowContext';
+import { useUserLocation } from './contexts/UserLocationContext';
+import { getLocationDistanceFromUser } from './util/geoDistance';
 import AuthBanner from './components/banners/AuthBanner';
 import AlertBanner from './components/banners/OfflineAlertBanner';
 
 export default function App() {
     const now = useCurrentTime();
+    const { userCoordinates } = useUserLocation();
     // Load locations
     const { data, error } = $api.useQuery('get', '/v2/locations');
     const locations = data?.map((location) => ({
@@ -33,6 +36,8 @@ export default function App() {
         ...getLocationStatus(location.times, now),
         cardViewPreference:
             cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
+        distanceFromUser:
+            userCoordinates === null ? undefined : getLocationDistanceFromUser(location, userCoordinates),
     }));
 
     return (
