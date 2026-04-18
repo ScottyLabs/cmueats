@@ -11,6 +11,7 @@ function SponsorCarousel({ darkMode, openByDefault }: { darkMode: boolean; openB
         import.meta.glob('../assets/logos/*', {
             eager: true,
             query: 'url',
+            // oxlint-disable-next-line typescript/no-unnecessary-type-assertion
         }) as Record<string, { default: string }>,
     ).map(({ default: logoUrl }) => {
         const filename = logoUrl.split('/').pop() || '';

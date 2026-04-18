@@ -17,7 +17,7 @@ export default function useLocalStorage(key: string) {
         (newVal: string) => {
             const success = safeSetItem(key, newVal);
             if (!success) {
-                notifySlack(`Failed to set localStorage key "${key}": cookies may be disabled`);
+                void notifySlack(`Failed to set localStorage key "${key}": cookies may be disabled`);
             }
             setValue(newVal);
         },

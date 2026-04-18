@@ -48,6 +48,7 @@ function MikuCard({ songData, animate = false }: { songData: IMikuCardData; anim
                       }
             }
             // whole card clickable
+            // oxlint-disable-next-line jsx_a11y/prefer-tag-over-role
             role="button"
             onClick={(ev) => {
                 if (ev.defaultPrevented) return;
