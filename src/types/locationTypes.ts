@@ -100,7 +100,7 @@ export type ILocation_TimeStatusData =
 export type ILocation_ExtraData = ILocation_TimeStatusData & {
     cardViewPreference: CardViewPreference;
     /** Distance from the user's coordinates to this location in meters */
-    distanceFromUserMeters?: number | null;
+    distanceFromUserMeters: number | null;
 };
 
 /** we'll typically pass this into components for efficient look-up of extra data (like time until close) */

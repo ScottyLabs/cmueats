@@ -33,9 +33,9 @@ const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) 
 function compareLocationsByDistanceWithinState(location1: ILocation_Full, location2: ILocation_Full) {
     const distance1 = location1.distanceFromUserMeters;
     const distance2 = location2.distanceFromUserMeters;
-    if (distance1 == null && distance2 == null) return compareLocations(location1, location2);
-    if (distance1 == null) return 1;
-    if (distance2 == null) return -1;
+    if (distance1 === null && distance2 === null) return compareLocations(location1, location2);
+    if (distance1 === null) return 1;
+    if (distance2 === null) return -1;
     if (distance1 !== distance2) return distance1 - distance2;
     return compareLocations(location1, location2);
 }
