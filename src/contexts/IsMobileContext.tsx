@@ -3,10 +3,11 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const isMobileContext = createContext<boolean | undefined>(undefined);
 
 export function IsMobileContextProvider({ children }: { children: React.ReactNode }) {
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+    const isTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const [isMobile, setIsMobile] = useState(isTouchScreen && window.innerWidth <= 900);
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth <= 900);
+            setIsMobile(isTouchScreen && window.innerWidth <= 900);
         };
 
         window.addEventListener('resize', handleResize);
