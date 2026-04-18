@@ -22,7 +22,7 @@
 .list-controls-container {
     position: sticky;
     top: -10px;
-    z-index: 727;
+    z-index: 800;
     background-color: var(--black-950);
     margin-bottom: 10px;
 }

@@ -15,7 +15,6 @@ import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
-import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 
 function ListBox({
@@ -29,7 +28,6 @@ function ListBox({
 }) {
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
-    const isMobile = useIsMobileContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
