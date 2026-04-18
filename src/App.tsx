@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
@@ -23,22 +23,43 @@ export default function App() {
     const { userCoordinates } = useUserLocation();
     // Load locations
     const { data, error } = $api.useQuery('get', '/v2/locations');
-    const locations = data?.map((location) => ({
-        ...location,
-        name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
-    })) satisfies ILocation_FromAPI[] | undefined;
+    const locations = useMemo(
+        () =>
+            data?.map((location) => ({
+                ...location,
+                name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
+            })) satisfies ILocation_FromAPI[] | undefined,
+        [data],
+    );
 
     const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
     useRefreshWhenBackOnline();
 
-    const fullLocationData: ILocation_Full[] | undefined = locations?.map((location) => ({
-        ...location,
-        ...getLocationStatus(location.times, now),
-        cardViewPreference:
-            cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
-        distanceFromUserMeters:
-            userCoordinates === null ? null : (getLocationDistanceFromUser(location, userCoordinates) ?? null),
-    }));
+    const distanceFromUserMetersByLocationId = useMemo(() => {
+        if (!locations) return undefined;
+        const out: Record<string, number | null> = {};
+        if (userCoordinates === null) {
+            for (const location of locations) {
+                out[location.id] = null;
+            }
+            return out;
+        }
+        for (const location of locations) {
+            out[location.id] = getLocationDistanceFromUser(location, userCoordinates) ?? null;
+        }
+        return out;
+    }, [locations, userCoordinates]);
+
+    const fullLocationData: ILocation_Full[] | undefined = useMemo(() => {
+        if (!locations || !distanceFromUserMetersByLocationId) return undefined;
+        return locations.map((location) => ({
+            ...location,
+            ...getLocationStatus(location.times, now),
+            cardViewPreference:
+                cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
+            distanceFromUserMeters: distanceFromUserMetersByLocationId[location.id] ?? null,
+        }));
+    }, [locations, now, cardViewPreferences, distanceFromUserMetersByLocationId]);
 
     return (
         <React.StrictMode>
