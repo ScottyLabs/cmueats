@@ -16,6 +16,7 @@ import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
 
+
 function ListBox({
     locations,
     error,

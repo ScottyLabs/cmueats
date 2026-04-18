@@ -173,11 +173,14 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                                 toast.error(`Failed to set rating! Error: ${error}`);
                             }
                         } else {
-                            await queryClient.refetchQueries(
-                                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-                                    params: { path: { locationId } },
-                                }),
-                            );
+                            await Promise.all([
+                                queryClient.refetchQueries($api.queryOptions('get', '/v2/locations')),
+                                queryClient.refetchQueries(
+                                    $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                                        params: { path: { locationId } },
+                                    }),
+                                ),
+                            ]);
                         }
                     }}
                     deleteRating={async () => {
@@ -193,11 +196,14 @@ function Ratings({ starData, locationId }: { starData: APISummaryType['starData'
                                 toast.error('Failed to delete rating!');
                             }
                         } else {
-                            await queryClient.refetchQueries(
-                                $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
-                                    params: { path: { locationId } },
-                                }),
-                            );
+                            await Promise.all([
+                                queryClient.refetchQueries($api.queryOptions('get', '/v2/locations')),
+                                queryClient.refetchQueries(
+                                    $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
+                                        params: { path: { locationId } },
+                                    }),
+                                ),
+                            ]);
                         }
                     }}
                     starColor="var(--yellow-400)"
@@ -408,6 +414,7 @@ export default function ReviewPage({ locationId }: { locationId: string }) {
 
     const revalidateData = async () => {
         await Promise.all([
+            queryClient.refetchQueries($api.queryOptions('get', '/v2/locations')),
             queryClient.refetchQueries(
                 $api.queryOptions('get', '/v2/locations/{locationId}/reviews/summary', {
                     params: { path: { locationId } },
