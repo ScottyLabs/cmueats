@@ -82,13 +82,13 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                     backgroundAudioObj.currentTime = foregroundAudioObj.currentTime;
                     if (!foregroundAudioObj.paused) {
                         foregroundAudioObj.pause();
-                        backgroundAudioObj.play();
+                        void backgroundAudioObj.play();
                     }
                 } else if (document.visibilityState === 'visible') {
                     foregroundAudioObj.currentTime = backgroundAudioObj.currentTime;
                     if (!backgroundAudioObj.paused) {
                         backgroundAudioObj.pause();
-                        foregroundAudioObj.play();
+                        void foregroundAudioObj.play();
                     }
                 }
             },
@@ -105,7 +105,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
         () => ({
             playSong: (playerId) => {
                 if (audioState?.playerId !== playerId) return;
-                foregroundAudioObj.play();
+                void foregroundAudioObj.play();
             },
             pauseSong: (playerId) => {
                 if (audioState?.playerId !== playerId) return;
@@ -120,7 +120,7 @@ export function AudioContextProvider({ children }: { children: React.ReactNode }
                 backgroundAudioObj.setAttribute('src', url);
                 backgroundAudioObj.load();
                 foregroundAudioObj.load();
-                foregroundAudioObj.play();
+                void foregroundAudioObj.play();
                 if (!initializedAudioAnalyzer.current) {
                     const audioCtx = new window.AudioContext();
                     const audioSource = audioCtx.createMediaElementSource(foregroundAudioObj);

@@ -26,6 +26,7 @@ function EateryCardHeader({
     const isPinned = location.cardViewPreference === 'pinned';
     const isHidden = location.cardViewPreference === 'hidden';
     const { closeDrawer, selectedId } = useDrawerAPIContext();
+
     useEffect(() => {
         const dotAnimation = dotRef.current?.getAnimations()[0];
         if (!statusChangesSoon) {
@@ -174,7 +175,7 @@ function EateryCardHeader({
                 />
 
                 <div className={css['time-container']}>
-                    <span className={css['card-header-relative-time-text']}>{statusMsg.shortStatus[0]}</span>
+                    <span className={css['card-header-relative-time-text']}>Closes in 18 minutes</span>
                     <span className={css['card-header-absolute-time-text']}>{statusMsg.shortStatus[1]}</span>
                 </div>
                 <div className={css['button-container']}>

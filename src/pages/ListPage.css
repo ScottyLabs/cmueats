@@ -30,7 +30,7 @@
     margin-left: auto;
     padding: 27px var(--global-x-padding) 15px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 230px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     max-width: 550px;
     gap: 0.6rem;
     align-items: center;
@@ -40,7 +40,7 @@
         padding: 20px var(--global-x-padding) 10px;
     }
     @container (width<600px) {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) auto auto;
     }
 }
 

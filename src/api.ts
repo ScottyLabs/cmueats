@@ -6,7 +6,7 @@ import env from './env';
 import notifySlack from './util/slack';
 import locations from './mockLocations';
 
-const BACKEND_LOCATIONS_URL = env.VITE_API_URL === 'local' ? '/' : `${env.VITE_API_URL}`;
+const BACKEND_LOCATIONS_URL = env.VITE_API_URL === 'local' ? '/' : env.VITE_API_URL;
 
 export const fetchClient = createFetchClient<paths>({
     baseUrl: BACKEND_LOCATIONS_URL,
@@ -21,8 +21,8 @@ export const fetchClient = createFetchClient<paths>({
 export const queryClient = new QueryClient({
     defaultOptions: { queries: { staleTime: 120 * 1000 } },
     queryCache: new QueryCache({
-        onError(error, query) {
-            notifySlack(`<!channel> API ERROR! ${error}: ${query.queryKey.join('|')}`);
+        async onError(error, query) {
+            await notifySlack(`<!channel> API ERROR! ${error}: ${query.queryKey.join('|')}`);
         },
     }),
 });

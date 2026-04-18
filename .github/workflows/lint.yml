@@ -16,5 +16,7 @@ jobs:
             - run: pnpm install
             - name: Check TypeScript
               run: pnpm tsc
-            - name: Run ESLint
+            - name: Run Oxlint
               run: pnpm lint
+            - name: Check formatting
+              run: pnpm format:check

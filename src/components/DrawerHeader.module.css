@@ -74,3 +74,21 @@
     color: var(--text-muted);
     gap: 5px;
 }
+
+@media (max-width: 600px) {
+    .drawer-header-container {
+        padding: 0px var(--drawer-x-padding) 20px;
+    }
+
+    .header__title {
+        margin-top: 0px;
+    }
+
+    .header__status {
+        font-size: 14px;
+        color: var(--status-color);
+        border: none;
+        padding: 0px;
+        font-weight: 500;
+    }
+}
