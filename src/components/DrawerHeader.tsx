@@ -11,7 +11,7 @@ function DrawerHeader() {
     const { closeDrawer } = useDrawerAPIContext();
     const { name, location: physicalLocation, url } = location;
 
-    const mobileCSS = isMobile ? '-mobile' : ''
+    const mobileCSS = isMobile ? '-mobile' : '';
 
     return (
         <div className={css[`drawer-header-container${mobileCSS}`]}>
@@ -25,7 +25,10 @@ function DrawerHeader() {
                     <X size={36} />
                 </button>
             )}
-            <div className={css[`header__status${mobileCSS}`]} style={{ '--status-color': highlightColors[location.locationState] }}>
+            <div
+                className={css[`header__status${mobileCSS}`]}
+                style={{ '--status-color': highlightColors[location.locationState] }}
+            >
                 {location.statusMsg.longStatus}
             </div>
             <div className={css[`header__title${mobileCSS}`]}>
