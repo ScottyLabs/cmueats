@@ -36,8 +36,7 @@ export default function App() {
         ...getLocationStatus(location.times, now),
         cardViewPreference:
             cardViewPreferences[location.id] ?? cardViewPreferences[location.conceptId ?? ''] ?? 'normal', // check for conceptid preference as well, fallback
-        distanceFromUser:
-            userCoordinates === null ? undefined : getLocationDistanceFromUser(location, userCoordinates),
+        distanceFromUser: userCoordinates === null ? undefined : getLocationDistanceFromUser(location, userCoordinates),
     }));
 
     return (
