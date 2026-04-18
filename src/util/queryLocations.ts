@@ -1,11 +1,6 @@
 import { DateTime, Interval } from 'luxon';
 
-import {
-    LocationState,
-    ITimeRangeList,
-    ILocation_TimeStatusData,
-    IStatusMessage,
-} from '../types/locationTypes';
+import { LocationState, ITimeRangeList, ILocation_TimeStatusData, IStatusMessage } from '../types/locationTypes';
 import { getNextTimeSlot, isValidTimeSlotArray, getApproximateTimeStringFromMinutes } from './time';
 import assert from './assert';
 

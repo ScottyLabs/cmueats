@@ -27,7 +27,7 @@ export default function App() {
 
     const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
     useRefreshWhenBackOnline();
-    
+
     const fullLocationData: ILocation_Full[] | undefined = locations?.map((location) => ({
         ...location,
         ...getLocationStatus(location.times, now),

@@ -96,7 +96,6 @@ export type ILocation_TimeStatusData =
     | ILocation_TimeStateData_NotPermanentlyClosed
     | ILocation_TimeStatusData_PermanentlyClosed;
 
-
 /** Extra data derived from a single location */
 export type ILocation_ExtraData = ILocation_TimeStatusData & {
     cardViewPreference: CardViewPreference;
