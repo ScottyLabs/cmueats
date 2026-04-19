@@ -19,7 +19,7 @@ export default function Footer() {
     });
 
     return (
-        <footer id="footer" className={css.footer}>
+        <footer className={css.footer}>
             <div className={css['footer__text-section']}>
                 {theme === 'miku' ? (
                     <>
