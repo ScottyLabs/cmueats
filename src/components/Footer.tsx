@@ -29,12 +29,14 @@ export default function Footer() {
                 ) : (
                     <>
                         <p>
-                            CMUEats Raffle Details: We are raffling off 3 $40 Amazon gift cards! All you have to do is
-                            log into CMUEats.com and leave a written review on any of the locations. Participate by May
-                            1st to be eligible. Reviews must be legitimate dining reviews about your experience at the
-                            eatery. We reserve the right to disqualify any entry. We are only offering one entry per
-                            person, no matter how many reviews you leave. If you win, we will reach out to you via
-                            email.
+                            <span style={{ color: 'hsl(117.55deg 20% 83%)' }}>
+                                <b>CMUEats Raffle Details:</b> We are raffling off 3 $40 Amazon gift cards! All you have
+                                to do is log into CMUEats.com and leave a written review on any of the locations.
+                                Participate by May 1st to be eligible. Reviews must be legitimate dining reviews about
+                                your experience at the eatery. We reserve the right to disqualify any entry. We are only
+                                offering one entry per person, no matter how many reviews you leave. If you win, we will
+                                reach out to you via email.
+                            </span>
                         </p>
                         <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
                         <p>
