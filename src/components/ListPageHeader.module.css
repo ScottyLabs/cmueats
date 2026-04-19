@@ -87,7 +87,7 @@
     }
 }
 
-.list-header> button {
+.list-header > button {
     background-color: transparent;
     border: 2px solid var(--black-900);
     padding: 10px 20px;
