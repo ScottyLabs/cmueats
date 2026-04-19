@@ -114,11 +114,13 @@ const getGreetingMobile = (hours: number, special?: Special) => {
     }
     return "Welcome to CMUEats!";
 };
-const getGreetings = (hours: number, special?: Special) => ({
-    desktopGreeting:
-        "Want to win $40? Enter CMUEats raffle! (See footer for details)",
-    // getGreeting(hours, special),
-    mobileGreeting: "Want to win $40? Enter CMUEats raffle! (See footer)",
-    // getGreetingMobile(hours, special),
-});
+const getGreetings = () =>
+    // hours: number, special?: Special
+    ({
+        desktopGreeting:
+            "Want to win $40? Enter CMUEats raffle! (See footer for details)",
+        // getGreeting(hours, special),
+        mobileGreeting: "Want to win $40? Enter CMUEats raffle! (See footer)",
+        // getGreetingMobile(hours, special),
+    });
 export { getGreeting, getGreetingMobile, getGreetings };
