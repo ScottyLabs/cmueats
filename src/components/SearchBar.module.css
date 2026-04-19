@@ -6,8 +6,8 @@
 .locations-search {
     display: block;
     width: 100%;
-    /* stays at the top when greeting text wraps */
-    align-self: start;
+    box-sizing: border-box;
+
     padding: 10.4px 13.6px;
     padding-left: 41.6px;
     border-radius: 14.4px;
