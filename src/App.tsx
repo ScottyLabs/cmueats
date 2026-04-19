@@ -23,7 +23,7 @@ export default function App() {
     const locations = data?.map((location) => ({
         ...location,
         name: toTitleCase(location.name ?? 'Untitled'), // Convert names to title case
-    })) satisfies ILocation_FromAPI[] | undefined;
+    })) as ILocation_FromAPI[] | undefined;
 
     const [cardViewPreferences, setCardViewPreferences] = useUserCardViewPreferences();
     useRefreshWhenBackOnline();

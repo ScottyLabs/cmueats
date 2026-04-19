@@ -65,11 +65,23 @@ function DrawerTabContent() {
     }
 
     function renderMenu() {
+        const images = location.images ?? [];
+        const menuItemsString = location.menuItemsString ?? '';
+
         return (
             <>
                 <h4 className={css['section-header']}>Menu</h4>
                 <div>
-                    {menu ? (
+                    {images.length > 0 ? (
+                        <>
+                            <div className={css['menu-images-gallery']}>
+                                {images.map((menuUrl) => (
+                                    <img key={menuUrl} src={menuUrl} alt={menuUrl} className={css['menu-image']} />
+                                ))}
+                            </div>
+                            {menuItemsString && <div className={css['hidden-menu-text']}>{menuItemsString}</div>}
+                        </>
+                    ) : menu ? (
                         <a className={css['inline-link']} href={menu} target="_blank" rel="noreferrer">
                             <span>View menu online</span>
                             <ExternalLink size={14} aria-hidden />
