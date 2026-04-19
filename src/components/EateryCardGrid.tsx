@@ -5,14 +5,58 @@ import clsx from 'clsx';
 import EateryCard from './EateryCard';
 import EateryCardSkeleton from './EateryCardSkeleton';
 import NoResultsError from './NoResultsError';
-import { ILocation_Full, IMikuCardData } from '../types/locationTypes';
+import { ILocation_Full, IMikuCardData, LocationState } from '../types/locationTypes';
 import css from './EateryCardGrid.module.css';
+import { SelectSort } from './SelectSort';
 
 import DropdownArrow from '../assets/control_buttons/dropdown_arrow.svg?react';
 import { CardViewPreference } from '../util/storage';
 import mikuSongs from '../data/mikuSongs';
 import MikuCard from './MikuCard';
 import { useThemeContext } from '../ThemeProvider';
+import assert from '../util/assert';
+
+const compareLocationsByTime = (location1: ILocation_Full, location2: ILocation_Full) => {
+    const state1 = location1.locationState;
+    const state2 = location2.locationState;
+
+    if (state1 !== state2) return state1 - state2;
+
+    // this if statement is janky but otherwise TS won't
+    // realize that the timeUntil property exists on both l1 and l2
+    if (location1.closedLongTerm || location2.closedLongTerm) {
+        assert(location1.closedLongTerm && location2.closedLongTerm);
+        return location1.name.localeCompare(location2.name);
+    }
+    if (state1 === LocationState.OPEN || state1 === LocationState.CLOSES_SOON) {
+        return location2.minutesUntil - location1.minutesUntil;
+    }
+    return location1.minutesUntil - location2.minutesUntil;
+};
+
+const compareLocationsByRating = (l1: ILocation_Full, l2: ILocation_Full, type: SelectSort) => {
+    // kind of confusing but asc means lowest to highest and desc means highest to lowest
+
+    const o1 = l1.locationState === LocationState.OPEN || l1.locationState === LocationState.CLOSES_SOON;
+    const o2 = l2.locationState === LocationState.OPEN || l2.locationState === LocationState.CLOSES_SOON;
+
+    const state1 = l1.locationState;
+    const state2 = l2.locationState;
+
+    if (o1 !== o2 && type === 'stars-desc-open') return state1 - state2; // keep same sorting by open/closed status as the default time sorting
+    if (!o1 && !o2) return compareLocationsByTime(l1, l2); // if both are closed, sort by closed time like normal
+
+    const r1 = l1.ratingsAvg ?? null;
+    const r2 = l2.ratingsAvg ?? null;
+
+    if (r1 === null && r2 === null) return compareLocationsByTime(l1, l2);
+    if (r1 === null) return 1;
+    if (r2 === null) return -1;
+
+    if (r1 === r2) return compareLocationsByTime(l1, l2);
+
+    return type === 'stars-asc' ? r1 - r2 : r2 - r1;
+};
 
 export default function EateryCardGrid({
     locations,
@@ -20,6 +64,7 @@ export default function EateryCardGrid({
     shouldAnimateCards,
     apiError,
     updateCardViewPreference,
+    sortOption,
 }: {
     /** locations should already be filtered and sorted - this component is just responsible for rendering the content as-is */
     locations: ILocation_Full[] | undefined;
@@ -28,6 +73,7 @@ export default function EateryCardGrid({
     shouldAnimateCards: boolean;
     apiError: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
+    sortOption: SelectSort;
 }) {
     const [showHiddenSection, setShowHiddenSection] = useState(false);
     const { theme } = useThemeContext();
@@ -61,6 +107,11 @@ export default function EateryCardGrid({
 
     if (locations.length === 0) return <NoResultsError onClear={() => setSearchQuery('')} />;
 
+    const sortedLocations = [...locations].sort((location1, location2) => {
+        if (sortOption !== 'time') return compareLocationsByRating(location1, location2, sortOption);
+        return compareLocationsByTime(location1, location2);
+    }); // we make a copy to avoid mutating the original array
+
     function locationToCard(data: ILocation_Full | IMikuCardData) {
         if (data.id === undefined) {
             // janky type discrimination
@@ -78,9 +129,9 @@ export default function EateryCardGrid({
             />
         );
     }
-    const pinnedLocations = locations.filter((location) => location.cardViewPreference === 'pinned');
-    const normalLocations = locations.filter((location) => location.cardViewPreference === 'normal');
-    const hiddenLocations = locations.filter((location) => location.cardViewPreference === 'hidden');
+    const pinnedLocations = sortedLocations.filter((location) => location.cardViewPreference === 'pinned');
+    const normalLocations = sortedLocations.filter((location) => location.cardViewPreference === 'normal');
+    const hiddenLocations = sortedLocations.filter((location) => location.cardViewPreference === 'hidden');
     const mainCards = [...pinnedLocations, ...normalLocations];
     const mainCardsWithMikuSongs: (ILocation_Full | IMikuCardData)[] = [];
     if (theme === 'miku') {

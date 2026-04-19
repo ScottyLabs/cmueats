@@ -1,35 +1,84 @@
-.select {
-    appearance: none;
-    cursor: pointer;
-    display: block;
-    width: 100%;
-
-    padding: 10.4px 13.6px;
-    border-radius: 14.4px;
-    background: var(--input-bg) url(../assets/select.svg) no-repeat calc(100% - 10px) 50%;
-    outline: none;
-    border: 1px solid transparent;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
-    transition: all 0.2s;
-    font-family: inherit;
-    font-size: 16px;
-    color: var(--black-400);
-    font-weight: 500;
+.control {
+    position: relative;
+    justify-self: end;
 }
 
-.select:hover {
-    transition: all 0.5s;
+.triggerButton {
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    border-radius: 14.4px;
+    border: 1px solid transparent;
+    display: grid;
+    place-items: center;
+    background: var(--input-bg);
+    color: var(--black-300);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    transition: all 0.2s;
+}
+
+.triggerButton:hover,
+.triggerButton[aria-expanded='true'] {
     box-shadow: 0 0 40px var(--hover-accent-color);
     border-color: var(--hover-accent-color);
-    outline: none;
+    color: var(--black-100);
+}
+
+.dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    width: 260px;
+    max-height: min(55vh, 360px);
+    overflow-y: auto;
+    border-radius: 12px;
+    border: 1px solid var(--black-800);
+    background: var(--black-1000);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    padding: 6px;
+    z-index: 1000;
+}
+
+.dropdownItem {
+    width: 100%;
+    text-align: left;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--black-300);
+    padding: 9px 10px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dropdownItem:hover {
+    background-color: var(--black-900);
+    color: var(--black-100);
+}
+
+.dropdownItemActive {
+    background-color: var(--black-900);
+    color: var(--black-100);
 }
 
 @media screen and (max-width: 900px) {
-    /* don't animate in the select component on mobile */
-    .select {
+    .control {
+        justify-self: stretch;
+    }
+
+    .triggerButton {
+        width: 100%;
+    }
+
+    .dropdown {
+        width: min(100vw - 40px, 320px);
+        right: 0;
+    }
+
+    .triggerButton,
+    .dropdown {
         opacity: 1;
         animation: none;
-        width: 100%;
-        min-width: 0;
     }
 }

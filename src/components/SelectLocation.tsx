@@ -1,5 +1,7 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ILocation_Full } from '../types/locationTypes';
 import css from './SelectLocation.module.css';
+import { Filter } from 'lucide-react';
 
 type SelectLocationProps = {
     setLocationFilterQuery: React.Dispatch<string>;
@@ -11,29 +13,74 @@ function getPrimaryLocation(locationString: string) {
 }
 
 function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
-    if (locations === undefined) {
-        return (
-            <select className={css.select}>
-                {/* Keep label the same as the default option below to reduce loading jank */}
-                <option value="" label="Filter by Building" />
-            </select>
-        );
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedLocation, setSelectedLocation] = useState('');
+    const controlRef = useRef<HTMLDivElement>(null);
+
+    const dedupedLocationStrings = useMemo(() => {
+        if (locations === undefined) {
+            return [];
+        }
+
+        const locationStrings = locations.map((locationObj) => getPrimaryLocation(locationObj.location));
+        return [...new Set(locationStrings)];
+    }, [locations]);
+
+    useEffect(() => {
+        function handlePointerDown(event: MouseEvent) {
+            if (controlRef.current !== null && !controlRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+
+        window.addEventListener('mousedown', handlePointerDown);
+        return () => window.removeEventListener('mousedown', handlePointerDown);
+    }, []);
+
+    function selectLocation(location: string) {
+        setSelectedLocation(location);
+        setLocationFilterQuery(location);
+        setIsOpen(false);
     }
 
-    let locationStrings = locations.map((locationObj) => locationObj.location);
-    locationStrings = locations.map((locationObj) => getPrimaryLocation(locationObj.location));
-
-    const dedeupedLocationStrings = [...new Set(locationStrings)];
-
     return (
-        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
-            <option value="" key="Filter by Building" label="Filter by Building" />
-            {dedeupedLocationStrings.map((location) => (
-                <option key={location} value={location}>
-                    {location}
-                </option>
-            ))}
-        </select>
+        <div className={css.control} ref={controlRef}>
+            <button
+                type="button"
+                className={css.triggerButton}
+                onClick={() => setIsOpen((prev) => !prev)}
+                aria-label="Filter by Building"
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+            >
+                <Filter size={22} />
+            </button>
+            {isOpen ? (
+                <div className={css.dropdown} role="listbox" aria-label="Filter by Building">
+                    <button
+                        type="button"
+                        className={`${css.dropdownItem} ${selectedLocation === '' ? css.dropdownItemActive : ''}`}
+                        onClick={() => selectLocation('')}
+                        role="option"
+                        aria-selected={selectedLocation === ''}
+                    >
+                        Filter by Building
+                    </button>
+                    {dedupedLocationStrings.map((location) => (
+                        <button
+                            key={location}
+                            type="button"
+                            className={`${css.dropdownItem} ${selectedLocation === location ? css.dropdownItemActive : ''}`}
+                            onClick={() => selectLocation(location)}
+                            role="option"
+                            aria-selected={selectedLocation === location}
+                        >
+                            {location}
+                        </button>
+                    ))}
+                </div>
+            ) : null}
+        </div>
     );
 }
 

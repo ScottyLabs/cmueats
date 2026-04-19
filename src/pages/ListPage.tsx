@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useEffect, useLayoutEffect, useReducer, useRef } from 'react';
 
+import SortSelect, { SelectSort as SelectSortType } from '../components/SelectSort';
 import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
 import SearchBar from '../components/SearchBar';
@@ -9,12 +10,11 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { useFilteredLocations, useSortedLocations } from '../util/useFilteredLocations';
+import { useFilteredLocations } from '../util/useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
-import { useIsMobileContext } from '../contexts/IsMobileContext';
 
 function ListBox({
     locations,
@@ -27,7 +27,6 @@ function ListBox({
 }) {
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
-    const isMobile = useIsMobileContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -41,12 +40,17 @@ function ListBox({
         return newState;
     }, '');
 
+    const [sortQuery, setSortOption] = useReducer<SelectSortType, [SelectSortType]>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, 'time');
+
     const filteredLocations = useFilteredLocations({
         locations,
         searchQuery,
         locationFilterQuery,
     });
-    const sortedLocations = useSortedLocations({ locations: filteredLocations });
+
     // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');
@@ -62,17 +66,24 @@ function ListBox({
             }}
         >
             <ListPageHeader />
-            <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
+            <div
+                className="list-controls-container"
+                onClick={(ev) => {
+                    ev.stopPropagation();
+                }}
+            >
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
+                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
+                    <SortSelect sortOption={sortQuery} setSortOption={setSortOption} />
                 </div>
             </div>
             <EateryCardGrid
-                locations={sortedLocations}
+                locations={filteredLocations}
                 shouldAnimateCards={shouldAnimateCards.current}
                 apiError={error}
                 setSearchQuery={setSearchQuery}
+                sortOption={sortQuery}
                 updateCardViewPreference={(id, preference) => {
                     shouldAnimateCards.current = false;
                     updateCardViewPreference(id, preference);
