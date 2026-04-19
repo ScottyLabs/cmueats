@@ -33,7 +33,7 @@ export default function Footer() {
                             log into CMUEats.com and leave a written review on any of the locations. Participate by May
                             1st to be eligible. Reviews must be legitimate dining reviews about your experience at the
                             eatery. We reserve the right to disqualify any entry. We are only offering one entry per
-                            person, nom atter how many reviews you leave. If you win, we will reach out to you via
+                            person, no matter how many reviews you leave. If you win, we will reach out to you via
                             email.
                         </p>
                         <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
