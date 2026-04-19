@@ -19,7 +19,7 @@ export default function Footer() {
     });
 
     return (
-        <footer className={css.footer}>
+        <footer id="footer" className={css.footer}>
             <div className={css['footer__text-section']}>
                 {theme === 'miku' ? (
                     <>
@@ -28,6 +28,16 @@ export default function Footer() {
                     </>
                 ) : (
                     <>
+                        <p>
+                            <span style={{ color: 'hsl(117.55deg 20% 83%)' }}>
+                                <b>CMUEats Raffle Details:</b> We are raffling off 3 $40 Amazon gift cards! To enter,
+                                leave a written review on any dining location above. You'll get one raffle entry per
+                                review left after 4/18 and before 5/1 (non-inclusive), for a maximum of 10 entries.
+                                Reviews must be legitimate dining reviews about your experience at the eatery. We
+                                reserve the right to disqualify any entry. If you win, we will reach out to you via
+                                email!
+                            </span>
+                        </p>
                         <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
                         <p>
                             If you encounter any problems, please fill out our{' '}

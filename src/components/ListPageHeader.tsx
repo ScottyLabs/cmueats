@@ -34,7 +34,7 @@ export default function ListPageHeader() {
     const { data: userLoggedInData, isLoading, error } = $api.useQuery('get', '/whoami');
     const { theme } = useThemeContext();
     const { mobileGreeting, desktopGreeting } = useMemo(
-        () => getGreetings(new Date().getHours(), { isMikuDay: theme === 'miku' }),
+        () => getGreetings(new Date().getHours(), { rafflePromotion: true, isMikuDay: theme === 'miku' }),
         [theme],
     );
     if (theme === 'miku') {
@@ -47,7 +47,10 @@ export default function ListPageHeader() {
                 {theme === 'april-fools' ? (
                     <AprilFools />
                 ) : (
-                    <>
+                    <button
+                        className={css['list-header__greeting-button']}
+                        onClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
                         <span className={css['list-header__greeting--desktop']}>
                             {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData?.user?.firstName}! `}
                             {desktopGreeting}
@@ -57,7 +60,7 @@ export default function ListPageHeader() {
                             {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData?.user?.firstName}! `}
                             {mobileGreeting}
                         </span>
-                    </>
+                    </button>
                 )}
             </h3>
             {error !== null ? (
