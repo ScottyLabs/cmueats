@@ -1,6 +1,7 @@
 .list-header {
     display: flex;
-    padding: 26px var(--global-x-padding) 20px calc(var(--global-x-padding) + 2px);
+    padding: 26px var(--global-x-padding) 20px
+        calc(var(--global-x-padding) + 2px);
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
@@ -30,7 +31,7 @@
 }
 /* we need this to properly animate the mask gradient */
 @property --right-cutoff {
-    syntax: '<percentage>';
+    syntax: "<percentage>";
     inherits: false;
     initial-value: 0%;
 }
@@ -59,6 +60,10 @@
     &.list-header__greeting--mobile {
         font-size: 30px;
     }
+}
+
+.list-header__greeting-button {
+    cursor: pointer;
 }
 @keyframes slide-in {
     0% {

@@ -1,62 +1,70 @@
-import { ReactNode } from 'react';
-import assert from './assert';
-import bounded from './misc';
+import { ReactNode } from "react";
+import assert from "./assert";
+import bounded from "./misc";
 
 const graveyard = [
-    'Staying up all night?',
-    'Want a late-night snack?',
+    "Staying up all night?",
+    "Want a late-night snack?",
     "Don't stay up too late!",
-    'Delivery too expensive?',
-    'Pulling an all-nighter? Let us fuel your focus!',
-    'Late night genius? Keep it going with a bite!',
-    'Need a boost for your midnight grind?',
+    "Delivery too expensive?",
+    "Pulling an all-nighter? Let us fuel your focus!",
+    "Late night genius? Keep it going with a bite!",
+    "Need a boost for your midnight grind?",
 ];
 const graveyardShort = [
-    'Staying up all night?',
-    'Want a late-night snack?',
+    "Staying up all night?",
+    "Want a late-night snack?",
     "Don't stay up too late!",
-    'Delivery too expensive?',
+    "Delivery too expensive?",
 ];
 const morning = [
-    'Fancy some breakfast?',
-    'Is breakfast really the most important meal of the day?',
-    'What do you want to eat?',
-    'Have a good morning!',
-    'Start your day with a delicious meal!',
-    'Time to refuel for the day ahead!',
+    "Fancy some breakfast?",
+    "Is breakfast really the most important meal of the day?",
+    "What do you want to eat?",
+    "Have a good morning!",
+    "Start your day with a delicious meal!",
+    "Time to refuel for the day ahead!",
 ];
-const morningShort = ['Fancy some breakfast?', 'What do you want to eat?', 'Have a good morning!'];
+const morningShort = [
+    "Fancy some breakfast?",
+    "What do you want to eat?",
+    "Have a good morning!",
+];
 const afternoon = [
-    'What do you want for lunch?',
-    'What do you want to eat?',
-    'Have a good afternoon!',
-    'Use those blocks!',
-    'Fuel up for the afternoon!',
-    'Lunch options galore!',
-    'Satisfy your midday hunger!',
-    'Craving something savory for lunch?',
+    "What do you want for lunch?",
+    "What do you want to eat?",
+    "Have a good afternoon!",
+    "Use those blocks!",
+    "Fuel up for the afternoon!",
+    "Lunch options galore!",
+    "Satisfy your midday hunger!",
+    "Craving something savory for lunch?",
     "Midday munchies? We've got you covered!",
-    'Halfway through the day—time for a lunch break!',
+    "Halfway through the day—time for a lunch break!",
 ];
 const afternoonShort = [
-    'Have a good afternoon!',
-    'Use those blocks!',
-    'Fuel up for the afternoon!',
-    'Lunch options galore!',
+    "Have a good afternoon!",
+    "Use those blocks!",
+    "Fuel up for the afternoon!",
+    "Lunch options galore!",
 ];
 const evening = [
-    'What do you want for dinner?',
-    'What do you want to eat?',
-    'Have a good evening!',
-    'Grab a bite to eat!',
-    'Hungry night owl?',
+    "What do you want for dinner?",
+    "What do you want to eat?",
+    "Have a good evening!",
+    "Grab a bite to eat!",
+    "Hungry night owl?",
 ];
-const eveningShort = ['Have a good evening!', 'Grab a bite to eat!', 'Hungry night owl?'];
+const eveningShort = [
+    "Have a good evening!",
+    "Grab a bite to eat!",
+    "Hungry night owl?",
+];
 interface Special {
     isMikuDay: boolean;
 }
 const getRandomStringFrom = (greetings: string[]) => {
-    if (greetings.length === 0) return 'Welcome to CMUEats!';
+    if (greetings.length === 0) return "Welcome to CMUEats!";
     return greetings[Math.floor(Math.random() * greetings.length)];
 };
 const getGreeting = (hours: number, special?: Special): ReactNode => {
@@ -65,7 +73,8 @@ const getGreeting = (hours: number, special?: Special): ReactNode => {
     if (special?.isMikuDay)
         return (
             <>
-                Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span> (3/9)
+                Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span>{" "}
+                (3/9)
             </>
         );
     if (hours < 6) {
@@ -81,13 +90,14 @@ const getGreeting = (hours: number, special?: Special): ReactNode => {
         return getRandomStringFrom(evening);
     }
 
-    return 'Welcome to CMUEats!';
+    return "Welcome to CMUEats!";
 };
 const getGreetingMobile = (hours: number, special?: Special) => {
     if (special?.isMikuDay)
         return (
             <>
-                Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span> (3/9)
+                Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span>{" "}
+                (3/9)
             </>
         );
     if (hours < 6) {
@@ -102,10 +112,13 @@ const getGreetingMobile = (hours: number, special?: Special) => {
     if (hours < 24) {
         return getRandomStringFrom(eveningShort);
     }
-    return 'Welcome to CMUEats!';
+    return "Welcome to CMUEats!";
 };
 const getGreetings = (hours: number, special?: Special) => ({
-    desktopGreeting: getGreeting(hours, special),
-    mobileGreeting: getGreetingMobile(hours, special),
+    desktopGreeting:
+        "Want to win $40? Enter CMUEats raffle! (See footer for details)",
+    // getGreeting(hours, special),
+    mobileGreeting: "Want to win $40? Enter CMUEats raffle! (See footer)",
+    // getGreetingMobile(hours, special),
 });
 export { getGreeting, getGreetingMobile, getGreetings };

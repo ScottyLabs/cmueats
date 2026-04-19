@@ -1,57 +1,87 @@
-import css from './Footer.module.css';
-import SponsorCarousel from './SponsorCarousel';
-import { useThemeContext } from '../ThemeProvider';
-import footerMikuUrl from '../assets/miku/miku2.png';
-import { $api } from '../api';
-import { useCurrentTime } from '../contexts/NowContext';
+import css from "./Footer.module.css";
+import SponsorCarousel from "./SponsorCarousel";
+import { useThemeContext } from "../ThemeProvider";
+import footerMikuUrl from "../assets/miku/miku2.png";
+import { $api } from "../api";
+import { useCurrentTime } from "../contexts/NowContext";
 
 export default function Footer() {
     const now = useCurrentTime();
     const { theme } = useThemeContext();
-    const { data: emails } = $api.useQuery('get', '/emails');
+    const { data: emails } = $api.useQuery("get", "/emails");
     const nowString = now.toLocaleString({
-        weekday: 'short',
-        month: 'short',
-        day: '2-digit',
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit',
+        weekday: "short",
+        month: "short",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
     });
 
     return (
-        <footer className={css.footer}>
-            <div className={css['footer__text-section']}>
-                {theme === 'miku' ? (
+        <footer id="footer" className={css.footer}>
+            <div className={css["footer__text-section"]}>
+                {theme === "miku" ? (
                     <>
                         <p>Blue hair, blue tie, hiding in your wifi</p>
-                        <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
+                        <p>
+                            All times are displayed in Pittsburgh local time (
+                            {nowString}).
+                        </p>
                     </>
                 ) : (
                     <>
-                        <p>All times are displayed in Pittsburgh local time ({nowString}).</p>
                         <p>
-                            If you encounter any problems, please fill out our{' '}
-                            <a href="https://forms.gle/7JxgdgDhWMznQJdk9" style={{ color: 'white' }}>
+                            CMUEats Raffle Details: We are raffling off 3 $40
+                            Amazon gift cards! All you have to do is log into
+                            CMUEats.com and leave a written review on any of the
+                            locations. Participate by May 1st to be eligible.
+                            Reviews must be legitimate dining reviews about your
+                            experience at the eatery. We reserve the right to
+                            disqualify any entry. We are only offering one entry
+                            per person, nom atter how many reviews you leave. If
+                            you win, we will reach out to you via email.
+                        </p>
+                        <p>
+                            All times are displayed in Pittsburgh local time (
+                            {nowString}).
+                        </p>
+                        <p>
+                            If you encounter any problems, please fill out our{" "}
+                            <a
+                                href="https://forms.gle/7JxgdgDhWMznQJdk9"
+                                style={{ color: "white" }}
+                            >
                                 feedback form
-                            </a>{' '}
+                            </a>{" "}
                             (the fastest way to reach us!).
                         </p>
                         <p>
-                            Otherwise, reach out to{' '}
+                            Otherwise, reach out to{" "}
                             {emails && emails.length > 0 ? (
                                 emails.map((person, idx) => (
                                     <span key={person.email}>
-                                        <a href={`mailto:${person.email}`} style={{ color: 'white' }}>
+                                        <a
+                                            href={`mailto:${person.email}`}
+                                            style={{ color: "white" }}
+                                        >
                                             {person.name}
                                         </a>
-                                        {idx < emails.length - 2 ? ', ' : ''}
+                                        {idx < emails.length - 2 ? ", " : ""}
                                         {/* eslint-disable-next-line no-nested-ternary */}
-                                        {idx === emails.length - 2 ? (emails.length > 2 ? ', or ' : ' or ') : ''}
+                                        {idx === emails.length - 2
+                                            ? emails.length > 2
+                                                ? ", or "
+                                                : " or "
+                                            : ""}
                                     </span>
                                 ))
                             ) : (
                                 <span>
-                                    <a href="mailto:hello@scottylabs.org" style={{ color: 'white' }}>
+                                    <a
+                                        href="mailto:hello@scottylabs.org"
+                                        style={{ color: "white" }}
+                                    >
                                         ScottyLabs
                                     </a>
                                 </span>
@@ -59,27 +89,37 @@ export default function Footer() {
                             .
                         </p>
                         <p>
-                            To provide feedback on your dining experience, please contact{' '}
-                            <a href="mailto:dining@andrew.cmu.edu" style={{ color: 'white' }}>
+                            To provide feedback on your dining experience,
+                            please contact{" "}
+                            <a
+                                href="mailto:dining@andrew.cmu.edu"
+                                style={{ color: "white" }}
+                            >
                                 Dining Services
-                            </a>{' '}
-                            or take the{' '}
-                            <a href="https://forms.gle/fTnWrS7jkTFRB14DA" style={{ color: 'white' }}>
+                            </a>{" "}
+                            or take the{" "}
+                            <a
+                                href="https://forms.gle/fTnWrS7jkTFRB14DA"
+                                style={{ color: "white" }}
+                            >
                                 dining survey
                             </a>
                             .
                         </p>
                         <p>
-                            Made with ❤️ by the{' '}
-                            <a href="https://scottylabs.org" style={{ color: 'white' }}>
+                            Made with ❤️ by the{" "}
+                            <a
+                                href="https://scottylabs.org"
+                                style={{ color: "white" }}
+                            >
                                 ScottyLabs
-                            </a>{' '}
-                            Tech Committee (not the official{' '}
+                            </a>{" "}
+                            Tech Committee (not the official{" "}
                             <a
                                 href="https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Schedule"
                                 target="_blank"
                                 rel="noreferrer"
-                                style={{ color: 'white' }}
+                                style={{ color: "white" }}
                             >
                                 dining website
                             </a>
@@ -93,7 +133,13 @@ export default function Footer() {
                 </h4>
             </div>
             <SponsorCarousel darkMode openByDefault={false} />
-            {theme === 'miku' && <img src={footerMikuUrl} alt="miku!" className={css.footer__miku} />}
+            {theme === "miku" && (
+                <img
+                    src={footerMikuUrl}
+                    alt="miku!"
+                    className={css.footer__miku}
+                />
+            )}
         </footer>
     );
 }
