@@ -4,17 +4,19 @@ import { useEffect, useLayoutEffect, useReducer, useRef } from 'react';
 
 import { ILocation_Full } from '../types/locationTypes';
 import SelectLocation from '../components/SelectLocation';
+import SelectSort from '../components/SelectSort';
 import SearchBar from '../components/SearchBar';
 import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { useFilteredLocations, useSortedLocations } from '../util/useFilteredLocations';
+import { type SortOption, useFilteredLocations, useSortedLocations } from '../util/useFilteredLocations';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
 import { useIsMobileContext } from '../contexts/IsMobileContext';
+import { useUserLocation } from '../contexts/UserLocationContext';
 
 function ListBox({
     locations,
@@ -25,6 +27,7 @@ function ListBox({
     error: boolean;
     updateCardViewPreference: (id: string, newStatus: CardViewPreference) => void;
 }) {
+    const { requestUserCoordinates } = useUserLocation();
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
     const isMobile = useIsMobileContext();
@@ -40,13 +43,17 @@ function ListBox({
         shouldAnimateCards.current = false;
         return newState;
     }, '');
+    const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
+        shouldAnimateCards.current = false;
+        return newState;
+    }, '');
 
     const filteredLocations = useFilteredLocations({
         locations,
         searchQuery,
         locationFilterQuery,
     });
-    const sortedLocations = useSortedLocations({ locations: filteredLocations });
+    const sortedLocations = useSortedLocations({ locations: filteredLocations, sortBy });
     // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');
@@ -66,6 +73,13 @@ function ListBox({
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                     {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
+                    <SelectSort
+                        sortBy={sortBy}
+                        setSortBy={(newSortBy) => {
+                            setSortBy(newSortBy);
+                            if (newSortBy === 'distance') requestUserCoordinates();
+                        }}
+                    />
                 </div>
             </div>
             <EateryCardGrid
