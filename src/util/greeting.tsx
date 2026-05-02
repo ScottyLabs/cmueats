@@ -54,7 +54,6 @@ const evening = [
 const eveningShort = ['Have a good evening!', 'Grab a bite to eat!', 'Hungry night owl?'];
 interface Special {
     isMikuDay: boolean;
-    rafflePromotion: boolean;
 }
 const getRandomStringFrom = (greetings: string[]) => {
     if (greetings.length === 0) return 'Welcome to CMUEats!';
@@ -62,14 +61,6 @@ const getRandomStringFrom = (greetings: string[]) => {
 };
 const getGreeting = (hours: number, special?: Special): ReactNode => {
     assert(bounded(hours, 0, 24));
-    if (special?.rafflePromotion) {
-        return (
-            <span>
-                Want to win <span style={{ color: 'hsl(117.55deg 60% 53%)' }}>$40</span>? Enter CMUEats raffle! (Click
-                for details)
-            </span>
-        );
-    }
     if (special?.isMikuDay)
         return (
             <>
@@ -98,13 +89,6 @@ const getGreetingMobile = (hours: number, special?: Special) => {
                 Happy <span style={{ color: `var(--miku)` }}>Miku Day!</span> (3/9)
             </>
         );
-    if (special?.rafflePromotion) {
-        return (
-            <span>
-                Want to win <span style={{ color: 'hsl(117.55deg 60% 53%)' }}>$40</span>? (Click for details)
-            </span>
-        );
-    }
     if (hours < 6) {
         return getRandomStringFrom(graveyardShort);
     }
