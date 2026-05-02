@@ -15,6 +15,7 @@ import { NowContextProvider } from './contexts/NowContext';
 import { queryClient } from './api';
 import { AudioContextProvider } from './contexts/AudioContext';
 import { IsMobileContextProvider } from './contexts/IsMobileContext';
+import { UserLocationContextProvider } from './contexts/UserLocationContext';
 
 posthog.init(env.VITE_POSTHOG_KEY || '', {
     person_profiles: 'identified_only',
@@ -42,7 +43,9 @@ if (rootElement) {
                             <ThemeProvider>
                                 <AudioContextProvider>
                                     <IsMobileContextProvider>
-                                        <App />
+                                        <UserLocationContextProvider>
+                                            <App />
+                                        </UserLocationContextProvider>
                                     </IsMobileContextProvider>
                                 </AudioContextProvider>
                             </ThemeProvider>

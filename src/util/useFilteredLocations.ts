@@ -3,6 +3,8 @@ import { useMemo } from 'react';
 import { ILocation_Full, LocationState } from '../types/locationTypes';
 import assert from './assert';
 
+export type SortOption = '' | 'distance';
+
 const FUSE_OPTIONS: IFuseOptions<ILocation_Full> = {
     // keys to perform the search on
     keys: ['name', 'location', 'shortDescription', 'description'],
@@ -27,6 +29,16 @@ const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) 
     }
     return location1.minutesUntil - location2.minutesUntil;
 };
+
+function compareLocationsByDistanceWithinState(location1: ILocation_Full, location2: ILocation_Full) {
+    const distance1 = location1.distanceFromUserMeters;
+    const distance2 = location2.distanceFromUserMeters;
+    if (distance1 === null && distance2 === null) return compareLocations(location1, location2);
+    if (distance1 === null) return 1;
+    if (distance2 === null) return -1;
+    if (distance1 !== distance2) return distance1 - distance2;
+    return compareLocations(location1, location2);
+}
 
 export function useFilteredLocations({
     locations,
@@ -58,7 +70,20 @@ export function useFilteredLocations({
     return filteredLocations;
 }
 
-export function useSortedLocations({ locations }: { locations: ILocation_Full[] | undefined }) {
+export function useSortedLocations({
+    locations,
+    sortBy,
+}: {
+    locations: ILocation_Full[] | undefined;
+    sortBy: SortOption;
+}) {
     if (locations === undefined) return undefined;
+    if (sortBy === 'distance') {
+        return [...locations].sort((location1, location2) => {
+            const stateComparison = location1.locationState - location2.locationState;
+            if (stateComparison !== 0) return stateComparison;
+            return compareLocationsByDistanceWithinState(location1, location2);
+        });
+    }
     return [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
 }
