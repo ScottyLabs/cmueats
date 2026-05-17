@@ -12,7 +12,7 @@ WORKDIR /app
 # Enable pnpm via Corepack
 RUN corepack enable
 
-# Install deps first for better Docker layer caching (woah)
+# Install deps first for better Docker layer caching (suggested by GPT, idk if railway actually does docker layer caching...)
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 

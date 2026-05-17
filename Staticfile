@@ -1,0 +1,2 @@
+root: dist
+index_fallback: true
