@@ -47,10 +47,7 @@ export default function ListPageHeader() {
                 {theme === 'april-fools' ? (
                     <AprilFools />
                 ) : (
-                    <button
-                        className={css['list-header__greeting-button']}
-                        onClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })}
-                    >
+                    <button className={css['list-header__greeting-button']}>
                         <span className={css['list-header__greeting--desktop']}>
                             {userLoggedInData?.user?.firstName && `Hi ${userLoggedInData?.user?.firstName}! `}
                             {desktopGreeting}
