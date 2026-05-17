@@ -19,7 +19,7 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 6. Then, clone this repository to your computer by running `git clone https://github.com/ScottyLabs/cmueats.git` after making sure you have [git](https://git-scm.com/downloads) downloaded or running `gh repo clone ScottyLabs/cmueats` if you have the [Github CLI](https://cli.github.com/).
 
-7. Do the same for the dining API in a new location. This time, replace `https://github.com/ScottyLabs/cmueats.git`with `https://github.com/ScottyLabs/dining-api.git` and `ScottyLabs/cmueats` with `ScottyLabs/dining-api`.
+7. Do the same for the dining API in a new location. This time, replace `https://github.com/ScottyLabs/cmueats.git` with `https://github.com/ScottyLabs/dining-api.git` and `ScottyLabs/cmueats` with `ScottyLabs/dining-api`.
 
 8. If you already have the node_modules folder or package-lock.json from previous versions of the Dining API, please remove them before continuing.
 
