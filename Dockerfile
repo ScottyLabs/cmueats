@@ -1,4 +1,11 @@
 FROM node:lts-alpine AS builder
+# Railway doesn't support secret mounts (https://docs.docker.com/reference/build-checks/secrets-used-in-arg-or-env/) unless we use RailPack, so that's why I left these warnings here.
+ARG MAPKIT_ALLOWED_ORIGINS
+ARG MAPKIT_JS_AUTH_KEY
+ARG MAPKIT_JS_KEY_ID
+ARG MAPKIT_JS_TEAM_ID
+ARG VITE_API_URL
+ARG VITE_POSTHOG_KEY
 
 WORKDIR /app
 
