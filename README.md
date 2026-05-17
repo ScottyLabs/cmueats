@@ -19,33 +19,29 @@ Keep track of the statuses of the various dining locations across Carnegie Mello
 
 6. Then, clone this repository to your computer by running `git clone https://github.com/ScottyLabs/cmueats.git` after making sure you have [git](https://git-scm.com/downloads) downloaded or running `gh repo clone ScottyLabs/cmueats` if you have the [Github CLI](https://cli.github.com/).
 
-7. Next, run `git remote add upstream https://github.com/ScottyLabs/cmueats.git`.
+7. Do the same for the dining API in a new location. This time, replace `https://github.com/ScottyLabs/cmueats.git`with `https://github.com/ScottyLabs/dining-api.git` and `ScottyLabs/cmueats` with `ScottyLabs/dining-api`.
 
-8. Now use `git fetch upstream`.
+8. If you already have the node_modules folder or package-lock.json from previous versions of the Dining API, please remove them before continuing.
 
-9. Do the same for the dining API in a new location. This time, replace `https://github.com/ScottyLabs/cmueats.git`with `https://github.com/ScottyLabs/dining-api.git` and `ScottyLabs/cmueats` with `ScottyLabs/dining-api`.
+9. Now install the CMUEats dependencies using `pnpm install`. If you don't have pnpm installed, you can install it using the instructions [here](https://pnpm.io/installation).
 
-10. If you already have the node_modules folder or package-lock.json from previous versions of the Dining API, please remove them before continuing.
+10. Populate a top-level `.env` file with the secrets from our Notion page. (ask us on Slack for the link!) Now run the code with `pnpm dev` and it should work! Just click on the link that appears and you'll see the web app.
 
-11. Now install the CMUEats dependencies by ['cd'-ing](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/#) into the root of the location where you cloned CMUEats and running `pnpm install`. If you don't have pnpm installed, you can install it using the instructions [here](https://pnpm.io/installation).
+11. Now follow the installation steps for the dining API as well (steps 9, 10).
 
-12. Now run the code with `pnpm start` and it should work! Just click on the link that appears and you''ll see the web app. You can also use `pnpm run start` since `pnpm start` is its shorthand version
+12. To find bootcamp issues you can work on, please visit the [CMUEats issues page](https://github.com/ScottyLabs/cmueats/labels/bootcamp) or the [dining API issues page](https://github.com/ScottyLabs/dining-api/labels/bootcamp).
 
-13. Now follow the installation steps for the dining API as well (steps 9 to 12).
+13. For every new issue or change you work on, first make sure your local repo is up-to-date with the ScottyLabs repo with `git pull origin main`. Create a new branch off of your current one with `git switch -c <branch-name>` (the normies use `git checkout -b <branch-name>`. that was a joke. don't kill me plz.)
 
-14. To find bootcamp issues you can work on, please visit the [CMUEats issues page](https://github.com/ScottyLabs/cmueats/labels/bootcamp) or the [dining API issues page](https://github.com/ScottyLabs/dining-api/labels/bootcamp).
+14. When you want to commit changes, first stage changes with `git add .`. Then, use `git commit -m "commit message"` (alternatively commit using Github Desktop). To undo commits, use `git reset --hard (HEAD~# or commit-id)` (`--hard` removes staged and unstaged changes after commit chosen to reset to; `--soft` keeps changes in working directory and keeps reset commits in staging area). Replace `#` with the number of commits you want to go back by. Similarly, using `@{#}` instead of `~#` undos the reset (not necessarily just simplified). When you are ready to push changes, use `git push -u origin branch-name`. To push new commits after this, use `git push -f` instead.
 
-15. For every new issue or change you work on, first make sure your local repo is up-to-date with the ScottyLabs repo. To do this, go to your repo on your Github profile and click `Sync fork` if you are behind the main repo in commits. Then use `git pull origin main` in your IDE. Then type `cd main` in the local repository (folder containing all the code) for CMUEats or the dining API then type `git checkout -b branch-name`, where `branch-name` is the branch you want to work on (see [Learn Git Branching](https://learngitbranching.js.org)). To work on changes to a branch you already created, use `git checkout branch-name`, where `branch-name` is the branch you already created. Make sure to use `git checkout main` every time you are ready to create a new branch.
+15. When you want to create a pull request for your changes, go to the ScottyLabs repo on the Github website and click on `Pull Requests`. Click on `New Pull Request`. On the right side, click on your repo's branch you want to merge from, and, on the left side, make sure you have ScottyLabs' `main` branch selected. Create a description then create the pull request. Feel free to request reviewers or ask a tech lead directly, so they can review your pull requests and requests changes or merge it. If the tech lead(s) are doing their job, you should get a response within 1 to 2 days. Assuming it's not midterm or finals season. But if it is, shouldn't you be studying instead of working on cmueats anyways?
 
-16. When you want to commit changes, first stage changes with `git add .`. Then, use `git commit -m "commit message"` (alternatively commit using Github Desktop). To undo commits, use `git reset --hard (HEAD~# or commit-id)` (`--hard` removes staged and unstaged changes after commit chosen to reset to; `--soft` keeps changes in working directory and keeps reset commits in staging area). Replace `#` with the number of commits you want to go back by. Similarly, using `@{#}` instead of `~#` undos the reset (not necessarily just simplified). When you are ready to push changes, use `git push -u origin branch-name`. To push new commits after this, use `git push -f` instead.
-
-17. When you want to create a pull request for your changes, go to the ScottyLabs repo on the Github website and click on `Pull Requests`. Click on `New Pull Request`. On the right side, click on your repo's branch you want to merge from, and, on the left side, make sure you have ScottyLabs' `main` branch selected. Create a description then create the pull request. Feel free to request reviewers or ask a tech lead directly, so they can review your pull requests and requests changes or merge it.
-
-Note that GitHub will automatically run checks (workflows) on your PR. This includes code linting (with tsc and eslint) and verifying that all unit tests in `/tests` pass with vitest.
+Note that GitHub will automatically run checks (workflows) on your PR. This includes code linting (with tsc and oxlint) and verifying that all unit tests in `/tests` pass with vitest.
 
 ![Example checks](/public/checks_example.png)
 
-17. To run unit tests locally, type `pnpm run test`.
+16. To run unit tests locally, type `pnpm run test`.
 
 Note: To add new dependencies, use `pnpm add dependency-name`. To remove dependencies, use `pnpm remove dependency-name`. Run `pnpm outdated` to see what dependencies are outdated and `pnpm update` to update all outdated dependencies to the latest version.
 
