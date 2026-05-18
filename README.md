@@ -45,12 +45,6 @@ Note that GitHub will automatically run checks (workflows) on your PR. This incl
 
 Note: To add new dependencies, use `pnpm add dependency-name`. To remove dependencies, use `pnpm remove dependency-name`. Run `pnpm outdated` to see what dependencies are outdated and `pnpm update` to update all outdated dependencies to the latest version.
 
-## Mocking out the backend
-
-For displaying custom api data without starting up the backend, you can change `BACKEND_LOCATIONS_URL` in `App.tsx` to point to `http://localhost:5173/example-response.json`, which contents should match that returned by the real `/locations` endpoint. Feel free to use live or historical data (see below) for reference. (note that you need an `example-response.json` file in the /public folder) You can also just modify what's returned by `queryLocations` if that feels more convenient.
-
-(If you're testing this on mobile, be sure to replace `localhost` with your device IP instead.)
-
 ## Accessing historical API data
 
 <https://web.archive.org/web/20250000000000*/https://dining.apis.scottylabs.org/locations>
@@ -76,6 +70,8 @@ E.g.:
 ```txt
 VITE_API_URL=locations.json
 ```
+
+(If you're testing this on mobile, you should write out the full URL to the static file, making sure to replace `localhost` with your device IP instead.)
 
 ### Method 2: setup backend server
 
