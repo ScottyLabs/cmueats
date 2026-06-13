@@ -89,8 +89,15 @@
     &:hover {
         text-decoration: underline;
     }
+}
 
-    &:hover {
-        text-decoration: underline;
+.grubhub-link {
+    display: none;
+    margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+    .grubhub-link {
+        display: inline-flex;
     }
 }
