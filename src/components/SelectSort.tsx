@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { SortDesc } from 'lucide-react';
 import css from './SelectDropdown.module.css';
-import type { SortOption } from '../util/useFilteredLocations';
+import type { SortOption } from '../util/useLocationList';
 
 type SelectSortProps = {
     setSortBy: React.Dispatch<SortOption>;
@@ -9,11 +9,11 @@ type SelectSortProps = {
 };
 
 const sortOptionLabels: Record<SortOption, string> = {
-    open: 'Sort by Open Status',
+    open: 'Sort by Open Status (Default)',
     distance: 'Sort by Distance',
-    'ra-highest-open': 'Sort by Highest Rating (Open First)',
-    'ra-highest': 'Sort by Highest Rating (All)',
-    'ra-lowest': 'Sort by Lowest Rating (All)',
+    'rating-highest-open': 'Sort by Highest Rating (Open First)',
+    'rating-highest': 'Sort by Highest Rating (All)',
+    'rating-lowest': 'Sort by Lowest Rating (All)',
 };
 
 function SelectSort({ setSortBy, sortBy }: SelectSortProps) {

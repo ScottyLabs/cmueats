@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { ILocation_Full, LocationState } from '../types/locationTypes';
 import assert from './assert';
 
-export type SortOption = 'open' | 'distance' | 'ra-highest-open' | 'ra-highest' | 'ra-lowest';
+export type SortOption = 'open' | 'distance' | 'rating-highest-open' | 'rating-highest' | 'rating-lowest';
 
 const FUSE_OPTIONS: IFuseOptions<ILocation_Full> = {
     // keys to perform the search on
@@ -12,7 +12,7 @@ const FUSE_OPTIONS: IFuseOptions<ILocation_Full> = {
     threshold: 0.2,
 };
 
-const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) => {
+const compareLocationsByStatus = (location1: ILocation_Full, location2: ILocation_Full) => {
     const state1 = location1.locationState;
     const state2 = location2.locationState;
 
@@ -33,11 +33,11 @@ const compareLocations = (location1: ILocation_Full, location2: ILocation_Full) 
 function compareLocationsByDistanceWithinState(location1: ILocation_Full, location2: ILocation_Full) {
     const distance1 = location1.distanceFromUserMeters;
     const distance2 = location2.distanceFromUserMeters;
-    if (distance1 === null && distance2 === null) return compareLocations(location1, location2);
+    if (distance1 === null && distance2 === null) return compareLocationsByStatus(location1, location2);
     if (distance1 === null) return 1;
     if (distance2 === null) return -1;
     if (distance1 !== distance2) return distance1 - distance2;
-    return compareLocations(location1, location2);
+    return compareLocationsByStatus(location1, location2);
 }
 
 export function useFilteredLocations({
@@ -85,27 +85,27 @@ export function useSortedLocations({
             return compareLocationsByDistanceWithinState(location1, location2);
         });
     }
-    if (sortBy === 'ra-highest-open' || sortBy === 'ra-highest' || sortBy === 'ra-lowest') {
+    if (sortBy === 'rating-highest-open' || sortBy === 'rating-highest' || sortBy === 'rating-lowest') {
         return [...locations].sort((location1, location2) => {
             const o1 =
                 location1.locationState === LocationState.OPEN || location1.locationState === LocationState.CLOSES_SOON;
             const o2 =
                 location2.locationState === LocationState.OPEN || location2.locationState === LocationState.CLOSES_SOON;
 
-            if (sortBy === 'ra-highest-open' && o1 !== o2) {
+            if (sortBy === 'rating-highest-open' && o1 !== o2) {
                 return location1.locationState - location2.locationState;
             }
 
             const r1 = location1.ratingsAvg ?? null;
             const r2 = location2.ratingsAvg ?? null;
 
-            if (r1 === null && r2 === null) return compareLocations(location1, location2);
+            if (r1 === null && r2 === null) return compareLocationsByStatus(location1, location2);
             if (r1 === null) return 1;
             if (r2 === null) return -1;
-            if (r1 === r2) return compareLocations(location1, location2);
+            if (r1 === r2) return compareLocationsByStatus(location1, location2);
 
-            return sortBy === 'ra-lowest' ? r1 - r2 : r2 - r1;
+            return sortBy === 'rating-lowest' ? r1 - r2 : r2 - r1;
         });
     }
-    return [...locations].sort(compareLocations); // we make a copy to avoid mutating the original array
+    return [...locations].sort(compareLocationsByStatus); // we make a copy to avoid mutating the original array
 }
