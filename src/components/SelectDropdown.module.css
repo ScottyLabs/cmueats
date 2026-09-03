@@ -13,7 +13,7 @@
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
     transition: all 0.2s;
     display: flex;
-    svg{
+    svg {
         height: 50%;
         margin: auto;
     }

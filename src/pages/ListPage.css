@@ -34,7 +34,6 @@
     gap: 0.6rem;
     height: 42px;
 
-
     @container (width<1000px) {
         padding: 20px var(--global-x-padding) 10px;
     }
