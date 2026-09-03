@@ -3,7 +3,7 @@
     aspect-ratio: 1/1;
 }
 
-.button {
+.icon-div {
     height: 100%;
     width: 100%;
     border-radius: 14px;
@@ -17,20 +17,21 @@
         height: 50%;
         margin: auto;
     }
+}
 
-    &:hover {
-        transition: all 0.5s;
-        box-shadow: 0 0 40px var(--hover-accent-color);
-        border-color: var(--hover-accent-color);
-        outline: none;
-    }
+.container:hover .icon-div {
+    transition: all 0.5s;
+    box-shadow: 0 0 40px var(--hover-accent-color);
+    border-color: var(--hover-accent-color);
+    outline: none;
 }
 
 .select {
     position: absolute;
+    top: 0;
     right: 0;
     opacity: 0;
-    width: 0;
-    height: 0;
-    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
 }

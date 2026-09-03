@@ -19,21 +19,11 @@ const sortOptionLabels: Record<SortOption, string> = {
 function SelectSort({ setSortBy, sortBy }: SelectSortProps) {
     const selectRef = useRef<HTMLSelectElement>(null);
 
-    const handleClick = () => {
-        const select = selectRef.current;
-        if (!select) return;
-        if (typeof select.showPicker === 'function') {
-            select.showPicker();
-        } else {
-            select.click();
-        }
-    };
-
     return (
         <div className={css.container}>
-            <button className={css.button} onClick={handleClick}>
+            <div className={css['icon-div']}>
                 <SortDesc />
-            </button>
+            </div>
             <select
                 ref={selectRef}
                 value={sortBy}

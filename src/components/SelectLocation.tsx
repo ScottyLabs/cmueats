@@ -14,26 +14,15 @@ function getPrimaryLocation(locationString: string) {
 
 function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
     const selectRef = useRef<HTMLSelectElement>(null);
-
-    const handleClick = () => {
-        const select = selectRef.current;
-        if (!select) return;
-        if (typeof select.showPicker === 'function') {
-            select.showPicker();
-        } else {
-            select.click();
-        }
-    };
-
     const deduplicatedLocations = locations
         ? [...new Set(locations.map((loc) => getPrimaryLocation(loc.location)))]
         : [];
 
     return (
         <div className={css.container}>
-            <button className={css.button} onClick={handleClick}>
+            <div className={css['icon-div']}>
                 <Filter />
-            </button>
+            </div>
             <select ref={selectRef} onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
                 <option value="" key="All Buildings" label="All Buildings" />
                 {deduplicatedLocations.map((location) => (
