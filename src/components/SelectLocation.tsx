@@ -1,5 +1,7 @@
+import { useRef } from 'react';
+import { Filter } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
-import css from './SelectLocation.module.css';
+import css from './SelectDropdown.module.css';
 
 type SelectLocationProps = {
     setLocationFilterQuery: React.Dispatch<string>;
@@ -11,29 +13,25 @@ function getPrimaryLocation(locationString: string) {
 }
 
 function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
-    if (locations === undefined) {
-        return (
-            <select className={css.select}>
-                {/* Keep label the same as the default option below to reduce loading jank */}
-                <option value="" label="Filter by Building" />
-            </select>
-        );
-    }
-
-    let locationStrings = locations.map((locationObj) => locationObj.location);
-    locationStrings = locations.map((locationObj) => getPrimaryLocation(locationObj.location));
-
-    const dedeupedLocationStrings = [...new Set(locationStrings)];
+    const selectRef = useRef<HTMLSelectElement>(null);
+    const deduplicatedLocations = locations
+        ? [...new Set(locations.map((loc) => getPrimaryLocation(loc.location)))]
+        : [];
 
     return (
-        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
-            <option value="" key="Filter by Building" label="Filter by Building" />
-            {dedeupedLocationStrings.map((location) => (
-                <option key={location} value={location}>
-                    {location}
-                </option>
-            ))}
-        </select>
+        <div className={css.container}>
+            <div className={css['icon-div']}>
+                <Filter />
+            </div>
+            <select ref={selectRef} onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
+                <option value="" key="All Buildings" label="All Buildings" />
+                {deduplicatedLocations.map((location) => (
+                    <option key={location} value={location}>
+                        {location}
+                    </option>
+                ))}
+            </select>
+        </div>
     );
 }
 
