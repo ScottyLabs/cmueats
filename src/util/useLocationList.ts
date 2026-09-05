@@ -70,13 +70,7 @@ export function useFilteredLocations({
     return filteredLocations;
 }
 
-export function useSortedLocations({
-    locations,
-    sortBy,
-}: {
-    locations: ILocation_Full[] | undefined;
-    sortBy: SortOption;
-}) {
+export function sortLocations({ locations, sortBy }: { locations: ILocation_Full[] | undefined; sortBy: SortOption }) {
     if (locations === undefined) return undefined;
     if (sortBy === 'distance') {
         return [...locations].sort((location1, location2) => {
@@ -96,13 +90,12 @@ export function useSortedLocations({
                 return location1.locationState - location2.locationState;
             }
 
-            const r1 = location1.ratingsAvg ?? null;
-            const r2 = location2.ratingsAvg ?? null;
+            const r1 = location1.ratingsAvg;
+            const r2 = location2.ratingsAvg;
 
-            if (r1 === null && r2 === null) return compareLocationsByStatus(location1, location2);
+            if (r1 === r2) return compareLocationsByStatus(location1, location2);
             if (r1 === null) return 1;
             if (r2 === null) return -1;
-            if (r1 === r2) return compareLocationsByStatus(location1, location2);
 
             return sortBy === 'rating-lowest' ? r1 - r2 : r2 - r1;
         });

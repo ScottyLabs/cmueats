@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { Filter } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
 import css from './SelectDropdown.module.css';
@@ -9,12 +8,11 @@ type SelectLocationProps = {
 };
 
 function getPrimaryLocation(locationString: string) {
-    return locationString.indexOf(',') === -1 ? locationString : locationString.slice(0, locationString.indexOf(','));
+    return locationString.split(',', 1)[0];
 }
 
 function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
-    const selectRef = useRef<HTMLSelectElement>(null);
-    const deduplicatedLocations = locations
+    const deduplicatedBuildingNames = locations
         ? [...new Set(locations.map((loc) => getPrimaryLocation(loc.location)))]
         : [];
 
@@ -23,9 +21,9 @@ function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationPro
             <div className={css['icon-div']}>
                 <Filter />
             </div>
-            <select ref={selectRef} onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
+            <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
                 <option value="" key="All Buildings" label="All Buildings" />
-                {deduplicatedLocations.map((location) => (
+                {deduplicatedBuildingNames.map((location) => (
                     <option key={location} value={location}>
                         {location}
                     </option>

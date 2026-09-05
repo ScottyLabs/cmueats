@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { SortDesc } from 'lucide-react';
 import css from './SelectDropdown.module.css';
 import type { SortOption } from '../util/useLocationList';
@@ -17,19 +16,12 @@ const sortOptionLabels: Record<SortOption, string> = {
 };
 
 function SelectSort({ setSortBy, sortBy }: SelectSortProps) {
-    const selectRef = useRef<HTMLSelectElement>(null);
-
     return (
         <div className={css.container}>
             <div className={css['icon-div']}>
                 <SortDesc />
             </div>
-            <select
-                ref={selectRef}
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className={css.select}
-            >
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)} className={css.select}>
                 {(Object.keys(sortOptionLabels) as SortOption[]).map((option) => (
                     <option key={option} value={option}>
                         {sortOptionLabels[option]}

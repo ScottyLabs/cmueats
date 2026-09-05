@@ -118,7 +118,7 @@ export default function BottomSheet({ children, onHide, hideSheetDelayMs = 450 }
 
     // if dragging, starts calculating sheet position (moves sheet)
     useEffect(() => {
-        if (!dragging) return; // dragging is initiated by `startDrag`
+        if (!dragging) return undefined; // dragging is initiated by `startDrag`
         const controller = new AbortController();
 
         window.addEventListener('mousemove', onDrag, { signal: controller.signal });

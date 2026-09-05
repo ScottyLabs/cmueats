@@ -10,7 +10,7 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { type SortOption, useFilteredLocations, useSortedLocations } from '../util/useLocationList';
+import { type SortOption, useFilteredLocations, sortLocations } from '../util/useLocationList';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
@@ -51,7 +51,7 @@ function ListBox({
         searchQuery,
         locationFilterQuery,
     });
-    const sortedLocations = useSortedLocations({ locations: filteredLocations, sortBy });
+    const sortedLocations = sortLocations({ locations: filteredLocations, sortBy });
     // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');

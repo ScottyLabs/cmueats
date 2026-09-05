@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { useFilteredLocations, useSortedLocations, SortOption } from '../../src/util/useLocationList';
+import { useFilteredLocations, sortLocations, SortOption } from '../../src/util/useLocationList';
 import { ILocation_Full, LocationState } from '../../src/types/locationTypes';
 import { renderHook } from '@testing-library/react';
 
@@ -33,8 +33,8 @@ function makeLocation(overrides: Partial<ILocation_Full> & { name: string }): IL
 }
 
 function sort(locations: ILocation_Full[], sortBy: SortOption) {
-    const { result } = renderHook(() => useSortedLocations({ locations, sortBy }));
-    return result.current!;
+    const result = sortLocations({ locations, sortBy });
+    return result!;
 }
 
 function filter(locations: ILocation_Full[], searchQuery: string, locationFilterQuery: string) {
@@ -42,12 +42,50 @@ function filter(locations: ILocation_Full[], searchQuery: string, locationFilter
     return result.current!;
 }
 
-const CAFE = makeLocation({ name: 'Cafe', location: 'Cohon Center', ratingsAvg: 4.5, locationState: LocationState.OPEN, minutesUntil: 60 });
-const LIBRARY = makeLocation({ name: 'Library', location: 'Hunt Library', ratingsAvg: 3.0, locationState: LocationState.OPEN, minutesUntil: 30 });
-const DINER = makeLocation({ name: 'Diner', location: 'Cohon Center', ratingsAvg: null, locationState: LocationState.OPEN, minutesUntil: 90 });
-const CLOSED = makeLocation({ name: 'Closed', location: 'Wean Hall', ratingsAvg: 4.0, locationState: LocationState.CLOSED, minutesUntil: 120, isOpen: false });
-const CLOSES_SOON = makeLocation({ name: 'ClosesSoon', location: 'Hunt Library', ratingsAvg: 2.0, locationState: LocationState.CLOSES_SOON, minutesUntil: 5, isOpen: true });
-const LONG_TERM = makeLocation({ name: 'LongTerm', location: 'Gates Center', ratingsAvg: 5.0, closedLongTerm: true, locationState: LocationState.CLOSED_LONG_TERM } as any);
+const CAFE = makeLocation({
+    name: 'Cafe',
+    location: 'Cohon Center',
+    ratingsAvg: 4.5,
+    locationState: LocationState.OPEN,
+    minutesUntil: 60,
+});
+const LIBRARY = makeLocation({
+    name: 'Library',
+    location: 'Hunt Library',
+    ratingsAvg: 3.0,
+    locationState: LocationState.OPEN,
+    minutesUntil: 30,
+});
+const DINER = makeLocation({
+    name: 'Diner',
+    location: 'Cohon Center',
+    ratingsAvg: null,
+    locationState: LocationState.OPEN,
+    minutesUntil: 90,
+});
+const CLOSED = makeLocation({
+    name: 'Closed',
+    location: 'Wean Hall',
+    ratingsAvg: 4.0,
+    locationState: LocationState.CLOSED,
+    minutesUntil: 120,
+    isOpen: false,
+});
+const CLOSES_SOON = makeLocation({
+    name: 'ClosesSoon',
+    location: 'Hunt Library',
+    ratingsAvg: 2.0,
+    locationState: LocationState.CLOSES_SOON,
+    minutesUntil: 5,
+    isOpen: true,
+});
+const LONG_TERM = makeLocation({
+    name: 'LongTerm',
+    location: 'Gates Center',
+    ratingsAvg: 5.0,
+    closedLongTerm: true,
+    locationState: LocationState.CLOSED_LONG_TERM,
+} as any);
 
 describe('useFilteredLocations', () => {
     const locations = [CAFE, LIBRARY, DINER, CLOSED, CLOSES_SOON, LONG_TERM];
@@ -70,7 +108,12 @@ describe('useFilteredLocations', () => {
     });
 
     test('filters by search query matching description', () => {
-        const withDesc = makeLocation({ name: 'TestPlace', description: 'serves coffee and pastries', locationState: LocationState.OPEN, minutesUntil: 60 });
+        const withDesc = makeLocation({
+            name: 'TestPlace',
+            description: 'serves coffee and pastries',
+            locationState: LocationState.OPEN,
+            minutesUntil: 60,
+        });
         const result = filter([withDesc], 'coffee', '');
         expect(result).toHaveLength(1);
         expect(result![0].name).toBe('TestPlace');
@@ -100,7 +143,7 @@ describe('useFilteredLocations', () => {
     });
 });
 
-describe('useSortedLocations', () => {
+describe('sortLocations', () => {
     describe('sortBy: open (default status sort)', () => {
         test('sorts by locationState priority, then by minutesUntil', () => {
             const locations = [CLOSED, CAFE, CLOSES_SOON, LIBRARY];
@@ -115,36 +158,78 @@ describe('useSortedLocations', () => {
         });
 
         test('returns undefined for undefined locations', () => {
-            const { result } = renderHook(() => useSortedLocations({ locations: undefined, sortBy: 'open' }));
-            expect(result.current).toBeUndefined();
+            const result = sortLocations({ locations: undefined, sortBy: 'open' });
+            expect(result).toBeUndefined();
         });
     });
 
     describe('sortBy: distance', () => {
         test('sorts by distanceFromUserMeters within same state', () => {
-            const near = makeLocation({ name: 'Near', locationState: LocationState.OPEN, distanceFromUserMeters: 100, minutesUntil: 60 });
-            const far = makeLocation({ name: 'Far', locationState: LocationState.OPEN, distanceFromUserMeters: 500, minutesUntil: 60 });
+            const near = makeLocation({
+                name: 'Near',
+                locationState: LocationState.OPEN,
+                distanceFromUserMeters: 100,
+                minutesUntil: 60,
+            });
+            const far = makeLocation({
+                name: 'Far',
+                locationState: LocationState.OPEN,
+                distanceFromUserMeters: 500,
+                minutesUntil: 60,
+            });
             const sorted = sort([far, near], 'distance');
             expect(sorted.map((l) => l.name)).toEqual(['Near', 'Far']);
         });
 
         test('sorts by state first, then by distance', () => {
-            const openFar = makeLocation({ name: 'OpenFar', locationState: LocationState.OPEN, distanceFromUserMeters: 500, minutesUntil: 60 });
-            const closedNear = makeLocation({ name: 'ClosedNear', locationState: LocationState.CLOSED, distanceFromUserMeters: 100, isOpen: false, minutesUntil: 120 });
+            const openFar = makeLocation({
+                name: 'OpenFar',
+                locationState: LocationState.OPEN,
+                distanceFromUserMeters: 500,
+                minutesUntil: 60,
+            });
+            const closedNear = makeLocation({
+                name: 'ClosedNear',
+                locationState: LocationState.CLOSED,
+                distanceFromUserMeters: 100,
+                isOpen: false,
+                minutesUntil: 120,
+            });
             const sorted = sort([closedNear, openFar], 'distance');
             expect(sorted.map((l) => l.name)).toEqual(['OpenFar', 'ClosedNear']);
         });
 
         test('null distances sort after non-null', () => {
-            const withDist = makeLocation({ name: 'WithDist', locationState: LocationState.OPEN, distanceFromUserMeters: 100, minutesUntil: 60 });
-            const noDist = makeLocation({ name: 'NoDist', locationState: LocationState.OPEN, distanceFromUserMeters: null, minutesUntil: 60 });
+            const withDist = makeLocation({
+                name: 'WithDist',
+                locationState: LocationState.OPEN,
+                distanceFromUserMeters: 100,
+                minutesUntil: 60,
+            });
+            const noDist = makeLocation({
+                name: 'NoDist',
+                locationState: LocationState.OPEN,
+                distanceFromUserMeters: null,
+                minutesUntil: 60,
+            });
             const sorted = sort([withDist, noDist], 'distance');
             expect(sorted.map((l) => l.name)).toEqual(['WithDist', 'NoDist']);
         });
 
         test('falls back to status sort when both distances are null', () => {
-            const a = makeLocation({ name: 'A', locationState: LocationState.CLOSED, distanceFromUserMeters: null, isOpen: false, minutesUntil: 120 });
-            const b = makeLocation({ name: 'B', locationState: LocationState.OPEN, distanceFromUserMeters: null, minutesUntil: 60 });
+            const a = makeLocation({
+                name: 'A',
+                locationState: LocationState.CLOSED,
+                distanceFromUserMeters: null,
+                isOpen: false,
+                minutesUntil: 120,
+            });
+            const b = makeLocation({
+                name: 'B',
+                locationState: LocationState.OPEN,
+                distanceFromUserMeters: null,
+                minutesUntil: 60,
+            });
             const sorted = sort([a, b], 'distance');
             expect(sorted.map((l) => l.name)).toEqual(['B', 'A']);
         });
@@ -163,7 +248,12 @@ describe('useSortedLocations', () => {
 
         test('equal ratings fall back to status sort', () => {
             const a = makeLocation({ name: 'A', ratingsAvg: 4.0, locationState: LocationState.OPEN, minutesUntil: 60 });
-            const b = makeLocation({ name: 'B', ratingsAvg: 4.0, locationState: LocationState.CLOSES_SOON, minutesUntil: 5 });
+            const b = makeLocation({
+                name: 'B',
+                ratingsAvg: 4.0,
+                locationState: LocationState.CLOSES_SOON,
+                minutesUntil: 5,
+            });
             const sorted = sort([b, a], 'rating-highest');
             expect(sorted.map((l) => l.name)).toEqual(['A', 'B']);
         });
