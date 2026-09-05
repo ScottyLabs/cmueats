@@ -1,0 +1,36 @@
+.container {
+    position: relative;
+    aspect-ratio: 1/1;
+}
+
+.icon-div {
+    height: 100%;
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    background: var(--input-bg);
+    color: var(--black-400);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    transition: all 0.2s;
+    display: flex;
+    svg {
+        height: 50%;
+        margin: auto;
+    }
+}
+
+.container:hover .icon-div {
+    transition: all 0.5s;
+    box-shadow: 0 0 40px var(--hover-accent-color);
+    border-color: var(--hover-accent-color);
+    outline: none;
+}
+
+.select {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    font-size: 16px;
+    cursor: pointer;
+}

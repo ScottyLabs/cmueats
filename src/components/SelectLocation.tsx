@@ -1,5 +1,6 @@
+import { Filter } from 'lucide-react';
 import { ILocation_Full } from '../types/locationTypes';
-import css from './SelectLocation.module.css';
+import css from './SelectDropdown.module.css';
 
 type SelectLocationProps = {
     setLocationFilterQuery: React.Dispatch<string>;
@@ -7,33 +8,28 @@ type SelectLocationProps = {
 };
 
 function getPrimaryLocation(locationString: string) {
-    return locationString.indexOf(',') === -1 ? locationString : locationString.slice(0, locationString.indexOf(','));
+    return locationString.split(',', 1)[0];
 }
 
 function SelectLocation({ setLocationFilterQuery, locations }: SelectLocationProps) {
-    if (locations === undefined) {
-        return (
-            <select className={css.select}>
-                {/* Keep label the same as the default option below to reduce loading jank */}
-                <option value="" label="Filter by Building" />
-            </select>
-        );
-    }
-
-    let locationStrings = locations.map((locationObj) => locationObj.location);
-    locationStrings = locations.map((locationObj) => getPrimaryLocation(locationObj.location));
-
-    const dedeupedLocationStrings = [...new Set(locationStrings)];
+    const deduplicatedBuildingNames = locations
+        ? [...new Set(locations.map((loc) => getPrimaryLocation(loc.location)))]
+        : [];
 
     return (
-        <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
-            <option value="" key="Filter by Building" label="Filter by Building" />
-            {dedeupedLocationStrings.map((location) => (
-                <option key={location} value={location}>
-                    {location}
-                </option>
-            ))}
-        </select>
+        <div className={css.container}>
+            <div className={css['icon-div']}>
+                <Filter />
+            </div>
+            <select onChange={(e) => setLocationFilterQuery(e.target.value)} className={css.select}>
+                <option value="" key="All Buildings" label="All Buildings" />
+                {deduplicatedBuildingNames.map((location) => (
+                    <option key={location} value={location}>
+                        {location}
+                    </option>
+                ))}
+            </select>
+        </div>
     );
 }
 

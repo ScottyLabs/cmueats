@@ -10,12 +10,11 @@ import mikuBgUrl from '../assets/miku/miku.jpg';
 import EateryCardGrid from '../components/EateryCardGrid';
 import Drawer from '../components/Drawer';
 import { DrawerAPIContextProvider, useDrawerAPIContext } from '../contexts/DrawerAPIContext';
-import { type SortOption, useFilteredLocations, useSortedLocations } from '../util/useFilteredLocations';
+import { type SortOption, useFilteredLocations, sortLocations } from '../util/useLocationList';
 import './ListPage.css';
 import { CardViewPreference } from '../util/storage';
 import Footer from '../components/Footer';
 import ListPageHeader from '../components/ListPageHeader';
-import { useIsMobileContext } from '../contexts/IsMobileContext';
 import { useUserLocation } from '../contexts/UserLocationContext';
 
 function ListBox({
@@ -30,7 +29,6 @@ function ListBox({
     const { requestUserCoordinates } = useUserLocation();
     const shouldAnimateCards = useRef(true);
     const { closeDrawer } = useDrawerAPIContext();
-    const isMobile = useIsMobileContext();
 
     // permanently cut out animation when user filters cards,
     // so we don't end up with some cards (but not others)
@@ -46,14 +44,14 @@ function ListBox({
     const [sortBy, setSortBy] = useReducer<SortOption, [SortOption]>((_, newState) => {
         shouldAnimateCards.current = false;
         return newState;
-    }, '');
+    }, 'open');
 
     const filteredLocations = useFilteredLocations({
         locations,
         searchQuery,
         locationFilterQuery,
     });
-    const sortedLocations = useSortedLocations({ locations: filteredLocations, sortBy });
+    const sortedLocations = sortLocations({ locations: filteredLocations, sortBy });
     // Load query from URL
     useLayoutEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('search');
@@ -72,7 +70,7 @@ function ListBox({
             <div className="list-controls-container" onClick={(ev) => ev.preventDefault()}>
                 <div className="list-controls-layout">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                    {!isMobile && <SelectLocation {...{ setLocationFilterQuery, locations }} />}
+                    <SelectLocation {...{ setLocationFilterQuery, locations }} />
                     <SelectSort
                         sortBy={sortBy}
                         setSortBy={(newSortBy) => {
