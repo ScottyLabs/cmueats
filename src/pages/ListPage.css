@@ -17,6 +17,8 @@
     }
     overflow-y: auto;
     height: 100%;
+    /* keep sticky list-controls-container under iOS overlay scrollbars */
+    isolation: isolate;
 }
 
 .list-controls-container {
