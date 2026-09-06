@@ -25,6 +25,7 @@
     z-index: 727;
     background-color: var(--black-950);
     margin-bottom: 10px;
+    overflow-y: hidden;
 }
 .list-controls-layout {
     margin-left: auto;
