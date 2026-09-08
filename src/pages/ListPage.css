@@ -17,8 +17,6 @@
     }
     overflow-y: auto;
     height: 100%;
-    /* keep sticky list-controls-container under iOS overlay scrollbars */
-    isolation: isolate;
 }
 
 .list-controls-container {
@@ -27,7 +25,6 @@
     z-index: 727;
     background-color: var(--black-950);
     margin-bottom: 10px;
-    overflow-y: hidden;
 }
 .list-controls-layout {
     margin-left: auto;
