@@ -11,8 +11,10 @@ function DrawerHeader() {
     const { closeDrawer } = useDrawerAPIContext();
     const { name, location: physicalLocation, url } = location;
 
+    const mobileCSS = isMobile ? '-mobile' : '';
+
     return (
-        <div className={css['drawer-header-container']}>
+        <div className={css[`drawer-header-container${mobileCSS}`]}>
             {!isMobile && (
                 <button
                     type="button"
@@ -23,10 +25,13 @@ function DrawerHeader() {
                     <X size={36} />
                 </button>
             )}
-            <div className={css.header__status} style={{ '--status-color': highlightColors[location.locationState] }}>
+            <div
+                className={css[`header__status${mobileCSS}`]}
+                style={{ '--status-color': highlightColors[location.locationState] }}
+            >
                 {location.statusMsg.longStatus}
             </div>
-            <div className={css.header__title}>
+            <div className={css[`header__title${mobileCSS}`]}>
                 <h3 className={css.title__text}>
                     <a className={css['location-link']} href={url} target="_blank" rel="noreferrer">
                         <span>{name}</span>
