@@ -8,14 +8,18 @@ function SearchBar({ searchQuery, setSearchQuery }: { searchQuery: string; setSe
 
     // delay query to prevent performance issue
     const [pendingQuery, setPendingQuery] = useState(searchQuery);
+    const lastSentRef = useRef(searchQuery);
     useEffect(() => {
-        setPendingQuery(searchQuery);
+        if (searchQuery !== lastSentRef.current) {
+            setPendingQuery(searchQuery);
+        }
     }, [searchQuery]);
     useEffect(() => {
         if (pendingQuery === searchQuery) {
             return () => {};
         }
         const timeoutId = window.setTimeout(() => {
+            lastSentRef.current = pendingQuery;
             setSearchQuery(pendingQuery);
         }, 150);
         return () => window.clearTimeout(timeoutId);
